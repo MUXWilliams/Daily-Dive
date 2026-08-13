@@ -1,4 +1,4 @@
-# The Daily Dive
+# Daily Dive
 
 A Techmeme-style morning digest for the saltwater reef hobby, published at
 [theloneaquarist.com](https://www.theloneaquarist.com).

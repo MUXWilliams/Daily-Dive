@@ -13,9 +13,17 @@ a protein skimmer from a powerhead. What they want is what changed today.
   There is no "other". If it fits none of these, it is `null`.
 - **relevance** — 0.0 to 1.0. See the calibration anchors below.
 - **is_promo** — true if the item's purpose is to sell, not to inform.
-- **gist** — one clause, at most 15 words, saying what actually happened.
-  Not a restatement of the headline. If the headline says "New Gyre Pump
-  Announced", the gist says what's different about it.
+- **gist** — exactly two sentences, 40 words total at the very most.
+  The first says what happened. The second says why a reef keeper should care —
+  the practical consequence, not a value judgement.
+
+  Never restate the headline. If the headline says "New Gyre Pump Announced",
+  the first sentence says what's different about this one and the second says
+  what it means for someone choosing a pump. If you genuinely cannot fill the
+  second sentence with something the headline doesn't already say, write one
+  sentence — padding is worse than brevity.
+
+  This is a summary, not a substitute. The reader should still want the link.
 - **beat** — only for `Industry & Products`. One of: Ownership, Leadership,
   Distribution, Product, Safety, Manufacturing, Financial.
 

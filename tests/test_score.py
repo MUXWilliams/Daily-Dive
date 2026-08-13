@@ -251,3 +251,42 @@ def test_usage_missing_fields_does_not_crash_accounting():
     spend.add(SimpleNamespace(input_tokens=10))  # older/partial usage shape
     assert spend.calls == 1
     assert spend.output_tokens == 0
+
+
+# --------------------------------------------------------------- gist ceiling
+
+def test_two_sentence_gist_is_kept():
+    it = item("a")
+    two = (
+        "Maxspect ended its third-party North American distribution arrangement. "
+        "Warranty handling moves in-house, so existing claims route differently."
+    )
+    kept = apply_scores([it], {it.uid: score(it.uid, gist=two)})
+    assert kept[0].extra["gist"] == two
+
+
+def test_overlong_gist_is_dropped_but_the_item_survives():
+    """The attribution policy caps summaries at 40 words. A prompt is a request;
+    this is the rule — enforcement costs a summary, never a story."""
+    it = item("a")
+    long_gist = " ".join(["word"] * 41)
+    kept = apply_scores([it], {it.uid: score(it.uid, gist=long_gist)})
+
+    assert len(kept) == 1
+    assert "gist" not in kept[0].extra
+    assert kept[0].url == it.url  # attribution untouched
+
+
+def test_gist_exactly_at_the_cap_is_kept():
+    it = item("a")
+    at_cap = " ".join(["word"] * 40)
+    kept = apply_scores([it], {it.uid: score(it.uid, gist=at_cap)})
+    assert kept[0].extra["gist"] == at_cap
+
+
+def test_prompt_asks_for_two_sentences_within_the_enforced_cap():
+    """The prompt and the code must agree on the ceiling, or the model is being
+    asked for something the renderer will silently throw away."""
+    prompt = score_mod.load_system_prompt()
+    assert "two sentences" in prompt
+    assert str(score_mod.GIST_MAX_WORDS) in prompt

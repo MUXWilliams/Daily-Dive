@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Daily Dive — {{ issue.date | datefmt }}</title>
+<title>Daily Dive — {{ issue.date | datefmt }}</title>
 <style>
   :root {
     --bg: #fbfaf7;
@@ -78,7 +78,7 @@
 
   <header class="masthead">
     <p class="brand">The Lone Aquarist</p>
-    <h1>The Daily Dive</h1>
+    <h1>Daily Dive</h1>
     <p class="dateline">{{ issue.date | datefmt('full') }} · {{ issue.items|length }} item{{ '' if issue.items|length == 1 else 's' }}</p>
   </header>
 
@@ -118,7 +118,7 @@
     </p>
     {% endif %}
     <p>
-      <em>The Daily Dive</em> is an automated digest that links to reporting it does not own.
+      <em>Daily Dive</em> is an automated digest that links to reporting it does not own.
       See <a href="/about.html">about &amp; sourcing policy</a> for how sources are selected
       and how to request removal.
     </p>

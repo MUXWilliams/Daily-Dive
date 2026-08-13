@@ -44,6 +44,12 @@ BATCH_SIZE = 20
 # anchors in the prompt — 0.3 is the top of the "true but marginal" band.
 DEFAULT_THRESHOLD = 0.35
 
+# The attribution policy caps summaries at 40 words. The prompt asks for two
+# sentences within that budget, but a prompt is a request and this is the rule:
+# an over-long gist is dropped rather than published. The item still runs with
+# its own headline, so enforcement costs a summary, never a story.
+GIST_MAX_WORDS = 40
+
 
 class ItemScore(BaseModel):
     """One scored item. `category=None` means drop it."""
@@ -195,13 +201,24 @@ def apply_scores(
             continue
         if score.category is None or score.is_promo or score.relevance < threshold:
             continue
+
+        gist = score.gist.strip()
+        if len(gist.split()) > GIST_MAX_WORDS:
+            log.warning(
+                "gist for %s ran to %d words (cap %d), dropped",
+                item.uid,
+                len(gist.split()),
+                GIST_MAX_WORDS,
+            )
+            gist = ""
+
         kept.append(
             item.model_copy(
                 update={
                     "category_hint": score.category,
                     "extra": {
                         **item.extra,
-                        "gist": score.gist,
+                        **({"gist": gist} if gist else {}),
                         "relevance": f"{score.relevance:.2f}",
                         **({"beat": score.beat.value} if score.beat else {}),
                     },
