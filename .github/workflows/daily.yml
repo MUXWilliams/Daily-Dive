@@ -1,0 +1,69 @@
+name: Build issue
+
+# Manual for now. GitHub's runners have full internet access, so this is the
+# easiest way to test real feeds without a local setup.
+#
+# The daily schedule stays commented out until v3, when there's something worth
+# publishing. Uncomment then — 09:30 UTC is roughly 5:30am US Eastern.
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Only this source id (blank = all enabled sources)"
+        required: false
+        default: ""
+      limit:
+        description: "Max items (blank = no cap)"
+        required: false
+        default: ""
+  # schedule:
+  #   - cron: "30 9 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Tests
+        run: pytest -q
+
+      - name: List configured sources
+        run: daily-dive sources
+
+      - name: Build issue from live feeds
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.source }}" ]; then ARGS="$ARGS --source ${{ inputs.source }}"; fi
+          if [ -n "${{ inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ inputs.limit }}"; fi
+          echo "daily-dive run $ARGS"
+          daily-dive run $ARGS --verbose
+
+      - name: Summarize what each feed returned
+        if: always()
+        run: |
+          echo "### Feed check" >> $GITHUB_STEP_SUMMARY
+          if [ -f site/index.html ]; then
+            echo "Built \`site/index.html\` — download the **site** artifact below to view it." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Headlines pulled:" >> $GITHUB_STEP_SUMMARY
+            grep -o 'class="headline"[^>]*>[^<]*' site/index.html \
+              | sed 's/.*>//' | sed 's/^/- /' >> $GITHUB_STEP_SUMMARY || true
+          else
+            echo "No issue was built — check the log above." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload the built page
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site/
+          if-no-files-found: warn
