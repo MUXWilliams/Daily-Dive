@@ -9,38 +9,83 @@ somewhere with real network access (the Actions workflow does).
 from __future__ import annotations
 
 from dataclasses import dataclass
+from html.parser import HTMLParser
+from urllib.parse import urljoin
 
 import feedparser
 import httpx
 
 from .ingest import TIMEOUT, USER_AGENT, Fetcher
 
-# Candidates worth testing when no URLs are given. Grouped by what we're trying
-# to learn; update as answers come in.
+# Candidates worth testing when no URLs are given. Trimmed as answers come in —
+# settled questions move to sources.toml and drop off this list.
 CANDIDATES: list[str] = [
     # Known good — the control. If this breaks, the fetcher broke, not the site.
     "https://reefbuilders.com/feed/",
-    # CORAL Magazine: reef2rainforest.com stopped resolving. coralmagazine.com
-    # looks like the current home — find its feed.
-    "https://www.coralmagazine.com/feed/",
-    "https://coralmagazine.com/feed/",
-    "https://www.reef2rainforest.com/feed/",
-    # Reef2Reef: the site-wide XenForo path returned 403. Try the other shapes
-    # XenForo exposes before concluding they block aggregators outright.
-    "https://www.reef2reef.com/forums/-/index.rss",
-    "https://www.reef2reef.com/whats-new/posts/index.rss",
-    "https://www.reef2reef.com/index.rss",
-    "https://www.reef2reef.com/forums/index.rss",
-    # Other reef publications with likely WordPress feeds.
-    "https://reefhobbyistmagazine.com/feed/",
-    "https://www.advancedaquarist.com/feed",
-    "https://reefs.com/feed/",
-    "https://www.tidalgardens.com/blog/feed/",
-    # NOAA — public domain, and the wild-reef angle nobody else runs daily.
-    "https://coralreefwatch.noaa.gov/index.rss",
-    "https://coralreef.noaa.gov/rss.xml",
-    "https://www.coris.noaa.gov/rss/coris.xml",
+    # Round 2: more reef publications that may run WordPress.
+    "https://www.reefkeeping.com/feed/",
+    "https://aquanerd.com/feed/",
+    "https://melevsreef.com/feed",
+    "https://www.marinedepot.com/blog/rss",
+    "https://reefbum.com/feed/",
+    "https://www.saltwatersmarts.com/feed",
 ]
+
+# Sites where guessing the feed path failed but a feed may still exist. Rather
+# than guess again, ask the page: HTML feed autodiscovery is a standard, and
+# it's how a browser's "subscribe" button has always found feeds.
+DISCOVER_TARGETS: list[str] = [
+    # NOAA's reef programs — public domain data, and the wild-reef angle nobody
+    # else runs daily. Every guessed path 404'd, so let the pages answer.
+    "https://coralreefwatch.noaa.gov/",
+    "https://coralreef.noaa.gov/",
+    "https://www.coris.noaa.gov/rss/",
+    "https://www.fisheries.noaa.gov/",
+    # Guessed paths failed; these sites may still publish a feed elsewhere.
+    "https://www.advancedaquarist.com/",
+    "https://www.tidalgardens.com/",
+    "https://reefs.com/",
+]
+
+
+class _FeedLinkParser(HTMLParser):
+    """Pulls <link rel="alternate" type="application/rss+xml"> out of a page."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.feeds: list[tuple[str, str]] = []  # (href, title)
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "link":
+            return
+        a = {k.lower(): (v or "") for k, v in attrs}
+        rels = a.get("rel", "").lower().split()
+        if "alternate" not in rels:
+            return
+        if not any(t in a.get("type", "").lower() for t in ("rss", "atom", "xml")):
+            return
+        if a.get("href"):
+            self.feeds.append((a["href"], a.get("title", "")))
+
+
+def discover_feeds(page_url: str, fetcher: Fetcher, client: httpx.Client) -> list[str]:
+    """Return feed URLs advertised by a page, via HTML autodiscovery."""
+    if not fetcher.allowed(page_url):
+        return []
+    try:
+        resp = client.get(page_url)
+        resp.raise_for_status()
+    except httpx.HTTPError:
+        return []
+
+    parser = _FeedLinkParser()
+    parser.feed(resp.text)
+    seen: list[str] = []
+    for href, _title in parser.feeds:
+        absolute = urljoin(str(resp.url), href)
+        if absolute not in seen:
+            seen.append(absolute)
+    return seen
 
 
 @dataclass
@@ -82,11 +127,16 @@ def probe_one(url: str, fetcher: Fetcher, client: httpx.Client) -> ProbeResult:
     return ProbeResult(url, "empty", "parses, but has no entries")
 
 
-def probe(urls: list[str] | None = None) -> list[ProbeResult]:
-    targets = urls or CANDIDATES
+def probe(urls: list[str] | None = None, *, discover: bool = False) -> list[ProbeResult]:
+    targets = list(urls or CANDIDATES)
     client = httpx.Client(timeout=TIMEOUT, follow_redirects=True, headers={"User-Agent": USER_AGENT})
     try:
         with Fetcher(client=client) as fetcher:
+            if discover and not urls:
+                for page in DISCOVER_TARGETS:
+                    for found in discover_feeds(page, fetcher, client):
+                        if found not in targets:
+                            targets.append(found)
             return [probe_one(u, fetcher, client) for u in targets]
     finally:
         client.close()

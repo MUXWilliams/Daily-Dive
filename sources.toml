@@ -23,36 +23,54 @@ url = "https://reefbuilders.com/feed/"
 type = "wordpress"
 category_hint = "Industry & Products"
 
-# PARKED — reef2rainforest.com no longer resolves (DNS: "No address associated
-# with hostname"), so the publisher appears to have moved. coralmagazine.com
-# looks like the current home. Run the workflow with probe=true to find the
-# working feed URL, then swap it in and re-enable.
+# Verified live: 10 items, newest "CORAL Magazine Table of Contents Jul/Aug 2026".
+# reef2rainforest.com stopped resolving entirely; coralmagazine.com is the
+# publisher's current home.
 [[source]]
-id = "reef2rainforest"
+id = "coralmagazine"
 name = "CORAL Magazine"
 url = "https://www.coralmagazine.com/feed/"
 type = "wordpress"
 category_hint = "Husbandry & Science"
-enabled = false
+
+# Verified live: 10 items, newest "Treating Brown Jelly". Long-running
+# hobbyist site, heavier on husbandry than on industry news.
+[[source]]
+id = "reefs"
+name = "Reefs.com"
+url = "https://reefs.com/feed/"
+type = "wordpress"
+category_hint = "Husbandry & Science"
 
 # ---------------------------------------------------------------------- forums
 
-# PARKED — the site-wide XenForo feed returns 403 Forbidden. That is usually
-# bot protection rather than a wrong path, but probe=true tests the other
-# XenForo feed shapes to tell the difference.
+# BLOCKED — all four XenForo feed shapes return 403:
+#   /forums/-/index.rss   /whats-new/posts/index.rss
+#   /index.rss            /forums/index.rss
+# Four different paths failing identically is a site-level block, not a wrong
+# URL. Reef2Reef does not want automated clients reading its feeds.
 #
-# If they're blocking aggregators deliberately, the answer is to ask, not to
-# work around it: a 403 is a site saying no, and forging a browser User-Agent
-# to get past it would undo the whole good-citizen posture this project runs on.
-#
-# Per-forum feeds (higher signal than the firehose) follow the same shape:
-# /forums/<slug>.<id>/index.rss — the id is visible in the URL of any forum.
+# The answer is to ask, not to route around it. Forging a browser User-Agent
+# would get past this and would undo the entire good-citizen posture the
+# project depends on — and Reef2Reef is exactly the outlet whose goodwill
+# matters most here. Email them, explain the project, ask about an aggregator
+# exception or a partnership. Until then this stays off.
 [[source]]
 id = "reef2reef"
 name = "Reef2Reef"
 url = "https://www.reef2reef.com/forums/-/index.rss"
 type = "xenforo"
 category_hint = "Community"
+enabled = false
+
+# BLOCKED — 403, same story as Reef2Reef. Worth an email rather than a
+# workaround; it's a low-volume, high-signal publication.
+[[source]]
+id = "reefhobbyist"
+name = "Reef Hobbyist Magazine"
+url = "https://reefhobbyistmagazine.com/feed/"
+type = "wordpress"
+category_hint = "Husbandry & Science"
 enabled = false
 
 # PARKED — Reddit's robots.txt disallows crawling the .rss endpoints, and the

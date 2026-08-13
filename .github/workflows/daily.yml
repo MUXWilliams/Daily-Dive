@@ -49,7 +49,7 @@ jobs:
           {
             echo "### Candidate feed probe"
             echo ""
-            daily-dive probe --markdown || true
+            daily-dive probe --markdown --discover || true
             echo ""
           } >> $GITHUB_STEP_SUMMARY
 

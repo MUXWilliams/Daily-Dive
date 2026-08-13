@@ -91,6 +91,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     probing.add_argument("urls", nargs="*", help="URLs to test; omit to use the built-in candidate list")
     probing.add_argument("--markdown", action="store_true", help="emit a markdown table")
+    probing.add_argument(
+        "--discover",
+        action="store_true",
+        help="also ask known sites what feeds they advertise (HTML autodiscovery)",
+    )
 
     args = parser.parse_args(argv)
 
@@ -102,7 +107,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "probe":
         from . import probe as probe_mod
 
-        results = probe_mod.probe(args.urls or None)
+        results = probe_mod.probe(args.urls or None, discover=args.discover)
         if args.markdown:
             print(probe_mod.format_markdown(results))
         else:
