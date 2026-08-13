@@ -70,12 +70,38 @@ url = "https://ecotechmarine.com/feed"
 type = "wordpress"
 category_hint = "Industry & Products"
 
+# Verified live: 5 items. A real corporate press-release feed — the best kind
+# of industry source, since it's a primary announcement channel rather than a
+# blog.
+#
+# Its newest item when verified was "Maxspect North America Announces Strategic
+# Distribution Partnerships", which is exactly the story shape docs/industry-
+# brief.md warns about most: a distribution partnership is NOT an ownership
+# change, and must never be written up as one. Maxspect established Maxspect
+# North America LLC in Dec 2025 and has no parent in industry.toml.
+[[source]]
+id = "maxspect"
+name = "Maxspect"
+url = "https://maxspect.com/en/press-releases-patents.feed?type=rss"
+type = "generic"
+section = "Press releases"
+category_hint = "Industry & Products"
+
 # PARKED — the feed exists and parses, but is empty. The site publishes no
 # posts through it today. Worth re-probing occasionally rather than deleting.
 [[source]]
 id = "panta-rhei"
 name = "Panta Rhei Aquatics"
 url = "https://www.panta-rhei-aquatics.com/feed/"
+type = "wordpress"
+category_hint = "Industry & Products"
+enabled = false
+
+# PARKED — WordPress feed exists but is currently empty. Re-probe later.
+[[source]]
+id = "neptune"
+name = "Neptune Systems"
+url = "https://www.neptunesystems.com/feed/"
 type = "wordpress"
 category_hint = "Industry & Products"
 enabled = false

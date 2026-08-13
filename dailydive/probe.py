@@ -25,87 +25,73 @@ CANDIDATES: list[str] = [
     # aquanerd.com timed out once — retrying to tell a slow host from a dead one.
     "https://aquanerd.com/feed/",
     "https://www.aquanerd.com/feed/",
-    # Round 3 candidates.
-    "https://www.humble.fish/feed/",
-    "https://reefcentral.com/forums/external.php?type=RSS2",
-    "https://www.nano-reef.com/forums/rss/",
-    # Ownership-chain news pages. Corporate sites often publish a feed at a
-    # conventional path without advertising it in the page's <head>, so these
-    # are worth testing directly as well as via autodiscovery.
-    "https://www.bertramcapital.com/news/feed/",
-    "https://www.bertramcapital.com/feed/",
-    "https://www.bertramcapital.com/rss",
-    "https://www.apetlife.com/news/feed/",
-    "https://www.apetlife.com/feed/",
-    "https://www.apetlife.com/rss",
-    "https://www.bulkreefsupply.com/blog/feed",
-    "https://www.neptunesystems.com/feed/",
+    # Trade press: the www hosts all failed DNS resolution, which usually means
+    # the bare domain is the real one. Retrying without the subdomain.
+    "https://petbusiness.com/feed/",
+    "https://petproductnews.com/feed/",
+    "https://pettradenews.com/feed/",
+    "https://www.petfoodindustry.com/rss/articles",
 ]
 
 # Sites where guessing the feed path failed but a feed may still exist. Rather
 # than guess again, ask the page: HTML feed autodiscovery is a standard, and
 # it's how a browser's "subscribe" button has always found feeds.
 DISCOVER_TARGETS: list[str] = [
-    # NOAA's reef programs — public domain data, and the wild-reef angle nobody
-    # else runs daily. Every guessed path 404'd, so let the pages answer.
-    "https://coralreefwatch.noaa.gov/",
-    "https://coralreef.noaa.gov/",
-    "https://www.coris.noaa.gov/rss/",
-    "https://www.fisheries.noaa.gov/",
     # Guessed paths failed; these sites may still publish a feed elsewhere.
     "https://www.advancedaquarist.com/",
     "https://www.tidalgardens.com/",
     "https://reefs.com/",
     # --- Industry beat -------------------------------------------------------
-    # Corporate newsrooms and investor-relations pages from the ownership map in
-    # docs/industry-brief.md. Ownership, leadership, and financial news breaks
-    # here first, and a primary source beats anyone's summary of it.
-    "https://ecotechmarine.com/company-news",
-    # The top of the Aperture chain. A Bertram exit or add-on acquisition moves
-    # BRS, EcoTech, Neptune and AquaIllumination simultaneously — the highest-
-    # leverage single signal in the whole ownership map.
-    "https://www.bertramcapital.com/news",
-    "https://www.bertramcapital.com/news/",
-    "https://www.apetlife.com/news",
-    "https://www.apetlife.com/news/",
-    "https://www.apetlife.com/",
-    "https://www.bertramcapital.com/portfolio/aperture-pet-life",
-    "https://maxspect.com/en/press-releases-patents/",
-    "https://www.iwakipumps.co.jp/en/ir/",
-    "https://www.iwakipumps.co.jp/en/",
-    "https://tunze.com/",
-    "https://www.sicce.com/en/",
-    "https://abyzz.com/",
-    "https://www.royalexclusiv.com/",
-    "https://www.panta-rhei-aquatics.com/",
-    "https://www.panworldpump.com/",
-    # Pet-industry trade press — where private-equity moves in this sector get
-    # reported, since most of these manufacturers publish nothing themselves.
-    "https://petage.com/",
-    "https://www.petbusiness.com/",
-    "https://www.petproductnews.com/",
-    "https://www.pettradenews.com/",
+    # SETTLED, do not re-probe: bertramcapital.com and apetlife.com publish no
+    # feed. Every conventional path 404s and both /news pages advertise nothing.
+    # Same for iwakipumps.co.jp (including /ir/), tunze.com, sicce.com,
+    # abyzz.com, royalexclusiv.com and panworldpump.com. These are hand-
+    # maintained HTML. See README "Watching the pages that have no feed".
+    #
+    # Still worth asking, since NOAA's index page lists feeds as ordinary links
+    # rather than advertising them in the head — the new fallback may find them.
+    "https://coralreefwatch.noaa.gov/",
+    "https://www.coris.noaa.gov/rss/",
+    "https://coralreef.noaa.gov/rss.html",
+    "https://www.fisheries.noaa.gov/news-and-announcements/news",
+    "https://petage.com/news/",
 ]
 
 
 class _FeedLinkParser(HTMLParser):
-    """Pulls <link rel="alternate" type="application/rss+xml"> out of a page."""
+    """Finds feeds a page points to.
+
+    Two mechanisms, because sites use both:
+      - <link rel="alternate" type="application/rss+xml"> in the head, the
+        standard autodiscovery mechanism.
+      - ordinary <a> links to .rss/.xml files, which is how directory pages
+        like NOAA's feed index actually publish their feeds. Those are kept
+        separate and only used when the head advertises nothing.
+    """
 
     def __init__(self) -> None:
         super().__init__()
         self.feeds: list[tuple[str, str]] = []  # (href, title)
+        self.linked_files: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        a = {k.lower(): (v or "") for k, v in attrs}
+        href = a.get("href", "")
+
+        if tag == "a":
+            if href and href.lower().split("?")[0].endswith((".rss", ".xml", ".atom")):
+                self.linked_files.append(href)
+            return
+
         if tag != "link":
             return
-        a = {k.lower(): (v or "") for k, v in attrs}
         rels = a.get("rel", "").lower().split()
         if "alternate" not in rels:
             return
         if not any(t in a.get("type", "").lower() for t in ("rss", "atom", "xml")):
             return
-        if a.get("href"):
-            self.feeds.append((a["href"], a.get("title", "")))
+        if href:
+            self.feeds.append((href, a.get("title", "")))
 
 
 # WordPress advertises several feeds that are never what we want: comment
@@ -143,6 +129,16 @@ def discover_feeds(page_url: str, fetcher: Fetcher, client: httpx.Client) -> tup
 
     if seen:
         return seen, ""
+
+    # Nothing in the head. Fall back to .rss/.xml files linked in the body —
+    # how feed directory pages (NOAA's, for one) actually publish theirs.
+    for href in parser.linked_files:
+        absolute = urljoin(str(resp.url), href)
+        if absolute not in seen:
+            seen.append(absolute)
+    if seen:
+        return seen[:8], "found via linked .rss/.xml files, not head autodiscovery"
+
     if skipped:
         return [], f"advertises {skipped} feed(s), all comments/oembed boilerplate"
     return [], "page loads but advertises no feed"
@@ -211,6 +207,8 @@ def probe(urls: list[str] | None = None, *, discover: bool = False) -> list[Prob
 def format_markdown(results: list[ProbeResult]) -> str:
     lines = ["| URL | Result | Items | Detail |", "|---|---|---|---|"]
     for r in results:
-        detail = r.detail.replace("|", "\\|")[:120]
+        # Collapse whitespace: an error string containing a newline would
+        # otherwise split one row into two and corrupt the table.
+        detail = " ".join(r.detail.split()).replace("|", "\\|")[:120]
         lines.append(f"| `{r.url}` | {r.icon} {r.verdict} | {r.entries or ''} | {detail} |")
     return "\n".join(lines)

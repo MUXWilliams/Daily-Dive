@@ -88,6 +88,33 @@ Two judgement calls worth knowing about:
   once distributed Maxspect. Neither is ownership, and there's a test asserting
   the map never says otherwise.
 
+### Watching the pages that have no feed
+
+Probing settled a question: **the top of the ownership chain publishes no feed.**
+`bertramcapital.com` and `apetlife.com` 404 on every conventional feed path and
+advertise nothing on their `/news` pages. Same for Iwaki (including its IR page),
+TUNZE, SICCE, Abyzz, Royal Exclusiv, and Pan World. These are hand-maintained
+HTML pages.
+
+That matters because a Bertram exit or add-on acquisition would move BRS,
+EcoTech, Neptune, and AquaIllumination simultaneously — the highest-leverage
+single event in the map, and there's no feed for it.
+
+The options, none of them free:
+
+1. **Rely on trade press.** An Aperture-scale transaction gets covered. Costs a
+   day or two of latency on an event that happens maybe twice a year.
+2. **Change-detection on those two specific pages.** Fetch daily, hash the
+   content, flag a change. This is scraping, and it breaks the RSS-only rule —
+   but narrowly: two known URLs, once a day, robots respected, linking to their
+   page rather than reproducing it. If this is ever turned on, it belongs in
+   `site/about.html` explicitly, not done quietly.
+3. **Ask.** Same play as Reef2Reef.
+
+Currently option 1. Ownership changes are rare enough that a day's latency costs
+little, while quietly becoming a scraper would cost the posture that makes
+everything else here defensible.
+
 What still needs the model passes: judging whether a story is *material*,
 assigning the beat (Ownership / Leadership / Distribution / Product / Safety /
 Manufacturing / Financial), writing the "why it matters" line, and applying the
