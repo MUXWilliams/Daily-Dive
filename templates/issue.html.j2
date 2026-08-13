@@ -52,8 +52,14 @@
   li.item:last-child { border-bottom: none; }
   .item a.headline { color: var(--ink); text-decoration: none; font-weight: 600; }
   .item a.headline:hover { color: var(--accent); text-decoration: underline; }
+  .gist { margin: .35rem 0 0; font-size: .93rem; color: var(--ink); opacity: .82; }
   .credit { display: block; margin-top: .3rem; font-size: .84rem; color: var(--muted); }
   .credit .source { color: var(--accent); font-weight: 600; }
+  .beat {
+    display: inline-block; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase;
+    font-weight: 700; padding: .08rem .4rem; border-radius: 3px; margin-right: .3rem;
+    background: var(--accent); color: var(--bg);
+  }
   .badge {
     display: inline-block; font-size: .7rem; padding: .05rem .4rem; border-radius: 3px;
     background: var(--accent-soft); color: var(--accent); margin-left: .35rem;
@@ -87,7 +93,11 @@
       {% for item in items %}
       <li class="item">
         <a class="headline" href="{{ item.url }}" rel="noopener nofollow external">{{ item.title }}</a>
+        {% if item.extra.gist %}
+        <p class="gist">{{ item.extra.gist }}</p>
+        {% endif %}
         <span class="credit">
+          {% if item.extra.beat %}<span class="beat">{{ item.extra.beat }}</span>{% endif %}
           <span class="source">{{ item.source_name }}</span>
           {% if item.author %}· {{ item.author }}{% endif %}
           · {{ item.published_at | datefmt('short') }}

@@ -16,8 +16,11 @@ from pathlib import Path
 
 import httpx
 
-from . import config, ingest, normalize, render, store
+from . import config, ingest, normalize, render
+from . import score as score_mod
+from . import store
 from .models import Issue, Item, Source
+from .pricing import RunSpend
 
 log = logging.getLogger("dailydive")
 
@@ -80,6 +83,17 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--out", type=Path, default=Path("site"), help="output directory (default: site)")
     run.add_argument("--db", type=Path, default=store.DEFAULT_DB)
     run.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
+    run.add_argument(
+        "--score",
+        action="store_true",
+        help="run the Haiku scoring pass (needs ANTHROPIC_API_KEY; costs money)",
+    )
+    run.add_argument(
+        "--threshold",
+        type=float,
+        default=None,
+        help=f"minimum relevance to publish (default {score_mod.DEFAULT_THRESHOLD})",
+    )
 
     listing = sub.add_parser("sources", help="list configured feeds", parents=[common])
     listing.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
@@ -137,6 +151,26 @@ def main(argv: list[str] | None = None) -> int:
     items = _collect_offline(sources) if args.offline else _collect_live(sources, args.db)
     if args.limit:
         items = items[: args.limit]
+
+    spend = RunSpend()
+    if args.score:
+        try:
+            import anthropic
+        except ImportError:
+            log.error("--score needs the anthropic package: pip install -e '.[ai]'")
+            return 2
+
+        before = len(items)
+        client = anthropic.Anthropic()  # resolves ANTHROPIC_API_KEY / ant profile
+        stage = spend.stage("score", score_mod.MODEL)
+        scores = score_mod.score_items(items, client=client, spend=stage)
+        items = score_mod.apply_scores(
+            items,
+            scores,
+            threshold=args.threshold if args.threshold is not None else score_mod.DEFAULT_THRESHOLD,
+        )
+        log.info("scored %d items, kept %d", before, len(items))
+        print("cost:\n" + spend.report())
 
     issue = Issue(date=datetime.now(UTC), items=items)
     path = render.write_issue(issue, args.out)

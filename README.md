@@ -7,8 +7,10 @@ Reads the feeds that matter — publications, forums, YouTube channels, and NOAA
 reef data — dedupes what overlaps, sorts it into categories, and produces one
 scannable page every morning. Every item links to its source.
 
-**Status: v0.** The pipeline works end to end with no AI in it: fetch, normalize,
-dedupe, render. Headlines are the sources' own. The model passes come in v1.
+**Status: v1.** The pipeline fetches, normalizes, dedupes, scores, and renders.
+`--score` runs a Claude Haiku pass that categorizes every item, rates its
+relevance, and drops the promos. Headlines are still the sources' own — the
+writing pass is v2.
 
 ## Quick start
 
@@ -18,7 +20,7 @@ uv venv && uv pip install -e ".[dev]"
 .venv/bin/daily-dive sources               # what's configured
 .venv/bin/daily-dive run --offline         # build from fixtures, no network
 .venv/bin/daily-dive run                   # build from live feeds
-.venv/bin/pytest -q                        # 18 tests, no network, no cost
+.venv/bin/pytest -q                        # 57 tests, no network, no cost
 ```
 
 Output lands in `site/` — `index.html` plus a dated permalink under `site/issues/`.
@@ -28,6 +30,7 @@ Useful while iterating:
 ```bash
 daily-dive run --source reefbuilders --limit 5    # one feed, small
 daily-dive run --offline --out site/preview       # scratch output, gitignored
+daily-dive run --score --limit 20                 # with the AI pass (costs money)
 ```
 
 ## Adding sources
@@ -130,9 +133,13 @@ dailydive/
   ingest.py           robots.txt, rate limiting, conditional GET
   normalize.py        feed dialects in, one Item model out
   store.py            SQLite: archive + HTTP cache
+  entities.py         brand -> owner, no model calls
+  score.py            v1: the Haiku scoring pass
+  pricing.py          token and cost accounting
   render.py           Issue -> HTML
   cli.py              entry point
 templates/            Jinja
+prompts/              versioned prompt files — frozen, cacheable prefixes
 tests/fixtures/       synthetic feeds; also the eval set for later prompt work
 site/                 generated output, served by GitHub Pages
 ```
@@ -145,11 +152,40 @@ archive, it's free, and it versions both for free.
 | | |
 |---|---|
 | **v0** ✅ | Pipeline with no AI. Fetch, dedupe, render, full attribution. |
-| **v1** | Haiku pass scores and categorizes every item. Sections get real. |
+| **v1** ✅ | Haiku pass scores and categorizes every item. Sections get real. |
 | **v2** | Clustering + Sonnet writes the issue + a grounding check. The Techmeme format proper. |
 | **v3** | RSS out, then email from `mail.theloneaquarist.com`. |
 
 Ship each one fully before starting the next. The temptation is to start at v2.
+
+## The scoring pass (v1)
+
+`daily-dive run --score` sends every item through Claude Haiku 4.5, which
+returns structured output — a category from the closed enum, a relevance score,
+a promo flag, and a one-clause gist — and drops everything below the relevance
+threshold before the page is rendered.
+
+Design notes worth knowing before editing `dailydive/score.py`:
+
+- **The system prompt is a frozen prefix.** It's loaded verbatim from
+  `prompts/score.system.md` and marked cacheable; per-item data goes in the user
+  turn. Interpolating anything per-request — a date, a run id — would invalidate
+  the cache on every call and quietly multiply cost. Haiku's cache minimum is
+  4096 tokens, so watch `cache hit` in the run's cost line rather than assuming.
+- **Structured output, not prose parsing.** `messages.parse()` validates against
+  a pydantic schema, so a malformed reply raises here instead of causing a
+  mystery three stages later.
+- **The source's `category_hint` is deliberately withheld** from the model. The
+  hint says where an item came from, not what it is; showing it just invites a
+  rubber stamp.
+- **Entity context is supplied, not recalled.** Detected companies come from the
+  deterministic matcher, so the model reasons about ownership it was handed.
+- **Invented uids are dropped.** A hallucinated uid would attach a score to the
+  wrong story, so unmatched entries are discarded rather than guessed at.
+- **Unscored items don't publish.** An unscored item is one nothing has judged.
+
+Every run prints its own token and cost accounting. If `cache hit` reads 0%
+across repeated runs, something is invalidating the prefix.
 
 ## Cost
 
