@@ -199,6 +199,21 @@ def test_empty_issue_still_renders():
     assert "Nothing new in the feeds" in html
 
 
+def test_verbose_flag_is_accepted_on_either_side_of_the_subcommand(tmp_path):
+    """argparse exits 2 on an unrecognized flag; CI passes -v after the
+    subcommand, so both positions must parse."""
+    from dailydive import cli
+
+    for argv in (["-v", "sources"], ["sources", "-v"]):
+        assert cli.main(argv) == 0
+
+
+def test_unknown_source_id_is_an_error_not_an_empty_issue(tmp_path):
+    from dailydive import cli
+
+    assert cli.main(["run", "--source", "nope", "--offline", "--out", str(tmp_path)]) == 2
+
+
 def test_dates_render_without_platform_specific_codes():
     """`%-d` is glibc-only and raises on Windows. Regression guard."""
     dt = datetime(2026, 8, 3, 9, 31, tzinfo=UTC)

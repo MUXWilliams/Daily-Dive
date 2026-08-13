@@ -39,31 +39,59 @@ jobs:
         run: daily-dive sources
 
       - name: Build issue from live feeds
+        id: build
+        continue-on-error: true
         run: |
           ARGS=""
           if [ -n "${{ inputs.source }}" ]; then ARGS="$ARGS --source ${{ inputs.source }}"; fi
           if [ -n "${{ inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ inputs.limit }}"; fi
-          echo "daily-dive run $ARGS"
-          daily-dive run $ARGS --verbose
+          echo "daily-dive run $ARGS --verbose"
+          # Tee so the summary step can report per-source results even on failure.
+          set -o pipefail
+          daily-dive run $ARGS --verbose 2>&1 | tee run.log
 
       - name: Summarize what each feed returned
         if: always()
         run: |
-          echo "### Feed check" >> $GITHUB_STEP_SUMMARY
-          if [ -f site/index.html ]; then
-            echo "Built \`site/index.html\` — download the **site** artifact below to view it." >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Headlines pulled:" >> $GITHUB_STEP_SUMMARY
-            grep -o 'class="headline"[^>]*>[^<]*' site/index.html \
-              | sed 's/.*>//' | sed 's/^/- /' >> $GITHUB_STEP_SUMMARY || true
-          else
-            echo "No issue was built — check the log above." >> $GITHUB_STEP_SUMMARY
-          fi
+          {
+            echo "### Feed check"
+            echo ""
+            if [ -f run.log ]; then
+              echo "| Source | Result |"
+              echo "|---|---|"
+              # One row per source: "<id>: N items" on success, or the error.
+              grep -E "dailydive: [a-z0-9-]+: [0-9]+ items" run.log \
+                | sed -E 's/.*dailydive: ([a-z0-9-]+): ([0-9]+) items.*/| \1 | ✅ \2 items |/' || true
+              grep -E "(failed|skipping) [a-z0-9-]+" run.log \
+                | sed -E 's/.*(failed|skipping) ([a-z0-9-]+):? ?(.*)/| \2 | ❌ \3 |/' || true
+              echo ""
+            fi
+            if [ -f site/index.html ]; then
+              echo "Built the page — download the **site** artifact below to open it."
+              echo ""
+              echo "<details><summary>Headlines pulled</summary>"
+              echo ""
+              grep -o 'class="headline"[^>]*>[^<]*' site/index.html \
+                | sed 's/.*>//' | sed 's/^/- /' || true
+              echo ""
+              echo "</details>"
+            else
+              echo "**No page was built.** See the log for why."
+            fi
+          } >> $GITHUB_STEP_SUMMARY
 
       - name: Upload the built page
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: site
-          path: site/
+          path: |
+            site/
+            run.log
           if-no-files-found: warn
+
+      - name: Fail if the build failed
+        if: steps.build.outcome == 'failure'
+        run: |
+          echo "The build step failed — see the Feed check summary." >&2
+          exit 1

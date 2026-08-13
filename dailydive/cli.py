@@ -65,10 +65,15 @@ def _collect_offline(sources: list[Source]) -> list[Item]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="daily-dive", description=__doc__)
+    # Shared options live on a parent parser so they're accepted on either side
+    # of the subcommand — `daily-dive -v run` and `daily-dive run -v` both work.
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("-v", "--verbose", action="store_true")
+
+    parser = argparse.ArgumentParser(prog="daily-dive", description=__doc__, parents=[common])
     sub = parser.add_subparsers(dest="command", required=True)
 
-    run = sub.add_parser("run", help="build an issue")
+    run = sub.add_parser("run", help="build an issue", parents=[common])
     run.add_argument("--source", action="append", help="only these source ids (repeatable)")
     run.add_argument("--limit", type=int, help="cap items per run, newest first")
     run.add_argument("--offline", action="store_true", help="use tests/fixtures instead of the network")
@@ -76,10 +81,9 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--db", type=Path, default=store.DEFAULT_DB)
     run.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
 
-    listing = sub.add_parser("sources", help="list configured feeds")
+    listing = sub.add_parser("sources", help="list configured feeds", parents=[common])
     listing.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
 
-    parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args(argv)
 
     logging.basicConfig(
