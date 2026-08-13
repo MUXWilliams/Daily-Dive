@@ -29,6 +29,13 @@ class Category(StrEnum):
     WILD_REEFS = "Wild Reefs"
     EVENTS = "Events"
 
+    @property
+    def slug(self) -> str:
+        """CSS-safe identifier. Each category owns a colour in the stylesheet,
+        keyed off this — so renaming a member renames its class too, and a
+        category can never end up styled as a different one."""
+        return self.name.lower().replace("_", "-")
+
 
 class SourceType(StrEnum):
     """Feed dialect. Picks the normalizer, not the fetcher."""

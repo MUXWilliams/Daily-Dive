@@ -190,8 +190,12 @@ def test_sections_follow_canonical_order_and_skip_empties():
             item(url="https://a.invalid/3"),  # no hint -> "Elsewhere"
         ],
     )
-    titles = [t for t, _ in render.group_by_category(issue)]
-    assert titles == [Category.INDUSTRY.value, Category.COMMUNITY.value, "Elsewhere"]
+    buckets = render.group_by_category(issue)
+    assert [t for t, _, _ in buckets] == [
+        Category.INDUSTRY.value, Category.COMMUNITY.value, "Elsewhere"
+    ]
+    # Slug keys the section's colour, so it must survive alongside the title.
+    assert [sl for _, sl, _ in buckets] == ["industry", "community", "elsewhere"]
 
 
 def test_empty_issue_still_renders():
@@ -258,3 +262,27 @@ def test_feed_link_parser_finds_advertised_feeds():
     hrefs = [h for h, _ in parser.feeds]
     assert "/feed/" in hrefs
     assert "/style.css" not in hrefs
+
+
+def test_every_category_has_a_slug_and_a_colour_in_the_stylesheet():
+    """A category with no matching CSS class would render on the fallback hue —
+    silently, and only in production."""
+    template = (render.TEMPLATE_DIR / "issue.html.j2").read_text(encoding="utf-8")
+    for category in Category:
+        assert f".sec-{category.slug}" in template, category
+    assert ".sec-elsewhere" in template  # the uncategorized fallback
+
+
+def test_slugs_are_css_safe():
+    for category in Category:
+        assert category.slug.replace("-", "").isalnum(), category
+        assert category.slug.islower()
+
+
+def test_page_commits_to_one_theme():
+    """Light-only is a decision, not an omission — no dark-mode blocks, and the
+    body paints its own background so it never borrows the host's."""
+    template = (render.TEMPLATE_DIR / "issue.html.j2").read_text(encoding="utf-8")
+    assert "prefers-color-scheme" not in template
+    assert "data-theme" not in template
+    assert "background: var(--page)" in template

@@ -4,73 +4,106 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Daily Dive — {{ issue.date | datefmt }}</title>
+<meta name="description" content="A daily digest of saltwater and reef aquarium news. Every item links to its source.">
 <style>
+  /* Single-theme by choice: white ground, the conventional register for a news
+     aggregator. There is deliberately no dark variant — a digest read at 6am on
+     a phone should look the same as one read at noon on a desktop. Every colour
+     is stated explicitly so the page holds its look on any host background. */
   :root {
-    --bg: #fbfaf7;
-    --surface: #ffffff;
-    --ink: #17211f;
-    --muted: #5d6b68;
-    --rule: #e2e0d9;
-    --accent: #0f6f6c;
-    --accent-soft: #e6f1f0;
+    --page:      #ffffff;
+    --ground:    #f6f7f8;
+    --ink:       #16191d;
+    --ink-soft:  #545e69;
+    --ink-faint: #8b959f;
+    --rule:      #e4e8eb;
+    --link:      #0b5fbe;
+    --flare:     #b8501f;   /* beat tags only — the one warm note on the page */
+
+    /* One hue per category, matched in weight so the set reads as a system
+       rather than a rainbow. Each clears 4.5:1 on white. */
+    --c-industry:       #0a6360;  --c-industry-tint:   #ecf4f3;
+    --c-husbandry:      #2a6234;  --c-husbandry-tint:  #edf3ee;
+    --c-community:      #364a8f;  --c-community-tint:  #ecEEF7;
+    --c-video:          #7a3560;  --c-video-tint:      #f6ecf1;
+    --c-livestock:      #8a5512;  --c-livestock-tint:  #f6f1e8;
+    --c-wild-reefs:     #1a5182;  --c-wild-reefs-tint: #eaeff5;
+    --c-events:         #4b4a6e;  --c-events-tint:     #eeedf4;
+    --c-elsewhere:      #545e69;  --c-elsewhere-tint:  #f2f3f5;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #101614;
-      --surface: #161d1b;
-      --ink: #e8ece9;
-      --muted: #93a29e;
-      --rule: #263230;
-      --accent: #5fc9c2;
-      --accent-soft: #16302e;
-    }
-  }
+
+  /* Each section sets --hue and --tint once; everything inside reads from them. */
+  .sec-industry   { --hue: var(--c-industry);   --tint: var(--c-industry-tint); }
+  .sec-husbandry  { --hue: var(--c-husbandry);  --tint: var(--c-husbandry-tint); }
+  .sec-community  { --hue: var(--c-community);  --tint: var(--c-community-tint); }
+  .sec-video      { --hue: var(--c-video);      --tint: var(--c-video-tint); }
+  .sec-livestock  { --hue: var(--c-livestock);  --tint: var(--c-livestock-tint); }
+  .sec-wild-reefs { --hue: var(--c-wild-reefs); --tint: var(--c-wild-reefs-tint); }
+  .sec-events     { --hue: var(--c-events);     --tint: var(--c-events-tint); }
+  .sec-elsewhere  { --hue: var(--c-elsewhere);  --tint: var(--c-elsewhere-tint); }
+
   * { box-sizing: border-box; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     -webkit-text-size-adjust: 100%;
   }
-  .wrap { max-width: 46rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+  .wrap { max-width: 42rem; margin: 0 auto; padding: 2.25rem 1.15rem 4rem; }
 
-  header.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 1rem; margin-bottom: .5rem; }
-  .brand { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0; }
-  h1 { font-size: 2.1rem; line-height: 1.15; margin: .3rem 0 .4rem; letter-spacing: -.02em; }
-  .dateline { color: var(--muted); font-size: .9rem; margin: 0; }
+  /* -------------------------------- masthead ------------------------------- */
+  header.masthead { border-bottom: 2px solid var(--ink); padding-bottom: .85rem; }
+  .brand {
+    margin: 0 0 .4rem; font: 700 .68rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: .17em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  h1 { margin: 0 0 .3rem; font-size: clamp(1.55rem, 4.5vw, 2rem); letter-spacing: -.03em; font-weight: 700; }
+  .dateline { margin: 0; font-size: .79rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
 
-  section { margin-top: 2.5rem; }
-  h2 {
-    font-size: .82rem; text-transform: uppercase; letter-spacing: .1em;
-    color: var(--accent); margin: 0 0 .85rem;
-    padding-bottom: .4rem; border-bottom: 1px solid var(--rule);
+  /* -------------------------------- sections ------------------------------- */
+  .sections { display: grid; gap: .9rem; margin-top: 1.5rem; }
+  section.card { background: var(--tint); border-radius: 8px; padding: .95rem 1.05rem 1.05rem; }
+  section.card > h2 {
+    display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+    margin: 0 0 .45rem; padding-bottom: .45rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--hue) 20%, transparent);
+    font: 700 .69rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: .13em; text-transform: uppercase; color: var(--hue);
+  }
+  section.card > h2 .count {
+    font-weight: 700; color: var(--ink-faint); font-variant-numeric: tabular-nums;
   }
 
   ul.items { list-style: none; margin: 0; padding: 0; }
-  li.item { padding: .85rem 0; border-bottom: 1px solid var(--rule); }
-  li.item:last-child { border-bottom: none; }
-  .item a.headline { color: var(--ink); text-decoration: none; font-weight: 600; }
-  .item a.headline:hover { color: var(--accent); text-decoration: underline; }
-  .gist { margin: .35rem 0 0; font-size: .93rem; color: var(--ink); opacity: .82; }
-  .credit { display: block; margin-top: .3rem; font-size: .84rem; color: var(--muted); }
-  .credit .source { color: var(--accent); font-weight: 600; }
-  .beat {
-    display: inline-block; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase;
-    font-weight: 700; padding: .08rem .4rem; border-radius: 3px; margin-right: .3rem;
-    background: var(--accent); color: var(--bg);
+  li.item { padding: .62rem 0; border-bottom: 1px solid color-mix(in srgb, var(--hue) 13%, transparent); }
+  li.item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  a.headline {
+    display: block; font-size: .96rem; font-weight: 700; letter-spacing: -.011em;
+    line-height: 1.32; color: var(--ink); text-decoration: none; text-wrap: balance;
   }
-  .badge {
-    display: inline-block; font-size: .7rem; padding: .05rem .4rem; border-radius: 3px;
-    background: var(--accent-soft); color: var(--accent); margin-left: .35rem;
+  a.headline:hover { color: var(--hue); text-decoration: underline; }
+  .gist { margin: .26rem 0 0; font-size: .89rem; line-height: 1.48; color: var(--ink-soft); }
+  .credit {
+    margin: .3rem 0 0; font-size: .755rem; color: var(--ink-faint);
+    display: flex; flex-wrap: wrap; gap: .3rem; align-items: center;
+  }
+  .credit .source { color: var(--hue); font-weight: 700; }
+  .beat {
+    background: var(--flare); color: #fff; font-size: .6rem; font-weight: 700;
+    letter-spacing: .07em; text-transform: uppercase; padding: .1rem .32rem; border-radius: 2px;
   }
 
+  /* --------------------------------- footer -------------------------------- */
+  .empty { color: var(--ink-soft); font-style: italic; padding: 2rem 0; }
   footer {
-    margin-top: 3.5rem; padding-top: 1.25rem; border-top: 1px solid var(--rule);
-    font-size: .85rem; color: var(--muted);
+    margin-top: 2.25rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+    font-size: .78rem; color: var(--ink-faint); line-height: 1.6;
   }
-  footer a { color: var(--accent); }
-  .empty { color: var(--muted); font-style: italic; padding: 2rem 0; }
+  footer p { margin: 0 0 .6rem; }
+  footer p:last-child { margin-bottom: 0; }
+  footer a { color: var(--link); }
+
+  a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
 </style>
 </head>
 <body>
@@ -86,28 +119,30 @@
     <p class="empty">Nothing new in the feeds this morning.</p>
   {% endif %}
 
-  {% for title, items in sections %}
-  <section>
-    <h2>{{ title }}</h2>
-    <ul class="items">
-      {% for item in items %}
-      <li class="item">
-        <a class="headline" href="{{ item.url }}" rel="noopener nofollow external">{{ item.title }}</a>
-        {% if item.extra.gist %}
-        <p class="gist">{{ item.extra.gist }}</p>
-        {% endif %}
-        <span class="credit">
-          {% if item.extra.beat %}<span class="beat">{{ item.extra.beat }}</span>{% endif %}
-          <span class="source">{{ item.source_name }}</span>
-          {% if item.author %}· {{ item.author }}{% endif %}
-          · {{ item.published_at | datefmt('short') }}
-          <span class="badge">{{ item.url | host }}</span>
-        </span>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-  {% endfor %}
+  <div class="sections">
+    {% for title, slug, items in sections %}
+    <section class="card sec-{{ slug }}">
+      <h2><span>{{ title }}</span><span class="count">{{ items|length }}</span></h2>
+      <ul class="items">
+        {% for item in items %}
+        <li class="item">
+          <a class="headline" href="{{ item.url }}" rel="noopener nofollow external">{{ item.title }}</a>
+          {% if item.extra.gist %}
+          <p class="gist">{{ item.extra.gist }}</p>
+          {% endif %}
+          <p class="credit">
+            {% if item.extra.beat %}<span class="beat">{{ item.extra.beat }}</span>{% endif %}
+            <span class="source">{{ item.source_name }}</span>
+            {% if item.author %}<span>· {{ item.author }}</span>{% endif %}
+            <span>· {{ item.published_at | datefmt('short') }}</span>
+            <span>· {{ item.url | host }}</span>
+          </p>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endfor %}
+  </div>
 
   <footer>
     {% if issue.outlets %}

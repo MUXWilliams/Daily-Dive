@@ -49,21 +49,23 @@ def _datefmt(dt: datetime, style: str = "long") -> str:
             return f"{dt:%B} {dt.day}, {dt.year}"
 
 
-def group_by_category(issue: Issue) -> list[tuple[str, list]]:
+def group_by_category(issue: Issue) -> list[tuple[str, str, list]]:
     """Section the issue, in the canonical category order, skipping empties.
 
-    v0 groups on the source's category_hint. v1 replaces this with real
-    per-item categories from the scoring pass; the template doesn't change.
+    Returns (title, slug, items). The slug keys the section's colour in the
+    stylesheet — one hue per category, carried through the heading, the source
+    name, and the link hover, so the colour tells the reader where they are
+    before they read a word.
     """
-    buckets: list[tuple[str, list]] = []
+    buckets: list[tuple[str, str, list]] = []
     for category in Category:
         members = [i for i in issue.items if i.category_hint is category]
         if members:
-            buckets.append((category.value, members))
+            buckets.append((category.value, category.slug, members))
 
     uncategorized = [i for i in issue.items if i.category_hint is None]
     if uncategorized:
-        buckets.append(("Elsewhere", uncategorized))
+        buckets.append(("Elsewhere", "elsewhere", uncategorized))
     return buckets
 
 
