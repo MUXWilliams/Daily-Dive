@@ -82,6 +82,21 @@
     border-bottom: 1px solid var(--rule);
   }
 
+  /* ---------------------------------- intro --------------------------------
+     The one place on the page written to a person rather than assembled from
+     a feed. Slightly larger than the story text, so the voice lands before
+     the density starts. */
+  .intro { margin: 1.3rem 0 1.5rem; font-size: .97rem; line-height: 1.6; }
+  .intro p { margin: 0 0 .85rem; }
+  .intro p:last-child { margin-bottom: 0; }
+  .intro .lead-in { font-weight: 700; color: var(--ink); margin-bottom: .5rem; }
+  .intro ul {
+    margin: 0 0 .95rem; padding-left: 1.15rem;
+    display: grid; gap: .3rem;
+  }
+  .intro li { color: var(--ink); }
+  .intro li.plus { color: var(--ink-soft); }
+
   /* -------------------------------- sections ------------------------------- */
   .sections { display: grid; gap: .9rem; margin-top: 1.5rem; }
   section.card { background: var(--tint); border-radius: 8px; padding: .95rem 1.05rem 1.05rem; }
@@ -148,7 +163,22 @@
     <p class="dateline">{{ issue.date | datefmt('full') }} · {{ issue.items|length }} item{{ '' if issue.items|length == 1 else 's' }}</p>
   </header>
 
-  {% if not issue.items %}
+  {% if issue.items %}
+  <section class="intro">
+    <p>Howdy, it's {{ brand.EDITOR }} again.</p>
+    <p>Happy {{ issue.date | datefmt('weekday') }}, {{ brand.AUDIENCE }}, and welcome back to Daily Dive.</p>
+    <p class="lead-in">Here are the biggest things worth knowing today:</p>
+    <ul>
+      {% for line in highlights %}
+      <li>{{ line }}</li>
+      {% endfor %}
+      {% if highlights_plus %}
+      <li class="plus">{{ highlights_plus }}</li>
+      {% endif %}
+    </ul>
+    <p>Let's <em>dive</em> into the news touching our hobby&hellip;</p>
+  </section>
+  {% else %}
     <p class="empty">Nothing new in the feeds this morning.</p>
   {% endif %}
 

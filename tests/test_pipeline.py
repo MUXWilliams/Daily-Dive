@@ -336,3 +336,66 @@ def test_write_issue_gives_each_page_the_right_banner_path(tmp_path):
     dated = (tmp_path / "issues" / "2026-08-13.html").read_text()
     assert f'src="{render.HEADER_IMAGE}"' in index
     assert f'src="../{render.HEADER_IMAGE}"' in dated
+
+
+# --------------------------------------------------------------------- intro
+
+def test_intro_highlights_come_from_the_issue_itself():
+    """Derived from the ranked items, never written separately — so the intro
+    can't advertise a story the issue doesn't contain."""
+    items = [item(url=f"https://a.invalid/{n}", title=f"Story {n}") for n in range(6)]
+    issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=items)
+
+    bullets, plus = render.highlights(issue, limit=4)
+    assert bullets == [f"Story {n}" for n in range(4)]
+    assert plus and plus.startswith("Plus 2 more")
+
+    html = render.render_issue(issue)
+    for line in bullets:
+        assert line in html
+
+
+def test_intro_omits_the_plus_line_when_nothing_is_left_over():
+    items = [item(url=f"https://a.invalid/{n}", title=f"Story {n}") for n in range(3)]
+    issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=items)
+
+    bullets, plus = render.highlights(issue, limit=4)
+    assert len(bullets) == 3
+    assert plus is None
+
+
+def test_intro_plus_line_names_the_remaining_areas():
+    items = [
+        item(url="https://a.invalid/1", category_hint=Category.INDUSTRY),
+        item(url="https://a.invalid/2", category_hint=Category.INDUSTRY),
+        item(url="https://a.invalid/3", category_hint=Category.VIDEO),
+        item(url="https://a.invalid/4", category_hint=Category.WILD_REEFS),
+    ]
+    issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=items)
+    _, plus = render.highlights(issue, limit=2)
+    assert "video" in plus and "wild reefs" in plus
+
+
+def test_empty_issue_shows_no_intro():
+    """Greeting a reader and then showing them nothing is worse than silence."""
+    html = render.render_issue(Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=[]))
+    assert "Howdy" not in html
+    assert "Nothing new in the feeds" in html
+
+
+def test_greeting_uses_the_issue_date_not_today():
+    """A dated permalink read next week must still say the day it was written."""
+    issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=[item()])  # a Thursday
+    assert "Happy Thursday" in render.render_issue(issue)
+
+
+# ------------------------------------------------------------------- contact
+
+def test_one_contact_address_everywhere():
+    """A publisher asking to be delisted must find the same address wherever
+    they look — the User-Agent, the about page, or the README."""
+    from dailydive import brand, ingest
+
+    assert brand.CONTACT_EMAIL in ingest.USER_AGENT
+    assert brand.SITE_URL in ingest.USER_AGENT
+    assert brand.CONTACT_EMAIL in Path("site/about.html").read_text(encoding="utf-8")

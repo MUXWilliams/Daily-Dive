@@ -12,6 +12,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from . import brand
 from .models import Category, Issue, assert_attributable
 
 TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
@@ -32,6 +33,33 @@ def _host(url: str) -> str:
     return urlsplit(url).netloc.removeprefix("www.")
 
 
+def highlights(issue: Issue, limit: int = 4) -> tuple[list[str], str | None]:
+    """The morning's headline bullets, plus a line covering the remainder.
+
+    Derived from the ranked items rather than written separately, so the intro
+    can never advertise a story the issue doesn't contain. Items arrive sorted
+    by relevance from the scoring pass; without scores this falls back to
+    document order, which is the source feeds' own ordering.
+    """
+    if not issue.items:
+        return [], None
+
+    top = issue.items[:limit]
+    rest = issue.items[limit:]
+
+    plus = None
+    if rest:
+        areas = []
+        for item in rest:
+            name = item.category_hint.value if item.category_hint else "more"
+            if name not in areas:
+                areas.append(name)
+        listed = ", ".join(a.lower() for a in areas[:3])
+        plus = f"Plus {len(rest)} more across {listed}"
+
+    return [i.title for i in top], plus
+
+
 def _datefmt(dt: datetime, style: str = "long") -> str:
     """Format a date without platform-specific strftime codes.
 
@@ -43,6 +71,8 @@ def _datefmt(dt: datetime, style: str = "long") -> str:
             return f"{dt:%A}, {dt:%B} {dt.day}, {dt.year}"
         case "short":  # Aug 13
             return f"{dt:%b} {dt.day}"
+        case "weekday":  # Thursday
+            return f"{dt:%A}"
         case "stamp":  # 2026-08-13 09:31 UTC
             return f"{dt:%Y-%m-%d %H:%M} {dt.tzname() or ''}".strip()
         case _:  # August 13, 2026
@@ -96,11 +126,15 @@ def render_issue(issue: Issue, *, header_image: str | None = None) -> str:
     env.filters["host"] = _host
     env.filters["datefmt"] = _datefmt
     template = env.get_template("issue.html.j2")
+    bullets, plus = highlights(issue)
     return template.render(
         issue=issue,
         sections=group_by_category(issue),
         generated_at=datetime.now(issue.date.tzinfo),
         header_image=header_image,
+        brand=brand,
+        highlights=bullets,
+        highlights_plus=plus,
     )
 
 

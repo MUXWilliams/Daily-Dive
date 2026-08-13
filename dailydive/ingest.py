@@ -17,15 +17,16 @@ from urllib.robotparser import RobotFileParser
 
 import httpx
 
-from . import store
+from . import brand, store
 from .models import Source
 
 log = logging.getLogger(__name__)
 
-# Change the address if you fork this. A crawler that can't be contacted is a
-# crawler that gets blocked instead of emailed.
-CONTACT = "william.isaac.alves@gmail.com"
-USER_AGENT = f"DailyDiveBot/0.1 (+https://theloneaquarist.com; {CONTACT})"
+# A crawler that can't be contacted is a crawler that gets blocked instead of
+# emailed. The address lives in brand.py so the User-Agent, the about page, and
+# the removal policy can never drift apart.
+CONTACT = brand.CONTACT_EMAIL
+USER_AGENT = f"{brand.BOT_NAME}/{brand.BOT_VERSION} (+{brand.SITE_URL}; {CONTACT})"
 
 MIN_INTERVAL_PER_HOST = 1.0
 TIMEOUT = httpx.Timeout(20.0, connect=10.0)
