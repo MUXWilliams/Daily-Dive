@@ -50,14 +50,37 @@
   }
   .wrap { max-width: 42rem; margin: 0 auto; padding: 2.25rem 1.15rem 4rem; }
 
-  /* -------------------------------- masthead ------------------------------- */
-  header.masthead { border-bottom: 2px solid var(--ink); padding-bottom: .85rem; }
-  .brand {
-    margin: 0 0 .4rem; font: 700 .68rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-    letter-spacing: .17em; text-transform: uppercase; color: var(--ink-soft);
+  /* -------------------------------- masthead -------------------------------
+     The banner carries the wordmark and tagline, so the h1 wraps the image and
+     the alt text is the heading — no duplicated text on the page, and screen
+     readers still get a real <h1>. */
+  header.masthead { margin: 0 0 1.1rem; }
+  h1.wordmark { margin: 0; font-size: 0; line-height: 0; }
+  h1.wordmark img { display: block; width: 100%; height: auto; border-radius: 8px; }
+
+  /* Drawn stand-in, used only when no banner file is present. Same palette, so
+     a missing asset degrades rather than breaks. */
+  .banner-fallback {
+    border-radius: 8px; padding: 1.5rem 1.4rem 1.6rem;
+    background: linear-gradient(155deg, #3585b8 0%, #1d5f92 45%, #102a3f 100%);
+    color: #fff;
   }
-  h1 { margin: 0 0 .3rem; font-size: clamp(1.55rem, 4.5vw, 2rem); letter-spacing: -.03em; font-weight: 700; }
-  .dateline { margin: 0; font-size: .79rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .banner-fallback .kicker {
+    margin: 0 0 .15rem; font-size: .84rem; font-weight: 700; letter-spacing: -.005em;
+  }
+  .banner-fallback .name {
+    margin: 0; font-size: clamp(2rem, 7vw, 3rem); font-weight: 700;
+    letter-spacing: -.035em; line-height: 1;
+  }
+  .banner-fallback .tagline {
+    margin: .5rem 0 0; font-size: .85rem; font-weight: 700; color: rgba(255,255,255,.9);
+  }
+
+  .dateline {
+    margin: .6rem 0 0; font-size: .79rem; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums; padding-bottom: .7rem;
+    border-bottom: 1px solid var(--rule);
+  }
 
   /* -------------------------------- sections ------------------------------- */
   .sections { display: grid; gap: .9rem; margin-top: 1.5rem; }
@@ -110,8 +133,18 @@
 <div class="wrap">
 
   <header class="masthead">
-    <p class="brand">The Lone Aquarist</p>
-    <h1>Daily Dive</h1>
+    {% if header_image %}
+    <h1 class="wordmark">
+      <img src="{{ header_image }}" width="954" height="202"
+           alt="Daily Dive — The Lone Aquarist's daily news for the marine aquarist">
+    </h1>
+    {% else %}
+    <div class="banner-fallback">
+      <p class="kicker">The Lone Aquarist's</p>
+      <h1 class="name">Daily Dive</h1>
+      <p class="tagline">Your daily news for the marine aquarist.</p>
+    </div>
+    {% endif %}
     <p class="dateline">{{ issue.date | datefmt('full') }} · {{ issue.items|length }} item{{ '' if issue.items|length == 1 else 's' }}</p>
   </header>
 

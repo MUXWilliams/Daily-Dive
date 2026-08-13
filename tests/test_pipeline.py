@@ -286,3 +286,53 @@ def test_page_commits_to_one_theme():
     assert "prefers-color-scheme" not in template
     assert "data-theme" not in template
     assert "background: var(--page)" in template
+
+
+# -------------------------------------------------------------------- banner
+
+def test_banner_is_used_when_present_and_carries_the_heading(tmp_path):
+    """The artwork contains the wordmark, so the h1 wraps the image and the alt
+    text is the heading — no duplicated text, and a real <h1> for a reader."""
+    (tmp_path / "assets").mkdir()
+    (tmp_path / render.HEADER_IMAGE).write_bytes(b"\x89PNG\r\n\x1a\n")
+
+    issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=[item()])
+    html = render.render_issue(issue, header_image=render.find_header_image(tmp_path))
+
+    assert render.HEADER_IMAGE in html
+    # The class name also appears in the stylesheet, so check the markup.
+    assert 'class="banner-fallback"' not in html
+    assert '<h1 class="wordmark">' in html
+
+
+def test_missing_banner_falls_back_rather_than_breaking(tmp_path):
+    """The artwork is an upgrade, never a dependency."""
+    issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=[item()])
+    assert render.find_header_image(tmp_path) is None
+
+    html = render.render_issue(issue, header_image=None)
+    assert 'class="banner-fallback"' in html
+    assert "Daily Dive" in html  # the wordmark still reaches the page
+
+
+def test_banner_path_resolves_from_the_dated_permalink(tmp_path):
+    """index.html and issues/*.html sit at different depths; an absolute path
+    would work live and break when opened off disk, so both get a relative one."""
+    (tmp_path / "assets").mkdir()
+    (tmp_path / render.HEADER_IMAGE).write_bytes(b"\x89PNG\r\n\x1a\n")
+
+    assert render.find_header_image(tmp_path) == render.HEADER_IMAGE
+    assert render.find_header_image(tmp_path, depth=1) == "../" + render.HEADER_IMAGE
+
+
+def test_write_issue_gives_each_page_the_right_banner_path(tmp_path):
+    (tmp_path / "assets").mkdir()
+    (tmp_path / render.HEADER_IMAGE).write_bytes(b"\x89PNG\r\n\x1a\n")
+
+    issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=[item()])
+    render.write_issue(issue, tmp_path)
+
+    index = (tmp_path / "index.html").read_text()
+    dated = (tmp_path / "issues" / "2026-08-13.html").read_text()
+    assert f'src="{render.HEADER_IMAGE}"' in index
+    assert f'src="../{render.HEADER_IMAGE}"' in dated

@@ -69,7 +69,26 @@ def group_by_category(issue: Issue) -> list[tuple[str, str, list]]:
     return buckets
 
 
-def render_issue(issue: Issue) -> str:
+# Drop a banner here and the page uses it; leave it out and the page draws its
+# own. Either way the masthead renders — the artwork is an upgrade, never a
+# dependency, so a missing file can't produce a broken header in production.
+HEADER_IMAGE = "assets/dailydive-header.png"
+
+
+def find_header_image(out_dir: Path, *, depth: int = 0) -> str | None:
+    """Relative path to the banner, or None if it isn't there.
+
+    Relative rather than absolute so the page renders correctly both on the
+    live site and when opened straight off disk — `depth` is how many
+    directories down from the site root the page sits, so the dated permalink
+    under issues/ gets the `../` it needs.
+    """
+    if not (out_dir / HEADER_IMAGE).is_file():
+        return None
+    return ("../" * depth) + HEADER_IMAGE
+
+
+def render_issue(issue: Issue, *, header_image: str | None = None) -> str:
     for item in issue.items:
         assert_attributable(item)
 
@@ -81,18 +100,28 @@ def render_issue(issue: Issue) -> str:
         issue=issue,
         sections=group_by_category(issue),
         generated_at=datetime.now(issue.date.tzinfo),
+        header_image=header_image,
     )
 
 
 def write_issue(issue: Issue, out_dir: Path) -> Path:
-    """Write the issue to out_dir/index.html and a dated permalink."""
-    html = render_issue(issue)
+    """Write the issue to out_dir/index.html and a dated permalink.
+
+    Rendered twice, because the two pages sit at different depths and the
+    banner path has to resolve from each of them.
+    """
     out_dir.mkdir(parents=True, exist_ok=True)
 
     dated = out_dir / "issues" / f"{issue.date:%Y-%m-%d}.html"
     dated.parent.mkdir(parents=True, exist_ok=True)
-    dated.write_text(html, encoding="utf-8")
+    dated.write_text(
+        render_issue(issue, header_image=find_header_image(out_dir, depth=1)),
+        encoding="utf-8",
+    )
 
     index = out_dir / "index.html"
-    index.write_text(html, encoding="utf-8")
+    index.write_text(
+        render_issue(issue, header_image=find_header_image(out_dir)),
+        encoding="utf-8",
+    )
     return index
