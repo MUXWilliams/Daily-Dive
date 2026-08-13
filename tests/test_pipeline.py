@@ -197,3 +197,17 @@ def test_sections_follow_canonical_order_and_skip_empties():
 def test_empty_issue_still_renders():
     html = render.render_issue(Issue(date=datetime(2026, 8, 12, tzinfo=UTC), items=[]))
     assert "Nothing new in the feeds" in html
+
+
+def test_dates_render_without_platform_specific_codes():
+    """`%-d` is glibc-only and raises on Windows. Regression guard."""
+    dt = datetime(2026, 8, 3, 9, 31, tzinfo=UTC)
+    assert render._datefmt(dt) == "August 3, 2026"
+    assert render._datefmt(dt, "full") == "Monday, August 3, 2026"
+    assert render._datefmt(dt, "short") == "Aug 3"
+
+    template = (render.TEMPLATE_DIR / "issue.html.j2").read_text(encoding="utf-8")
+    assert "%-" not in template
+
+    html = render.render_issue(Issue(date=dt, items=[item()]))
+    assert "August 3, 2026" in html

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Daily Dive — {{ issue.date.strftime('%B %-d, %Y') }}</title>
+<title>The Daily Dive — {{ issue.date | datefmt }}</title>
 <style>
   :root {
     --bg: #fbfaf7;
@@ -73,7 +73,7 @@
   <header class="masthead">
     <p class="brand">The Lone Aquarist</p>
     <h1>The Daily Dive</h1>
-    <p class="dateline">{{ issue.date.strftime('%A, %B %-d, %Y') }} · {{ issue.items|length }} item{{ '' if issue.items|length == 1 else 's' }}</p>
+    <p class="dateline">{{ issue.date | datefmt('full') }} · {{ issue.items|length }} item{{ '' if issue.items|length == 1 else 's' }}</p>
   </header>
 
   {% if not issue.items %}
@@ -90,7 +90,7 @@
         <span class="credit">
           <span class="source">{{ item.source_name }}</span>
           {% if item.author %}· {{ item.author }}{% endif %}
-          · {{ item.published_at.strftime('%b %-d') }}
+          · {{ item.published_at | datefmt('short') }}
           <span class="badge">{{ item.url | host }}</span>
         </span>
       </li>
@@ -112,7 +112,7 @@
       See <a href="/about.html">about &amp; sourcing policy</a> for how sources are selected
       and how to request removal.
     </p>
-    <p>Generated {{ generated_at.strftime('%Y-%m-%d %H:%M %Z') }}.</p>
+    <p>Generated {{ generated_at | datefmt('stamp') }}.</p>
   </footer>
 
 </div>

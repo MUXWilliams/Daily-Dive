@@ -32,6 +32,23 @@ def _host(url: str) -> str:
     return urlsplit(url).netloc.removeprefix("www.")
 
 
+def _datefmt(dt: datetime, style: str = "long") -> str:
+    """Format a date without platform-specific strftime codes.
+
+    `%-d` (no zero padding) is glibc-only and raises on Windows, so the day
+    number is interpolated directly instead.
+    """
+    match style:
+        case "full":  # Thursday, August 13, 2026
+            return f"{dt:%A}, {dt:%B} {dt.day}, {dt.year}"
+        case "short":  # Aug 13
+            return f"{dt:%b} {dt.day}"
+        case "stamp":  # 2026-08-13 09:31 UTC
+            return f"{dt:%Y-%m-%d %H:%M} {dt.tzname() or ''}".strip()
+        case _:  # August 13, 2026
+            return f"{dt:%B} {dt.day}, {dt.year}"
+
+
 def group_by_category(issue: Issue) -> list[tuple[str, list]]:
     """Section the issue, in the canonical category order, skipping empties.
 
@@ -56,6 +73,7 @@ def render_issue(issue: Issue) -> str:
 
     env = _env()
     env.filters["host"] = _host
+    env.filters["datefmt"] = _datefmt
     template = env.get_template("issue.html.j2")
     return template.render(
         issue=issue,
