@@ -1,0 +1,196 @@
+# Aquarium-equipment ownership map, machine-readable.
+#
+# Derived from docs/industry-brief.md — that file is the editorial authority and
+# carries the sourcing, verification, and language rules. This file is the part
+# a program can act on: who owns whom, and what names to watch for.
+#
+# kind:
+#   sponsor       private-equity or holding entity at the top of a chain
+#   parent        operating parent that owns brands
+#   manufacturer  makes its own products; may be independently owned
+#   brand         a product line, NOT an independent company
+#
+# parent: id of the entity directly above this one. Chains resolve upward, so
+# a match on "Radion" reports EcoTech Marine -> Aperture -> Bertram Capital.
+#
+# ambiguous_aliases: real aliases that are too generic to match on automatically.
+# They are kept for the record and for a human reading a story, but the matcher
+# ignores them — "AI" would otherwise fire on every mention of artificial
+# intelligence, and "Prime", "Blade", "Jump", and "Speedy" are ordinary words.
+#
+# Baseline verified 2026-08-13. Ownership changes; see the maintenance protocol
+# in docs/industry-brief.md before treating any of this as current.
+
+# ------------------------------------------------------------ Aperture / Bertram
+
+[[entity]]
+id = "bertram"
+name = "Bertram Capital"
+kind = "sponsor"
+aliases = ["Bertram Capital"]
+
+[[entity]]
+id = "aperture"
+name = "Aperture Pet & Life"
+kind = "parent"
+parent = "bertram"
+aliases = ["Aperture Pet & Life", "Aperture LLC", "Aperture, LLC", "A Pet Life"]
+ambiguous_aliases = ["Aperture"]
+
+[[entity]]
+id = "brs"
+name = "Bulk Reef Supply"
+kind = "manufacturer"
+parent = "aperture"
+aliases = ["Bulk Reef Supply", "BRStv", "BRS TV"]
+ambiguous_aliases = ["BRS"]
+note = "Founded by Ryan Batcheller and Andrew Duneman, who are not the controlling owners."
+
+[[entity]]
+id = "ecotech"
+name = "EcoTech Marine"
+kind = "manufacturer"
+parent = "aperture"
+aliases = ["EcoTech Marine", "EcoTech", "Radion", "VorTech", "Vectra", "Mobius"]
+ambiguous_aliases = ["ETM", "Versa"]
+
+[[entity]]
+id = "aqua-illumination"
+name = "AquaIllumination"
+kind = "manufacturer"
+parent = "aperture"
+aliases = ["AquaIllumination", "Aqua Illumination", "Hydra 32", "Hydra 64", "Nero"]
+ambiguous_aliases = ["AI", "Hydra", "Prime", "Blade"]
+
+[[entity]]
+id = "neptune"
+name = "Neptune Systems"
+kind = "manufacturer"
+parent = "aperture"
+aliases = ["Neptune Systems", "Apex Fusion", "Trident", "ApexEL"]
+ambiguous_aliases = ["Neptune", "Apex", "DOS", "COR", "SKY"]
+
+[[entity]]
+id = "helloreef"
+name = "HelloReef"
+kind = "brand"
+parent = "aperture"
+aliases = ["HelloReef", "Hello Reef"]
+
+[[entity]]
+id = "aquaready"
+name = "AquaReady"
+kind = "brand"
+parent = "aperture"
+aliases = ["AquaReady", "Aqua Ready"]
+
+[[entity]]
+id = "leap-habitats"
+name = "Leap Habitats"
+kind = "brand"
+parent = "aperture"
+aliases = ["Leap Habitats"]
+
+[[entity]]
+id = "marine-depot"
+name = "Marine Depot"
+kind = "brand"
+parent = "brs"
+aliases = ["Marine Depot", "MarineDepot"]
+note = "Acquired by BRS in 2021. Treat as legacy unless a current source confirms active operations."
+
+# ------------------------------------------------------------- independent makers
+
+[[entity]]
+id = "jebao"
+name = "Jebao / Jecod"
+kind = "manufacturer"
+aliases = ["Jebao", "Jecod", "Zhongshan Jebao", "Jebao Eco Design"]
+ambiguous_aliases = ["DCP", "DCS", "MDP", "MLW", "MOW", "SLW"]
+note = "Jecod is Jebao's export brand identity, not a separate company."
+
+[[entity]]
+id = "maxspect"
+name = "Maxspect"
+kind = "manufacturer"
+aliases = ["Maxspect", "Maxspect North America", "Aeraqua Duo", "Turbine Duo", "Ethereal"]
+ambiguous_aliases = ["Gyre", "Razor", "RSX", "Jump"]
+note = "Established Maxspect North America LLC in Dec 2025, bringing NA operations in-house. Aperture's prior NA distribution was never ownership."
+
+[[entity]]
+id = "tunze"
+name = "TUNZE"
+kind = "manufacturer"
+aliases = ["TUNZE", "Tunze Aquarientechnik", "Turbelle", "Osmolator", "Comline"]
+ambiguous_aliases = ["Stream"]
+note = "Family-owned. TUNZE USA LLC supports the US market but does not own the global brand."
+
+[[entity]]
+id = "sicce"
+name = "SICCE"
+kind = "manufacturer"
+aliases = ["SICCE", "Sicce S.r.l.", "Syncra", "XStream", "Voyager"]
+ambiguous_aliases = ["SDC", "Whale", "Shark"]
+note = "Family-owned by the Pettenon family. SICCE US and SICCE Australia are regional subsidiaries."
+
+[[entity]]
+id = "venotec"
+name = "venotec"
+kind = "parent"
+aliases = ["venotec", "venotec GmbH"]
+
+[[entity]]
+id = "abyzz"
+name = "Abyzz"
+kind = "manufacturer"
+parent = "venotec"
+aliases = ["Abyzz", "Flow Cannon"]
+ambiguous_aliases = ["A100", "A120", "A200", "A400", "AFC"]
+note = "CoralVue distributes Abyzz in North America. Distribution is not ownership."
+
+[[entity]]
+id = "royal-exclusiv"
+name = "Royal Exclusiv"
+kind = "manufacturer"
+aliases = ["Royal Exclusiv", "Red Dragon", "Bubble King", "Dreambox", "Mini Red Dragon"]
+ambiguous_aliases = ["Speedy"]
+note = "Christian Walter acquired the company from founder Klaus Jansen in 2021. Red Dragon, Bubble King and Dreambox are product brands, not separate manufacturers."
+
+[[entity]]
+id = "kag"
+name = "Kählig Antriebstechnik (KAG)"
+kind = "parent"
+aliases = ["Kählig Antriebstechnik", "Kahlig Antriebstechnik", "KAG Hannover"]
+ambiguous_aliases = ["KAG"]
+
+[[entity]]
+id = "panta-rhei"
+name = "Panta Rhei Aquatics"
+kind = "manufacturer"
+parent = "kag"
+aliases = ["Panta Rhei", "Panta Rhei Aquatics", "Hydro Wizard", "Hydro Tube", "Panta Surge"]
+note = "Hydro Wizard, Hydro Tube and Panta Surge are product brands, not independent manufacturers."
+
+[[entity]]
+id = "iwaki"
+name = "Iwaki"
+kind = "manufacturer"
+aliases = ["Iwaki", "IWAKI Co., Ltd.", "Iwaki Pumps", "Iwaki America"]
+ambiguous_aliases = ["6237", "MD series"]
+public_ticker = "TSE:6237"
+note = "Publicly traded on the Tokyo Stock Exchange Prime Market. Shareholder-owned; the Fujinaka family retains a significant interest. Describe as shareholder-owned, not as one person's company."
+
+[[entity]]
+id = "pan-world"
+name = "Pan World"
+kind = "manufacturer"
+aliases = ["Pan World", "Pan World Pumps", "Pan World Americas", "Blueline HD"]
+note = "Not an Iwaki subsidiary, despite competing closely. Privately held Japanese company."
+
+[[entity]]
+id = "reeflo"
+name = "ReeFlo"
+kind = "manufacturer"
+aliases = ["ReeFlo", "Reeflo Pumps", "ReeFlo Inc", "Hammerhead", "Barracuda", "SwordTail"]
+ambiguous_aliases = ["Dart", "Snapper", "Gold Series"]
+note = "Three owner-operators per the company; Beth Franklin publicly identified as one. Historical association with MDM/Sequence — confirm the current legal entity before describing any present-day relationship."

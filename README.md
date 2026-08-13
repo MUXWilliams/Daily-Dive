@@ -64,6 +64,35 @@ enforced in code rather than left to convention:
 If you run something that appears here and want it removed, the address in
 `dailydive/ingest.py` reaches a human.
 
+## The industry beat
+
+[`docs/industry-brief.md`](docs/industry-brief.md) is the editorial authority for
+industry coverage: the ownership map, verification standards, sourcing hierarchy,
+and — most importantly — the language rules that keep a distribution deal from
+being reported as an acquisition.
+
+[`industry.toml`](industry.toml) is the machine-readable half, and
+`dailydive/entities.py` resolves brands to their owners against it with **no model
+calls**. That's deliberate: a deterministic lookup can't hallucinate an ownership
+relationship, so "Radion" reliably resolves to EcoTech Marine → Aperture Pet &
+Life → Bertram Capital, and never to anything that isn't written in the file.
+
+Two judgement calls worth knowing about:
+
+- **Ambiguous aliases are deliberately not matched.** `AI` is a real
+  AquaIllumination alias, and `Apex`, `Prime`, `Gyre`, `Dart`, and `Speedy` are
+  all real product names — matching them automatically would tag every artificial
+  intelligence story as aquarium lighting news. They're recorded in
+  `ambiguous_aliases` for a human reader and skipped by the matcher.
+- **Distributors never appear as parents.** CoralVue distributes Abyzz; Aperture
+  once distributed Maxspect. Neither is ownership, and there's a test asserting
+  the map never says otherwise.
+
+What still needs the model passes: judging whether a story is *material*,
+assigning the beat (Ownership / Leadership / Distribution / Product / Safety /
+Manufacturing / Financial), writing the "why it matters" line, and applying the
+brief's two-source rule for acquisitions and recalls. Those arrive with v1 and v2.
+
 ## Layout
 
 ```

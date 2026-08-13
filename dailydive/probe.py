@@ -45,6 +45,28 @@ DISCOVER_TARGETS: list[str] = [
     "https://www.advancedaquarist.com/",
     "https://www.tidalgardens.com/",
     "https://reefs.com/",
+    # --- Industry beat -------------------------------------------------------
+    # Corporate newsrooms and investor-relations pages from the ownership map in
+    # docs/industry-brief.md. Ownership, leadership, and financial news breaks
+    # here first, and a primary source beats anyone's summary of it.
+    "https://ecotechmarine.com/company-news",
+    "https://www.apetlife.com/",
+    "https://www.bertramcapital.com/portfolio/aperture-pet-life",
+    "https://maxspect.com/en/press-releases-patents/",
+    "https://www.iwakipumps.co.jp/en/ir/",
+    "https://www.iwakipumps.co.jp/en/",
+    "https://tunze.com/",
+    "https://www.sicce.com/en/",
+    "https://abyzz.com/",
+    "https://www.royalexclusiv.com/",
+    "https://www.panta-rhei-aquatics.com/",
+    "https://www.panworldpump.com/",
+    # Pet-industry trade press — where private-equity moves in this sector get
+    # reported, since most of these manufacturers publish nothing themselves.
+    "https://petage.com/",
+    "https://www.petbusiness.com/",
+    "https://www.petproductnews.com/",
+    "https://www.pettradenews.com/",
 ]
 
 
