@@ -29,6 +29,17 @@ CANDIDATES: list[str] = [
     "https://www.humble.fish/feed/",
     "https://reefcentral.com/forums/external.php?type=RSS2",
     "https://www.nano-reef.com/forums/rss/",
+    # Ownership-chain news pages. Corporate sites often publish a feed at a
+    # conventional path without advertising it in the page's <head>, so these
+    # are worth testing directly as well as via autodiscovery.
+    "https://www.bertramcapital.com/news/feed/",
+    "https://www.bertramcapital.com/feed/",
+    "https://www.bertramcapital.com/rss",
+    "https://www.apetlife.com/news/feed/",
+    "https://www.apetlife.com/feed/",
+    "https://www.apetlife.com/rss",
+    "https://www.bulkreefsupply.com/blog/feed",
+    "https://www.neptunesystems.com/feed/",
 ]
 
 # Sites where guessing the feed path failed but a feed may still exist. Rather
@@ -50,6 +61,13 @@ DISCOVER_TARGETS: list[str] = [
     # docs/industry-brief.md. Ownership, leadership, and financial news breaks
     # here first, and a primary source beats anyone's summary of it.
     "https://ecotechmarine.com/company-news",
+    # The top of the Aperture chain. A Bertram exit or add-on acquisition moves
+    # BRS, EcoTech, Neptune and AquaIllumination simultaneously — the highest-
+    # leverage single signal in the whole ownership map.
+    "https://www.bertramcapital.com/news",
+    "https://www.bertramcapital.com/news/",
+    "https://www.apetlife.com/news",
+    "https://www.apetlife.com/news/",
     "https://www.apetlife.com/",
     "https://www.bertramcapital.com/portfolio/aperture-pet-life",
     "https://maxspect.com/en/press-releases-patents/",
