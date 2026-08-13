@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SYNTHETIC fixture. Structure mirrors a XenForo forum RSS feed. Thread titles
+  and usernames are invented for testing.
+
+  Note the duplicate-URL case at the bottom: the same thread appears twice with
+  different tracking params, which is what dedupe() must collapse.
+-->
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+  <title>Reef2Reef</title>
+  <link>https://www.reef2reef.com</link>
+  <description>Latest threads</description>
+
+  <item>
+    <title>Dinos finally gone after 7 months — full writeup of what worked</title>
+    <link>https://www.reef2reef.com/threads/dinos-finally-gone.998877/</link>
+    <dc:creator>saltyfingers</dc:creator>
+    <pubDate>Wed, 12 Aug 2026 13:14:00 +0000</pubDate>
+    <guid isPermaLink="true">https://www.reef2reef.com/threads/dinos-finally-gone.998877/</guid>
+    <description><![CDATA[Posting the whole timeline in case it helps someone. UV, blackout, and a lot of patience.]]></description>
+  </item>
+
+  <item>
+    <title>Alkalinity swinging 0.8 dKH overnight on a stable system</title>
+    <link>https://www.reef2reef.com/threads/alk-swing-help.998801/</link>
+    <dc:creator>tangfan88</dc:creator>
+    <pubDate>Wed, 12 Aug 2026 09:31:00 +0000</pubDate>
+    <guid isPermaLink="true">https://www.reef2reef.com/threads/alk-swing-help.998801/</guid>
+    <description><![CDATA[Same doser, same salt mix, no changes to the tank. Logs attached.]]></description>
+  </item>
+
+  <item>
+    <title>Dinos finally gone after 7 months — full writeup of what worked</title>
+    <link>https://www.reef2reef.com/threads/dinos-finally-gone.998877/?utm_source=rss&amp;ref=whatsnew</link>
+    <dc:creator>saltyfingers</dc:creator>
+    <pubDate>Wed, 12 Aug 2026 13:14:00 +0000</pubDate>
+    <guid isPermaLink="false">tag:reef2reef.com,2026:dup-998877</guid>
+    <description><![CDATA[Duplicate delivery of the same thread via a different feed path.]]></description>
+  </item>
+</channel>
+</rss>

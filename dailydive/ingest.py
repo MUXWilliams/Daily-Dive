@@ -1,0 +1,125 @@
+"""Fetching, politely.
+
+Every request honors robots.txt, identifies itself with a contact address,
+rate-limits to one request per second per host, and sends conditional-GET
+headers so a normal morning re-fetches almost nothing. These are the terms on
+which an aggregator gets to keep existing.
+"""
+
+from __future__ import annotations
+
+import logging
+import sqlite3
+import time
+from dataclasses import dataclass
+from urllib.parse import urlsplit
+from urllib.robotparser import RobotFileParser
+
+import httpx
+
+from . import store
+from .models import Source
+
+log = logging.getLogger(__name__)
+
+# Change the address if you fork this. A crawler that can't be contacted is a
+# crawler that gets blocked instead of emailed.
+CONTACT = "william.isaac.alves@gmail.com"
+USER_AGENT = f"DailyDiveBot/0.1 (+https://theloneaquarist.com; {CONTACT})"
+
+MIN_INTERVAL_PER_HOST = 1.0
+TIMEOUT = httpx.Timeout(20.0, connect=10.0)
+
+
+class RobotsDisallowed(RuntimeError):
+    """The site's robots.txt says not to fetch this. Respect it."""
+
+
+@dataclass
+class FetchResult:
+    source: Source
+    body: bytes | None  # None means 304 Not Modified — nothing changed
+    status: int
+    from_cache: bool = False
+
+
+class Fetcher:
+    """Stateful across a run so rate limits and robots rules are per-host."""
+
+    def __init__(self, client: httpx.Client | None = None, *, respect_robots: bool = True) -> None:
+        self._client = client or httpx.Client(
+            timeout=TIMEOUT,
+            follow_redirects=True,
+            headers={"User-Agent": USER_AGENT},
+        )
+        self._respect_robots = respect_robots
+        self._robots: dict[str, RobotFileParser | None] = {}
+        self._last_hit: dict[str, float] = {}
+
+    def close(self) -> None:
+        self._client.close()
+
+    def __enter__(self) -> Fetcher:
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        self.close()
+
+    def _throttle(self, host: str) -> None:
+        elapsed = time.monotonic() - self._last_hit.get(host, 0.0)
+        if elapsed < MIN_INTERVAL_PER_HOST:
+            time.sleep(MIN_INTERVAL_PER_HOST - elapsed)
+        self._last_hit[host] = time.monotonic()
+
+    def _robots_for(self, url: str) -> RobotFileParser | None:
+        """Fetch and cache a host's robots.txt.
+
+        A host that fails to serve robots.txt is treated as permissive, which
+        matches the standard: absence of a policy is not a prohibition.
+        """
+        parts = urlsplit(url)
+        host = parts.netloc
+        if host in self._robots:
+            return self._robots[host]
+
+        robots_url = f"{parts.scheme}://{host}/robots.txt"
+        parser: RobotFileParser | None = None
+        try:
+            self._throttle(host)
+            resp = self._client.get(robots_url)
+            if resp.status_code == 200:
+                parser = RobotFileParser()
+                parser.parse(resp.text.splitlines())
+        except httpx.HTTPError as exc:
+            log.warning("could not read %s (%s) — treating as permissive", robots_url, exc)
+
+        self._robots[host] = parser
+        return parser
+
+    def allowed(self, url: str) -> bool:
+        if not self._respect_robots:
+            return True
+        parser = self._robots_for(url)
+        return True if parser is None else parser.can_fetch(USER_AGENT, url)
+
+    def fetch(self, source: Source, conn: sqlite3.Connection) -> FetchResult:
+        """GET a feed, conditionally. Raises RobotsDisallowed if off-limits."""
+        if not self.allowed(source.url):
+            raise RobotsDisallowed(f"robots.txt disallows {source.url}")
+
+        headers = store.get_cache_headers(conn, source.url)
+        self._throttle(urlsplit(source.url).netloc)
+        resp = self._client.get(source.url, headers=headers)
+
+        if resp.status_code == 304:
+            log.info("%s unchanged (304)", source.id)
+            return FetchResult(source=source, body=None, status=304, from_cache=True)
+
+        resp.raise_for_status()
+        store.save_cache_headers(
+            conn,
+            source.url,
+            resp.headers.get("ETag"),
+            resp.headers.get("Last-Modified"),
+        )
+        return FetchResult(source=source, body=resp.content, status=resp.status_code)

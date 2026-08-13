@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SYNTHETIC fixture. Structure mirrors a WordPress RSS 2.0 feed; the headlines
+  and text are invented for testing and are not copied from any real outlet.
+-->
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+  <title>Reef Builders</title>
+  <link>https://reefbuilders.com</link>
+  <description>The reef and marine aquarium blog</description>
+  <language>en-US</language>
+
+  <item>
+    <title>New gyre-style powerhead announced ahead of the fall show season</title>
+    <link>https://reefbuilders.com/2026/08/12/example-gyre-powerhead/?utm_source=rss&amp;utm_medium=feed</link>
+    <dc:creator><![CDATA[Jane Reefer]]></dc:creator>
+    <pubDate>Wed, 12 Aug 2026 14:20:11 +0000</pubDate>
+    <guid isPermaLink="false">https://reefbuilders.com/?p=101201</guid>
+    <description><![CDATA[<p>A new crossflow pump was announced this week, with a redesigned magnet mount and a controller that speaks the same protocol as the previous generation.</p>]]></description>
+  </item>
+
+  <item>
+    <title>Aquacultured deepwater acropora reaches hobbyist availability</title>
+    <link>https://reefbuilders.com/2026/08/12/example-deepwater-acro/</link>
+    <dc:creator><![CDATA[Marcus Tang]]></dc:creator>
+    <pubDate>Wed, 12 Aug 2026 11:02:00 +0000</pubDate>
+    <guid isPermaLink="false">https://reefbuilders.com/?p=101198</guid>
+    <description><![CDATA[<p>A grow-out facility reports its first commercial-scale frags of a species previously only collected from depth.</p>]]></description>
+  </item>
+
+  <item>
+    <title>Salinity probe recall affects two model years</title>
+    <link>https://reefbuilders.com/2026/08/11/example-probe-recall/</link>
+    <dc:creator><![CDATA[Jane Reefer]]></dc:creator>
+    <pubDate>Tue, 11 Aug 2026 19:45:30 +0000</pubDate>
+    <guid isPermaLink="false">https://reefbuilders.com/?p=101190</guid>
+    <description><![CDATA[<p>Owners are advised to check serial numbers against the published range.</p>]]></description>
+  </item>
+</channel>
+</rss>

@@ -1,0 +1,87 @@
+# The Daily Dive — source list.
+#
+# This is the file you'll edit most. One [[source]] block per feed.
+#
+#   id            stable slug, used in the DB and on the CLI (--source <id>)
+#   name          how the outlet is CREDITED on the page. Get this right.
+#   url           the feed itself
+#   type          wordpress | xenforo | youtube | reddit | generic
+#   section       forum / subreddit / channel, when the outlet name is too coarse
+#   category_hint provisional bucket until v1's scoring pass assigns for real
+#   enabled       false parks a source without deleting its config
+#
+# RULE: RSS/API only. If a source has no feed, it does not go in here. No
+# scraping, no headless browser. That is what keeps this cheap, unbrittle, and
+# welcome.
+
+# ---------------------------------------------------------------- publications
+
+[[source]]
+id = "reefbuilders"
+name = "Reef Builders"
+url = "https://reefbuilders.com/feed/"
+type = "wordpress"
+category_hint = "Industry & Products"
+
+[[source]]
+id = "reef2rainforest"
+name = "CORAL Magazine"
+url = "https://reef2rainforest.com/feed/"
+type = "wordpress"
+category_hint = "Husbandry & Science"
+
+# ---------------------------------------------------------------------- forums
+
+# XenForo's site-wide feed. Once you know which forums you actually care about,
+# replace this with per-forum feeds — they're the same path shape with the
+# forum's slug and id: /forums/<slug>.<id>/index.rss (the id is in the URL when
+# you open the forum). Per-forum is much higher signal than the firehose.
+[[source]]
+id = "reef2reef"
+name = "Reef2Reef"
+url = "https://www.reef2reef.com/forums/-/index.rss"
+type = "xenforo"
+category_hint = "Community"
+
+[[source]]
+id = "reddit-reeftank"
+name = "r/ReefTank"
+url = "https://www.reddit.com/r/ReefTank/new/.rss"
+type = "reddit"
+section = "new"
+category_hint = "Community"
+
+# ----------------------------------------------------------------------- video
+#
+# YouTube per-channel RSS needs the UC... channel ID, not the @handle, and
+# there's no handle-based feed endpoint. To get an ID: open the channel, View
+# Source, search for "channelId". Then fill it in below and flip enabled = true.
+#
+# These three are parked because the IDs below are placeholders — I had no
+# network access to resolve them, and a wrong ID fails silently as an empty
+# feed rather than an error, which is the worst kind of bug to inherit.
+
+[[source]]
+id = "yt-brs"
+name = "BRStv"
+url = "https://www.youtube.com/feeds/videos.xml?channel_id=REPLACE_ME"
+type = "youtube"
+section = "Bulk Reef Supply"
+category_hint = "Video"
+enabled = false
+
+[[source]]
+id = "yt-tidalgardens"
+name = "Tidal Gardens"
+url = "https://www.youtube.com/feeds/videos.xml?channel_id=REPLACE_ME"
+type = "youtube"
+category_hint = "Video"
+enabled = false
+
+[[source]]
+id = "yt-wwc"
+name = "World Wide Corals"
+url = "https://www.youtube.com/feeds/videos.xml?channel_id=REPLACE_ME"
+type = "youtube"
+category_hint = "Video"
+enabled = false

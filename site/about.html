@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About &amp; Sourcing Policy — The Daily Dive</title>
+<style>
+  :root {
+    --bg: #fbfaf7; --surface: #ffffff; --ink: #17211f;
+    --muted: #5d6b68; --rule: #e2e0d9; --accent: #0f6f6c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101614; --surface: #161d1b; --ink: #e8ece9;
+      --muted: #93a29e; --rule: #263230; --accent: #5fc9c2;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.65 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 42rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+  .brand { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin: .3rem 0 1.5rem; letter-spacing: -.02em; }
+  h2 { font-size: .82rem; text-transform: uppercase; letter-spacing: .1em; color: var(--accent);
+       margin: 2.25rem 0 .6rem; padding-bottom: .4rem; border-bottom: 1px solid var(--rule); }
+  a { color: var(--accent); }
+  ul { padding-left: 1.1rem; }
+  li { margin: .35rem 0; }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--rule);
+           font-size: .85rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="brand">The Lone Aquarist</p>
+  <h1>About &amp; sourcing policy</h1>
+
+  <p>
+    <strong>The Daily Dive</strong> is a daily digest of saltwater and reef aquarium news:
+    industry and product announcements, husbandry and science, notable forum discussion,
+    new videos, livestock and coral news, wild reef conditions, and club events.
+  </p>
+
+  <p>
+    It is assembled automatically each morning and reviewed by one person — me. It is a
+    hobby project, not a publication, and it is not affiliated with any of the outlets
+    it links to.
+  </p>
+
+  <h2>How sources are selected</h2>
+  <ul>
+    <li>Only outlets that publish a public feed or API. Nothing here is scraped.</li>
+    <li>Sources are chosen for signal, not completeness. This is a digest, not an archive.</li>
+    <li>Anything that reads as an ad rather than news is filtered out.</li>
+  </ul>
+
+  <h2>How sources are credited</h2>
+  <ul>
+    <li>Every item names its outlet and links to the original. That link is the point.</li>
+    <li>Summaries are short and in my own words — facts and context, never a replacement
+        for reading the source.</li>
+    <li>No article text is reproduced. Quotes, where they appear, are brief and attributed.</li>
+    <li>Every issue lists all the outlets it drew from.</li>
+  </ul>
+
+  <h2>How the crawler behaves</h2>
+  <ul>
+    <li>Honors <code>robots.txt</code> on every request.</li>
+    <li>Identifies itself as <code>DailyDiveBot</code> with a working contact address.</li>
+    <li>No more than one request per second per site.</li>
+    <li>Uses conditional requests, so an unchanged feed costs the host almost nothing.</li>
+  </ul>
+
+  <h2>Corrections and removal</h2>
+  <p>
+    If you publish something that appears here and you'd like it removed, your feed
+    excluded, or a credit corrected, email
+    <a href="mailto:william.isaac.alves@gmail.com">william.isaac.alves@gmail.com</a>.
+    No justification needed — I'll remove it and it stays removed.
+  </p>
+
+  <footer>
+    <p><a href="/">← Back to today's issue</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

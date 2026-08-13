@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Local run artifacts. The state DB is committed on purpose once real runs
+# start (it is the archive + dedupe memory) — see README.
+site/preview/
+.env
+
+# Generated issues, ignored through v0-v2 so that locally-built pages — which
+# come from SYNTHETIC fixtures — can't end up published as real reef news.
+# DELETE THESE TWO LINES at v3, when the Action starts committing real issues.
+site/index.html
+site/issues/
