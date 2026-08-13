@@ -16,6 +16,11 @@ on:
         description: "Max items (blank = no cap)"
         required: false
         default: ""
+      probe:
+        description: "Also test candidate feed URLs and report which ones work"
+        type: boolean
+        required: false
+        default: false
   # schedule:
   #   - cron: "30 9 * * *"
 
@@ -37,6 +42,16 @@ jobs:
 
       - name: List configured sources
         run: daily-dive sources
+
+      - name: Probe candidate feed URLs
+        if: inputs.probe
+        run: |
+          {
+            echo "### Candidate feed probe"
+            echo ""
+            daily-dive probe --markdown || true
+            echo ""
+          } >> $GITHUB_STEP_SUMMARY
 
       - name: Build issue from live feeds
         id: build
@@ -60,10 +75,12 @@ jobs:
               echo "| Source | Result |"
               echo "|---|---|"
               # One row per source: "<id>: N items" on success, or the error.
+              # Anchored on our own log prefix so stack-trace lines don't
+              # masquerade as sources.
               grep -E "dailydive: [a-z0-9-]+: [0-9]+ items" run.log \
                 | sed -E 's/.*dailydive: ([a-z0-9-]+): ([0-9]+) items.*/| \1 | ✅ \2 items |/' || true
-              grep -E "(failed|skipping) [a-z0-9-]+" run.log \
-                | sed -E 's/.*(failed|skipping) ([a-z0-9-]+):? ?(.*)/| \2 | ❌ \3 |/' || true
+              grep -E "dailydive: (failed|skipping) [a-z0-9-]+:" run.log \
+                | sed -E 's/.*dailydive: (failed|skipping) ([a-z0-9-]+): (.*)/| \2 | ❌ \3 |/' || true
               echo ""
             fi
             if [ -f site/index.html ]; then

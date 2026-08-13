@@ -23,26 +23,42 @@ url = "https://reefbuilders.com/feed/"
 type = "wordpress"
 category_hint = "Industry & Products"
 
+# PARKED — reef2rainforest.com no longer resolves (DNS: "No address associated
+# with hostname"), so the publisher appears to have moved. coralmagazine.com
+# looks like the current home. Run the workflow with probe=true to find the
+# working feed URL, then swap it in and re-enable.
 [[source]]
 id = "reef2rainforest"
 name = "CORAL Magazine"
-url = "https://reef2rainforest.com/feed/"
+url = "https://www.coralmagazine.com/feed/"
 type = "wordpress"
 category_hint = "Husbandry & Science"
+enabled = false
 
 # ---------------------------------------------------------------------- forums
 
-# XenForo's site-wide feed. Once you know which forums you actually care about,
-# replace this with per-forum feeds — they're the same path shape with the
-# forum's slug and id: /forums/<slug>.<id>/index.rss (the id is in the URL when
-# you open the forum). Per-forum is much higher signal than the firehose.
+# PARKED — the site-wide XenForo feed returns 403 Forbidden. That is usually
+# bot protection rather than a wrong path, but probe=true tests the other
+# XenForo feed shapes to tell the difference.
+#
+# If they're blocking aggregators deliberately, the answer is to ask, not to
+# work around it: a 403 is a site saying no, and forging a browser User-Agent
+# to get past it would undo the whole good-citizen posture this project runs on.
+#
+# Per-forum feeds (higher signal than the firehose) follow the same shape:
+# /forums/<slug>.<id>/index.rss — the id is visible in the URL of any forum.
 [[source]]
 id = "reef2reef"
 name = "Reef2Reef"
 url = "https://www.reef2reef.com/forums/-/index.rss"
 type = "xenforo"
 category_hint = "Community"
+enabled = false
 
+# PARKED — Reddit's robots.txt disallows crawling the .rss endpoints, and the
+# fetcher correctly refused. This is not a bug to route around: the sanctioned
+# path is Reddit's official OAuth API, which has a free tier and is explicitly
+# for this. Wire that up as its own source type rather than ignoring robots.txt.
 [[source]]
 id = "reddit-reeftank"
 name = "r/ReefTank"
@@ -50,6 +66,7 @@ url = "https://www.reddit.com/r/ReefTank/new/.rss"
 type = "reddit"
 section = "new"
 category_hint = "Community"
+enabled = false
 
 # ----------------------------------------------------------------------- video
 #

@@ -84,12 +84,31 @@ def main(argv: list[str] | None = None) -> int:
     listing = sub.add_parser("sources", help="list configured feeds", parents=[common])
     listing.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
 
+    probing = sub.add_parser(
+        "probe",
+        help="test candidate feed URLs (needs real network access)",
+        parents=[common],
+    )
+    probing.add_argument("urls", nargs="*", help="URLs to test; omit to use the built-in candidate list")
+    probing.add_argument("--markdown", action="store_true", help="emit a markdown table")
+
     args = parser.parse_args(argv)
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(levelname)s %(name)s: %(message)s",
     )
+
+    if args.command == "probe":
+        from . import probe as probe_mod
+
+        results = probe_mod.probe(args.urls or None)
+        if args.markdown:
+            print(probe_mod.format_markdown(results))
+        else:
+            for r in results:
+                print(f"{r.icon} {r.verdict:14} {r.entries or '':>4}  {r.url}\n     {r.detail}")
+        return 0 if any(r.verdict == "ok" for r in results) else 1
 
     if args.command == "sources":
         for source in config.load_sources(args.sources_file, include_disabled=True):
