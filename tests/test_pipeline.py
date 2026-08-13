@@ -226,3 +226,35 @@ def test_dates_render_without_platform_specific_codes():
 
     html = render.render_issue(Issue(date=dt, items=[item()]))
     assert "August 3, 2026" in html
+
+
+# --------------------------------------------------------------------- probe
+
+def test_autodiscovery_skips_wordpress_boilerplate_feeds():
+    """Comment streams and oEmbed endpoints are advertised but never news."""
+    from dailydive import probe as probe_mod
+
+    for junk in (
+        "https://reefs.com/comments/feed/",
+        "https://reefs.com/wp-json/oembed/1.0/embed?url=x&format=xml",
+        "https://ecotechmarine.com/web-stories/feed/",
+    ):
+        assert any(m in junk.lower() for m in probe_mod._JUNK_FEED_MARKERS)
+
+    assert not any(m in "https://reefbuilders.com/feed/" for m in probe_mod._JUNK_FEED_MARKERS)
+
+
+def test_feed_link_parser_finds_advertised_feeds():
+    from dailydive.probe import _FeedLinkParser
+
+    parser = _FeedLinkParser()
+    parser.feed(
+        '<html><head>'
+        '<link rel="alternate" type="application/rss+xml" title="Feed" href="/feed/">'
+        '<link rel="alternate" type="application/json+oembed" href="/oembed">'
+        '<link rel="stylesheet" href="/style.css">'
+        '</head></html>'
+    )
+    hrefs = [h for h, _ in parser.feeds]
+    assert "/feed/" in hrefs
+    assert "/style.css" not in hrefs

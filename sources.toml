@@ -42,6 +42,44 @@ url = "https://reefs.com/feed/"
 type = "wordpress"
 category_hint = "Husbandry & Science"
 
+# Verified live: 10 items, newest "How To Grow Live Phyto". Single-author
+# tank-keeping site — technique-heavy, low volume.
+[[source]]
+id = "reefbum"
+name = "ReefBum"
+url = "https://reefbum.com/feed/"
+type = "wordpress"
+category_hint = "Husbandry & Science"
+
+# ------------------------------------------------------------- industry beat
+#
+# See docs/industry-brief.md for the editorial rules governing this section.
+#
+# Corporate feeds are primary sources, which the brief ranks highest — but they
+# are also the company's own marketing channel. The newest item when this was
+# verified was "ETM Subscribe", a signup page rather than news. Expect a low
+# signal-to-promo ratio here until v1's scoring pass can apply the brief's
+# exclusion rules and drop the coupon-and-restock noise.
+
+# Verified live: 10 items. First working corporate newsroom feed.
+# EcoTech Marine -> Aperture Pet & Life -> Bertram Capital (see industry.toml).
+[[source]]
+id = "ecotech"
+name = "EcoTech Marine"
+url = "https://ecotechmarine.com/feed"
+type = "wordpress"
+category_hint = "Industry & Products"
+
+# PARKED — the feed exists and parses, but is empty. The site publishes no
+# posts through it today. Worth re-probing occasionally rather than deleting.
+[[source]]
+id = "panta-rhei"
+name = "Panta Rhei Aquatics"
+url = "https://www.panta-rhei-aquatics.com/feed/"
+type = "wordpress"
+category_hint = "Industry & Products"
+enabled = false
+
 # ---------------------------------------------------------------------- forums
 
 # BLOCKED — all four XenForo feed shapes return 403:

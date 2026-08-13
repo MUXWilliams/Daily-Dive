@@ -22,13 +22,13 @@ from .ingest import TIMEOUT, USER_AGENT, Fetcher
 CANDIDATES: list[str] = [
     # Known good — the control. If this breaks, the fetcher broke, not the site.
     "https://reefbuilders.com/feed/",
-    # Round 2: more reef publications that may run WordPress.
-    "https://www.reefkeeping.com/feed/",
+    # aquanerd.com timed out once — retrying to tell a slow host from a dead one.
     "https://aquanerd.com/feed/",
-    "https://melevsreef.com/feed",
-    "https://www.marinedepot.com/blog/rss",
-    "https://reefbum.com/feed/",
-    "https://www.saltwatersmarts.com/feed",
+    "https://www.aquanerd.com/feed/",
+    # Round 3 candidates.
+    "https://www.humble.fish/feed/",
+    "https://reefcentral.com/forums/external.php?type=RSS2",
+    "https://www.nano-reef.com/forums/rss/",
 ]
 
 # Sites where guessing the feed path failed but a feed may still exist. Rather
@@ -90,24 +90,44 @@ class _FeedLinkParser(HTMLParser):
             self.feeds.append((a["href"], a.get("title", "")))
 
 
-def discover_feeds(page_url: str, fetcher: Fetcher, client: httpx.Client) -> list[str]:
-    """Return feed URLs advertised by a page, via HTML autodiscovery."""
+# WordPress advertises several feeds that are never what we want: comment
+# streams, oEmbed endpoints, and Web Stories. Filtering them here keeps the
+# probe output readable and stops a comments feed from being mistaken for news.
+_JUNK_FEED_MARKERS = ("/comments/feed", "wp-json", "oembed", "web-stories", "/feed/atom", "?attachment_id=")
+
+
+def discover_feeds(page_url: str, fetcher: Fetcher, client: httpx.Client) -> tuple[list[str], str]:
+    """Feed URLs a page advertises, plus a note explaining an empty result.
+
+    Returns (urls, note). The note matters: a site with no feeds and a site we
+    couldn't reach both yield an empty list, and those need different responses.
+    """
     if not fetcher.allowed(page_url):
-        return []
+        return [], "robots.txt disallows the page"
     try:
         resp = client.get(page_url)
         resp.raise_for_status()
-    except httpx.HTTPError:
-        return []
+    except httpx.HTTPError as exc:
+        return [], f"{type(exc).__name__}: {str(exc)[:80]}"
 
     parser = _FeedLinkParser()
     parser.feed(resp.text)
+
     seen: list[str] = []
+    skipped = 0
     for href, _title in parser.feeds:
         absolute = urljoin(str(resp.url), href)
+        if any(marker in absolute.lower() for marker in _JUNK_FEED_MARKERS):
+            skipped += 1
+            continue
         if absolute not in seen:
             seen.append(absolute)
-    return seen
+
+    if seen:
+        return seen, ""
+    if skipped:
+        return [], f"advertises {skipped} feed(s), all comments/oembed boilerplate"
+    return [], "page loads but advertises no feed"
 
 
 @dataclass
@@ -120,7 +140,7 @@ class ProbeResult:
 
     @property
     def icon(self) -> str:
-        return {"ok": "✅", "empty": "⚠️", "robots": "🚫"}.get(self.verdict, "❌")
+        return {"ok": "✅", "empty": "⚠️", "robots": "🚫", "no-feed": "➖"}.get(self.verdict, "❌")
 
 
 def probe_one(url: str, fetcher: Fetcher, client: httpx.Client) -> ProbeResult:
@@ -151,15 +171,21 @@ def probe_one(url: str, fetcher: Fetcher, client: httpx.Client) -> ProbeResult:
 
 def probe(urls: list[str] | None = None, *, discover: bool = False) -> list[ProbeResult]:
     targets = list(urls or CANDIDATES)
+    dead_ends: list[ProbeResult] = []
     client = httpx.Client(timeout=TIMEOUT, follow_redirects=True, headers={"User-Agent": USER_AGENT})
     try:
         with Fetcher(client=client) as fetcher:
             if discover and not urls:
                 for page in DISCOVER_TARGETS:
-                    for found in discover_feeds(page, fetcher, client):
-                        if found not in targets:
-                            targets.append(found)
-            return [probe_one(u, fetcher, client) for u in targets]
+                    found, note = discover_feeds(page, fetcher, client)
+                    for feed_url in found:
+                        if feed_url not in targets:
+                            targets.append(feed_url)
+                    if not found:
+                        # Report rather than silently drop: "no feed here" is a
+                        # finding, and distinguishes a dead site from a quiet one.
+                        dead_ends.append(ProbeResult(page, "no-feed", note))
+            return [probe_one(u, fetcher, client) for u in targets] + dead_ends
     finally:
         client.close()
 
