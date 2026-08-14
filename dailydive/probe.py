@@ -31,6 +31,23 @@ CANDIDATES: list[str] = [
     "https://petproductnews.com/feed/",
     "https://pettradenews.com/feed/",
     "https://www.petfoodindustry.com/rss/articles",
+    # --- Leads from the aggregation-strategy doc -----------------------------
+    # Reef2Reef per-subforum path. The four site-wide shapes all 403'd, which
+    # reads as a site-level block rather than a wrong path — but a per-forum URL
+    # is a shape we haven't actually tried, and one request settles it.
+    "https://www.reef2reef.com/forums/general-reef-discussion.51/index.rss",
+    # Public-aquarium science blogs: conservation and reef science from
+    # institutions. Wild Reefs is the thinnest section in the issue today.
+    "https://www.calacademy.org/feed",
+    "https://www.waikikiaquarium.org/feed/",
+    "https://www.montereybayaquarium.org/feed/",
+    "https://www.aqua.org/blog/feed",
+    # Clubs. Events has never carried a single item because no club source
+    # exists. Most clubs run WordPress or publish an iCal calendar.
+    "https://scmas.org/feed/",
+    "https://dfwmas.org/feed/",
+    "https://atlantareefclub.org/feed/",
+    "https://www.wamas.org/feed/",
 ]
 
 # Sites where guessing the feed path failed but a feed may still exist. Rather
@@ -55,6 +72,13 @@ DISCOVER_TARGETS: list[str] = [
     "https://coralreef.noaa.gov/rss.html",
     "https://www.fisheries.noaa.gov/news-and-announcements/news",
     "https://petage.com/news/",
+    # Clubs and institutions whose feed path we're guessing at — ask the page
+    # instead of guessing a second time.
+    "https://www.reefcentral.com/",
+    "https://www.calacademy.org/hope-for-reefs",
+    "https://www.waikikiaquarium.org/",
+    "https://dfwmas.org/",
+    "https://scmas.org/",
 ]
 
 
