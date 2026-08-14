@@ -25,7 +25,6 @@
     --c-industry:       #0a6360;  --c-industry-tint:   #ecf4f3;
     --c-husbandry:      #2a6234;  --c-husbandry-tint:  #edf3ee;
     --c-community:      #364a8f;  --c-community-tint:  #ecEEF7;
-    --c-video:          #7a3560;  --c-video-tint:      #f6ecf1;
     --c-livestock:      #8a5512;  --c-livestock-tint:  #f6f1e8;
     --c-wild-reefs:     #1a5182;  --c-wild-reefs-tint: #eaeff5;
     --c-events:         #4b4a6e;  --c-events-tint:     #eeedf4;
@@ -36,7 +35,6 @@
   .sec-industry   { --hue: var(--c-industry);   --tint: var(--c-industry-tint); }
   .sec-husbandry  { --hue: var(--c-husbandry);  --tint: var(--c-husbandry-tint); }
   .sec-community  { --hue: var(--c-community);  --tint: var(--c-community-tint); }
-  .sec-video      { --hue: var(--c-video);      --tint: var(--c-video-tint); }
   .sec-livestock  { --hue: var(--c-livestock);  --tint: var(--c-livestock-tint); }
   .sec-wild-reefs { --hue: var(--c-wild-reefs); --tint: var(--c-wild-reefs-tint); }
   .sec-events     { --hue: var(--c-events);     --tint: var(--c-events-tint); }
@@ -126,6 +124,14 @@
     display: flex; flex-wrap: wrap; gap: .3rem; align-items: center;
   }
   .credit .source { color: var(--hue); font-weight: 700; }
+  /* Medium, not section: a duration says "this is a video, and how long" in
+     the one place a reader is deciding whether to click. */
+  .runtime {
+    border: 1px solid color-mix(in srgb, var(--hue) 35%, transparent);
+    color: var(--hue); font-size: .6rem; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: .1rem .32rem; border-radius: 2px;
+  }
   .beat {
     background: var(--flare); color: #fff; font-size: .6rem; font-weight: 700;
     letter-spacing: .07em; text-transform: uppercase; padding: .1rem .32rem; border-radius: 2px;
@@ -195,6 +201,7 @@
           {% endif %}
           <p class="credit">
             {% if item.extra.beat %}<span class="beat">{{ item.extra.beat }}</span>{% endif %}
+            {% if item.extra.duration_s %}<span class="runtime">{{ item.extra.duration_s | runtime }}</span>{% endif %}
             <span class="source">{{ item.source_name }}</span>
             {% if item.author %}<span>· {{ item.author }}</span>{% endif %}
             <span>· {{ item.published_at | datefmt('short') }}</span>

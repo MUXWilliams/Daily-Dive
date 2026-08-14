@@ -162,6 +162,9 @@ enabled = false
 # at 100. Five channels daily is ~5 units against a free 10,000/day.
 #
 # Needs YOUTUBE_API_KEY in the environment. The key is never written here.
+#
+# No category_hint: there is no Video category. A video is filed by what it is
+# about, so the scoring pass assigns the section from the subject.
 
 [[source]]
 id = "yt-brs"
@@ -169,32 +172,27 @@ name = "BRStv"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUGGM8r6qjSRqPy9eAIFT32w"
 type = "youtube_api"
 section = "Bulk Reef Supply"
-category_hint = "Video"
 
 [[source]]
 id = "yt-tidalgardens"
 name = "Tidal Gardens"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUGdAIpjFq4vygKzXAyDKKtQ"
 type = "youtube_api"
-category_hint = "Video"
 
 [[source]]
 id = "yt-wwc"
 name = "World Wide Corals"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUSFIdT_l261xC6sRQGx-T4Q"
 type = "youtube_api"
-category_hint = "Video"
 
 [[source]]
 id = "yt-saltwateraquarium"
 name = "SaltwaterAquarium.com"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUFTt5UhP0EwqHwTU0y-lUlg"
 type = "youtube_api"
-category_hint = "Video"
 
 [[source]]
 id = "yt-reefdudes"
 name = "ReefDudes"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUwjh_Pj6nAURoQ1nYIG9qsw"
 type = "youtube_api"
-category_hint = "Video"

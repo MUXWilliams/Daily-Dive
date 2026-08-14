@@ -83,11 +83,11 @@ def test_per_item_data_goes_in_the_user_turn_not_the_system_prompt():
 def test_source_category_hint_is_not_shown_to_the_model():
     """The hint says where an item came from, not what it is — offering it
     would just invite the model to rubber-stamp it."""
-    it = item("a", category_hint=Category.VIDEO)
+    it = item("a", category_hint=Category.COMMUNITY)
     client = FakeClient([ScoreBatch(scores=[score(it.uid)])])
     score_items([it], client=client)
 
-    assert "Video" not in client.requests[0]["messages"][0]["content"]
+    assert "Community" not in client.requests[0]["messages"][0]["content"]
 
 
 def test_entity_context_is_attached_when_a_company_is_mentioned():

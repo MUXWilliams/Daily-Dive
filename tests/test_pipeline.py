@@ -123,12 +123,11 @@ def test_wordpress_feed_yields_credited_items():
 
 
 def test_youtube_feed_captures_video_id_without_transcripts():
-    source = fixture_source("yt-brs", name="BRStv", type=SourceType.YOUTUBE, category_hint=Category.VIDEO)
+    source = fixture_source("yt-brs", name="BRStv", type=SourceType.YOUTUBE)
     items = normalize.normalize(source, (FIXTURES / "yt-brs.xml").read_bytes())
 
     assert len(items) == 2
     assert items[0].extra.get("video_id")
-    assert items[0].category_hint is Category.VIDEO
 
 
 def test_section_makes_the_credit_more_specific():
@@ -372,12 +371,12 @@ def test_intro_plus_line_names_the_remaining_areas():
     items = [
         item(url="https://a.invalid/1", category_hint=Category.INDUSTRY),
         item(url="https://a.invalid/2", category_hint=Category.INDUSTRY),
-        item(url="https://a.invalid/3", category_hint=Category.VIDEO),
+        item(url="https://a.invalid/3", category_hint=Category.COMMUNITY),
         item(url="https://a.invalid/4", category_hint=Category.WILD_REEFS),
     ]
     issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=items)
     _, plus = render.highlights(issue, limit=2)
-    assert "video" in plus and "wild reefs" in plus
+    assert "community" in plus and "wild reefs" in plus
 
 
 def test_empty_issue_shows_no_intro():
@@ -592,7 +591,6 @@ def _yt_source() -> Source:
         url="https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUx",
         type=SourceType.YOUTUBE_API,
         section="Bulk Reef Supply",
-        category_hint=Category.VIDEO,
     )
 
 
@@ -713,3 +711,58 @@ def test_non_video_items_pass_through_untouched():
     article = item(url="https://reefbuilders.com/story/")
     with _durations_client({}) as client:
         assert youtube.drop_shorts([article], client=client, api_key="k") == [article]
+
+
+# ------------------------------------------------------------ no video bucket
+
+def test_there_is_no_video_category():
+    """Video is a medium, not a subject. Having both meant the same story
+    landed in different sections depending on how it was filmed."""
+    assert "VIDEO" not in Category.__members__
+    assert not any(c.value == "Video" for c in Category)
+
+
+def test_the_scoring_prompt_offers_no_video_category():
+    """The prompt is the model's only list of sections. If Video survives
+    there, the model will keep filing videos by medium whatever the enum says."""
+    prompt = Path("prompts/score.system.md").read_text(encoding="utf-8")
+    assert "- **Video**" not in prompt
+    for category in Category:
+        assert f"**{category.value}**" in prompt, f"{category.value} missing from the prompt"
+
+
+def test_runtime_reads_as_a_length_a_reader_can_judge():
+    assert render._runtime(1102) == "18 min"
+    assert render._runtime("240") == "4 min"
+    assert render._runtime(4920) == "1h 22m"
+    assert render._runtime(None) == ""
+
+
+def test_duration_appears_on_the_page_but_never_as_a_section():
+    video = item(
+        url="https://www.youtube.com/watch?v=abc123XYZ_1",
+        category_hint=Category.HUSBANDRY,
+        extra={"video_id": "abc123XYZ_1", "duration_s": "1102"},
+    )
+    html = render.render_issue(Issue(date=datetime(2026, 8, 14, tzinfo=UTC), items=[video]))
+    assert "18 min" in html
+    assert "Husbandry &amp; Science" in html  # escaped, see autoescape test
+    assert 'class="sec-video"' not in html
+
+
+def test_feed_content_is_escaped_before_it_reaches_the_page():
+    """Titles are attacker-controlled in the ordinary case — anyone who can
+    post to a syndicated forum or blog can put markup in one. This failed
+    silently for weeks because select_autoescape matches the final extension
+    and the template is issue.html.j2, so ["html"] never matched."""
+    nasty = item(
+        title='Pump "review" <script>alert(1)</script> & more',
+        url="https://reefbuilders.com/x/",
+        category_hint=Category.INDUSTRY,
+        extra={"gist": "Tag <b>soup</b> & ampersands."},
+    )
+    html = render.render_issue(Issue(date=datetime(2026, 8, 14, tzinfo=UTC), items=[nasty]))
+    assert "<script>" not in html
+    assert "&lt;script&gt;" in html
+    assert "&amp; more" in html
+    assert "<b>soup</b>" not in html

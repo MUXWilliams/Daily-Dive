@@ -34,12 +34,17 @@ a protein skimmer from a powerhead. What they want is what changed today.
 - **Husbandry & Science** — technique, disease, water chemistry, biology,
   published research. The "how do I keep this alive" beat.
 - **Community** — notable forum threads, build logs, discussion worth reading.
-- **Video** — new uploads from channels the reader follows.
 - **Livestock & Corals** — new morphs, collection and aquaculture news,
   notable availability.
 - **Wild Reefs** — bleaching, conservation, reef science in the wild, trade
   and import regulation.
 - **Events** — frag swaps, club meetings, shows.
+
+There is no Video category. A video is filed by what it is about, exactly like
+an article: a coral-disease video is Husbandry & Science, a controller unboxing
+is Industry & Products, a shop tour is Community. Never let the medium decide
+the section, and never reach for a nearby category because an item happens to
+be a video.
 
 ## Relevance calibration
 

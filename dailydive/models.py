@@ -21,10 +21,14 @@ class Category(StrEnum):
     """Closed set. An item that fits none of these is dropped rather than
     inventing a new bucket — see README."""
 
+    # Deliberately no "Video" member. Video is a medium, not a subject, and
+    # having both meant the same story landed in different sections depending
+    # on how it was filmed — a brown-jelly video under Husbandry, a reef-tour
+    # video under Video. Everything is filed by what it is about; the medium
+    # shows up as a duration badge on the item instead.
     INDUSTRY = "Industry & Products"
     HUSBANDRY = "Husbandry & Science"
     COMMUNITY = "Community"
-    VIDEO = "Video"
     LIVESTOCK = "Livestock & Corals"
     WILD_REEFS = "Wild Reefs"
     EVENTS = "Events"

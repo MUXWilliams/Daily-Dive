@@ -21,7 +21,18 @@ TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 def _env() -> Environment:
     return Environment(
         loader=FileSystemLoader(TEMPLATE_DIR),
-        autoescape=select_autoescape(["html"]),
+        # select_autoescape matches on the filename's final extension, and the
+        # template is issue.html.j2 — so ["html"] never matched and every feed
+        # title was being written into the page unescaped. Titles are attacker-
+        # controlled in the ordinary case: anyone who can post to a syndicated
+        # forum or blog can put markup in one. `default=True` is the belt to
+        # the extension list's braces, so renaming a template can't silently
+        # turn escaping off again.
+        autoescape=select_autoescape(
+            enabled_extensions=("html", "htm", "xml", "j2"),
+            default_for_string=True,
+            default=True,
+        ),
         trim_blocks=True,
         lstrip_blocks=True,
     )
@@ -79,6 +90,20 @@ def _datefmt(dt: datetime, style: str = "long") -> str:
             return f"{dt:%B} {dt.day}, {dt.year}"
 
 
+def _runtime(seconds: str | int) -> str:
+    """Seconds -> "14 min" / "1h 22m". Shown so a reader can judge the ask.
+
+    Nothing under a minute can appear here — Shorts are filtered upstream —
+    so the shortest label this ever produces is "4 min".
+    """
+    try:
+        total = int(seconds)
+    except (TypeError, ValueError):
+        return ""
+    hours, minutes = divmod(round(total / 60), 60)
+    return f"{hours}h {minutes}m" if hours else f"{minutes} min"
+
+
 def group_by_category(issue: Issue) -> list[tuple[str, str, list]]:
     """Section the issue, in the canonical category order, skipping empties.
 
@@ -125,6 +150,7 @@ def render_issue(issue: Issue, *, header_image: str | None = None) -> str:
     env = _env()
     env.filters["host"] = _host
     env.filters["datefmt"] = _datefmt
+    env.filters["runtime"] = _runtime
     template = env.get_template("issue.html.j2")
     bullets, plus = highlights(issue)
     return template.render(
@@ -154,7 +180,10 @@ def as_text(issue: Issue) -> str:
             score = item.extra.get("relevance")
             beat = item.extra.get("beat")
             prefix = f"  [{score}] " if score else "  "
-            lines.append(f"{prefix}{f'({beat}) ' if beat else ''}{item.title}")
+            run = _runtime(item.extra["duration_s"]) if item.extra.get("duration_s") else ""
+            lines.append(
+                f"{prefix}{f'({beat}) ' if beat else ''}{item.title}{f' [{run}]' if run else ''}"
+            )
             if item.extra.get("gist"):
                 lines.append(f"      {item.extra['gist']}")
             lines.append(f"      — {item.source_name} · {item.url}")
