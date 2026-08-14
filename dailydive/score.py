@@ -58,7 +58,11 @@ class ItemScore(BaseModel):
     category: Category | None = None
     relevance: float = Field(ge=0.0, le=1.0)
     is_promo: bool = False
-    gist: str = ""
+    # Required, with no default. `= ""` satisfies the schema without the model
+    # writing anything, and the first live run showed exactly that: the five
+    # highest-scoring industry stories came back with no summary, because an
+    # omitted field was legal. Requiring it makes the schema do the asking.
+    gist: str
     beat: IndustryBeat | None = None
 
 

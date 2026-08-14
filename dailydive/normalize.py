@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 import re
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 import feedparser
 
@@ -131,6 +131,32 @@ def dedupe(items: list[Item]) -> list[Item]:
         seen.add(item.uid)
         unique.append(item)
     return unique
+
+
+# How far back an item can be published and still count as today's news. Feeds
+# carry whatever the publisher last posted, which on a low-volume site can be
+# months old — the first live run filed a March press release and two June
+# species descriptions as news. From the second run onward the archive
+# suppresses anything already seen, so this window mostly governs the first run
+# against a new source. Two weeks is generous enough for a genuinely slow
+# publisher without letting a quiet feed pad the issue.
+DEFAULT_MAX_AGE_DAYS = 14
+
+
+def recent(
+    items: list[Item],
+    *,
+    days: int = DEFAULT_MAX_AGE_DAYS,
+    now: datetime | None = None,
+) -> list[Item]:
+    """Drop items published longer ago than `days`. `days <= 0` keeps everything."""
+    if days <= 0:
+        return items
+    cutoff = (now or datetime.now(UTC)) - timedelta(days=days)
+    fresh = [i for i in items if i.published_at >= cutoff]
+    if dropped := len(items) - len(fresh):
+        log.info("dropped %d item(s) published more than %d days ago", dropped, days)
+    return fresh
 
 
 # Keeps the closed-enum promise visible at the seam where v1's scoring pass

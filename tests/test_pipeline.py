@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -477,3 +477,30 @@ def test_text_rendering_carries_credit_and_link_for_every_item():
         assert published.title in text
         assert published.source_name in text
         assert published.url in text
+
+
+# ------------------------------------------------------------------ recency
+
+def test_stale_items_are_dropped_before_they_cost_anything():
+    """A feed carries whatever was posted last, not what was posted today. The
+    first live run filed a March press release as news; this is the guard."""
+    now = datetime(2026, 8, 14, tzinfo=UTC)
+    fresh = item(url="https://reefbuilders.com/fresh/", published_at=now - timedelta(days=3))
+    stale = item(url="https://reefbuilders.com/stale/", published_at=now - timedelta(days=90))
+    kept = normalize.recent([fresh, stale], days=14, now=now)
+    assert kept == [fresh]
+
+
+def test_max_age_zero_keeps_everything():
+    now = datetime(2026, 8, 14, tzinfo=UTC)
+    old = item(published_at=now - timedelta(days=900))
+    assert normalize.recent([old], days=0, now=now) == [old]
+
+
+def test_scoring_requires_a_gist():
+    """An optional gist is one the model can silently skip — and on the first
+    live run it skipped exactly the highest-scoring stories."""
+    from dailydive.score import ItemScore
+
+    with pytest.raises(ValidationError):
+        ItemScore(uid="x", relevance=0.9)

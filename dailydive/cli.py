@@ -92,6 +92,12 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--source", action="append", help="only these source ids (repeatable)")
     run.add_argument("--limit", type=int, help="cap items per run, newest first")
     run.add_argument("--offline", action="store_true", help="use tests/fixtures instead of the network")
+    run.add_argument(
+        "--max-age-days",
+        type=int,
+        default=normalize.DEFAULT_MAX_AGE_DAYS,
+        help=f"drop items older than this (default {normalize.DEFAULT_MAX_AGE_DAYS}; 0 keeps everything)",
+    )
     run.add_argument("--out", type=Path, default=Path("site"), help="output directory (default: site)")
     run.add_argument("--db", type=Path, default=store.DEFAULT_DB)
     run.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
@@ -171,6 +177,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     items = _collect_offline(sources) if args.offline else _collect_live(sources, args.db)
+    # Before scoring, not after: an item too old to publish shouldn't be paid
+    # for. Scoring is the one step that costs money.
+    items = normalize.recent(items, days=args.max_age_days)
     if args.limit:
         items = items[: args.limit]
 

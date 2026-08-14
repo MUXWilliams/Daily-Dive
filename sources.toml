@@ -152,10 +152,21 @@ enabled = false
 
 # ----------------------------------------------------------------------- video
 #
-# Per-channel RSS: youtube.com/feeds/videos.xml?channel_id=UC... — no API key,
-# no quota. The UC id is not the @handle; find it via View Source on the channel
-# page and search for "channelId". A wrong id returns an empty feed rather than
-# an error, so verify with --source <id> before trusting one.
+# ALL PARKED — youtube.com/robots.txt disallows /feeds/, and the fetcher
+# refused all five on the first live run. The channel ids below are correct and
+# the feeds would parse; reading them would mean ignoring robots.txt, which is
+# the same line we declined to cross for Reef2Reef and for Reddit. It does not
+# become acceptable because this is a source we happen to want more.
+#
+# The sanctioned path is the YouTube Data API v3: a free key, a 10,000 unit
+# daily quota, and playlistItems.list at 1 unit per call — five channels polled
+# once a day costs about 5 of those 10,000 units. That is a v2 source type, not
+# a workaround, and it is the reason these entries stay here rather than being
+# deleted.
+#
+# Until then the Video section runs on video posts from the publications, which
+# is thinner but honest. The UC id is not the @handle; find it via View Source
+# on the channel page and search for "channelId".
 
 [[source]]
 id = "yt-brs"
@@ -164,6 +175,7 @@ url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCGGM8r6qjSRqPy9eAIFT
 type = "youtube"
 section = "Bulk Reef Supply"
 category_hint = "Video"
+enabled = false
 
 [[source]]
 id = "yt-tidalgardens"
@@ -171,6 +183,7 @@ name = "Tidal Gardens"
 url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCGdAIpjFq4vygKzXAyDKKtQ"
 type = "youtube"
 category_hint = "Video"
+enabled = false
 
 [[source]]
 id = "yt-wwc"
@@ -178,6 +191,7 @@ name = "World Wide Corals"
 url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCSFIdT_l261xC6sRQGx-T4Q"
 type = "youtube"
 category_hint = "Video"
+enabled = false
 
 [[source]]
 id = "yt-saltwateraquarium"
@@ -185,6 +199,7 @@ name = "SaltwaterAquarium.com"
 url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCFTt5UhP0EwqHwTU0y-lUlg"
 type = "youtube"
 category_hint = "Video"
+enabled = false
 
 [[source]]
 id = "yt-reefdudes"
@@ -192,3 +207,4 @@ name = "ReefDudes"
 url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCwjh_Pj6nAURoQ1nYIG9qsw"
 type = "youtube"
 category_hint = "Video"
+enabled = false
