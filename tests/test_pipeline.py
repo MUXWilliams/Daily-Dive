@@ -399,3 +399,24 @@ def test_one_contact_address_everywhere():
     assert brand.CONTACT_EMAIL in ingest.USER_AGENT
     assert brand.SITE_URL in ingest.USER_AGENT
     assert brand.CONTACT_EMAIL in Path("site/about.html").read_text(encoding="utf-8")
+
+
+# ------------------------------------------------------------------- youtube
+
+def test_youtube_sources_carry_a_real_channel_id():
+    """A wrong or placeholder channel id returns an empty feed rather than an
+    error — the worst failure shape, because it looks like a quiet channel."""
+    for source in config.load_sources(Path("sources.toml"), include_disabled=True):
+        if source.type is not SourceType.YOUTUBE:
+            continue
+        assert "channel_id=" in source.url, source.id
+        cid = source.url.split("channel_id=")[1]
+        assert cid.startswith("UC"), f"{source.id}: {cid!r} is not a channel id"
+        assert len(cid) == 24, f"{source.id}: channel id should be 24 chars, got {len(cid)}"
+        assert "REPLACE" not in cid.upper(), f"{source.id} still has a placeholder"
+
+
+def test_no_source_ships_with_a_placeholder_url():
+    for source in config.load_sources(Path("sources.toml"), include_disabled=True):
+        assert "REPLACE" not in source.url.upper(), source.id
+        assert "example.com" not in source.url, source.id

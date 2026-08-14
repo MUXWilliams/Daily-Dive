@@ -152,35 +152,43 @@ enabled = false
 
 # ----------------------------------------------------------------------- video
 #
-# YouTube per-channel RSS needs the UC... channel ID, not the @handle, and
-# there's no handle-based feed endpoint. To get an ID: open the channel, View
-# Source, search for "channelId". Then fill it in below and flip enabled = true.
-#
-# These three are parked because the IDs below are placeholders — I had no
-# network access to resolve them, and a wrong ID fails silently as an empty
-# feed rather than an error, which is the worst kind of bug to inherit.
+# Per-channel RSS: youtube.com/feeds/videos.xml?channel_id=UC... — no API key,
+# no quota. The UC id is not the @handle; find it via View Source on the channel
+# page and search for "channelId". A wrong id returns an empty feed rather than
+# an error, so verify with --source <id> before trusting one.
 
 [[source]]
 id = "yt-brs"
 name = "BRStv"
-url = "https://www.youtube.com/feeds/videos.xml?channel_id=REPLACE_ME"
+url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCGGM8r6qjSRqPy9eAIFT32w"
 type = "youtube"
 section = "Bulk Reef Supply"
 category_hint = "Video"
-enabled = false
 
 [[source]]
 id = "yt-tidalgardens"
 name = "Tidal Gardens"
-url = "https://www.youtube.com/feeds/videos.xml?channel_id=REPLACE_ME"
+url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCGdAIpjFq4vygKzXAyDKKtQ"
 type = "youtube"
 category_hint = "Video"
-enabled = false
 
 [[source]]
 id = "yt-wwc"
 name = "World Wide Corals"
-url = "https://www.youtube.com/feeds/videos.xml?channel_id=REPLACE_ME"
+url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCSFIdT_l261xC6sRQGx-T4Q"
 type = "youtube"
 category_hint = "Video"
-enabled = false
+
+[[source]]
+id = "yt-saltwateraquarium"
+name = "SaltwaterAquarium.com"
+url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCFTt5UhP0EwqHwTU0y-lUlg"
+type = "youtube"
+category_hint = "Video"
+
+[[source]]
+id = "yt-reefdudes"
+name = "ReefDudes"
+url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCwjh_Pj6nAURoQ1nYIG9qsw"
+type = "youtube"
+category_hint = "Video"
