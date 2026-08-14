@@ -78,22 +78,9 @@ CANDIDATES: list[str] = [
     "https://bsky.app/profile/acarreiro.bsky.social/rss",
     "https://bsky.app/profile/ubcoceans.bsky.social/rss",
     "https://bsky.app/profile/uncw-cms.bsky.social/rss",
-    # Humble.Fish — XenForo, the same feed shape Reef2Reef refuses. Worth its
-    # own test rather than an assumption: the 403s there were that site's
-    # policy, not a property of XenForo. High value if it answers, since this
-    # is the community for fish disease and quarantine, which is the thinnest
-    # part of Husbandry & Science.
-    "https://humble.fish/community/forums/-/index.rss",
-    "https://humble.fish/community/whats-new/posts/index.rss",
-    # Maxspect's press-release feed started serving HTML instead of RSS, which
-    # is a moved feed rather than a dead outlet. The old path ended in
-    # ".feed?type=rss", the Joomla convention, so these are the other Joomla
-    # shapes plus the two obvious generic ones.
-    "https://maxspect.com/en/press-releases-patents?format=feed&type=rss",
-    "https://maxspect.com/en/component/content/category/press-releases-footer?format=feed&type=rss",
-    "https://maxspect.com/en/?format=feed&type=rss",
-    "https://maxspect.com/feed",
-    "https://maxspect.com/en/feed",
+    # SETTLED, do not re-probe: humble.fish 403s on both XenForo shapes, the
+    # same wall as Reef2Reef. Maxspect's feed was found at the Joomla
+    # "?format=feed&type=rss" shape and is now in sources.toml.
 ]
 
 # Sites where guessing the feed path failed but a feed may still exist. Rather

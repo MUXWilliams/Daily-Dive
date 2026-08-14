@@ -92,14 +92,18 @@ enabled = false
 [[source]]
 id = "maxspect"
 name = "Maxspect"
-url = "https://maxspect.com/en/press-releases-patents.feed?type=rss"
+url = "https://maxspect.com/en/?format=feed&type=rss"
 type = "generic"
-section = "Press releases"
 category_hint = "Industry & Products"
-# PARKED — this URL used to return 5 press releases and now serves an HTML
-# page, so the feed fails to parse every run. The site changed, not us.
-# Candidate replacement paths are in probe.py; re-enable once one answers.
-enabled = false
+# FIXED — the old ".feed?type=rss" path now serves HTML; the working shape is
+# Joomla's "?format=feed&type=rss". Two answered: the press-releases category
+# (5 items, 164 days old) and this site-wide one (13 items, 68 days, newest
+# "Gyre 300 Cloud Edition"). Site-wide wins on both counts — more current and
+# it carries product launches, which is what the industry beat wants.
+#
+# 68 days is slow, not dead, so this is enabled on the same reasoning as CORAL
+# Magazine: the 7-day window makes a quiet feed cost one request and nothing
+# else, while a dead one (EcoTech at 1060 days) can never contribute at all.
 
 # PARKED — the feed exists and parses, but is empty. The site publishes no
 # posts through it today. Worth re-probing occasionally rather than deleting.
@@ -139,6 +143,20 @@ name = "Reef2Reef"
 url = "https://www.reef2reef.com/forums/-/index.rss"
 type = "xenforo"
 category_hint = "Community"
+enabled = false
+
+# BLOCKED — both XenForo shapes return 403:
+#   /community/forums/-/index.rss   /community/whats-new/posts/index.rss
+# That is now two reef forums blocking identically (Reef2Reef was the other),
+# which reads as a norm among XenForo reef communities rather than one site's
+# policy. Would have been the best Husbandry source we could get: this is the
+# community for fish disease and quarantine. Email rather than workaround.
+[[source]]
+id = "humblefish"
+name = "Humble.Fish"
+url = "https://humble.fish/community/forums/-/index.rss"
+type = "xenforo"
+category_hint = "Husbandry & Science"
 enabled = false
 
 # BLOCKED — 403, same story as Reef2Reef. Worth an email rather than a
