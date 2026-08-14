@@ -70,6 +70,32 @@ def _youtube_extra(entry: feedparser.FeedParserDict) -> dict[str, str]:
 # sit on one line next to everything else in the issue.
 SYNTH_TITLE_CHARS = 110
 
+_SENTENCE_END_RE = re.compile(r"[.!?](?=\s)|\n")
+
+# Words whose trailing full stop is an abbreviation, not a sentence ending. The
+# first live run cut headlines at every one of these — "The administration of
+# U.S", "Our colleague Dr", "director Prof", "#NewStudy by Menkara et al" —
+# each of which reads as a truncation bug, because it is one.
+_ABBREVIATIONS = frozenset(
+    """
+    dr prof mr mrs ms st sr jr vs etc al inc ltd co corp dept est fig no vol
+    approx cf ca ie eg pp ed eds repr trans univ assoc
+    """.split()
+)
+
+
+def _ends_in_abbreviation(head: str) -> bool:
+    """True if `head` stops on an abbreviation rather than a real sentence."""
+    last = head.rstrip(".").rsplit(" ", 1)[-1] if " " in head else head.rstrip(".")
+    bare = last.strip(".,;:!?\"'()[[]").lower()
+    if not bare:
+        return False
+    # A dotted initialism ("U.S", "e.g") or a single letter is never a sentence
+    # ending — a one-letter "word" is an initial, as in "Amanda V. Smith".
+    if "." in last.rstrip(".") or len(bare) == 1:
+        return True
+    return bare in _ABBREVIATIONS
+
 
 def _synth_title(text: str | None, limit: int = SYNTH_TITLE_CHARS) -> str | None:
     """A headline for something that never had one.
@@ -86,10 +112,14 @@ def _synth_title(text: str | None, limit: int = SYNTH_TITLE_CHARS) -> str | None
 
     # Prefer a sentence boundary; a truncated sentence reads as a mistake,
     # while a complete short one reads as a headline.
-    for stop in (". ", "! ", "? ", "\n"):
-        head, sep, _ = plain.partition(stop)
-        if sep and len(head) <= limit:
-            return head.strip() or None
+    for match in _SENTENCE_END_RE.finditer(plain):
+        head = plain[: match.start() + 1].strip()
+        if _ends_in_abbreviation(head):
+            continue  # "U.S." and "Dr." are not the end of a sentence
+        # Headlines don't take a full stop, but "!" and "?" carry meaning.
+        head = head.rstrip(".")
+        if head and len(head) <= limit:
+            return head
 
     if len(plain) <= limit:
         return plain

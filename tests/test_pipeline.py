@@ -824,3 +824,25 @@ def test_a_textless_post_is_dropped_rather_than_published_as_a_bare_link():
     from dailydive.normalize import _synth_title
 
     assert _synth_title("<img src='x'>") is None
+
+
+def test_synth_title_does_not_cut_a_headline_at_an_abbreviation():
+    """The first live run produced "The administration of U.S", "Our colleague
+    Dr" and "#NewStudy by Menkara et al" — every one a truncation bug."""
+    from dailydive.normalize import _synth_title
+
+    assert _synth_title(
+        "The administration of U.S. President Trump redirected funding. More."
+    ) == "The administration of U.S. President Trump redirected funding"
+    assert _synth_title("Our colleague Dr. Smith published a study. Next.") == (
+        "Our colleague Dr. Smith published a study"
+    )
+    assert _synth_title("#NewStudy by Menkara et al. reclassifies genera. Next.") == (
+        "#NewStudy by Menkara et al. reclassifies genera"
+    )
+    # An initial is not a sentence ending either.
+    assert _synth_title("Named after Amanda V. Vincent this year. Next.") == (
+        "Named after Amanda V. Vincent this year"
+    )
+    # A question mark still ends a headline, and keeps its mark.
+    assert _synth_title("Is the reef recovering? Some think so.") == "Is the reef recovering?"
