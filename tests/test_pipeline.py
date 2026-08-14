@@ -519,3 +519,27 @@ def test_volume_report_counts_each_window_per_outlet():
     report = normalize.volume_report(items, now=now)
     assert "ALL" in report
     assert report.strip().splitlines()[-1].split()[-3:] == ["1", "2", "3"]
+
+
+# --------------------------------------------------------------------- probe
+
+def _feed_with_date(when: datetime) -> bytes:
+    return f"""<?xml version="1.0"?><rss version="2.0"><channel>
+      <title>Test</title>
+      <item><title>A post</title><link>https://example.org/a</link>
+      <pubDate>{when:%a, %d %b %Y %H:%M:%S} +0000</pubDate></item>
+    </channel></rss>""".encode()
+
+
+def test_probe_flags_a_feed_that_parses_but_stopped_publishing():
+    """Four configured sources probed 'ok' and were publishing nothing — one
+    hadn't posted in three and a half years. Parsing is not liveness."""
+    import feedparser
+
+    from dailydive import probe as probe_mod
+
+    fresh = feedparser.parse(_feed_with_date(datetime.now(UTC) - timedelta(days=2)))
+    dead = feedparser.parse(_feed_with_date(datetime.now(UTC) - timedelta(days=1295)))
+
+    assert probe_mod._newest_age_days(fresh) <= 3
+    assert probe_mod._newest_age_days(dead) >= 1290

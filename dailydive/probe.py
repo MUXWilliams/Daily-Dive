@@ -9,6 +9,7 @@ somewhere with real network access (the Actions workflow does).
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from html.parser import HTMLParser
 from urllib.parse import urljoin
 
@@ -171,14 +172,26 @@ def discover_feeds(page_url: str, fetcher: Fetcher, client: httpx.Client) -> tup
 @dataclass
 class ProbeResult:
     url: str
-    verdict: str  # ok | empty | not-a-feed | robots | http-error | network-error
+    verdict: str  # ok | stale | empty | not-a-feed | robots | http-error | network-error
     detail: str
     entries: int = 0
     title: str | None = None
 
     @property
     def icon(self) -> str:
-        return {"ok": "✅", "empty": "⚠️", "robots": "🚫", "no-feed": "➖"}.get(self.verdict, "❌")
+        return {"ok": "✅", "stale": "🕸️", "empty": "⚠️", "robots": "🚫", "no-feed": "➖"}.get(self.verdict, "❌")
+
+
+def _newest_age_days(parsed: feedparser.FeedParserDict) -> int | None:
+    """Days since the most recent dated entry, or None if nothing is dated."""
+    stamps = [
+        datetime(*e.published_parsed[:6], tzinfo=UTC)
+        for e in parsed.entries
+        if e.get("published_parsed")
+    ]
+    if not stamps:
+        return None
+    return (datetime.now(UTC) - max(stamps)).days
 
 
 def probe_one(url: str, fetcher: Fetcher, client: httpx.Client) -> ProbeResult:
@@ -201,7 +214,16 @@ def probe_one(url: str, fetcher: Fetcher, client: httpx.Client) -> ProbeResult:
     count = len(parsed.entries)
 
     if count:
-        return ProbeResult(url, "ok", f"parses cleanly, newest: {parsed.entries[0].get('title', '?')[:70]}", count, title)
+        # Age, not just "it parses". Four of the six sources in sources.toml
+        # probed "ok" and turned out to be publishing nothing — ReefBum's
+        # newest entry was three and a half years old. A feed that parses is
+        # not a feed that is alive, and this is the column that tells them
+        # apart before a dead source gets configured.
+        age = _newest_age_days(parsed)
+        stamp = "unknown age" if age is None else f"newest {age}d old"
+        verdict = "ok" if (age is not None and age <= 60) else "stale"
+        headline = parsed.entries[0].get("title", "?")[:60]
+        return ProbeResult(url, verdict, f"{stamp}: {headline}", count, title)
     if parsed.bozo:
         return ProbeResult(url, "not-a-feed", f"not parseable as a feed ({parsed.get('bozo_exception')})")
     return ProbeResult(url, "empty", "parses, but has no entries")
