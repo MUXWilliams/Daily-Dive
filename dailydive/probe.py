@@ -49,6 +49,20 @@ CANDIDATES: list[str] = [
     "https://dfwmas.org/feed/",
     "https://atlantareefclub.org/feed/",
     "https://www.wamas.org/feed/",
+    # --- Reef science --------------------------------------------------------
+    # Asked for as "can we read @ICRSCoralReefs on x.com". We can't — X has no
+    # free read tier and killed RSS — but ICRS is a society, and its X account
+    # is a distribution channel rather than the origin. These are the origins.
+    "https://coralreefs.org/feed/",
+    "https://coralreefs.org/news/feed/",
+    # The society's journal, published by Springer, which serves per-journal
+    # RSS. Primary literature, and Wild Reefs is the thinnest section we have.
+    "https://link.springer.com/search.rss?facet-journal-id=338",
+    # Bluesky serves free public RSS per profile, no key and no auth — the one
+    # microblog readable without paying or misbehaving. The handles are
+    # guesses; a 404 costs one request and settles it.
+    "https://bsky.app/profile/icrs.bsky.social/rss",
+    "https://bsky.app/profile/coralreefs.bsky.social/rss",
 ]
 
 # Sites where guessing the feed path failed but a feed may still exist. Rather
@@ -80,6 +94,9 @@ DISCOVER_TARGETS: list[str] = [
     "https://www.waikikiaquarium.org/",
     "https://dfwmas.org/",
     "https://scmas.org/",
+    # If the guessed feed paths miss, ask the site itself.
+    "https://coralreefs.org/",
+    "https://link.springer.com/journal/338",
 ]
 
 
