@@ -67,11 +67,23 @@ def _collect_offline(sources: list[Source]) -> list[Item]:
     return normalize.dedupe(items)
 
 
-def main(argv: list[str] | None = None) -> int:
+def build_parser() -> argparse.ArgumentParser:
+    """The CLI's argument surface, built separately from running it.
+
+    Split out so a test can check what the parser accepts without executing a
+    run — specifically, that every flag the GitHub workflow passes is one this
+    parser knows about. That mismatch has broken CI before, and it fails in the
+    worst possible place: after the install and test steps have already passed.
+    """
     # Shared options live on a parent parser so they're accepted on either side
     # of the subcommand — `daily-dive -v run` and `daily-dive run -v` both work.
     common = argparse.ArgumentParser(add_help=False)
-    common.add_argument("-v", "--verbose", action="store_true")
+    # SUPPRESS matters: the parent and the subparser share this action, so with
+    # an ordinary `default=False` the subparser writes its default over a -v
+    # given before the subcommand, and `daily-dive -v run` silently isn't
+    # verbose. Suppressed, the flag is only ever set by actually passing it —
+    # which is why main reads it with getattr.
+    common.add_argument("-v", "--verbose", action="store_true", default=argparse.SUPPRESS)
 
     parser = argparse.ArgumentParser(prog="daily-dive", description=__doc__, parents=[common])
     sub = parser.add_subparsers(dest="command", required=True)
@@ -111,10 +123,14 @@ def main(argv: list[str] | None = None) -> int:
         help="also ask known sites what feeds they advertise (HTML autodiscovery)",
     )
 
-    args = parser.parse_args(argv)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
 
     logging.basicConfig(
-        level=logging.DEBUG if args.verbose else logging.INFO,
+        level=logging.DEBUG if getattr(args, "verbose", False) else logging.INFO,
         format="%(levelname)s %(name)s: %(message)s",
     )
 

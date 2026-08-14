@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+import re
+
 from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
 
-from dailydive import config, normalize, render, store
+from dailydive import cli, config, normalize, render, store
 from dailydive.models import (
     AttributionError,
     Category,
@@ -420,3 +422,47 @@ def test_no_source_ships_with_a_placeholder_url():
     for source in config.load_sources(Path("sources.toml"), include_disabled=True):
         assert "REPLACE" not in source.url.upper(), source.id
         assert "example.com" not in source.url, source.id
+
+
+# ------------------------------------------------------------------ workflow
+
+WORKFLOW = Path(".github/workflows/daily.yml")
+
+
+def _run_flags_in_workflow() -> set[str]:
+    """Long flags the workflow hands to `daily-dive run`."""
+    text = WORKFLOW.read_text(encoding="utf-8")
+    return set(re.findall(r'ARGS="\$ARGS (--[a-z-]+)', text))
+
+
+def test_workflow_only_passes_flags_the_cli_accepts():
+    """CI builds its argv with shell string-splicing, so a renamed flag isn't a
+    syntax error anywhere — it's an exit code 2 after install and tests have
+    already gone green. Catch it here instead."""
+    parser = cli.build_parser()
+    run_parser = parser._subparsers._group_actions[0].choices["run"]  # noqa: SLF001
+    known = {opt for action in run_parser._actions for opt in action.option_strings}  # noqa: SLF001
+
+    flags = _run_flags_in_workflow()
+    assert flags, "found no flags in the workflow — did the build step change shape?"
+    assert flags <= known, f"workflow passes unknown flags: {sorted(flags - known)}"
+
+
+def test_workflow_scoring_is_opt_in_and_has_a_key():
+    """Scoring is the only step that spends money, so it must never be the
+    default, and it must fail loudly rather than half-run without a key."""
+    text = WORKFLOW.read_text(encoding="utf-8")
+    assert "--score" in text
+    assert "ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}" in text
+    score_input = text.split("      score:", 1)[1].split("      threshold:", 1)[0]
+    assert "default: false" in score_input
+
+
+def test_verbose_is_accepted_on_either_side_of_the_subcommand():
+    """CI passes -v after the subcommand and humans type it before. Both have
+    to actually turn on debug logging — the failure mode here is silent, not a
+    parse error."""
+    parser = cli.build_parser()
+    assert getattr(parser.parse_args(["-v", "run"]), "verbose", False)
+    assert getattr(parser.parse_args(["run", "-v"]), "verbose", False)
+    assert not getattr(parser.parse_args(["run"]), "verbose", False)
