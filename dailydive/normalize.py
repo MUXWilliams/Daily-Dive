@@ -159,6 +159,36 @@ def recent(
     return fresh
 
 
+def volume_report(items: list[Item], *, now: datetime | None = None) -> str:
+    """How much each outlet actually publishes, over 7 / 14 / 30 days.
+
+    The daily-vs-weekly question is a question about publishing volume, and
+    volume is measurable rather than arguable. Run this against a full fetch
+    and the answer is in the last column: if the six-source total for 7 days
+    is smaller than a readable issue, the sources are the problem, not the
+    format — and if it's still small at 30 days, the format is.
+    """
+    now = now or datetime.now(UTC)
+    windows = (7, 14, 30)
+    by_source: dict[str, list[Item]] = {}
+    for i in items:
+        by_source.setdefault(i.source_name, []).append(i)
+
+    rows = [f"{'outlet':28} {'7d':>4} {'14d':>4} {'30d':>4}  newest"]
+    for name in sorted(by_source, key=lambda n: -len(by_source[n])):
+        members = by_source[name]
+        counts = [sum(1 for i in members if (now - i.published_at).days <= w) for w in windows]
+        newest = max(i.published_at for i in members)
+        age = (now - newest).days
+        rows.append(
+            f"{name[:28]:28} {counts[0]:>4} {counts[1]:>4} {counts[2]:>4}"
+            f"  {age}d ago"
+        )
+    totals = [sum(1 for i in items if (now - i.published_at).days <= w) for w in windows]
+    rows.append(f"{'ALL':28} {totals[0]:>4} {totals[1]:>4} {totals[2]:>4}")
+    return "\n".join(rows)
+
+
 # Keeps the closed-enum promise visible at the seam where v1's scoring pass
 # will start assigning categories for real.
 def categories_in(items: list[Item]) -> list[Category]:

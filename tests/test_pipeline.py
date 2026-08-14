@@ -504,3 +504,18 @@ def test_scoring_requires_a_gist():
 
     with pytest.raises(ValidationError):
         ItemScore(uid="x", relevance=0.9)
+
+
+def test_volume_report_counts_each_window_per_outlet():
+    """Whether this is a daily or a weekly is a question about how much the
+    sources publish — which is measurable, so measure it."""
+    now = datetime(2026, 8, 14, tzinfo=UTC)
+    items = [
+        item(url="https://reefbuilders.com/a/", published_at=now - timedelta(days=1)),
+        item(url="https://reefbuilders.com/b/", published_at=now - timedelta(days=10)),
+        item(url="https://reefbuilders.com/c/", published_at=now - timedelta(days=25)),
+        item(url="https://reefbuilders.com/d/", published_at=now - timedelta(days=200)),
+    ]
+    report = normalize.volume_report(items, now=now)
+    assert "ALL" in report
+    assert report.strip().splitlines()[-1].split()[-3:] == ["1", "2", "3"]

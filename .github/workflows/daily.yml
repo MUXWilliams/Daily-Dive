@@ -71,12 +71,15 @@ jobs:
       - name: Probe candidate feed URLs
         if: inputs.probe
         run: |
+          # tee, not redirect: the step summary is the readable form, but the
+          # verdicts also need to be in the log, which is the only place a
+          # tool (or a person on a restricted network) can actually get at them.
           {
             echo "### Candidate feed probe"
             echo ""
-            daily-dive probe --markdown --discover || true
+            daily-dive probe --markdown --discover 2>/dev/null || true
             echo ""
-          } >> $GITHUB_STEP_SUMMARY
+          } | tee -a $GITHUB_STEP_SUMMARY
 
       - name: Build issue from live feeds
         id: build

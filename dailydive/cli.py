@@ -177,6 +177,8 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     items = _collect_offline(sources) if args.offline else _collect_live(sources, args.db)
+    if items:
+        print("volume:\n" + normalize.volume_report(items))
     # Before scoring, not after: an item too old to publish shouldn't be paid
     # for. Scoring is the one step that costs money.
     items = normalize.recent(items, days=args.max_age_days)
