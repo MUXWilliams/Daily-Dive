@@ -1,10 +1,11 @@
 name: Build issue
 
-# Manual for now. GitHub's runners have full internet access, so this is the
-# easiest way to test real feeds without a local setup.
+# Weekly, plus manual runs whenever you want one. GitHub's runners have full
+# internet access, so workflow_dispatch is also how real feeds get tested.
 #
-# The daily schedule stays commented out until v3, when there's something worth
-# publishing. Uncomment then — 09:30 UTC is roughly 5:30am US Eastern.
+# Weekly rather than daily because the sources say so: ~19 publishable items
+# per 14-day window, which is a good weekly issue and a very thin daily one.
+# See the volume table any run prints.
 on:
   workflow_dispatch:
     inputs:
@@ -27,11 +28,14 @@ on:
         required: false
         default: false
       threshold:
-        description: "Minimum relevance to publish, 0-1 (blank = 0.35). Only used with scoring."
+        description: "Minimum relevance to publish, 0-1 (blank = 0.45). Only used with scoring."
         required: false
         default: ""
-  # schedule:
-  #   - cron: "30 9 * * *"
+  schedule:
+    # Friday 10:00 UTC — 6am US Eastern in summer, 5am in winter. Cron has no
+    # notion of daylight saving, so the local hour shifts by one twice a year;
+    # that is the accepted cost of not running a timezone-aware scheduler.
+    - cron: "0 10 * * 5"
 
 jobs:
   build:
@@ -54,7 +58,7 @@ jobs:
       # authentication error — and you'd be reading a stack trace instead of a
       # sentence telling you which secret is missing.
       - name: Check the API key is present
-        if: inputs.score
+        if: inputs.score || github.event_name == 'schedule'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
@@ -95,7 +99,11 @@ jobs:
           ARGS=""
           if [ -n "${{ inputs.source }}" ]; then ARGS="$ARGS --source ${{ inputs.source }}"; fi
           if [ -n "${{ inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ inputs.limit }}"; fi
-          if [ "${{ inputs.score }}" = "true" ]; then ARGS="$ARGS --score"; fi
+          # inputs.* are empty on a schedule event, so without this the weekly
+          # run would quietly build an unscored issue.
+          if [ "${{ inputs.score || github.event_name == 'schedule' }}" = "true" ]; then
+            ARGS="$ARGS --score"
+          fi
           if [ -n "${{ inputs.threshold }}" ]; then ARGS="$ARGS --threshold ${{ inputs.threshold }}"; fi
           # --print puts the issue in the log as text. The page ships as an
           # artifact, but reviewing the editorial judgment shouldn't require

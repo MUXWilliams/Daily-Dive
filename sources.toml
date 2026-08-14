@@ -23,7 +23,11 @@ url = "https://reefbuilders.com/feed/"
 type = "wordpress"
 category_hint = "Industry & Products"
 
-# Verified live: 10 items, newest "CORAL Magazine Table of Contents Jul/Aug 2026".
+# KEPT despite a 34-day-old newest item, which is not staleness: CORAL is a
+# print bi-monthly, so a month between posts is its normal rhythm rather than a
+# dead feed. The 60-day staleness flag exists precisely to avoid mistaking a
+# slow publisher for an abandoned one — do not park this on a quiet month.
+#
 # reef2rainforest.com stopped resolving entirely; coralmagazine.com is the
 # publisher's current home.
 [[source]]
@@ -42,14 +46,16 @@ url = "https://reefs.com/feed/"
 type = "wordpress"
 category_hint = "Husbandry & Science"
 
-# Verified live: 10 items, newest "How To Grow Live Phyto". Single-author
-# tank-keeping site — technique-heavy, low volume.
+# PARKED — 10 items, newest 1295 days old. The articles are good and the site
+# still serves them, but nothing has been published in three and a half years.
+# Its posts were being filed as today's news until the recency window landed.
 [[source]]
 id = "reefbum"
 name = "ReefBum"
 url = "https://reefbum.com/feed/"
 type = "wordpress"
 category_hint = "Husbandry & Science"
+enabled = false
 
 # ------------------------------------------------------------- industry beat
 #
@@ -61,7 +67,10 @@ category_hint = "Husbandry & Science"
 # signal-to-promo ratio here until v1's scoring pass can apply the brief's
 # exclusion rules and drop the coupon-and-restock noise.
 
-# Verified live: 10 items. First working corporate newsroom feed.
+# PARKED — the feed parses and returns 10 items, every one of them roughly
+# three years old (newest: 1060 days). It looked live because "it parses" was
+# all the probe used to check. Nothing here can ever reach an issue, so it is
+# two HTTP requests a run for nothing. Re-probe if CoralLab starts posting.
 # EcoTech Marine -> Aperture Pet & Life -> Bertram Capital (see industry.toml).
 [[source]]
 id = "ecotech"
@@ -69,6 +78,7 @@ name = "EcoTech Marine"
 url = "https://ecotechmarine.com/feed"
 type = "wordpress"
 category_hint = "Industry & Products"
+enabled = false
 
 # Verified live: 5 items. A real corporate press-release feed — the best kind
 # of industry source, since it's a primary announcement channel rather than a
@@ -86,6 +96,10 @@ url = "https://maxspect.com/en/press-releases-patents.feed?type=rss"
 type = "generic"
 section = "Press releases"
 category_hint = "Industry & Products"
+# PARKED — this URL used to return 5 press releases and now serves an HTML
+# page, so the feed fails to parse every run. The site changed, not us.
+# Candidate replacement paths are in probe.py; re-enable once one answers.
+enabled = false
 
 # PARKED — the feed exists and parses, but is empty. The site publishes no
 # posts through it today. Worth re-probing occasionally rather than deleting.

@@ -342,14 +342,16 @@ def dedupe(items: list[Item]) -> list[Item]:
     return unique
 
 
-# How far back an item can be published and still count as today's news. Feeds
-# carry whatever the publisher last posted, which on a low-volume site can be
-# months old — the first live run filed a March press release and two June
+# How far back an item can be published and still belong in this week's issue.
+# Feeds carry whatever the publisher last posted, which on a low-volume site
+# can be months old — an early run filed a March press release and two June
 # species descriptions as news. From the second run onward the archive
 # suppresses anything already seen, so this window mostly governs the first run
-# against a new source. Two weeks is generous enough for a genuinely slow
-# publisher without letting a quiet feed pad the issue.
-DEFAULT_MAX_AGE_DAYS = 14
+# against a new source.
+#
+# One week, matching the publishing cadence: at weekly, anything older than the
+# window has already had its chance to appear and been passed over.
+DEFAULT_MAX_AGE_DAYS = 7
 
 
 def recent(

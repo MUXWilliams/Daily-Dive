@@ -78,6 +78,15 @@ CANDIDATES: list[str] = [
     "https://bsky.app/profile/acarreiro.bsky.social/rss",
     "https://bsky.app/profile/ubcoceans.bsky.social/rss",
     "https://bsky.app/profile/uncw-cms.bsky.social/rss",
+    # Maxspect's press-release feed started serving HTML instead of RSS, which
+    # is a moved feed rather than a dead outlet. The old path ended in
+    # ".feed?type=rss", the Joomla convention, so these are the other Joomla
+    # shapes plus the two obvious generic ones.
+    "https://maxspect.com/en/press-releases-patents?format=feed&type=rss",
+    "https://maxspect.com/en/component/content/category/press-releases-footer?format=feed&type=rss",
+    "https://maxspect.com/en/?format=feed&type=rss",
+    "https://maxspect.com/feed",
+    "https://maxspect.com/en/feed",
 ]
 
 # Sites where guessing the feed path failed but a feed may still exist. Rather

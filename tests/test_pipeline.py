@@ -911,3 +911,25 @@ def test_the_prompt_gives_one_ordered_answer_per_beat():
     assert "A shutdown is Financial, not Ownership" in prompt
     for beat in ("Ownership", "Financial", "Leadership", "Distribution", "Manufacturing", "Safety", "Product"):
         assert beat in prompt
+
+
+# ------------------------------------------------------------------- weekly
+
+WORKFLOW_TEXT = WORKFLOW.read_text(encoding="utf-8")
+
+
+def test_the_schedule_is_weekly_and_matches_the_recency_window():
+    """A window longer than the cadence republishes last issue's leftovers; a
+    shorter one drops stories nobody has seen yet."""
+    assert 'cron: "0 10 * * 5"' in WORKFLOW_TEXT  # Friday
+    assert normalize.DEFAULT_MAX_AGE_DAYS == 7
+
+
+def test_a_scheduled_run_still_scores():
+    """inputs.* are empty on a schedule event, so a naive `inputs.score` test
+    would leave the weekly issue unscored — raw feed dumps, silently."""
+    assert "inputs.score || github.event_name == 'schedule'" in WORKFLOW_TEXT
+    # And the key check must cover the scheduled path too, or the run dies at
+    # the first model call instead of the first step.
+    guard = WORKFLOW_TEXT.split("Check the API key is present", 1)[1][:200]
+    assert "github.event_name == 'schedule'" in guard
