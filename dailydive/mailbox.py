@@ -279,7 +279,14 @@ def fetch(
             log.error("%s: no mailbox named %r", source.id, folder)
             return []
 
-        status, data = imap.search(None, "SINCE", since)
+        # Narrow server-side when the source speaks for exactly one outlet,
+        # which is the normal case: each publisher is its own source so each
+        # item can be credited to the outlet that actually wrote it. Filtering
+        # here means one source never even downloads another's mail.
+        criteria = ["SINCE", since]
+        if len(source.senders) == 1:
+            criteria += ["FROM", f'"{source.senders[0]}"']
+        status, data = imap.search(None, *criteria)
         if status != "OK":
             log.error("%s: IMAP search failed", source.id)
             return []

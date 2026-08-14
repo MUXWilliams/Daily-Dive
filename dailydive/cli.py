@@ -171,7 +171,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="verify the newsletter mailbox and list its senders (publishes nothing)",
         parents=[common],
     )
-    checking.add_argument("--source", default="trade-mail", help="which imap source to check")
+    checking.add_argument("--source", default="mail-aquaticmedia", help="which imap source to check")
     checking.add_argument("--days", type=int, default=30, help="how far back to look")
     checking.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
 

@@ -336,29 +336,90 @@ enabled = false
 
 # ------------------------------------------------------------- newsletters
 #
-# Trade press that blocks HTTP clients but still sends email. Pet Age, Pet
-# Product News and Pet Business all 403 or fail DNS for us, and all publish
-# newsletters — the mailbox is the door they left open.
+# Read over IMAP from the `digest` Gmail label. One source per sender, not one
+# source for the mailbox: every item has to be credited to the outlet that
+# actually wrote it, and a single "newsletters" source would have credited a
+# Quality Marine announcement to something else entirely. That is the whole
+# attribution promise, so the config shape has to enforce it.
 #
-# url is imap://host/label: where to connect and which label to read. No
-# credentials in it; IMAP_USER and IMAP_PASSWORD come from the environment,
-# and the app password is a GitHub secret.
+# `senders` is a security control. An inbox is an untrusted input — anyone who
+# learns the address can mail it — so only these addresses contribute, and an
+# empty list refuses everything. With exactly one sender the filtering also
+# happens server-side, so a source never downloads another source's mail.
 #
-# `senders` is a security control, not a convenience. An inbox is an untrusted
-# input — anyone who learns the address can mail it — so only these addresses
-# can put anything into the pipeline, and an empty list refuses everything.
-# Fill it in from the "From" address of a real newsletter once one arrives:
-# they are usually a no-reply subdomain, not the publication's own domain.
-#
-# DISABLED until the first newsletters land and their real sender addresses
-# are known. Enabling it with an empty allowlist would fetch mail and then
-# correctly discard all of it.
+# Verified present in the mailbox 2026-08-14.
+
+# The publisher of CORAL and AMAZONAS — editorial, not retail. The strongest
+# of these by a distance, and a second route to CORAL's reporting alongside
+# the (bi-monthly, therefore quiet) coralmagazine.com feed.
 [[source]]
-id = "trade-mail"
-name = "Pet trade press"
+id = "mail-aquaticmedia"
+name = "Aquatic Media Press"
 url = "imap://imap.gmail.com/digest"
 type = "imap"
 section = "Newsletter"
 category_hint = "Industry & Products"
-senders = []
+senders = ["editors@aquaticmediapress.com"]
+
+# NOAA National Ocean Service via GovDelivery. US government work, so the
+# content is public domain — the one source here with no licensing question
+# at all. Broad ocean-service coverage, so expect the scorer to drop a lot.
+[[source]]
+id = "mail-noaa"
+name = "NOAA National Ocean Service"
+url = "imap://imap.gmail.com/digest"
+type = "imap"
+section = "Newsletter"
+category_hint = "Wild Reefs"
+senders = ["nosnoaa@public.govdelivery.com"]
+
+# --- Vendors -----------------------------------------------------------------
+#
+# DISABLED pending a decision. These are all `sales@` addresses: marketing
+# lists, where the newsletter exists to sell. Biota and Quality Marine do
+# announce genuine firsts — a captive-bred species nobody has bred before is
+# real news, and Quality Marine's Black Longnose Tang already reached an issue
+# through CORAL — but most of what these send will be stock and offers, which
+# the scorer drops as promo. Enabling them costs money to be told "no" a lot.
+
+[[source]]
+id = "mail-biota"
+name = "Biota Aquariums"
+url = "imap://imap.gmail.com/digest"
+type = "imap"
+section = "Newsletter"
+category_hint = "Livestock & Corals"
+senders = ["support@thebiotagroup.com"]
+enabled = false
+
+[[source]]
+id = "mail-qualitymarine"
+name = "Quality Marine"
+url = "imap://imap.gmail.com/digest"
+type = "imap"
+section = "Newsletter"
+category_hint = "Livestock & Corals"
+senders = ["sales@qualitymarine.com"]
+enabled = false
+
+[[source]]
+id = "mail-faunamarin"
+name = "Fauna Marin"
+url = "imap://imap.gmail.com/digest"
+type = "imap"
+section = "Newsletter"
+category_hint = "Industry & Products"
+senders = ["sales@faunamarin.de"]
+enabled = false
+
+# A retailer's mailing list. Almost certainly pure promotion; listed so the
+# decision is recorded rather than forgotten.
+[[source]]
+id = "mail-championlighting"
+name = "Champion Lighting"
+url = "imap://imap.gmail.com/digest"
+type = "imap"
+section = "Newsletter"
+category_hint = "Industry & Products"
+senders = ["sales@championlighting.com"]
 enabled = false

@@ -1051,3 +1051,17 @@ def test_mailcheck_refuses_to_read_a_whole_inbox():
         source = _mail_source().model_copy(update={"url": f"imap://imap.gmail.com/{path}"})
         out = mailbox.describe(source, user="x@example.com", password="unused", days=7)
         assert out.startswith("refusing to read"), path
+
+
+def test_each_newsletter_source_speaks_for_exactly_one_outlet():
+    """Attribution: an item must be credited to whoever wrote it. One shared
+    "newsletters" source would have credited a Quality Marine announcement to
+    something else, which is the one thing this project must never do."""
+    mail = [
+        s for s in config.load_sources(Path("sources.toml"), include_disabled=True)
+        if s.type is SourceType.IMAP
+    ]
+    assert mail, "expected at least one configured newsletter source"
+    for source in mail:
+        assert len(source.senders) == 1, f"{source.id} mixes {len(source.senders)} senders"
+        assert source.name, source.id
