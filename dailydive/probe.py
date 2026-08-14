@@ -63,6 +63,21 @@ CANDIDATES: list[str] = [
     # guesses; a 404 costs one request and settles it.
     "https://bsky.app/profile/icrs.bsky.social/rss",
     "https://bsky.app/profile/coralreefs.bsky.social/rss",
+    # Ten more Bluesky accounts, supplied by the editor. Probed rather than
+    # configured straight in, for two reasons: the age column says which are
+    # actually posting, and the feed-title column gives each account's real
+    # display name — the name it gets CREDITED by — instead of one typed
+    # from memory.
+    "https://bsky.app/profile/scrippsocean.bsky.social/rss",
+    "https://bsky.app/profile/austsocfishbiol.bsky.social/rss",
+    "https://bsky.app/profile/greatsouthernreef.bsky.social/rss",
+    "https://bsky.app/profile/uaf-oarc-alaska.bsky.social/rss",
+    "https://bsky.app/profile/projectseahorse.bsky.social/rss",
+    "https://bsky.app/profile/vibriosoup.bsky.social/rss",
+    "https://bsky.app/profile/coralcitycamera.bsky.social/rss",
+    "https://bsky.app/profile/acarreiro.bsky.social/rss",
+    "https://bsky.app/profile/ubcoceans.bsky.social/rss",
+    "https://bsky.app/profile/uncw-cms.bsky.social/rss",
 ]
 
 # Sites where guessing the feed path failed but a feed may still exist. Rather
@@ -267,11 +282,21 @@ def probe(urls: list[str] | None = None, *, discover: bool = False) -> list[Prob
         client.close()
 
 
+def _cell(text: str | None, limit: int = 120) -> str:
+    """One table cell. Collapses whitespace, because an error string with a
+    newline in it would otherwise split a row and corrupt the whole table."""
+    return " ".join((text or "").split()).replace("|", "\\|")[:limit]
+
+
 def format_markdown(results: list[ProbeResult]) -> str:
-    lines = ["| URL | Result | Items | Detail |", "|---|---|---|---|"]
+    # The feed's own title is the outlet's self-description, which is the
+    # name it should be CREDITED by. Reading it here beats hand-typing a name
+    # into sources.toml from memory and getting an organisation's name wrong
+    # on a public page.
+    lines = ["| URL | Result | Items | Feed title | Detail |", "|---|---|---|---|---|"]
     for r in results:
-        # Collapse whitespace: an error string containing a newline would
-        # otherwise split one row into two and corrupt the table.
-        detail = " ".join(r.detail.split()).replace("|", "\\|")[:120]
-        lines.append(f"| `{r.url}` | {r.icon} {r.verdict} | {r.entries or ''} | {detail} |")
+        lines.append(
+            f"| `{r.url}` | {r.icon} {r.verdict} | {r.entries or ''} "
+            f"| {_cell(r.title, 60)} | {_cell(r.detail)} |"
+        )
     return "\n".join(lines)
