@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import unicodedata
 from datetime import UTC, datetime, timedelta
 
 import feedparser
@@ -250,6 +251,79 @@ def normalize(source: Source, body: bytes) -> list[Item]:
             log.warning("%s: %r dropped (%s)", source.id, title, exc)
 
     return items
+
+
+# Words too common to say two posts are about the same thing.
+_STOPWORDS = frozenset(
+    """
+    a an the and or but of in on at to for from by with as is are was were be
+    been being it its this that these those has have had will would can could
+    new now our your their his her out up more most just about after before
+    over under into than then them they we you i not no all some any one two
+    """.split()
+)
+
+# How much of two headlines must overlap before they count as one story.
+# Measured against the six posts about one new seahorse species that appeared
+# in a single issue: pairs within that group scored 0.11-0.71, while unrelated
+# headlines from the same issue scored 0.00 against all of them. 0.40 sits in
+# that gap. It collapses most of a group rather than all of it, which is the
+# right way to be wrong here — merging two genuinely different stories loses
+# one silently, while a missed repeat is visible and fixable.
+SIMILARITY_THRESHOLD = 0.40
+
+
+def _fingerprint(title: str) -> frozenset[str]:
+    """Content words of a headline, for comparing two of them.
+
+    NFKC first, because social posts are full of styled Unicode — a post
+    written in mathematical italics is the same words as one written plainly,
+    and without normalisation they share no characters at all.
+    """
+    folded = unicodedata.normalize("NFKC", title).lower()
+    words = re.findall(r"[a-z0-9]+", folded)
+    return frozenset(w for w in words if len(w) > 2 and w not in _STOPWORDS)
+
+
+def collapse_similar(items: list[Item], *, threshold: float = SIMILARITY_THRESHOLD) -> list[Item]:
+    """Merge items whose headlines describe the same story.
+
+    Social accounts covering one announcement produce near-identical posts —
+    a single new seahorse species arrived six times in one issue, from two
+    outlets. This keeps the first of each group, which after scoring is the
+    highest-relevance one, and records how many others said the same thing.
+
+    This is a stopgap for the real clustering pass: it only compares headlines,
+    so it catches the obvious repeats and misses coverage worded differently.
+    Nothing merged is published, so nothing merged needs crediting.
+    """
+    kept: list[Item] = []
+    prints: list[frozenset[str]] = []
+    merged: dict[int, int] = {}
+
+    for item in items:
+        marks = _fingerprint(item.title)
+        if len(marks) < 3:  # too short to judge; keep it rather than guess
+            kept.append(item)
+            prints.append(marks)
+            continue
+
+        for index, seen in enumerate(prints):
+            if not seen:
+                continue
+            overlap = len(marks & seen) / min(len(marks), len(seen))
+            if overlap >= threshold:
+                merged[index] = merged.get(index, 0) + 1
+                log.info("merged %r into %r", item.title[:60], kept[index].title[:60])
+                break
+        else:
+            kept.append(item)
+            prints.append(marks)
+
+    return [
+        i.model_copy(update={"extra": {**i.extra, "similar": str(merged[n])}}) if n in merged else i
+        for n, i in enumerate(kept)
+    ]
 
 
 def dedupe(items: list[Item]) -> list[Item]:

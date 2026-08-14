@@ -40,9 +40,12 @@ PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts" / "score.system
 # many items; small enough that one malformed reply doesn't cost the whole run.
 BATCH_SIZE = 20
 
-# Below this, an item never reaches the issue. Tuned against the calibration
-# anchors in the prompt — 0.3 is the top of the "true but marginal" band.
-DEFAULT_THRESHOLD = 0.35
+# Below this, an item never reaches the issue. Raised from 0.35 after the first
+# run with the marine-science accounts: 26 of 46 published items were Wild
+# Reefs, and the 0.4 band was full of items whose own gist called them
+# "tangential" or "minimal aquarium application". The prompt now forbids that
+# hedge-and-publish combination, and this is the second line of defence.
+DEFAULT_THRESHOLD = 0.45
 
 # The attribution policy caps summaries at 40 words. The prompt asks for two
 # sentences within that budget, but a prompt is a request and this is the rule:

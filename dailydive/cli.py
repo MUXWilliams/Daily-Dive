@@ -230,6 +230,12 @@ def main(argv: list[str] | None = None) -> int:
             threshold=args.threshold if args.threshold is not None else score_mod.DEFAULT_THRESHOLD,
         )
         log.info("scored %d items, kept %d", before, len(items))
+        # After scoring, not before: items arrive sorted by relevance, so the
+        # survivor of each group is the best-scored telling of that story.
+        deduped = normalize.collapse_similar(items)
+        if len(deduped) < len(items):
+            log.info("collapsed %d near-duplicate item(s)", len(items) - len(deduped))
+        items = deduped
         print("cost:\n" + spend.report())
 
     issue = Issue(date=datetime.now(UTC), items=items)

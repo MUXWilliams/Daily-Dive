@@ -181,8 +181,10 @@ def as_text(issue: Issue) -> str:
             beat = item.extra.get("beat")
             prefix = f"  [{score}] " if score else "  "
             run = _runtime(item.extra["duration_s"]) if item.extra.get("duration_s") else ""
+            also = f" +{item.extra['similar']} similar" if item.extra.get("similar") else ""
             lines.append(
-                f"{prefix}{f'({beat}) ' if beat else ''}{item.title}{f' [{run}]' if run else ''}"
+                f"{prefix}{f'({beat}) ' if beat else ''}{item.title}"
+                f"{f' [{run}]' if run else ''}{also}"
             )
             if item.extra.get("gist"):
                 lines.append(f"      {item.extra['gist']}")

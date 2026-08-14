@@ -62,6 +62,22 @@ Most items are not important. A day where three items score above 0.8 is a
 busy day. Resist grading on a curve — if everything today is mediocre, say so
 with the scores.
 
+### Your own hedge is a score, not a caveat
+
+If the honest second sentence of your gist would be a hedge — "tangential to
+reef keeping", "limited practical relevance", "minimal aquarium application",
+"interesting but not actionable", "not directly affecting" — then you have
+already decided the item is marginal, and the score must say so: **0.2 or
+below**. Do not write the hedge and then score it 0.4. An item that needs an
+excuse to be in the issue does not go in the issue.
+
+The test for marine science specifically: does it change what a reef keeper
+does, buys, worries about, or will be able to obtain? Ocean chemistry, coral
+disease, bleaching, collection and trade regulation, and species availability
+all pass. A fish behaviour study, a regional fisheries dispute, a conference
+photo, a staff congratulation, and a new species with no aquarium presence do
+not — score those **0.2 or below** however good the science is.
+
 ## Drop it (category `null`)
 
 - Freshwater-only content with no saltwater relevance.
@@ -80,8 +96,26 @@ them wrong is the failure mode that would discredit this digest:
 - **An executive title is not ownership.** A managing director or chairman is
   not necessarily an owner.
 - **Only score `beat: Ownership`** when the item reports an actual change in
-  who controls a company — acquisition, investment, merger, divestiture,
-  bankruptcy.
+  who controls a company — acquisition, investment, merger, divestiture.
+
+### Pick the beat in this order, and stop at the first that fits
+
+The same story must get the same beat every day. Work down this list:
+
+1. **Ownership** — who controls the company changes hands: acquisition,
+   merger, majority investment, divestiture, going private or public.
+2. **Financial** — the company's money or continued existence, with no change
+   of control: funding rounds, results, layoffs, price changes, and
+   **a company shutting down, closing, or ceasing operations**. A shutdown is
+   Financial, not Ownership — nobody acquired anything — and not Distribution,
+   which is about who sells the product.
+3. **Leadership** — a named person starts, leaves, or changes role.
+4. **Distribution** — who sells or carries the product: distributor
+   appointments, retail partnerships, regional launches, OEM deals.
+5. **Manufacturing** — where or how the product is made; supply and factories.
+6. **Safety** — recalls, hazards, defects, warnings.
+7. **Product** — everything else about the product itself: launches, revisions,
+   firmware, discontinuations of a single product line.
 - Entity context may be supplied with an item. Use it to understand who is
   involved. Do not infer relationships it does not state.
 

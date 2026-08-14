@@ -846,3 +846,68 @@ def test_synth_title_does_not_cut_a_headline_at_an_abbreviation():
     )
     # A question mark still ends a headline, and keeps its mark.
     assert _synth_title("Is the reef recovering? Some think so.") == "Is the reef recovering?"
+
+
+# ------------------------------------------------------------ near-duplicates
+
+def test_the_same_story_from_several_accounts_collapses_to_one():
+    """One new seahorse species arrived six times in a single issue, from two
+    outlets. Items are scored before this runs, so the survivor is the
+    best-scored telling."""
+    titles = [
+        "The newly described species, Hippocampus amandavincentae, has been named in honour of",
+        "The newly discovered Indian Ocean species, Hippocampus Amandavincentae, was named after",
+        "✨ Meet 𝘏𝘪𝘱𝘱𝘰𝘤𝘢𝘮𝘱𝘶𝘴 𝘢𝘮𝘢𝘯𝘥𝘢𝘷𝘪𝘯𝘤𝘦𝘯𝘵𝘢𝘦, named after Amanda Vincent, our director",
+    ]
+    items = [item(title=t, url=f"https://bsky.app/p/{n}") for n, t in enumerate(titles)]
+    kept = normalize.collapse_similar(items)
+
+    assert len(kept) == 1
+    assert kept[0].title == titles[0]  # the first, i.e. the highest-scoring
+    assert kept[0].extra["similar"] == "2"
+
+
+def test_styled_unicode_is_folded_before_comparing():
+    """A post written in mathematical italics shares no characters with the
+    same words written plainly — without NFKC they never match."""
+    plain = normalize._fingerprint("Hippocampus amandavincentae named")
+    styled = normalize._fingerprint("𝘏𝘪𝘱𝘱𝘰𝘤𝘢𝘮𝘱𝘶𝘴 𝘢𝘮𝘢𝘯𝘥𝘢𝘷𝘪𝘯𝘤𝘦𝘯𝘵𝘢𝘦 𝘯𝘢𝘮𝘦𝘥")
+    assert plain == styled
+
+
+def test_unrelated_stories_are_never_merged():
+    items = [
+        item(title="El Nino is happening in an unnaturally warming world", url="https://a.invalid/1"),
+        item(title="How to Treat Brown Jelly Disease", url="https://a.invalid/2"),
+        item(title="Climate change is amplifying lionfish invasions globally", url="https://a.invalid/3"),
+    ]
+    assert len(normalize.collapse_similar(items)) == 3
+
+
+def test_a_headline_too_short_to_judge_is_kept():
+    """Two-word posts share words by accident. Keeping is the safe error."""
+    items = [
+        item(title="Big news", url="https://a.invalid/1"),
+        item(title="Big news", url="https://a.invalid/2"),
+    ]
+    assert len(normalize.collapse_similar(items)) == 2
+
+
+def test_the_prompt_forbids_hedging_and_publishing():
+    """The scorer wrote "tangential to reef keeping" and then scored 0.4. The
+    prompt has to make its own hedge binding, or the pattern comes back."""
+    prompt = Path("prompts/score.system.md").read_text(encoding="utf-8")
+    assert "tangential" in prompt
+    assert "0.2 or below" in prompt
+
+
+def test_the_prompt_gives_one_ordered_answer_per_beat():
+    """AquaBiomics shutting down was tagged Ownership, then Distribution, then
+    Financial across three runs. An ordered list is what makes it stable."""
+    # Collapsed, because the rule is wrapped across lines in the prompt and a
+    # test that breaks on re-wrapping is a test nobody will keep.
+    prompt = " ".join(Path("prompts/score.system.md").read_text(encoding="utf-8").split())
+    assert "shutting down, closing, or ceasing operations" in prompt
+    assert "A shutdown is Financial, not Ownership" in prompt
+    for beat in ("Ownership", "Financial", "Leadership", "Distribution", "Manufacturing", "Safety", "Product"):
+        assert beat in prompt

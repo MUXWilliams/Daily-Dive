@@ -132,6 +132,10 @@
     letter-spacing: .06em; text-transform: uppercase;
     padding: .1rem .32rem; border-radius: 2px;
   }
+  /* How many other posts said the same thing. A crude stand-in for the
+     clustered "More:" line, and a signal that a story is being widely
+     covered rather than mentioned once. */
+  .alsoran { color: var(--ink-faint); font-size: .72rem; }
   .beat {
     background: var(--flare); color: #fff; font-size: .6rem; font-weight: 700;
     letter-spacing: .07em; text-transform: uppercase; padding: .1rem .32rem; border-radius: 2px;
@@ -202,6 +206,7 @@
           <p class="credit">
             {% if item.extra.beat %}<span class="beat">{{ item.extra.beat }}</span>{% endif %}
             {% if item.extra.duration_s %}<span class="runtime">{{ item.extra.duration_s | runtime }}</span>{% endif %}
+            {% if item.extra.similar %}<span class="alsoran">+{{ item.extra.similar }} similar</span>{% endif %}
             <span class="source">{{ item.source_name }}</span>
             {% if item.author %}<span>· {{ item.author }}</span>{% endif %}
             <span>· {{ item.published_at | datefmt('short') }}</span>
