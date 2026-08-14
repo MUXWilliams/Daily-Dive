@@ -196,3 +196,25 @@ id = "yt-reefdudes"
 name = "ReefDudes"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUwjh_Pj6nAURoQ1nYIG9qsw"
 type = "youtube_api"
+
+# ------------------------------------------------------------- reef science
+#
+# Asked for as "can we pull @ICRSCoralReefs from x.com". We can't: X has no
+# free read tier, killed RSS, and prohibits scraping. But the International
+# Coral Reef Society posts the same material to Bluesky, which serves public
+# per-profile RSS with no key and no auth — the front door to the same content.
+#
+# Expect an item or two a month, not a section. Verified live: 25 entries,
+# newest 21 days old. Two things it is NOT worth mistaking for: the society's
+# own site (coralreefs.org) whose feed is 465 days stale, and the journal
+# Coral Reefs, whose Springer feed robots.txt disallows.
+#
+# Posts have no title, so normalize._synth_title makes one from the first
+# sentence and drops image-only posts that have no text at all.
+[[source]]
+id = "icrs-bsky"
+name = "International Coral Reef Society"
+url = "https://bsky.app/profile/icrs.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"

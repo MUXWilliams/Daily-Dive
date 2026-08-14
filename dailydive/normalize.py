@@ -66,6 +66,37 @@ def _youtube_extra(entry: feedparser.FeedParserDict) -> dict[str, str]:
     return extra
 
 
+# A headline's worth of a post. Long enough to carry a claim, short enough to
+# sit on one line next to everything else in the issue.
+SYNTH_TITLE_CHARS = 110
+
+
+def _synth_title(text: str | None, limit: int = SYNTH_TITLE_CHARS) -> str | None:
+    """A headline for something that never had one.
+
+    Bluesky posts have body text and no title, and the renderer refuses an
+    item without one — correctly, since an untitled row can't be credited or
+    read. So the first sentence becomes the headline, and a post with no text
+    at all (an image on its own) returns None and is dropped rather than
+    published as a bare link.
+    """
+    plain = _text(text, limit=400)
+    if not plain:
+        return None
+
+    # Prefer a sentence boundary; a truncated sentence reads as a mistake,
+    # while a complete short one reads as a headline.
+    for stop in (". ", "! ", "? ", "\n"):
+        head, sep, _ = plain.partition(stop)
+        if sep and len(head) <= limit:
+            return head.strip() or None
+
+    if len(plain) <= limit:
+        return plain
+    clipped = plain[:limit].rsplit(" ", 1)[0].rstrip(",;:-—")
+    return f"{clipped}…" if clipped else None
+
+
 def _reddit_extra(entry: feedparser.FeedParserDict) -> dict[str, str]:
     return {"subreddit": entry["source"]["title"]} if isinstance(entry.get("source"), dict) else {}
 
@@ -148,7 +179,12 @@ def normalize(source: Source, body: bytes) -> list[Item]:
     items: list[Item] = []
     for entry in parsed.entries:
         url = entry.get("link")
+        summary = entry.get("summary") or entry.get("description")
         title = entry.get("title")
+        if source.type is SourceType.BLUESKY and not title:
+            # Posts have body text and no title. The renderer refuses an
+            # untitled item, correctly, so the first sentence becomes one.
+            title = _synth_title(summary)
         if not url or not title:
             log.warning("%s: entry missing link or title, dropped", source.id)
             continue
@@ -175,7 +211,7 @@ def normalize(source: Source, body: bytes) -> list[Item]:
                     url=url,
                     published_at=published,
                     author=_author(entry),
-                    raw_text=_text(entry.get("summary") or entry.get("description")),
+                    raw_text=_text(summary),
                     category_hint=source.category_hint,
                     extra=extra,
                 )

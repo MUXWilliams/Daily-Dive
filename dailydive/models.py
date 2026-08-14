@@ -52,6 +52,9 @@ class SourceType(StrEnum):
     # YouTube actually sanctions. See Source.is_authorized_api.
     YOUTUBE_API = "youtube_api"
     REDDIT = "reddit"
+    # Bluesky serves public per-profile RSS with no key and no auth. Its own
+    # dialect because posts have no title — see normalize._synth_title.
+    BLUESKY = "bluesky"
     GENERIC = "generic"
 
 

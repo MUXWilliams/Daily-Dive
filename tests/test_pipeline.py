@@ -766,3 +766,61 @@ def test_feed_content_is_escaped_before_it_reaches_the_page():
     assert "&lt;script&gt;" in html
     assert "&amp; more" in html
     assert "<b>soup</b>" not in html
+
+
+# ------------------------------------------------------------------- bluesky
+
+_BSKY_FEED = b"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+  <title>@icrs.bsky.social - International Coral Reef Society</title>
+  <item>
+    <description>Registration is open for the 2027 International Coral Reef
+      Symposium in Auckland. Early-bird rates close in March.</description>
+    <link>https://bsky.app/profile/icrs.bsky.social/post/aaa</link>
+    <pubDate>Wed, 12 Aug 2026 09:00:00 +0000</pubDate>
+  </item>
+  <item>
+    <description></description>
+    <link>https://bsky.app/profile/icrs.bsky.social/post/bbb</link>
+    <pubDate>Tue, 11 Aug 2026 09:00:00 +0000</pubDate>
+  </item>
+</channel></rss>"""
+
+
+def test_bluesky_posts_get_a_headline_made_from_their_first_sentence():
+    source = fixture_source(
+        "icrs-bsky",
+        name="International Coral Reef Society",
+        type=SourceType.BLUESKY,
+        section="Bluesky",
+    )
+    items = normalize.normalize(source, _BSKY_FEED)
+
+    assert len(items) == 1  # the empty, image-only post is dropped
+    post = items[0]
+    assert post.title == (
+        "Registration is open for the 2027 International Coral Reef Symposium in Auckland"
+    )
+    # The credit says where it came from: a post, not an article.
+    assert post.source_name == "International Coral Reef Society — Bluesky"
+
+
+def test_synth_title_prefers_a_whole_sentence_and_falls_back_to_a_clean_clip():
+    from dailydive.normalize import _synth_title
+
+    assert _synth_title("Short and done. Second sentence here.") == "Short and done"
+    assert _synth_title(None) is None
+    assert _synth_title("   ") is None
+
+    long_one = _synth_title("word " * 60)
+    assert long_one.endswith("…")
+    assert len(long_one) <= normalize.SYNTH_TITLE_CHARS + 1
+    assert not long_one.endswith(" …")
+
+
+def test_a_textless_post_is_dropped_rather_than_published_as_a_bare_link():
+    """An item with no title can't be credited or read — an image-only post
+    has nothing to say in a digest."""
+    from dailydive.normalize import _synth_title
+
+    assert _synth_title("<img src='x'>") is None
