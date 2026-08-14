@@ -10,16 +10,17 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
 import httpx
 
-from . import config, ingest, normalize, render
+from . import config, ingest, normalize, render, youtube
 from . import score as score_mod
 from . import store
-from .models import Issue, Item, Source
+from .models import Issue, Item, Source, SourceType
 from .pricing import RunSpend
 
 log = logging.getLogger("dailydive")
@@ -56,6 +57,20 @@ def _collect_live(sources: list[Source], db: Path) -> list[Item]:
         new_count = store.record_items(conn, items)
         log.info("%d items (%d new to the archive)", len(items), new_count)
     return items
+
+
+def _drop_shorts(items: list[Item]) -> list[Item]:
+    """Filter Shorts out, if there are any videos and we have a key."""
+    if not any(i.extra.get("video_id") for i in items):
+        return items
+
+    key = os.environ.get(ingest.API_KEY_ENV[SourceType.YOUTUBE_API], "").strip()
+    if not key:
+        log.warning("no YouTube key — cannot check durations, so Shorts may appear")
+        return items
+
+    with httpx.Client(timeout=ingest.TIMEOUT, headers={"User-Agent": ingest.USER_AGENT}) as client:
+        return youtube.drop_shorts(items, client=client, api_key=key)
 
 
 def _collect_offline(sources: list[Source]) -> list[Item]:
@@ -110,6 +125,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--score",
         action="store_true",
         help="run the Haiku scoring pass (needs ANTHROPIC_API_KEY; costs money)",
+    )
+    run.add_argument(
+        "--keep-shorts",
+        action="store_true",
+        help="don't filter out YouTube Shorts (they are dropped by default)",
     )
     run.add_argument(
         "--print",
@@ -184,6 +204,8 @@ def main(argv: list[str] | None = None) -> int:
     items = _collect_offline(sources) if args.offline else _collect_live(sources, args.db)
     if items:
         print("volume:\n" + normalize.volume_report(items))
+    if not args.offline and not args.keep_shorts:
+        items = _drop_shorts(items)
     # Before scoring, not after: an item too old to publish shouldn't be paid
     # for. Scoring is the one step that costs money.
     items = normalize.recent(items, days=args.max_age_days)

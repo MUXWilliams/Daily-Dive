@@ -642,3 +642,74 @@ def test_only_the_api_source_type_can_bypass_robots():
     for source in config.load_sources(Path("sources.toml"), include_disabled=True):
         if source.type is not SourceType.YOUTUBE_API:
             assert not source.is_authorized_api, source.id
+
+
+# -------------------------------------------------------------------- shorts
+
+def test_iso_durations_parse():
+    from dailydive.youtube import parse_duration
+
+    assert parse_duration("PT45S") == 45
+    assert parse_duration("PT3M") == 180
+    assert parse_duration("PT18M22S") == 1102
+    assert parse_duration("PT1H2M3S") == 3723
+    assert parse_duration("garbage") is None
+
+
+def _durations_client(mapping: dict[str, str]) -> httpx.Client:
+    def handler(request: httpx.Request) -> httpx.Response:
+        ids = request.url.params["id"].split(",")
+        return httpx.Response(
+            200,
+            json={
+                "items": [
+                    {"id": vid, "contentDetails": {"duration": mapping[vid]}}
+                    for vid in ids
+                    if vid in mapping
+                ]
+            },
+        )
+
+    return httpx.Client(transport=httpx.MockTransport(handler))
+
+
+def _video(vid: str) -> Item:
+    return item(url=f"https://www.youtube.com/watch?v={vid}", extra={"video_id": vid})
+
+
+def test_shorts_are_dropped_and_real_videos_keep_their_duration():
+    from dailydive import youtube
+
+    items = [_video("short01"), _video("long001")]
+    with _durations_client({"short01": "PT48S", "long001": "PT18M22S"}) as client:
+        kept = youtube.drop_shorts(items, client=client, api_key="k")
+
+    assert [i.extra["video_id"] for i in kept] == ["long001"]
+    assert kept[0].extra["duration_s"] == "1102"
+
+
+def test_a_video_exactly_at_the_cutoff_is_a_short():
+    from dailydive import youtube
+
+    with _durations_client({"edge0001": "PT3M"}) as client:
+        assert youtube.drop_shorts([_video("edge0001")], client=client, api_key="k") == []
+
+
+def test_a_video_whose_duration_cannot_be_resolved_is_kept():
+    """Asymmetric failure: dropping a real video loses reporting silently,
+    while keeping one Short is a blemish someone can point at."""
+    from dailydive import youtube
+
+    items = [_video("known001"), _video("missing1")]
+    with _durations_client({"known001": "PT12M"}) as client:
+        kept = youtube.drop_shorts(items, client=client, api_key="k")
+
+    assert {i.extra["video_id"] for i in kept} == {"known001", "missing1"}
+
+
+def test_non_video_items_pass_through_untouched():
+    from dailydive import youtube
+
+    article = item(url="https://reefbuilders.com/story/")
+    with _durations_client({}) as client:
+        assert youtube.drop_shorts([article], client=client, api_key="k") == [article]
