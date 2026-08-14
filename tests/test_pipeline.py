@@ -2,15 +2,17 @@
 
 from __future__ import annotations
 
+import json
 import re
 
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
+import httpx
 import pytest
 from pydantic import ValidationError
 
-from dailydive import cli, config, normalize, render, store
+from dailydive import cli, config, ingest, normalize, render, store
 from dailydive.models import (
     AttributionError,
     Category,
@@ -405,17 +407,28 @@ def test_one_contact_address_everywhere():
 
 # ------------------------------------------------------------------- youtube
 
-def test_youtube_sources_carry_a_real_channel_id():
-    """A wrong or placeholder channel id returns an empty feed rather than an
-    error — the worst failure shape, because it looks like a quiet channel."""
+def test_youtube_sources_carry_a_real_uploads_playlist_id():
+    """A wrong id returns an empty result rather than an error — the worst
+    failure shape, because a dead channel looks exactly like a quiet one.
+
+    The uploads playlist id is the channel id with UC swapped for UU. Getting
+    that swap wrong is the easy mistake, so it is the thing asserted."""
     for source in config.load_sources(Path("sources.toml"), include_disabled=True):
-        if source.type is not SourceType.YOUTUBE:
+        if source.type is not SourceType.YOUTUBE_API:
             continue
-        assert "channel_id=" in source.url, source.id
-        cid = source.url.split("channel_id=")[1]
-        assert cid.startswith("UC"), f"{source.id}: {cid!r} is not a channel id"
-        assert len(cid) == 24, f"{source.id}: channel id should be 24 chars, got {len(cid)}"
-        assert "REPLACE" not in cid.upper(), f"{source.id} still has a placeholder"
+        assert "playlistId=" in source.url, source.id
+        pid = source.url.split("playlistId=")[1].split("&")[0]
+        assert pid.startswith("UU"), f"{source.id}: {pid!r} is not an uploads playlist id"
+        assert len(pid) == 24, f"{source.id}: playlist id should be 24 chars, got {len(pid)}"
+        assert "REPLACE" not in pid.upper(), f"{source.id} still has a placeholder"
+
+
+def test_youtube_api_sources_never_carry_a_key_in_the_config():
+    """The key is a credential. It belongs in the environment, and a config
+    file is committed to a repo."""
+    raw = Path("sources.toml").read_text(encoding="utf-8")
+    assert "key=" not in raw
+    assert "AIza" not in raw  # Google API keys all start this way
 
 
 def test_no_source_ships_with_a_placeholder_url():
@@ -543,3 +556,89 @@ def test_probe_flags_a_feed_that_parses_but_stopped_publishing():
 
     assert probe_mod._newest_age_days(fresh) <= 3
     assert probe_mod._newest_age_days(dead) >= 1290
+
+
+# --------------------------------------------------------------- youtube api
+
+_YT_PAYLOAD = json.dumps(
+    {
+        "items": [
+            {
+                "snippet": {
+                    "title": "We tested 6 salt mixes for 90 days",
+                    "description": "Full results and methodology.",
+                    "publishedAt": "2026-08-12T14:00:00Z",
+                    "videoOwnerChannelTitle": "BRStv",
+                    "resourceId": {"kind": "youtube#video", "videoId": "abc123XYZ_1"},
+                }
+            },
+            {
+                "snippet": {
+                    "title": "Private video",
+                    "description": "",
+                    "publishedAt": "2026-08-11T14:00:00Z",
+                    "resourceId": {"kind": "youtube#video", "videoId": "hidden00000"},
+                }
+            },
+        ]
+    }
+).encode()
+
+
+def _yt_source() -> Source:
+    return Source(
+        id="yt-brs",
+        name="BRStv",
+        url="https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUx",
+        type=SourceType.YOUTUBE_API,
+        section="Bulk Reef Supply",
+        category_hint=Category.VIDEO,
+    )
+
+
+def test_youtube_api_items_are_creditable_and_linkable():
+    items = normalize.normalize(_yt_source(), _YT_PAYLOAD)
+    assert len(items) == 1  # the private video is dropped
+    video = items[0]
+    assert video.url == "https://www.youtube.com/watch?v=abc123XYZ_1"
+    assert video.source_name == "BRStv — Bulk Reef Supply"
+    assert video.published_at == datetime(2026, 8, 12, 14, 0, tzinfo=UTC)
+    assert video.extra["video_id"] == "abc123XYZ_1"
+
+
+def test_private_videos_are_dropped_rather_than_linked():
+    """They stay in the uploads playlist as placeholders. Publishing one sends
+    a reader to a video they cannot watch."""
+    titles = [i.title for i in normalize.normalize(_yt_source(), _YT_PAYLOAD)]
+    assert "Private video" not in titles
+
+
+def test_youtube_api_error_response_yields_no_items_and_no_crash():
+    body = json.dumps({"error": {"code": 403, "message": "quota exceeded"}}).encode()
+    assert normalize.normalize(_yt_source(), body) == []
+
+
+def test_api_key_comes_from_the_environment_and_is_not_the_cache_key(monkeypatch):
+    monkeypatch.setenv("YOUTUBE_API_KEY", "AIzaTESTKEY")
+    fetcher = ingest.Fetcher(client=httpx.Client())
+    url = fetcher._authorize(_yt_source())
+    assert url.endswith("&key=AIzaTESTKEY")
+    assert "key=" not in _yt_source().url
+    fetcher.close()
+
+
+def test_a_missing_api_key_is_a_clear_error_not_an_unauthenticated_request(monkeypatch):
+    monkeypatch.delenv("YOUTUBE_API_KEY", raising=False)
+    fetcher = ingest.Fetcher(client=httpx.Client())
+    with pytest.raises(ingest.MissingCredential):
+        fetcher._authorize(_yt_source())
+    fetcher.close()
+
+
+def test_only_the_api_source_type_can_bypass_robots():
+    """The robots exemption is a property of the type, so no ordinary feed can
+    opt out of the check by editing sources.toml."""
+    assert _yt_source().is_authorized_api
+    for source in config.load_sources(Path("sources.toml"), include_disabled=True):
+        if source.type is not SourceType.YOUTUBE_API:
+            assert not source.is_authorized_api, source.id

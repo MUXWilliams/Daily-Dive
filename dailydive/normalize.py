@@ -7,6 +7,7 @@ creditable Item, it is dropped with a warning rather than published half-cited.
 
 from __future__ import annotations
 
+import json
 import logging
 import re
 from datetime import UTC, datetime, timedelta
@@ -69,8 +70,76 @@ def _reddit_extra(entry: feedparser.FeedParserDict) -> dict[str, str]:
     return {"subreddit": entry["source"]["title"]} if isinstance(entry.get("source"), dict) else {}
 
 
+def _normalize_youtube_api(source: Source, body: bytes) -> list[Item]:
+    """playlistItems.list JSON -> Items.
+
+    One request per channel per run, against the uploads playlist, which the
+    API prices at a single quota unit — five channels cost 5 of the free
+    10,000/day. Deliberately playlistItems and not search.list: search costs
+    100 units, returns the same information less reliably, and would put a
+    daily run within sight of the quota for no benefit.
+
+    Metadata only. There is still no official transcript API for videos you
+    don't own, so this reads title, description and date, and sends people to
+    the creator.
+    """
+    try:
+        payload = json.loads(body)
+    except json.JSONDecodeError as exc:
+        log.warning("%s: response was not JSON (%s)", source.id, exc)
+        return []
+
+    if error := payload.get("error"):
+        # Surfaced rather than swallowed: a bad key, a disabled API and an
+        # exhausted quota all arrive here, and they need different fixes.
+        log.error("%s: YouTube API error %s: %s", source.id, error.get("code"), error.get("message"))
+        return []
+
+    items: list[Item] = []
+    for entry in payload.get("items", []):
+        snippet = entry.get("snippet") or {}
+        video_id = (snippet.get("resourceId") or {}).get("videoId")
+        title = snippet.get("title")
+        stamp = snippet.get("publishedAt")
+        if not video_id or not title or not stamp:
+            log.warning("%s: playlist entry missing id, title or date, dropped", source.id)
+            continue
+
+        # Private and deleted videos stay in the uploads playlist as
+        # placeholders with their real title replaced. Publishing one would
+        # mean linking a reader to a video they cannot watch.
+        if title in {"Private video", "Deleted video"}:
+            continue
+
+        extra = {"video_id": video_id}
+        if source.section:
+            extra["section"] = source.section
+
+        try:
+            items.append(
+                Item(
+                    source_id=source.id,
+                    source_name=source.display_name,
+                    title=title,
+                    url=f"https://www.youtube.com/watch?v={video_id}",
+                    published_at=datetime.fromisoformat(stamp.replace("Z", "+00:00")),
+                    author=snippet.get("videoOwnerChannelTitle") or snippet.get("channelTitle"),
+                    raw_text=_text(snippet.get("description")),
+                    category_hint=source.category_hint,
+                    extra=extra,
+                )
+            )
+        except (AttributionError, ValueError) as exc:
+            log.warning("%s: %r dropped (%s)", source.id, title, exc)
+
+    return items
+
+
 def normalize(source: Source, body: bytes) -> list[Item]:
     """Parse one feed body into Items, dropping anything uncreditable."""
+    if source.type is SourceType.YOUTUBE_API:
+        return _normalize_youtube_api(source, body)
+
     parsed = feedparser.parse(body)
     if parsed.bozo and not parsed.entries:
         log.warning("%s: unparseable feed (%s)", source.id, parsed.get("bozo_exception"))

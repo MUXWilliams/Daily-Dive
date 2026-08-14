@@ -9,6 +9,7 @@ which an aggregator gets to keep existing.
 from __future__ import annotations
 
 import logging
+import os
 import sqlite3
 import time
 from dataclasses import dataclass
@@ -18,7 +19,7 @@ from urllib.robotparser import RobotFileParser
 import httpx
 
 from . import brand, store
-from .models import Source
+from .models import Source, SourceType
 
 log = logging.getLogger(__name__)
 
@@ -34,6 +35,15 @@ TIMEOUT = httpx.Timeout(20.0, connect=10.0)
 
 class RobotsDisallowed(RuntimeError):
     """The site's robots.txt says not to fetch this. Respect it."""
+
+
+class MissingCredential(RuntimeError):
+    """A source needs an API key that isn't in the environment."""
+
+
+# env var -> the source types that need it. Keys are read at request time and
+# never written to sources.toml, the database, or a log line.
+API_KEY_ENV = {SourceType.YOUTUBE_API: "YOUTUBE_API_KEY"}
 
 
 @dataclass
@@ -103,14 +113,33 @@ class Fetcher:
         parser = self._robots_for(url)
         return True if parser is None else parser.can_fetch(USER_AGENT, url)
 
+    def _authorize(self, source: Source) -> str:
+        """The URL to actually request, with any API key appended.
+
+        Kept separate from source.url so the key never touches the config
+        file, the cache table, or a log message — only the outbound request.
+        """
+        env_var = API_KEY_ENV.get(source.type)
+        if env_var is None:
+            return source.url
+        key = os.environ.get(env_var, "").strip()
+        if not key:
+            raise MissingCredential(f"{source.id} needs {env_var} in the environment")
+        joiner = "&" if "?" in source.url else "?"
+        return f"{source.url}{joiner}key={key}"
+
     def fetch(self, source: Source, conn: sqlite3.Connection) -> FetchResult:
         """GET a feed, conditionally. Raises RobotsDisallowed if off-limits."""
-        if not self.allowed(source.url):
+        if not source.is_authorized_api and not self.allowed(source.url):
             raise RobotsDisallowed(f"robots.txt disallows {source.url}")
 
+        # The cache key stays the un-keyed URL: the API key is a credential,
+        # not part of the resource's identity, and it must not end up written
+        # to the database alongside ETags.
         headers = store.get_cache_headers(conn, source.url)
+        request_url = self._authorize(source)
         self._throttle(urlsplit(source.url).netloc)
-        resp = self._client.get(source.url, headers=headers)
+        resp = self._client.get(request_url, headers=headers)
 
         if resp.status_code == 304:
             log.info("%s unchanged (304)", source.id)

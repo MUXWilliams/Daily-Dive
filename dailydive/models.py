@@ -43,6 +43,10 @@ class SourceType(StrEnum):
     WORDPRESS = "wordpress"
     XENFORO = "xenforo"
     YOUTUBE = "youtube"
+    # The Data API rather than the per-channel RSS feed: JSON, needs a key,
+    # and — unlike the RSS path, which robots.txt disallows — it is access
+    # YouTube actually sanctions. See Source.is_authorized_api.
+    YOUTUBE_API = "youtube_api"
     REDDIT = "reddit"
     GENERIC = "generic"
 
@@ -105,6 +109,24 @@ class Source(BaseModel):
     @property
     def display_name(self) -> str:
         return f"{self.name} — {self.section}" if self.section else self.name
+
+    @property
+    def is_authorized_api(self) -> bool:
+        """True when access is granted by an API key and its terms of service.
+
+        robots.txt governs crawlers discovering and fetching pages. It is not
+        the mechanism by which a provider grants programmatic access — that is
+        the API, its key, and its quota. YouTube disallows /feeds/ in
+        robots.txt while simultaneously operating a public Data API for
+        exactly this purpose, so honoring robots.txt on an authenticated API
+        call would be obeying the letter of a rule that was never addressed
+        to us, and declining an invitation the provider explicitly extended.
+
+        This deliberately does NOT open a general escape hatch: it is a
+        property of the source type, not a per-source flag, so no ordinary
+        feed can quietly opt out of the robots check by editing sources.toml.
+        """
+        return self.type is SourceType.YOUTUBE_API
 
 
 class Item(BaseModel):

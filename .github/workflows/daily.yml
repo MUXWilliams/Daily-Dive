@@ -88,6 +88,9 @@ jobs:
           # Absent unless the secret is set; the CLI only reads it under --score,
           # so an unscored run is unaffected by a missing key.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Without this the five video sources are skipped with a warning and
+          # the rest of the issue builds normally.
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
           ARGS=""
           if [ -n "${{ inputs.source }}" ]; then ARGS="$ARGS --source ${{ inputs.source }}"; fi

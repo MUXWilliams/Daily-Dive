@@ -36,6 +36,11 @@ def _collect_live(sources: list[Source], db: Path) -> list[Item]:
             except ingest.RobotsDisallowed as exc:
                 log.warning("skipping %s: %s", source.id, exc)
                 continue
+            except ingest.MissingCredential as exc:
+                # Not fatal: a missing key should cost you the video section,
+                # not the issue.
+                log.warning("skipping %s: %s", source.id, exc)
+                continue
             except httpx.HTTPError as exc:
                 log.error("failed %s: %s", source.id, exc)
                 continue
