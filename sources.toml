@@ -166,7 +166,7 @@ enabled = false
 [[source]]
 id = "yt-brs"
 name = "BRStv"
-url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=UUGGM8r6qjSRqPy9eAIFT32w"
+url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUGGM8r6qjSRqPy9eAIFT32w"
 type = "youtube_api"
 section = "Bulk Reef Supply"
 category_hint = "Video"
@@ -174,27 +174,27 @@ category_hint = "Video"
 [[source]]
 id = "yt-tidalgardens"
 name = "Tidal Gardens"
-url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=UUGdAIpjFq4vygKzXAyDKKtQ"
+url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUGdAIpjFq4vygKzXAyDKKtQ"
 type = "youtube_api"
 category_hint = "Video"
 
 [[source]]
 id = "yt-wwc"
 name = "World Wide Corals"
-url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=UUSFIdT_l261xC6sRQGx-T4Q"
+url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUSFIdT_l261xC6sRQGx-T4Q"
 type = "youtube_api"
 category_hint = "Video"
 
 [[source]]
 id = "yt-saltwateraquarium"
 name = "SaltwaterAquarium.com"
-url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=UUFTt5UhP0EwqHwTU0y-lUlg"
+url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUFTt5UhP0EwqHwTU0y-lUlg"
 type = "youtube_api"
 category_hint = "Video"
 
 [[source]]
 id = "yt-reefdudes"
 name = "ReefDudes"
-url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=UUwjh_Pj6nAURoQ1nYIG9qsw"
+url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUwjh_Pj6nAURoQ1nYIG9qsw"
 type = "youtube_api"
 category_hint = "Video"
