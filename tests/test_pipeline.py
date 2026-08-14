@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import email.message
 import json
 import re
 
@@ -933,3 +934,109 @@ def test_a_scheduled_run_still_scores():
     # the first model call instead of the first step.
     guard = WORKFLOW_TEXT.split("Check the API key is present", 1)[1][:200]
     assert "github.event_name == 'schedule'" in guard
+
+
+# --------------------------------------------------------------- newsletters
+
+def _newsletter(sender: str = "news@petage-email.com", html: str = "") -> "email.message.Message":
+    import email.message
+
+    msg = email.message.EmailMessage()
+    msg["From"] = f"Pet Age <{sender}>"
+    msg["Subject"] = "Pet Age Weekly"
+    msg["Date"] = "Fri, 14 Aug 2026 09:00:00 +0000"
+    msg.set_content("plain text fallback")
+    msg.add_alternative(html or _NEWSLETTER_HTML, subtype="html")
+    return msg
+
+
+_NEWSLETTER_HTML = """
+<html><body>
+  <a href="https://petage.com/coral-aquaculture-expands">
+     Marine ornamental aquaculture expands as coral farms scale up production</a>
+  <a href="https://petage.com/premium-dog-food-trends">
+     Premium dog food sales climb for the eighth consecutive quarter</a>
+  <a href="https://petage.com/x">Read more</a>
+  <a href="https://petage.com/unsub">Unsubscribe from this newsletter today</a>
+</body></html>
+"""
+
+
+def _mail_source(senders=("news@petage-email.com",)) -> Source:
+    return Source(
+        id="trade-mail",
+        name="Pet Age",
+        url="imap://imap.gmail.com/digest",
+        type=SourceType.IMAP,
+        section="Newsletter",
+        category_hint=Category.INDUSTRY,
+        senders=tuple(senders),
+    )
+
+
+def test_a_newsletter_becomes_one_item_per_story():
+    """A trade newsletter is fifteen stories in one message. Treating the email
+    as a single item would let one dog-food story bury a coral one."""
+    from dailydive import mailbox
+
+    items = mailbox.items_from_message(_mail_source(), _newsletter())
+    assert [i.url for i in items] == ["https://petage.com/coral-aquaculture-expands"]
+    assert items[0].source_name == "Pet Age — Newsletter"
+
+
+def test_mail_from_an_unlisted_sender_is_refused():
+    """An inbox is an untrusted input: anyone who learns the address can mail
+    it, and this is the only thing standing between that and a public page."""
+    from dailydive import mailbox
+
+    spam = _newsletter(sender="attacker@example.com")
+    assert mailbox.items_from_message(_mail_source(), spam) == []
+
+
+def test_an_empty_allowlist_refuses_everything():
+    from dailydive import mailbox
+
+    assert mailbox.items_from_message(_mail_source(senders=()), _newsletter()) == []
+
+
+def test_navigation_and_boilerplate_are_not_stories():
+    from dailydive import mailbox
+
+    titles = [i.title for i in mailbox.items_from_message(_mail_source(), _newsletter())]
+    assert not any("Unsubscribe" in t for t in titles)
+    assert not any(t.strip() == "Read more" for t in titles)
+
+
+def test_the_vocabulary_gate_drops_the_rest_of_the_pet_trade():
+    """These are general pet-trade publications — mostly dogs, cats and retail.
+    The gate is a cost control before the scorer, which is the real judge."""
+    from dailydive import mailbox
+
+    assert mailbox.looks_marine("Coral farms scale up aquaculture production")
+    assert mailbox.looks_marine("New saltwater livestock shipment clears quarantine")
+    assert not mailbox.looks_marine("Premium dog food sales climb for the eighth quarter")
+
+
+def test_tracking_links_are_unwrapped_from_the_query_string():
+    from dailydive import mailbox
+
+    wrapped = "https://click.list-manage.com/track?u=abc&url=https%3A%2F%2Fpetage.com%2Fstory"
+    assert mailbox.unwrap(wrapped) == "https://petage.com/story"
+
+
+def test_an_unresolvable_tracking_link_drops_the_item():
+    """Publishing the wrapper would push every reader through someone else's
+    analytics and rot the day the campaign ends. Losing the item is better."""
+    from dailydive import mailbox
+
+    opaque = "https://petage.us1.list-manage.com/track/click?u=9f&id=7c2&e=aa"
+    assert mailbox.unwrap(opaque) is None
+
+    html = f'<a href="{opaque}">Coral aquaculture expands at marine facilities worldwide</a>'
+    assert mailbox.items_from_message(_mail_source(), _newsletter(html=html)) == []
+
+
+def test_a_plain_link_is_left_alone():
+    from dailydive import mailbox
+
+    assert mailbox.unwrap("https://petage.com/story") == "https://petage.com/story"

@@ -55,6 +55,9 @@ class SourceType(StrEnum):
     # Bluesky serves public per-profile RSS with no key and no auth. Its own
     # dialect because posts have no title — see normalize._synth_title.
     BLUESKY = "bluesky"
+    # A mailbox, not a URL. Some outlets that block crawlers still send
+    # newsletters, and an inbox is the door they left open.
+    IMAP = "imap"
     GENERIC = "generic"
 
 
@@ -112,6 +115,11 @@ class Source(BaseModel):
     # coarse to credit properly ("Reef2Reef" vs "Reef2Reef — Reef Chemistry").
     section: str | None = None
     enabled: bool = True
+    # IMAP only. Addresses allowed to put content into the pipeline. An inbox
+    # is an untrusted input — anyone who learns the address can mail it — and
+    # this is what stops that from reaching a published page. Empty means the
+    # source refuses everything, which is the safe direction to fail.
+    senders: tuple[str, ...] = ()
 
     @property
     def display_name(self) -> str:

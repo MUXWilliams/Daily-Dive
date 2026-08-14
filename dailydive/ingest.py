@@ -45,6 +45,11 @@ class MissingCredential(RuntimeError):
 # never written to sources.toml, the database, or a log line.
 API_KEY_ENV = {SourceType.YOUTUBE_API: "YOUTUBE_API_KEY"}
 
+# The mailbox account. The address is not a secret — it is the one printed on
+# the about page — but the app password is, and it only ever comes from here.
+IMAP_USER_ENV = "IMAP_USER"
+IMAP_PASSWORD_ENV = "IMAP_PASSWORD"
+
 
 @dataclass
 class FetchResult:

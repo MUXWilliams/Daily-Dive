@@ -333,3 +333,32 @@ type = "bluesky"
 section = "Bluesky"
 category_hint = "Wild Reefs"
 enabled = false
+
+# ------------------------------------------------------------- newsletters
+#
+# Trade press that blocks HTTP clients but still sends email. Pet Age, Pet
+# Product News and Pet Business all 403 or fail DNS for us, and all publish
+# newsletters — the mailbox is the door they left open.
+#
+# url is imap://host/label: where to connect and which label to read. No
+# credentials in it; IMAP_USER and IMAP_PASSWORD come from the environment,
+# and the app password is a GitHub secret.
+#
+# `senders` is a security control, not a convenience. An inbox is an untrusted
+# input — anyone who learns the address can mail it — so only these addresses
+# can put anything into the pipeline, and an empty list refuses everything.
+# Fill it in from the "From" address of a real newsletter once one arrives:
+# they are usually a no-reply subdomain, not the publication's own domain.
+#
+# DISABLED until the first newsletters land and their real sender addresses
+# are known. Enabling it with an empty allowlist would fetch mail and then
+# correctly discard all of it.
+[[source]]
+id = "trade-mail"
+name = "Pet trade press"
+url = "imap://imap.gmail.com/digest"
+type = "imap"
+section = "Newsletter"
+category_hint = "Industry & Products"
+senders = []
+enabled = false

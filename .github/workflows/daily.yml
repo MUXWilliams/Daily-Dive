@@ -95,6 +95,10 @@ jobs:
           # Without this the five video sources are skipped with a warning and
           # the rest of the issue builds normally.
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          # The newsletter mailbox. Without these the IMAP sources are skipped
+          # with a warning and the rest of the issue builds normally.
+          IMAP_USER: ${{ secrets.IMAP_USER }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
         run: |
           ARGS=""
           if [ -n "${{ inputs.source }}" ]; then ARGS="$ARGS --source ${{ inputs.source }}"; fi

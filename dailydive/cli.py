@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import argparse
+import imaplib
 import logging
 import os
 import sys
@@ -17,7 +18,7 @@ from pathlib import Path
 
 import httpx
 
-from . import config, ingest, normalize, render, youtube
+from . import brand, config, ingest, mailbox, normalize, render, youtube
 from . import score as score_mod
 from . import store
 from .models import Issue, Item, Source, SourceType
@@ -28,10 +29,31 @@ log = logging.getLogger("dailydive")
 FIXTURE_DIR = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
 
 
-def _collect_live(sources: list[Source], db: Path) -> list[Item]:
+def _collect_mail(source: Source, days: int, client: httpx.Client) -> list[Item]:
+    """Newsletters for one IMAP source, or nothing if we have no credentials."""
+    user = os.environ.get(ingest.IMAP_USER_ENV, "").strip() or brand.CONTACT_EMAIL
+    password = os.environ.get(ingest.IMAP_PASSWORD_ENV, "").strip()
+    if not password:
+        log.warning("skipping %s: no %s in the environment", source.id, ingest.IMAP_PASSWORD_ENV)
+        return []
+    try:
+        return mailbox.fetch(source, user=user, password=password, days=days, client=client)
+    except (imaplib.IMAP4.error, OSError) as exc:
+        # A mailbox that won't open should cost the newsletter section, not
+        # the issue — same posture as a feed that 500s.
+        log.error("failed %s: %s", source.id, exc)
+        return []
+
+
+def _collect_live(sources: list[Source], db: Path, days: int) -> list[Item]:
     items: list[Item] = []
     with store.connect(db) as conn, ingest.Fetcher() as fetcher:
         for source in sources:
+            if source.type is SourceType.IMAP:
+                found = _collect_mail(source, days, fetcher._client)
+                log.info("%s: %d items", source.id, len(found))
+                items.extend(found)
+                continue
             try:
                 result = fetcher.fetch(source, conn)
             except ingest.RobotsDisallowed as exc:
@@ -201,7 +223,7 @@ def main(argv: list[str] | None = None) -> int:
         log.error("no enabled sources — check %s", args.sources_file)
         return 2
 
-    items = _collect_offline(sources) if args.offline else _collect_live(sources, args.db)
+    items = _collect_offline(sources) if args.offline else _collect_live(sources, args.db, args.max_age_days)
     if items:
         print("volume:\n" + normalize.volume_report(items))
     if not args.offline and not args.keep_shorts:
