@@ -294,3 +294,73 @@ def fetch(
             items.extend(items_from_message(source, message, client=client))
 
     return items
+
+
+# The Actions log of a public repo is public. A wrong label would otherwise
+# dump a personal inbox into it, so the check refuses to read INBOX outright
+# rather than trusting the config to be right.
+FORBIDDEN_MAILBOXES = frozenset({"inbox", "[gmail]/all mail", "[gmail]/important"})
+
+
+def describe(source: Source, *, user: str, password: str, days: int) -> str:
+    """What is actually in the mailbox, without building or publishing anything.
+
+    Exists to answer two questions at once: do the credentials work, and what
+    are the real From addresses to put in the allowlist? Those addresses cannot
+    be guessed — publications send from vendor subdomains, not their own domain
+    — so they have to be read off real mail.
+    """
+    parts = urlsplit(source.url)
+    host = parts.netloc or "imap.gmail.com"
+    folder = parts.path.strip("/")
+
+    if not folder or folder.lower() in FORBIDDEN_MAILBOXES:
+        return (
+            f"refusing to read {folder or 'INBOX'!r}: this prints to a public log, so the "
+            "check only reads a dedicated label. Set one in the source URL."
+        )
+
+    since = (datetime.now(UTC) - timedelta(days=days)).strftime("%d-%b-%Y")
+    lines = [f"connecting to {host} as {user} …"]
+
+    with imaplib.IMAP4_SSL(host, IMAP_PORT) as imap:
+        imap.login(user, password)
+        lines.append("login OK")
+
+        status, _ = imap.select(f'"{folder}"', readonly=True)
+        if status != "OK":
+            lines.append(f"no mailbox named {folder!r} — check the Gmail label name and filter")
+            return "\n".join(lines)
+        lines.append(f"mailbox {folder!r} opened read-only")
+
+        status, data = imap.search(None, "SINCE", since)
+        ids = data[0].split() if status == "OK" else []
+        lines.append(f"{len(ids)} message(s) since {since}")
+        if not ids:
+            lines.append("nothing to read yet — subscribe, then re-run once mail arrives")
+            return "\n".join(lines)
+
+        allowed = {s.lower() for s in source.senders}
+        seen: dict[str, int] = {}
+        rows: list[str] = []
+        for message_id in ids[-40:]:
+            status, payload = imap.fetch(message_id, "(BODY.PEEK[HEADER])")
+            if status != "OK" or not payload or not isinstance(payload[0], tuple):
+                continue
+            header = email.message_from_bytes(payload[0][1])
+            sender = parseaddr(header.get("From", ""))[1].lower()
+            seen[sender] = seen.get(sender, 0) + 1
+            rows.append(f"    {sender:44} {_decode(header.get('Subject'))[:60]}")
+
+        lines += ["", "senders found:"]
+        for sender, count in sorted(seen.items(), key=lambda kv: -kv[1]):
+            mark = "allowed" if sender in allowed else "NOT in allowlist"
+            lines.append(f"  {sender:44} {count:>3} message(s)  [{mark}]")
+        lines += ["", "recent subjects:", *rows[-15:]]
+        lines += [
+            "",
+            "Add the senders you actually subscribed to into the source's `senders`",
+            "list in sources.toml, then enable the source. Anything not listed is",
+            "refused, which is the point.",
+        ]
+    return "\n".join(lines)

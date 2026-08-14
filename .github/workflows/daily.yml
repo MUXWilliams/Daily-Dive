@@ -27,6 +27,11 @@ on:
         type: boolean
         required: false
         default: false
+      mailcheck:
+        description: "Verify the newsletter mailbox and list its senders (publishes nothing)"
+        type: boolean
+        required: false
+        default: false
       threshold:
         description: "Minimum relevance to publish, 0-1 (blank = 0.45). Only used with scoring."
         required: false
@@ -68,6 +73,21 @@ jobs:
             exit 1
           fi
           echo "Key found. Scoring is enabled for this run."
+
+      # Publishes nothing and builds nothing: it opens the mailbox read-only
+      # and reports what is in it, which is how the sender allowlist gets
+      # filled in with real addresses rather than guessed ones.
+      - name: Check the newsletter mailbox
+        if: inputs.mailcheck
+        env:
+          IMAP_USER: ${{ secrets.IMAP_USER }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+        run: |
+          if [ -z "$IMAP_PASSWORD" ]; then
+            echo "IMAP_PASSWORD secret is not set." >&2
+            exit 1
+          fi
+          daily-dive mailcheck
 
       - name: List configured sources
         run: daily-dive sources

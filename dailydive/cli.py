@@ -166,6 +166,15 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"minimum relevance to publish (default {score_mod.DEFAULT_THRESHOLD})",
     )
 
+    checking = sub.add_parser(
+        "mailcheck",
+        help="verify the newsletter mailbox and list its senders (publishes nothing)",
+        parents=[common],
+    )
+    checking.add_argument("--source", default="trade-mail", help="which imap source to check")
+    checking.add_argument("--days", type=int, default=30, help="how far back to look")
+    checking.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
+
     listing = sub.add_parser("sources", help="list configured feeds", parents=[common])
     listing.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
 
@@ -203,6 +212,26 @@ def main(argv: list[str] | None = None) -> int:
             for r in results:
                 print(f"{r.icon} {r.verdict:14} {r.entries or '':>4}  {r.url}\n     {r.detail}")
         return 0 if any(r.verdict == "ok" for r in results) else 1
+
+    if args.command == "mailcheck":
+        wanted = [
+            s for s in config.load_sources(args.sources_file, include_disabled=True)
+            if s.id == args.source
+        ]
+        if not wanted:
+            log.error("no source with id %r", args.source)
+            return 2
+        password = os.environ.get(ingest.IMAP_PASSWORD_ENV, "").strip()
+        if not password:
+            log.error("%s is not set", ingest.IMAP_PASSWORD_ENV)
+            return 2
+        user = os.environ.get(ingest.IMAP_USER_ENV, "").strip() or brand.CONTACT_EMAIL
+        try:
+            print(mailbox.describe(wanted[0], user=user, password=password, days=args.days))
+        except (imaplib.IMAP4.error, OSError) as exc:
+            log.error("mailbox check failed: %s", exc)
+            return 1
+        return 0
 
     if args.command == "sources":
         for source in config.load_sources(args.sources_file, include_disabled=True):

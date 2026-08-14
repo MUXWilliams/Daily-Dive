@@ -1040,3 +1040,14 @@ def test_a_plain_link_is_left_alone():
     from dailydive import mailbox
 
     assert mailbox.unwrap("https://petage.com/story") == "https://petage.com/story"
+
+
+def test_mailcheck_refuses_to_read_a_whole_inbox():
+    """It prints to a public Actions log. A mistyped label must not turn that
+    into a dump of someone's personal mail."""
+    from dailydive import mailbox
+
+    for path in ("", "INBOX", "inbox", "[Gmail]/All Mail"):
+        source = _mail_source().model_copy(update={"url": f"imap://imap.gmail.com/{path}"})
+        out = mailbox.describe(source, user="x@example.com", password="unused", days=7)
+        assert out.startswith("refusing to read"), path
