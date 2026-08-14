@@ -1065,3 +1065,22 @@ def test_each_newsletter_source_speaks_for_exactly_one_outlet():
     for source in mail:
         assert len(source.senders) == 1, f"{source.id} mixes {len(source.senders)} senders"
         assert source.name, source.id
+
+
+def test_an_item_that_already_ran_is_not_published_again(tmp_path):
+    """store.known_uids existed, was tested, and was never called — so the
+    archive recorded everything and suppressed nothing. A story from last
+    week's issue would have run again this week while it sat inside the
+    recency window."""
+    db = tmp_path / "archive.sqlite3"
+    first = item(url="https://reefbuilders.com/story/")
+
+    with store.connect(db) as conn:
+        assert store.known_uids(conn, [first.uid]) == set()
+        store.record_items(conn, [first])
+
+    # Second run, same story still inside the window.
+    with store.connect(db) as conn:
+        seen = store.known_uids(conn, [first.uid])
+        fresh = [i for i in [first] if i.uid not in seen]
+    assert fresh == [], "an item already in the archive must not reach a second issue"

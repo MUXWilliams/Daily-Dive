@@ -45,7 +45,15 @@ def _collect_mail(source: Source, days: int, client: httpx.Client) -> list[Item]
         return []
 
 
-def _collect_live(sources: list[Source], db: Path, days: int) -> list[Item]:
+def _collect_live(sources: list[Source], db: Path, days: int) -> tuple[list[Item], list[Item]]:
+    """Fetch everything, and say which of it is new.
+
+    Returns (everything fetched, items not seen in a previous run). The first
+    is what the volume table measures — "is this outlet publishing?" is a
+    question about the feed, not about our archive. The second is what an
+    issue may contain: a story that ran last week is not news this week, even
+    while it sits inside the recency window.
+    """
     items: list[Item] = []
     with store.connect(db) as conn, ingest.Fetcher() as fetcher:
         for source in sources:
@@ -76,9 +84,12 @@ def _collect_live(sources: list[Source], db: Path, days: int) -> list[Item]:
             items.extend(found)
 
         items = normalize.dedupe(items)
-        new_count = store.record_items(conn, items)
-        log.info("%d items (%d new to the archive)", len(items), new_count)
-    return items
+        # Ask before recording: once record_items runs, everything is known.
+        seen = store.known_uids(conn, [i.uid for i in items])
+        fresh = [i for i in items if i.uid not in seen]
+        store.record_items(conn, items)
+        log.info("%d items (%d new to the archive)", len(items), len(fresh))
+    return items, fresh
 
 
 def _drop_shorts(items: list[Item]) -> list[Item]:
@@ -252,9 +263,18 @@ def main(argv: list[str] | None = None) -> int:
         log.error("no enabled sources — check %s", args.sources_file)
         return 2
 
-    items = _collect_offline(sources) if args.offline else _collect_live(sources, args.db, args.max_age_days)
-    if items:
-        print("volume:\n" + normalize.volume_report(items))
+    if args.offline:
+        fetched = _collect_offline(sources)
+        items = fetched
+    else:
+        fetched, items = _collect_live(sources, args.db, args.max_age_days)
+        if len(items) < len(fetched):
+            log.info("%d item(s) already ran in an earlier issue", len(fetched) - len(items))
+    if fetched:
+        # Volume measures the feeds, so it counts everything fetched — an
+        # outlet that published twice this week published twice, whether or
+        # not we already carried those stories.
+        print("volume:\n" + normalize.volume_report(fetched))
     if not args.offline and not args.keep_shorts:
         items = _drop_shorts(items)
     # Before scoring, not after: an item too old to publish shouldn't be paid
