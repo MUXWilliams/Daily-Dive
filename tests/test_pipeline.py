@@ -466,3 +466,14 @@ def test_verbose_is_accepted_on_either_side_of_the_subcommand():
     assert getattr(parser.parse_args(["-v", "run"]), "verbose", False)
     assert getattr(parser.parse_args(["run", "-v"]), "verbose", False)
     assert not getattr(parser.parse_args(["run"]), "verbose", False)
+
+
+def test_text_rendering_carries_credit_and_link_for_every_item():
+    """The text form is a real output, not a debug print — the attribution rule
+    applies to it exactly as it does to the page."""
+    issue = Issue(date=datetime(2026, 8, 14, tzinfo=UTC), items=[item(extra={"gist": "A short gist.", "relevance": "0.80"})])
+    text = render.as_text(issue)
+    for published in issue.items:
+        assert published.title in text
+        assert published.source_name in text
+        assert published.url in text

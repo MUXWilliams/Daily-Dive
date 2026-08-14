@@ -91,6 +91,10 @@ jobs:
           if [ -n "${{ inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ inputs.limit }}"; fi
           if [ "${{ inputs.score }}" = "true" ]; then ARGS="$ARGS --score"; fi
           if [ -n "${{ inputs.threshold }}" ]; then ARGS="$ARGS --threshold ${{ inputs.threshold }}"; fi
+          # --print puts the issue in the log as text. The page ships as an
+          # artifact, but reviewing the editorial judgment shouldn't require
+          # downloading and unzipping anything.
+          ARGS="$ARGS --print"
           echo "daily-dive run $ARGS --verbose"
           # Tee so the summary step can report per-source results even on failure.
           set -o pipefail

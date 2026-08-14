@@ -138,6 +138,29 @@ def render_issue(issue: Issue, *, header_image: str | None = None) -> str:
     )
 
 
+def as_text(issue: Issue) -> str:
+    """The issue as plain text, for reading in a terminal or a CI log.
+
+    The built page ships as a CI artifact, which is awkward to open and, on
+    some networks, awkward even to download — so editorial review shouldn't
+    depend on it. This is what you read to judge the scoring pass: what it
+    kept, where it filed it, how confident it was, and whether the gist says
+    anything the headline didn't.
+    """
+    lines = [f"Daily Dive — {_datefmt(issue.date, 'full')} — {len(issue.items)} items"]
+    for title, _slug, members in group_by_category(issue):
+        lines += ["", f"## {title} ({len(members)})"]
+        for item in members:
+            score = item.extra.get("relevance")
+            beat = item.extra.get("beat")
+            prefix = f"  [{score}] " if score else "  "
+            lines.append(f"{prefix}{f'({beat}) ' if beat else ''}{item.title}")
+            if item.extra.get("gist"):
+                lines.append(f"      {item.extra['gist']}")
+            lines.append(f"      — {item.source_name} · {item.url}")
+    return "\n".join(lines)
+
+
 def write_issue(issue: Issue, out_dir: Path) -> Path:
     """Write the issue to out_dir/index.html and a dated permalink.
 

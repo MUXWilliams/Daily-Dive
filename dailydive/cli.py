@@ -101,6 +101,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="run the Haiku scoring pass (needs ANTHROPIC_API_KEY; costs money)",
     )
     run.add_argument(
+        "--print",
+        dest="print_issue",
+        action="store_true",
+        help="also print the issue as plain text (readable in a CI log)",
+    )
+    run.add_argument(
         "--threshold",
         type=float,
         default=None,
@@ -191,6 +197,9 @@ def main(argv: list[str] | None = None) -> int:
     issue = Issue(date=datetime.now(UTC), items=items)
     path = render.write_issue(issue, args.out)
     print(f"wrote {path} ({len(items)} items from {len(issue.outlets)} outlets)")
+    if args.print_issue:
+        print()
+        print(render.as_text(issue))
     return 0
 
 
