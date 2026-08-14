@@ -218,3 +218,104 @@ url = "https://bsky.app/profile/icrs.bsky.social/rss"
 type = "bluesky"
 section = "Bluesky"
 category_hint = "Wild Reefs"
+
+# Marine science, broadly. The editor's call, and the right one: ocean
+# chemistry, fisheries policy and trade regulation are upstream of the hobby
+# and reach it late, so they are exactly what a digest should catch early.
+#
+# Every name below is the account's own display name, read from the feed's
+# channel title rather than typed from memory — these are real institutions
+# and getting their name wrong on a public page is not a small error.
+# Verified live 2026-08-14; item counts are what the feed carried, and all
+# except Blake Ushijima had posted the same day.
+
+[[source]]
+id = "scripps-bsky"
+name = "Scripps Institution of Oceanography"
+url = "https://bsky.app/profile/scrippsocean.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"
+
+[[source]]
+id = "asfb-bsky"
+name = "Australian Society for Fish Biology"
+url = "https://bsky.app/profile/austsocfishbiol.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"
+
+[[source]]
+id = "gsr-bsky"
+name = "Great Southern Reef Foundation"
+url = "https://bsky.app/profile/greatsouthernreef.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"
+
+# University of Alaska Fairbanks. Ocean acidification is the clearest example
+# of the brief above: it changes carbonate chemistry, which changes what
+# calcifies, which eventually changes what the hobby can keep and farm.
+[[source]]
+id = "oarc-bsky"
+name = "Ocean Acidification Research Center"
+url = "https://bsky.app/profile/uaf-oarc-alaska.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"
+
+# Works directly on the aquarium trade — seahorse collection, CITES listings,
+# trade regulation. The closest of these to the hobby's supply chain.
+[[source]]
+id = "projectseahorse-bsky"
+name = "Project Seahorse"
+url = "https://bsky.app/profile/projectseahorse.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"
+
+# A researcher, not an institution — coral disease work. Credited by the name
+# the account publishes, which is a person's name, so it stays exact.
+[[source]]
+id = "ushijima-bsky"
+name = "Blake Ushijima, Ph.D."
+url = "https://bsky.app/profile/vibriosoup.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Husbandry & Science"
+
+# A live camera on an urban reef in Miami. Reef condition as it happens.
+[[source]]
+id = "coralcitycam-bsky"
+name = "Coral City Camera"
+url = "https://bsky.app/profile/coralcitycamera.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"
+
+[[source]]
+id = "ubcoceans-bsky"
+name = "UBC Oceans"
+url = "https://bsky.app/profile/ubcoceans.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"
+
+[[source]]
+id = "uncwcms-bsky"
+name = "UNCW Center for Marine Science"
+url = "https://bsky.app/profile/uncw-cms.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"
+
+# PARKED — the account exists and the feed parses, but carries no entries at
+# all. Nothing to credit and nothing to publish. Re-probe if it starts posting.
+[[source]]
+id = "acarreiro-bsky"
+name = "acarreiro"
+url = "https://bsky.app/profile/acarreiro.bsky.social/rss"
+type = "bluesky"
+section = "Bluesky"
+category_hint = "Wild Reefs"
+enabled = false
