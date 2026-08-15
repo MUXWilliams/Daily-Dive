@@ -352,6 +352,37 @@ section = "Bluesky"
 category_hint = "Wild Reefs"
 enabled = false
 
+# --------------------------------------------------------- primary literature
+#
+# The deep-science block, and the reason to read this digest over the trade
+# press: papers, not press releases. A reefkeeper's technique comes out of this
+# literature a few years before it reaches a product page, and nobody in the
+# hobby aggregates it.
+#
+# Verified live 2026-08-15: 20 entries, newest 1 day old. Gold open access, so
+# every link goes to a full paper rather than a paywall — which matters more
+# here than anywhere else in this file, since a citation nobody can read is not
+# much of a citation.
+#
+# This feed is deliberately wider than our subject: it carries all of marine
+# science, and the newest item when verified was about ESG competencies in port
+# management. That is fine, and it is why prompts/score.system.md is a subject
+# test rather than a quality test — Frontiers supplies candidates and the scorer
+# decides which two or three belong in an issue. Expect a low keep rate here by
+# design. If it ever runs at ten items an issue, the threshold is wrong.
+#
+# Two nearby sources that did NOT survive the probe, recorded so nobody retries
+# them from the same document: the JZAR OJS gateway path 404s (the journal is
+# real and worth another look for the correct path), and drumandcroaker.org
+# serves a static PDF archive that advertises no feed at all.
+[[source]]
+id = "frontiers-marine"
+name = "Frontiers in Marine Science"
+url = "https://www.frontiersin.org/journals/marine-science/rss"
+type = "generic"
+section = "Journal"
+category_hint = "Husbandry & Science"
+
 # ------------------------------------------------------------- newsletters
 #
 # Read over IMAP from the `digest` Gmail label. One source per sender, not one

@@ -87,9 +87,28 @@ CANDIDATES: list[str] = [
     # of them fisheries and oceanography. Probing to see the shape and volume
     # before deciding whether a whole-journal feed is usable at all.
     "https://www.frontiersin.org/journals/marine-science/rss",
+    # JZAR, second attempt. The path above 404s, so the journal is not at the
+    # bare-slug OJS shape. These are the other two layouts OJS ships with —
+    # index.php-prefixed, and single-journal installs that drop the slug.
+    "https://jzar.org/index.php/jzar/gateway/plugin/WebFeedGatewayPlugin/rss2",
+    "https://jzar.org/jzar/gateway/plugin/WebFeedGatewayPlugin/atom",
+    # --- El Nino and ENSO ----------------------------------------------------
+    # Asked for by name, and there is no source in sources.toml that covers it:
+    # the Bluesky oceanography accounts mention ENSO in passing but nothing
+    # tracks the forecast itself. NOAA is the primary and its work is public
+    # domain, so this is the cheapest good source in the whole file if a feed
+    # exists. The ENSO blog is the readable one; CPC's advisory is the official
+    # one. A warm-phase forecast is a bleaching forecast, six months early.
+    "https://www.climate.gov/news-features/department/enso-blog/feed",
+    "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/rss.xml",
+    "https://www.pmel.noaa.gov/elnino/rss.xml",
     # SETTLED, do not re-probe: humble.fish 403s on both XenForo shapes, the
     # same wall as Reef2Reef. Maxspect's feed was found at the Joomla
-    # "?format=feed&type=rss" shape and is now in sources.toml.
+    # "?format=feed&type=rss" shape and is now in sources.toml. Frontiers in
+    # Marine Science answered (20 entries, 1 day old) and is now configured.
+    # drumandcroaker.org loads but advertises no feed — it is a static PDF
+    # archive, so reaching it needs a directory reader, not a feed parser.
+    # srac.msstate.edu/factsheets.html is a 404.
 ]
 
 # Sites where guessing the feed path failed but a feed may still exist. Rather
