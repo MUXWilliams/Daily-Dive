@@ -195,6 +195,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--out", type=Path, default=Path("site/preview"), help="output directory"
     )
     previewing.add_argument(
+        "--artifact",
+        type=Path,
+        default=None,
+        help="also write an artifact-shaped file (no doctype/head/body wrapper)",
+    )
+    previewing.add_argument(
         "--linked-assets",
         action="store_true",
         help="reference assets/ instead of inlining them (smaller file, only opens in place)",
@@ -263,6 +269,10 @@ def main(argv: list[str] | None = None) -> int:
 
         path = preview_mod.write_preview(args.out, standalone=not args.linked_assets)
         print(f"wrote {path}")
+        if args.artifact:
+            args.artifact.parent.mkdir(parents=True, exist_ok=True)
+            args.artifact.write_text(preview_mod.artifact_html(args.out), encoding="utf-8")
+            print(f"wrote {args.artifact}")
         return 0
 
     if args.command == "sources":

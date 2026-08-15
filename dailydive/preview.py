@@ -18,6 +18,7 @@ from __future__ import annotations
 import base64
 import json
 import mimetypes
+import re
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -93,3 +94,35 @@ def write_preview(out_dir: Path, *, site_dir: Path = Path("site"), standalone: b
     path = out_dir / "index.html"
     path.write_text(html, encoding="utf-8")
     return path
+
+
+# The staging page is the design under review, so it gets no harness. Chrome
+# around it — device frames, a toolbar, a "staging" banner — would compete with
+# the exact thing being judged. What ships is the page, at a stable URL, on
+# whatever screen you open it on.
+ARTIFACT_TITLE = "Weekly Dive"
+
+
+def artifact_html(out_dir: Path, *, site_dir: Path = Path("site")) -> str:
+    """The preview reshaped for a hosted artifact.
+
+    An artifact supplies its own doctype, head and body, so a full HTML
+    document cannot be published as-is. This lifts the stylesheet and the body
+    content out of the rendered page and leaves the rest behind — the canonical
+    and OpenGraph tags in particular, which name the live site and would be
+    wrong here.
+
+    Regenerated from the same fixture and the same template as the local
+    preview, so the staging page and the real page cannot drift.
+    """
+    write_preview(out_dir, site_dir=site_dir, standalone=True)
+    doc = (out_dir / "index.html").read_text(encoding="utf-8")
+
+    styles = re.findall(r"<style>.*?</style>", doc, re.S)
+    if not styles:
+        raise RuntimeError("no <style> block found — did the template change shape?")
+    body = re.search(r"<body>(.*)</body>", doc, re.S)
+    if body is None:
+        raise RuntimeError("no <body> found — did the template change shape?")
+
+    return f"<title>{ARTIFACT_TITLE}</title>\n" + "\n".join(styles) + "\n" + body.group(1).strip() + "\n"

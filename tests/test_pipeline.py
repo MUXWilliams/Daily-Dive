@@ -1612,3 +1612,40 @@ def test_the_synthetic_preview_items_are_labelled_as_such():
     assert invented, "the fixture should carry the coverage items"
     for i in invented:
         assert i.title.startswith("[SYNTHETIC]"), i.title
+
+
+def test_the_artifact_form_drops_the_document_wrapper():
+    """An artifact supplies its own doctype, head and body. Publishing a full
+    document nests one inside another."""
+    import tempfile
+    from dailydive import preview
+
+    with tempfile.TemporaryDirectory() as tmp:
+        html = preview.artifact_html(Path(tmp), site_dir=Path("site"))
+    assert "<!doctype" not in html.lower()
+    assert "<html" not in html.lower() and "<body" not in html.lower()
+    assert html.startswith("<title>")
+    assert "<style>" in html and 'class="wrap"' in html
+
+
+def test_the_artifact_form_drops_tags_that_name_the_live_site():
+    """Canonical and OpenGraph tags point at theloneaquarist.com. On a staging
+    page they are simply wrong."""
+    import tempfile
+    from dailydive import preview
+
+    with tempfile.TemporaryDirectory() as tmp:
+        html = preview.artifact_html(Path(tmp), site_dir=Path("site"))
+    assert 'rel="canonical"' not in html
+    assert "og:url" not in html
+
+
+def test_the_artifact_paints_its_own_ground():
+    """It renders inside a host that paints the viewer's theme behind it. A
+    transparent body would show dark grey through a page designed on white."""
+    import tempfile
+    from dailydive import preview
+
+    with tempfile.TemporaryDirectory() as tmp:
+        html = preview.artifact_html(Path(tmp), site_dir=Path("site"))
+    assert re.search(r"body\s*\{[^}]*background:", html)
