@@ -238,20 +238,22 @@ type = "youtube_api"
 # Channel ID -> uploads playlist is UC -> UU, which is why these URLs carry a
 # playlistId that looks like the channel ID with two letters changed.
 #
-# TWO NAMES STILL UNVERIFIED. `name` is the credit line, and typing one from
-# memory is how an outlet gets miscredited — the same reason the Bluesky
-# accounts were probed for their display names rather than guessed at. These
-# two must be named before they can reach a page.
+# All three named by the editor from their handles — @melevsreef, @PoloReef,
+# @ReefBeefPodcast — and written here as the channels name themselves rather
+# than as their URL slugs. Worth recording why that took asking: a web search
+# for the second channel's ID confidently returned "Andrew Sandler", who is
+# indeed the person behind it and is not what the channel is called. A
+# plausible answer would have put the wrong name on the credit line.
 
 [[source]]
-id = "yt-new1"
-name = "Unverified channel 1"
+id = "yt-melevsreef"
+name = "Melev's Reef"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUpv_735gcJAtjFi9Fl-WubA"
 type = "youtube_api"
 
 [[source]]
-id = "yt-new2"
-name = "Unverified channel 2"
+id = "yt-poloreef"
+name = "Polo Reef"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUgveGhLDUg_6jL_WtT92dtw"
 type = "youtube_api"
 
