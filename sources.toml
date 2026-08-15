@@ -485,12 +485,23 @@ senders = ["nosnoaa@public.govdelivery.com"]
 
 # --- Vendors -----------------------------------------------------------------
 #
-# DISABLED pending a decision. These are all `sales@` addresses: marketing
-# lists, where the newsletter exists to sell. Biota and Quality Marine do
-# announce genuine firsts — a captive-bred species nobody has bred before is
-# real news, and Quality Marine's Black Longnose Tang already reached an issue
-# through CORAL — but most of what these send will be stock and offers, which
-# the scorer drops as promo. Enabling them costs money to be told "no" a lot.
+# Two of four enabled, by editorial decision. All are marketing lists — the
+# newsletter exists to sell — so the question was never "is this promotional"
+# but "does this outlet ever break real news between the offers".
+#
+# Biota and Quality Marine do. A captive-bred species nobody has bred before
+# is genuinely new, and it reaches an aquaculture facility's own list before
+# it reaches the trade press; Quality Marine's Black Longnose Tang already
+# came to an issue secondhand through CORAL. These two are the primary source
+# for their own firsts, which is worth paying a scoring pass to sift.
+#
+# Fauna Marin and Champion Lighting stay off. A supplements maker and a
+# retailer break nothing — their news is product and stock, which the scorer
+# drops as promo, so enabling them buys a bill for being told no.
+#
+# Expect a low keep rate from both. That is the arrangement working: the
+# promo flag exists precisely so a marketing list can be read without the
+# marketing reaching the page.
 
 [[source]]
 id = "mail-biota"
@@ -500,7 +511,6 @@ type = "imap"
 section = "Newsletter"
 category_hint = "Livestock & Corals"
 senders = ["support@thebiotagroup.com"]
-enabled = false
 
 [[source]]
 id = "mail-qualitymarine"
@@ -510,7 +520,6 @@ type = "imap"
 section = "Newsletter"
 category_hint = "Livestock & Corals"
 senders = ["sales@qualitymarine.com"]
-enabled = false
 
 [[source]]
 id = "mail-faunamarin"
