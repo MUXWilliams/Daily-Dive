@@ -235,6 +235,32 @@ name = "ReefDudes"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUwjh_Pj6nAURoQ1nYIG9qsw"
 type = "youtube_api"
 
+# NAMES UNVERIFIED — placeholders until a run reports the real channel titles.
+# `name` is the credit line, and typing one from memory is how an outlet gets
+# miscredited. The API returns channelTitle per item, so one free unscored run
+# reveals all three; correct them before these ever reach a page.
+#
+# Channel ID -> uploads playlist is UC -> UU, which is why these URLs carry a
+# playlistId that looks like the channel ID with two letters changed.
+
+[[source]]
+id = "yt-new1"
+name = "Unverified channel 1"
+url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUpv_735gcJAtjFi9Fl-WubA"
+type = "youtube_api"
+
+[[source]]
+id = "yt-new2"
+name = "Unverified channel 2"
+url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUgveGhLDUg_6jL_WtT92dtw"
+type = "youtube_api"
+
+[[source]]
+id = "yt-new3"
+name = "Unverified channel 3"
+url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUSnbEFY3CG_ri7L5-Wwhezg"
+type = "youtube_api"
+
 # ------------------------------------------------------------- reef science
 #
 # Asked for as "can we pull @ICRSCoralReefs from x.com". We can't: X has no
