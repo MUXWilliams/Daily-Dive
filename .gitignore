@@ -10,8 +10,11 @@ venv/
 site/preview/
 .env
 
-# Generated issues, ignored through v0-v2 so that locally-built pages — which
-# come from SYNTHETIC fixtures — can't end up published as real reef news.
-# DELETE THESE TWO LINES at v3, when the Action starts committing real issues.
-site/index.html
-site/issues/
+# Generated issues were ignored through v0-v2 so locally-built pages — which
+# come from SYNTHETIC fixtures — could not be published as real reef news.
+# v3 commits them from the Action instead, because Pages replaces the whole
+# site on every deploy and an uncommitted permalink 404s a week later.
+#
+# The protection that replaced the ignore is the publish gate in daily.yml: a
+# partial run never commits, and --offline never runs in CI at all. Do not
+# `git add site/index.html` by hand from a local --offline build.

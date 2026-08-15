@@ -184,8 +184,31 @@ def find_header_image(
     return None
 
 
+def og_description(issue: Issue) -> str:
+    """The one line a link preview shows. Concrete beats generic.
+
+    "12 items from 7 outlets, led by ..." tells someone deciding whether to
+    open a forwarded link what is actually in it; the standing tagline tells
+    them only what the publication is, which they can see from the title.
+    """
+    if not issue.items:
+        return brand.DESCRIPTION
+    count = len(issue.items)
+    outlets = len(issue.outlets)
+    lead = issue.items[0].title
+    if len(lead) > 90:
+        lead = lead[:89].rstrip() + "\u2026"
+    return (
+        f"{count} item{'' if count == 1 else 's'} from "
+        f"{outlets} outlet{'' if outlets == 1 else 's'}, led by \u201c{lead}\u201d"
+    )
+
+
 def render_issue(
-    issue: Issue, *, header: tuple[str, int | None, int | None] | None = None
+    issue: Issue,
+    *,
+    header: tuple[str, int | None, int | None] | None = None,
+    canonical_path: str = "",
 ) -> str:
     for item in issue.items:
         assert_attributable(item)
@@ -206,6 +229,8 @@ def render_issue(
         brand=brand,
         highlights=bullets,
         highlights_plus=plus,
+        canonical_path=canonical_path,
+        og_description=og_description(issue),
     )
 
 
@@ -248,7 +273,11 @@ def write_issue(issue: Issue, out_dir: Path) -> Path:
     dated = out_dir / "issues" / f"{issue.date:%Y-%m-%d}.html"
     dated.parent.mkdir(parents=True, exist_ok=True)
     dated.write_text(
-        render_issue(issue, header=find_header_image(out_dir, depth=1)),
+        render_issue(
+            issue,
+            header=find_header_image(out_dir, depth=1),
+            canonical_path=f"issues/{issue.date:%Y-%m-%d}.html",
+        ),
         encoding="utf-8",
     )
 

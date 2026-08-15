@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ brand.PUBLICATION }} — {{ issue.date | datefmt }}</title>
 <meta name="description" content="{{ brand.DESCRIPTION }}">
+{#- Link previews. A digest spreads by being forwarded — into a reef club's
+    chat, a Discord, a text message — and an unfurled card with the masthead
+    and the item count is the difference between a link someone opens and a
+    bare URL they scroll past. The canonical URL also keeps the dated
+    permalink and the front page from competing as duplicates. #}
+<link rel="canonical" href="{{ brand.SITE_URL }}/{{ canonical_path }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ brand.SITE_NAME }}">
+<meta property="og:title" content="{{ brand.PUBLICATION }} — {{ issue.date | datefmt }}">
+<meta property="og:description" content="{{ og_description }}">
+<meta property="og:url" content="{{ brand.SITE_URL }}/{{ canonical_path }}">
+{%- if header_image %}
+<meta property="og:image" content="{{ brand.SITE_URL }}/assets/{{ header_image.rsplit('/', 1)[-1] }}">
+{%- if header_width %}<meta property="og:image:width" content="{{ header_width }}">{% endif %}
+{%- if header_height %}<meta property="og:image:height" content="{{ header_height }}">{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+{%- else %}
+<meta name="twitter:card" content="summary">
+{%- endif %}
 <style>
   /* Single-theme by choice: white ground, the conventional register for a news
      aggregator. There is deliberately no dark variant — a digest read at 6am on

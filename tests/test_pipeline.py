@@ -1403,3 +1403,95 @@ def test_an_unreadable_banner_still_renders_without_dimensions(tmp_path):
     )
     assert "masthead.webp" in html
     assert "width=" not in html.split("</h1>")[0].split('<h1 class="wordmark">')[-1]
+
+
+# -------------------------------------------------------------- link previews
+
+def test_the_front_page_and_the_permalink_do_not_compete_as_duplicates(tmp_path):
+    """Both carry the same issue. Without a canonical each week's issue would
+    exist at two URLs, which splits whatever ranking either would have had."""
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item()])
+    render.write_issue(issue, tmp_path)
+
+    index = (tmp_path / "index.html").read_text(encoding="utf-8")
+    dated = (tmp_path / "issues/2026-08-21.html").read_text(encoding="utf-8")
+    assert f'rel="canonical" href="{brand.SITE_URL}/"' in index
+    assert f'rel="canonical" href="{brand.SITE_URL}/issues/2026-08-21.html"' in dated
+
+
+def test_a_link_preview_says_what_is_in_the_issue():
+    """A forwarded link is how this spreads. "12 items from 7 outlets, led by
+    ..." helps someone decide; the standing tagline repeats the title."""
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item(), item(url="https://b.example/2")])
+    desc = render.og_description(issue)
+    assert "2 items from" in desc
+    assert "led by" in desc
+    assert desc in render.render_issue(issue)
+
+
+def test_an_empty_issue_falls_back_to_the_standing_description():
+    assert render.og_description(Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[])) == brand.DESCRIPTION
+
+
+def test_a_very_long_headline_is_trimmed_in_the_preview():
+    long_title = "A headline about coral " * 12
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item(title=long_title)])
+    desc = render.og_description(issue)
+    assert len(desc) < 160  # link previews truncate past roughly this
+    assert "…" in desc
+
+
+def test_the_preview_image_is_an_absolute_url(tmp_path):
+    """Relative og:image paths are ignored by most unfurlers."""
+    (tmp_path / "assets").mkdir()
+    (tmp_path / "assets/masthead.png").write_bytes(_png(1908, 404))
+    html = render.render_issue(
+        Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item()]),
+        header=render.find_header_image(tmp_path, depth=1),
+    )
+    assert f'content="{brand.SITE_URL}/assets/masthead.png"' in html
+    assert 'content="../assets/masthead.png"' not in html
+    assert 'name="twitter:card" content="summary_large_image"' in html
+
+
+# ------------------------------------------------------------------ publishing
+
+def _workflow() -> dict:
+    yaml = pytest.importorskip("yaml", reason="pyyaml is a local convenience, not a dependency")
+    return yaml.safe_load(Path(".github/workflows/daily.yml").read_text(encoding="utf-8"))
+
+
+def test_publishing_is_gated_on_a_full_successful_run():
+    """Pages replaces the whole site on every deploy, so publishing a --limit 5
+    test run would swap a real issue for a test — silently, until someone
+    noticed the following Friday."""
+    steps = {s.get("name"): s for s in _workflow()["jobs"]["build"]["steps"]}
+    gate = steps["Decide whether this run publishes"]
+    script = gate["run"]
+    assert "the build did not succeed" in script
+    assert "IN_SOURCE" in script and "IN_LIMIT" in script and "IN_PROBE_URLS" in script
+
+    for name in ("Commit the issue and the archive", "Package the site", "Deploy to Pages"):
+        assert steps[name]["if"] == "steps.gate.outputs.publish == 'true'", name
+
+
+def test_the_workflow_can_write_what_it_needs_and_no_more():
+    perms = _workflow()["permissions"]
+    assert perms == {"contents": "write", "pages": "write", "id-token": "write"}
+
+
+def test_deploys_do_not_cancel_each_other():
+    """A half-written Pages deploy is a broken site, which is worse than a late
+    one."""
+    assert _workflow()["concurrency"]["cancel-in-progress"] is False
+
+
+def test_the_archive_database_is_committed_back():
+    """The dedupe memory and the HTTP cache both live in this file. Every
+    scheduled run started from an empty one until the commit step existed, so
+    known_uids had nothing to compare against."""
+    steps = {s.get("name"): s for s in _workflow()["jobs"]["build"]["steps"]}
+    assert "dailydive.sqlite3" in steps["Commit the issue and the archive"]["run"]
+    ignored = Path(".gitignore").read_text(encoding="utf-8")
+    assert "dailydive.sqlite3" not in ignored
+    assert "\nsite/issues/\n" not in ignored

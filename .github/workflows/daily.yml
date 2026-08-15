@@ -46,9 +46,26 @@ on:
     # that is the accepted cost of not running a timezone-aware scheduler.
     - cron: "0 10 * * 5"
 
+# A publishing run needs three grants beyond the default read: contents to
+# commit the issue and the archive DB back, and pages + id-token for the
+# deploy. Nothing else in the workflow writes anything.
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# One deploy at a time, and never cancel one in flight — a half-written Pages
+# deploy is a broken site, which is worse than a late one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -202,6 +219,87 @@ jobs:
         run: |
           echo "The build step failed — see the Feed check summary." >&2
           exit 1
+
+      # ---------------------------------------------------------- publishing
+      #
+      # Deliberately gated. A --source or --limit run builds a knowingly
+      # partial issue, and Pages replaces the entire site on every deploy, so
+      # publishing one would swap a real issue for a test — silently, and until
+      # someone noticed next Friday.
+      - name: Decide whether this run publishes
+        id: gate
+        if: always()
+        env:
+          IN_SOURCE: ${{ inputs.source }}
+          IN_LIMIT: ${{ inputs.limit }}
+          IN_PROBE_URLS: ${{ inputs.probe_urls }}
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+        run: |
+          reason=""
+          if [ "$BUILD_OUTCOME" != "success" ]; then
+            reason="the build did not succeed"
+          elif [ -n "$IN_SOURCE$IN_LIMIT$IN_PROBE_URLS" ]; then
+            reason="this is a partial run (source, limit or probe_urls was set)"
+          elif [ ! -s site/index.html ]; then
+            reason="no page was built"
+          fi
+          if [ -n "$reason" ]; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "Not publishing: $reason." | tee -a $GITHUB_STEP_SUMMARY
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Two things have to outlive the runner, and neither did until now.
+      #
+      # The dated permalinks, because a Pages deploy replaces the whole site —
+      # an issue that is not committed disappears from the live site the moment
+      # the next one ships, and its permalink 404s.
+      #
+      # And dailydive.sqlite3, which is the dedupe memory and the HTTP cache.
+      # Every scheduled run has been starting from an empty database, so
+      # known_uids had nothing to compare against and conditional GET never
+      # engaged. The code was right; the file was being thrown away.
+      - name: Commit the issue and the archive
+        if: steps.gate.outputs.publish == 'true'
+        run: |
+          # The bot address, not a personal one: commit emails are public and
+          # permanent, and fixing them later means rewriting history.
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # -A over an explicit file list: git add fails the step outright on a
+          # path that does not exist, and the DB is absent on a first run.
+          git add -A site
+          [ -f dailydive.sqlite3 ] && git add dailydive.sqlite3 || true
+          if git diff --staged --quiet; then
+            echo "Nothing changed — no commit."
+            exit 0
+          fi
+          git commit -m "Issue for $(date -u +%Y-%m-%d) [skip ci]"
+          # A weekly job racing a human push is unlikely but cheap to survive.
+          for attempt in 1 2 3; do
+            if git push; then exit 0; fi
+            echo "Push failed, rebasing and retrying ($attempt/3)..."
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            sleep $((attempt * 4))
+          done
+          echo "Could not push the issue after three attempts." >&2
+          exit 1
+
+      - name: Configure Pages
+        if: steps.gate.outputs.publish == 'true'
+        uses: actions/configure-pages@v5
+
+      - name: Package the site
+        if: steps.gate.outputs.publish == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+      - name: Deploy to Pages
+        id: deploy
+        if: steps.gate.outputs.publish == 'true'
+        uses: actions/deploy-pages@v4
 
       # Every input below reaches the shell through `env:` rather than through
       # ${{ }} interpolation. Two reasons, and the first one already bit:
