@@ -235,13 +235,13 @@ name = "ReefDudes"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUwjh_Pj6nAURoQ1nYIG9qsw"
 type = "youtube_api"
 
-# NAMES UNVERIFIED — placeholders until a run reports the real channel titles.
-# `name` is the credit line, and typing one from memory is how an outlet gets
-# miscredited. The API returns channelTitle per item, so one free unscored run
-# reveals all three; correct them before these ever reach a page.
-#
 # Channel ID -> uploads playlist is UC -> UU, which is why these URLs carry a
 # playlistId that looks like the channel ID with two letters changed.
+#
+# TWO NAMES STILL UNVERIFIED. `name` is the credit line, and typing one from
+# memory is how an outlet gets miscredited — the same reason the Bluesky
+# accounts were probed for their display names rather than guessed at. These
+# two must be named before they can reach a page.
 
 [[source]]
 id = "yt-new1"
@@ -255,9 +255,10 @@ name = "Unverified channel 2"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUgveGhLDUg_6jL_WtT92dtw"
 type = "youtube_api"
 
+# Named by the editor from the channel's handle, @ReefBeefPodcast.
 [[source]]
-id = "yt-new3"
-name = "Unverified channel 3"
+id = "yt-reefbeef"
+name = "Reef Beef Podcast"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUSnbEFY3CG_ri7L5-Wwhezg"
 type = "youtube_api"
 
