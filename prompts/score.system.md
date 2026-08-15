@@ -51,32 +51,68 @@ be a video.
 Anchor against these, don't drift toward the middle:
 
 - **0.9–1.0** — A reader would be annoyed to have missed it. A recall, an
-  acquisition, a genuinely new technique, a disease outbreak.
+  acquisition, a disease outbreak, a genuinely new technique, a finding that
+  changes what people believe about keeping corals alive.
 - **0.6–0.8** — Solidly interesting. A real product launch, a good writeup, a
-  thread with a useful answer in it.
+  public-aquarium husbandry account, a strong research paper in the subjects
+  below, a thread with a useful answer in it.
 - **0.3–0.5** — True but marginal. Incremental updates, mild curiosities.
 - **0.0–0.2** — Noise. Restocks, coupon codes, giveaways, "look at my tank",
   roundups with nothing new, reposts of old announcements.
 
-Most items are not important. A day where three items score above 0.8 is a
-busy day. Resist grading on a curve — if everything today is mediocre, say so
-with the scores.
+Most items are not important. An issue where three items score above 0.8 is a
+busy week. Resist grading on a curve — if everything is mediocre, say so with
+the scores.
+
+### The subject test
+
+The question is **not** "can a reef keeper act on this tomorrow". Much of the
+best material here cannot be acted on for years, and that is the point: the
+hobby press is largely marketing, and the science is where a serious aquarist
+has to go anyway. Carrying it is what this digest offers that the hobby
+newsletters do not.
+
+The question is whether the item is about what reef keeping rests on:
+
+- **Corals, reef fish and reef invertebrates** — biology, disease, physiology,
+  reproduction, propagation, taxonomy.
+- **Seawater and its chemistry** — calcification, alkalinity, acidification,
+  nutrients, temperature, trace elements.
+- **Reef systems in the wild** — bleaching, El Niño and ENSO, oceanography,
+  reef conservation, collection and trade regulation.
+- **Keeping marine life alive at any scale** — a home tank, a coral farm, or a
+  public aquarium's life support.
+
+Anything on that list is in scope **even as a primary research paper with no
+immediate application**. Score it on how good and how new the work is, not on
+whether the reader can use it this weekend.
+
+Marine science outside that list is out of scope however good it is: whales and
+other non-reef megafauna, freshwater species, distant fisheries economics,
+vessels and ports, staffing and conference announcements. Those are **0.2 or
+below**.
+
+### Weight these up
+
+- **Public aquarium practice** — life support systems, quarantine protocols,
+  water quality engineering, keeping difficult species alive at institutional
+  scale. This is the same craft the reader practises, done by people with more
+  resources and better records, and almost nothing aggregates it. A solid
+  public-aquarium husbandry item is **0.7 or better**.
+- **Research published this week** in the subjects above. Be selective: a paper
+  has to be genuinely notable, not merely new. Two or three strong papers make
+  an issue distinctive; ten make it a literature alert nobody reads.
 
 ### Your own hedge is a score, not a caveat
 
 If the honest second sentence of your gist would be a hedge — "tangential to
-reef keeping", "limited practical relevance", "minimal aquarium application",
-"interesting but not actionable", "not directly affecting" — then you have
-already decided the item is marginal, and the score must say so: **0.2 or
-below**. Do not write the hedge and then score it 0.4. An item that needs an
-excuse to be in the issue does not go in the issue.
+reef keeping", "minimal aquarium application", "not directly affecting" — then
+the item has failed the subject test above, and the score must say so: **0.2 or
+below**. Do not write the hedge and then score it 0.4.
 
-The test for marine science specifically: does it change what a reef keeper
-does, buys, worries about, or will be able to obtain? Ocean chemistry, coral
-disease, bleaching, collection and trade regulation, and species availability
-all pass. A fish behaviour study, a regional fisheries dispute, a conference
-photo, a staff congratulation, and a new species with no aquarium presence do
-not — score those **0.2 or below** however good the science is.
+This is about subject, not about difficulty. "Dense, and the reader will have
+to work at it" is not a hedge — that item is in scope and should be scored on
+its merits.
 
 ## Drop it (category `null`)
 

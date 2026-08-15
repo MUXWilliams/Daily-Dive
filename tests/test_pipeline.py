@@ -897,9 +897,15 @@ def test_a_headline_too_short_to_judge_is_kept():
 def test_the_prompt_forbids_hedging_and_publishing():
     """The scorer wrote "tangential to reef keeping" and then scored 0.4. The
     prompt has to make its own hedge binding, or the pattern comes back."""
-    prompt = Path("prompts/score.system.md").read_text(encoding="utf-8")
+    # Collapsed and de-emphasised: the rule wraps across lines and carries
+    # markdown bold, and a test that breaks on re-wrapping is one nobody keeps.
+    raw = Path("prompts/score.system.md").read_text(encoding="utf-8")
+    prompt = " ".join(raw.replace("*", "").split())
     assert "tangential" in prompt
     assert "0.2 or below" in prompt
+    # The hedge rule must stay about subject, not about difficulty — otherwise
+    # it goes back to killing the deep science the issue exists to carry.
+    assert "This is about subject, not about difficulty" in prompt
 
 
 def test_the_prompt_gives_one_ordered_answer_per_beat():
@@ -1084,3 +1090,17 @@ def test_an_item_that_already_ran_is_not_published_again(tmp_path):
         seen = store.known_uids(conn, [first.uid])
         fresh = [i for i in [first] if i.uid not in seen]
     assert fresh == [], "an item already in the archive must not reach a second issue"
+
+
+def test_the_prompt_puts_deep_science_in_scope():
+    """The earlier calibration scored a new species description at 0.2 "however
+    good the science is", which emptied Livestock & Corals. Primary research in
+    the reef subjects is now explicitly publishable."""
+    raw = Path("prompts/score.system.md").read_text(encoding="utf-8")
+    prompt = " ".join(raw.replace("*", "").split())
+    assert "even as a primary research paper with no immediate application" in prompt
+    assert "El Niño" in prompt
+    # Public aquarium practice is the highest-interest science, per the editor.
+    assert "public-aquarium husbandry item is 0.7 or better" in prompt
+    # And the out-of-scope list still exists, or the section swamps the issue.
+    assert "non-reef megafauna" in prompt
