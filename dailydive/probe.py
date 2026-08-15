@@ -81,29 +81,22 @@ CANDIDATES: list[str] = [
     "https://bsky.app/profile/ubcoceans.bsky.social/rss",
     "https://bsky.app/profile/uncw-cms.bsky.social/rss",
     # --- Open-access journals ------------------------------------------------
-    # JZAR is the closest of these to the hobby: public-aquarium husbandry,
-    # life-support systems and quarantine, which is the same craft at a larger
-    # scale. Diamond open access on OJS, whose standard feed path this is.
-    "https://jzar.org/jzar/gateway/plugin/WebFeedGatewayPlugin/rss2",
-    # Frontiers publishes on the order of a hundred marine papers a month, most
-    # of them fisheries and oceanography. Probing to see the shape and volume
-    # before deciding whether a whole-journal feed is usable at all.
-    "https://www.frontiersin.org/journals/marine-science/rss",
-    # JZAR, second attempt. The path above 404s, so the journal is not at the
-    # bare-slug OJS shape. These are the other two layouts OJS ships with —
-    # index.php-prefixed, and single-journal installs that drop the slug.
-    "https://jzar.org/index.php/jzar/gateway/plugin/WebFeedGatewayPlugin/rss2",
-    "https://jzar.org/jzar/gateway/plugin/WebFeedGatewayPlugin/atom",
-    # --- El Nino and ENSO ----------------------------------------------------
-    # Asked for by name, and there is no source in sources.toml that covers it:
-    # the Bluesky oceanography accounts mention ENSO in passing but nothing
-    # tracks the forecast itself. NOAA is the primary and its work is public
-    # domain, so this is the cheapest good source in the whole file if a feed
-    # exists. The ENSO blog is the readable one; CPC's advisory is the official
-    # one. A warm-phase forecast is a bleaching forecast, six months early.
-    "https://www.climate.gov/news-features/department/enso-blog/feed",
-    "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/rss.xml",
-    "https://www.pmel.noaa.gov/elnino/rss.xml",
+    # SETTLED. Frontiers in Marine Science answered (20 entries, 1 day old) and
+    # is configured in sources.toml.
+    #
+    # STOP GUESSING AT JZAR. Three OJS layouts tried, all 404:
+    #   /jzar/gateway/plugin/WebFeedGatewayPlugin/rss2
+    #   /index.php/jzar/gateway/plugin/WebFeedGatewayPlugin/rss2
+    #   /jzar/gateway/plugin/WebFeedGatewayPlugin/atom
+    # Three guesses is enough. The journal is worth having — public-aquarium
+    # husbandry and life support, the closest of any journal to this hobby —
+    # so it moves to DISCOVER_TARGETS and the site gets asked instead.
+    #
+    # ENSO, same lesson learned the same way. climate.gov's blog feed and CPC's
+    # advisory rss.xml both 404, and PMEL's parses but carries no entries.
+    # Guessing feed paths at NOAA does not work; NOAA publishes feeds as
+    # ordinary links on index pages, which is exactly what the discovery
+    # fallback was built for. Also moved below.
     # --- OpenAlex ------------------------------------------------------------
     # The direct answer to "which papers came out this week", across every
     # journal at once rather than one journal at a time. Free, no key, and the
@@ -170,6 +163,19 @@ DISCOVER_TARGETS: list[str] = [
     # If the guessed feed paths miss, ask the site itself.
     "https://coralreefs.org/",
     "https://link.springer.com/journal/338",
+    # JZAR, after three wrong OJS paths. OJS advertises its feeds in the head,
+    # so the journal's own page should hand over the real URL if one exists.
+    "https://jzar.org/",
+    # ENSO, after three wrong NOAA paths. NOAA is the reason the linked-file
+    # fallback exists: it lists feeds as ordinary <a> links on index pages
+    # rather than advertising them in the head, so a guessed path misses what
+    # reading the page would find. El Nino was asked for by name and nothing
+    # in sources.toml covers it — a warm-phase forecast is a bleaching
+    # forecast half a year early, which is the kind of lead time this digest
+    # exists to give.
+    "https://www.climate.gov/news-features/department/enso-blog",
+    "https://www.cpc.ncep.noaa.gov/products/precip/CWlink/MJO/enso.shtml",
+    "https://www.pmel.noaa.gov/elnino/",
     # Drum and Croaker is the practitioner journal for public-aquarium life
     # support. Published as static PDFs with no feed as far as anyone can tell
     # — asking the page directly rather than assuming, since a feed would make
