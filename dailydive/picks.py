@@ -37,7 +37,14 @@ log = logging.getLogger(__name__)
 # Accounts whose issues may become items. Explicit rather than derived from the
 # repo owner, so widening it is a reviewable diff rather than a config change
 # nobody sees. Compared case-insensitively — GitHub logins are.
-AUTHORS: frozenset[str] = frozenset({"muxwilliams"})
+#
+# Both names are the editor. The repo lives under MUXWilliams; the account that
+# actually files issues is muxxworx. Assuming the owner and the author were the
+# same login cost the first real pick — it was ignored in silence, which is
+# exactly what an unrecognised author is supposed to get, and exactly what
+# makes this class of bug hard to notice. If picks ever stop appearing, look
+# here first.
+AUTHORS: frozenset[str] = frozenset({"muxwilliams", "muxxworx"})
 
 LABEL = "pick"
 API = "https://api.github.com"

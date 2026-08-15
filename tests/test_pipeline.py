@@ -1849,3 +1849,17 @@ def test_the_plain_text_issue_carries_the_byline():
 def test_a_missing_byline_leaves_no_dangling_separator():
     issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item(author=None)])
     assert " ·  · " not in render.as_text(issue)
+
+
+def test_the_allowlist_covers_the_account_that_files_not_just_the_repo_owner():
+    """The repo is under MUXWilliams; issues are filed by muxxworx. Assuming
+    they were the same login made the first real pick vanish silently."""
+    from dailydive import picks
+
+    assert "muxxworx" in picks.AUTHORS
+    bucket = _FakeBucket([{"number": 1, "body": _pick_body(), "user": {"login": "muxxworx"}}])
+    bucket.open_picks = lambda: [
+        i for i in bucket.issues if i["user"]["login"].lower() in picks.AUTHORS
+    ]
+    items, _ = picks.collect(bucket, published_uids=set())
+    assert len(items) == 1
