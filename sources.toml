@@ -383,15 +383,10 @@ type = "generic"
 section = "Journal"
 category_hint = "Husbandry & Science"
 
-# DISABLED pending one probe. Everything below is built and tested; what has
-# not been verified is the filter syntax, which cannot be checked from a desk.
-# Run the workflow with probe_urls set to this URL, and enable it if the probe
-# says ok. A wrong filter fails quietly here — OpenAlex answers 200 with an
-# error body and no results, so a broken query is indistinguishable from a
-# quiet week unless something looks. That is what probe._probe_json is for.
+# --- OpenAlex ----------------------------------------------------------------
 #
-# One source, many outlets. OpenAlex indexes the literature rather than
-# publishing it, so `name` below is only the fallback label in listings: each
+# One source type, many outlets. OpenAlex indexes the literature rather than
+# publishing it, so `name` below is only a fallback label for listings: each
 # paper is credited to its own journal, read from the record. Crediting a
 # Coral Reefs paper to OpenAlex would be a plain miscredit, and
 # normalize._normalize_openalex drops any work whose journal it cannot
@@ -402,17 +397,52 @@ category_hint = "Husbandry & Science"
 # indexing lags publication, so a 7-day query would miss papers that are new
 # to us. normalize.recent still does the real windowing.
 #
-# is_oa:true is an editorial choice, not a technical one. A citation the
-# reader cannot open is not worth much, so this asks only for papers they can
-# actually read.
+# Both filters below were arrived at by probe, and every clause earns its
+# place. The counts are per 21-day window:
+#
+#   title_and_abstract.search:coral   373   too broad — "coral" is a colour,
+#                                            a snake, and a person's name
+#   title.search:coral                178   still 59/week
+#   + type:article                     72   the fix: OpenAlex indexes datasets
+#                                            and preprints too, and the first
+#                                            query's top hit was a temperature
+#                                            logger series, not a paper
+#
+# is_oa:true is editorial, not technical: a citation the reader cannot open is
+# not worth much, so this asks only for papers they can actually read.
+#
+# The mailto is OpenAlex's documented request — it puts us in their polite
+# pool. It is the public contact address, the same one on the about page.
+#
+# Probed empty, recorded so nobody adds it: title_and_abstract.search:
+# "public aquarium" matches nothing at all, and "reef aquarium" likewise. The
+# hobby is not a term of art in this literature. Public-aquarium work is
+# weighted up in prompts/score.system.md instead, where it applies to items
+# from every source rather than to a query that returns nothing.
 [[source]]
 id = "openalex-coral"
 name = "OpenAlex"
-url = "https://api.openalex.org/works?filter=title_and_abstract.search:coral,from_publication_date:{since},is_oa:true&sort=publication_date:desc&per-page=25&mailto=theloneaquarist@gmail.com"
+url = "https://api.openalex.org/works?filter=title.search:coral,type:article,from_publication_date:{since},is_oa:true&sort=publication_date:desc&per-page=100&mailto=theloneaquarist@gmail.com"
 type = "openalex"
 section = "Journal"
 category_hint = "Husbandry & Science"
-enabled = false
+
+# Coral is not the whole subject. Reef fish behaviour, disease and physiology
+# are the other half of what a reefkeeper actually manages, and this query
+# catches papers a coral-titled search cannot: 15 per 21-day window, verified,
+# newest "Reef fish escape responses selectively match predator attack" in
+# PLoS ONE.
+#
+# title_and_abstract rather than title here because "reef fish" is a phrase
+# that shows up in an abstract's framing more often than in a title, and the
+# phrase is specific enough that the wider net stays clean.
+[[source]]
+id = "openalex-reef-fish"
+name = "OpenAlex"
+url = "https://api.openalex.org/works?filter=title_and_abstract.search:%22reef%20fish%22,type:article,from_publication_date:{since},is_oa:true&sort=publication_date:desc&per-page=100&mailto=theloneaquarist@gmail.com"
+type = "openalex"
+section = "Journal"
+category_hint = "Husbandry & Science"
 
 # ------------------------------------------------------------- newsletters
 #
