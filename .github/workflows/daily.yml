@@ -96,48 +96,11 @@ jobs:
       - name: List configured sources
         run: daily-dive sources
 
-      # Every input below reaches the shell through `env:` rather than through
-      # ${{ }} interpolation. Two reasons, and the first one already bit:
-      #
-      #   1. Interpolation pastes the value into the script text, so a URL
-      #      containing & — which every API query does — is read by bash as a
-      #      control operator and the command is torn into background jobs.
-      #      That failed silently here: the step "succeeded" in zero seconds
-      #      having probed nothing.
-      #   2. It is also how script injection works. Anyone who can dispatch
-      #      this workflow could otherwise run arbitrary commands on the
-      #      runner, with the secrets in scope.
-      #
-      # Read through $VAR, the value is data. set -f stops the ? in a query
-      # string being treated as a glob.
-      - name: Probe candidate feed URLs
-        if: inputs.probe || inputs.probe_urls != ''
-        env:
-          PROBE_URLS: ${{ inputs.probe_urls }}
-        run: |
-          set -f
-          # tee, not redirect: the step summary is the readable form, but the
-          # verdicts also need to be in the log, which is the only place a
-          # tool (or a person on a restricted network) can actually get at them.
-          #
-          # With explicit URLs, --discover is dropped: discovery walks a fixed
-          # list of pages and has nothing to do with the URLs you asked about.
-          {
-            echo "### Candidate feed probe"
-            echo ""
-            if [ -n "$PROBE_URLS" ]; then
-              # Unquoted on purpose: the input is a space-separated list and
-              # word splitting is what turns it into separate arguments.
-              daily-dive probe --markdown $PROBE_URLS 2>/dev/null || true
-            else
-              daily-dive probe --markdown --discover 2>/dev/null || true
-            fi
-            echo ""
-          } | tee -a $GITHUB_STEP_SUMMARY
-
-      # Skipped when specific URLs were asked about. The build runs --verbose,
-      # which buries the probe table under thousands of lines of HTTP debug
-      # output — and reading that table is the entire point of a targeted probe.
+      # Skipped when specific URLs were asked about: the point of a targeted
+      # probe is to read its verdicts, and a --verbose build buries them under
+      # thousands of lines of HTTP debug output. The probe itself runs last,
+      # for the same reason — every step after it echoes its own script into
+      # the log, which pushed the table out of reach twice.
       - name: Build issue from live feeds
         id: build
         if: inputs.probe_urls == ''
@@ -239,3 +202,42 @@ jobs:
         run: |
           echo "The build step failed — see the Feed check summary." >&2
           exit 1
+
+      # Every input below reaches the shell through `env:` rather than through
+      # ${{ }} interpolation. Two reasons, and the first one already bit:
+      #
+      #   1. Interpolation pastes the value into the script text, so a URL
+      #      containing & — which every API query does — is read by bash as a
+      #      control operator and the command is torn into background jobs.
+      #      That failed silently here: the step "succeeded" in zero seconds
+      #      having probed nothing.
+      #   2. It is also how script injection works. Anyone who can dispatch
+      #      this workflow could otherwise run arbitrary commands on the
+      #      runner, with the secrets in scope.
+      #
+      # Read through $VAR, the value is data. set -f stops the ? in a query
+      # string being treated as a glob.
+      - name: Probe candidate feed URLs
+        if: inputs.probe || inputs.probe_urls != ''
+        env:
+          PROBE_URLS: ${{ inputs.probe_urls }}
+        run: |
+          set -f
+          # tee, not redirect: the step summary is the readable form, but the
+          # verdicts also need to be in the log, which is the only place a
+          # tool (or a person on a restricted network) can actually get at them.
+          #
+          # With explicit URLs, --discover is dropped: discovery walks a fixed
+          # list of pages and has nothing to do with the URLs you asked about.
+          {
+            echo "### Candidate feed probe"
+            echo ""
+            if [ -n "$PROBE_URLS" ]; then
+              # Unquoted on purpose: the input is a space-separated list and
+              # word splitting is what turns it into separate arguments.
+              daily-dive probe --markdown $PROBE_URLS 2>/dev/null || true
+            else
+              daily-dive probe --markdown --discover 2>/dev/null || true
+            fi
+            echo ""
+          } | tee -a $GITHUB_STEP_SUMMARY
