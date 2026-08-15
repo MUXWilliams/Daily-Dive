@@ -1649,3 +1649,23 @@ def test_the_artifact_paints_its_own_ground():
     with tempfile.TemporaryDirectory() as tmp:
         html = preview.artifact_html(Path(tmp), site_dir=Path("site"))
     assert re.search(r"body\s*\{[^}]*background:", html)
+
+
+def test_the_sticky_header_is_not_trapped_in_a_scroll_container():
+    """overflow:hidden on section.card makes the card the sticky header's
+    scroll container, so the header sticks inside a box it already fills and
+    the effect dies silently. Verified in Chromium: with the overflow the
+    header scrolled to -200px; without it, it held at 0."""
+    css = (render.TEMPLATE_DIR / "issue.html.j2").read_text(encoding="utf-8")
+    card_rule = re.search(r"section\.card \{[^}]*\}", css)
+    assert card_rule, "section.card rule moved — re-check the sticky header"
+    assert "overflow" not in card_rule.group(0), card_rule.group(0)
+
+
+def test_sticky_positioning_is_not_gated_behind_reduced_motion():
+    """Sticky is not animation — nothing accelerates or parallaxes. Gating it
+    there switched the header off for everyone with Reduce Motion enabled,
+    which on iOS is a great many people."""
+    css = (render.TEMPLATE_DIR / "issue.html.j2").read_text(encoding="utf-8")
+    for block in re.findall(r"@media \(prefers-reduced-motion[^{]*\{(.*?)\n  \}", css, re.S):
+        assert "sticky" not in block, block

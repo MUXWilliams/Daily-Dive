@@ -127,13 +127,16 @@
      monospace. And the gap between cards is wider than the gap inside one, so
      the grouping is legible before any text is read at all. */
   .sections { display: grid; gap: 1.6rem; margin-top: 1.6rem; }
-  section.card {
-    background: var(--tint); border-radius: 10px; overflow: hidden;
-  }
+  /* No overflow:hidden here, however tempting for clipping the header bar to
+     the rounded corners. It makes this card the sticky header's scroll
+     container, and a sticky element can only stick inside its container — so
+     the header would sit still in a box it already fills, and the effect dies
+     silently. The h2 rounds its own top corners instead. */
+  section.card { background: var(--tint); border-radius: 10px; }
   section.card > h2 {
     display: flex; align-items: baseline; justify-content: space-between; gap: .6rem;
     margin: 0; padding: .6rem .95rem .62rem;
-    background: var(--hue); color: #fff;
+    background: var(--hue); color: #fff; border-radius: 10px 10px 0 0;
     font-size: .95rem; font-weight: 800; letter-spacing: -.008em; line-height: 1.2;
   }
   section.card > h2 .count {
@@ -143,11 +146,14 @@
   /* The item list keeps the old inset; only the header runs full width. */
   section.card > ul.items { padding: .1rem .95rem .95rem; }
 
-  @media (prefers-reduced-motion: no-preference) {
-    /* The header sticks while its own section scrolls past, so the answer to
-       "what am I looking at" is always on screen. Ends at the card boundary. */
-    section.card > h2 { position: sticky; top: 0; z-index: 1; }
-  }
+  /* The header sticks while its own section scrolls past, so the answer to
+     "what am I looking at" is always on screen. Ends at the card boundary.
+     
+     Deliberately NOT behind prefers-reduced-motion. Sticky positioning is not
+     animation — nothing accelerates or parallaxes, the header simply stays put
+     — and gating it there quietly switched the feature off for everyone with
+     Reduce Motion enabled, which on iOS is a great many people. */
+  section.card > h2 { position: sticky; top: 0; z-index: 1; }
 
   ul.items { list-style: none; margin: 0; padding: 0; }
   li.item { padding: .62rem 0; border-bottom: 1px solid color-mix(in srgb, var(--hue) 13%, transparent); }
