@@ -299,6 +299,7 @@ def main(argv: list[str] | None = None) -> int:
             items,
             scores,
             threshold=args.threshold if args.threshold is not None else score_mod.DEFAULT_THRESHOLD,
+            community_sources=frozenset(s.id for s in sources if s.is_community),
         )
         log.info("scored %d items, kept %d", before, len(items))
         # After scoring, not before: items arrive sorted by relevance, so the

@@ -26,9 +26,18 @@ class Category(StrEnum):
     # on how it was filmed — a brown-jelly video under Husbandry, a reef-tour
     # video under Video. Everything is filed by what it is about; the medium
     # shows up as a duration badge on the item instead.
+    #
+    # Community is the one category assigned by WHO is speaking rather than
+    # what about, which is a different axis from medium and not a relapse into
+    # one — see Source.is_community.
+    #
+    # Declaration order is section order on the page, and Community leads by
+    # editorial choice: the reader is a hobbyist, and what other hobbyists are
+    # building and arguing about is why they opened this at all. Trade news and
+    # literature are why they keep reading.
+    COMMUNITY = "Community"
     INDUSTRY = "Industry & Products"
     HUSBANDRY = "Husbandry & Science"
-    COMMUNITY = "Community"
     LIVESTOCK = "Livestock & Corals"
     WILD_REEFS = "Wild Reefs"
     EVENTS = "Events"
@@ -129,10 +138,34 @@ class Source(BaseModel):
     # this is what stops that from reaching a published page. Empty means the
     # source refuses everything, which is the safe direction to fail.
     senders: tuple[str, ...] = ()
+    # Files this outlet under Community regardless of subject. See is_community.
+    community: bool = False
 
     @property
     def display_name(self) -> str:
         return f"{self.name} — {self.section}" if self.section else self.name
+
+    @property
+    def is_community(self) -> bool:
+        """True when the outlet IS the community rather than reporting on it.
+
+        This is a claim about provenance, not medium. The project already
+        refuses to file by medium — that is why there is no Video category —
+        but who is talking is a different axis from what is filmed. A channel,
+        a forum thread and a hobbyist site are peers speaking; a trade outlet
+        and a journal are not, however similar their subjects.
+
+        Automatic for the source types that can only be community, and
+        opt-in via `community = true` for the ones that need saying: Reefs.com
+        is an ordinary WordPress feed and indistinguishable by type from the
+        trade press, but it is hobbyists writing for hobbyists.
+        """
+        return self.community or self.type in {
+            SourceType.YOUTUBE,
+            SourceType.YOUTUBE_API,
+            SourceType.XENFORO,
+            SourceType.REDDIT,
+        }
 
     @property
     def is_authorized_api(self) -> bool:

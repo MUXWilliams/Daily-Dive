@@ -115,17 +115,38 @@
   .intro li.plus { color: var(--ink-soft); }
 
   /* -------------------------------- sections ------------------------------- */
-  .sections { display: grid; gap: .9rem; margin-top: 1.5rem; }
-  section.card { background: var(--tint); border-radius: 8px; padding: .95rem 1.05rem 1.05rem; }
+  /* Scannability. The old heading was 11px tracked-out monospace in the
+     category hue — a caption, competing with 15px bold headlines directly
+     beneath it. Thumbing the page, you read headlines and never saw the
+     sections at all.
+     
+     Three changes, in order of how much each does. The header is now a solid
+     bar in the category colour, so a section boundary is a block of colour
+     rather than a line of small text — that is what the eye catches while
+     scrolling. It is set in the body face at readable size instead of tracked
+     monospace. And the gap between cards is wider than the gap inside one, so
+     the grouping is legible before any text is read at all. */
+  .sections { display: grid; gap: 1.6rem; margin-top: 1.6rem; }
+  section.card {
+    background: var(--tint); border-radius: 10px; overflow: hidden;
+  }
   section.card > h2 {
-    display: flex; align-items: center; justify-content: space-between; gap: .5rem;
-    margin: 0 0 .45rem; padding-bottom: .45rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--hue) 20%, transparent);
-    font: 700 .69rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-    letter-spacing: .13em; text-transform: uppercase; color: var(--hue);
+    display: flex; align-items: baseline; justify-content: space-between; gap: .6rem;
+    margin: 0; padding: .6rem .95rem .62rem;
+    background: var(--hue); color: #fff;
+    font-size: .95rem; font-weight: 800; letter-spacing: -.008em; line-height: 1.2;
   }
   section.card > h2 .count {
-    font-weight: 700; color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    font-size: .78rem; font-weight: 700; letter-spacing: 0;
+    color: #fff; opacity: .72; font-variant-numeric: tabular-nums;
+  }
+  /* The item list keeps the old inset; only the header runs full width. */
+  section.card > ul.items { padding: .1rem .95rem .95rem; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* The header sticks while its own section scrolls past, so the answer to
+       "what am I looking at" is always on screen. Ends at the card boundary. */
+    section.card > h2 { position: sticky; top: 0; z-index: 1; }
   }
 
   ul.items { list-style: none; margin: 0; padding: 0; }

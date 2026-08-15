@@ -191,6 +191,7 @@ def apply_scores(
     *,
     threshold: float = DEFAULT_THRESHOLD,
     keep_unscored: bool = False,
+    community_sources: frozenset[str] = frozenset(),
 ) -> list[Item]:
     """Filter and re-categorize items from their scores.
 
@@ -219,10 +220,19 @@ def apply_scores(
             )
             gist = ""
 
+        # Provenance beats subject for these outlets. A tank tour is a tank
+        # tour whatever it is about, and the model — reading only a title and
+        # a description — will file it under whichever subject it mentions,
+        # scattering the community across five sections. The source knows
+        # better than the text here, so the source wins.
+        category = score.category
+        if item.source_id in community_sources:
+            category = Category.COMMUNITY
+
         kept.append(
             item.model_copy(
                 update={
-                    "category_hint": score.category,
+                    "category_hint": category,
                     "extra": {
                         **item.extra,
                         **({"gist": gist} if gist else {}),

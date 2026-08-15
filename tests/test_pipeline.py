@@ -202,10 +202,16 @@ def test_sections_follow_canonical_order_and_skip_empties():
     )
     buckets = render.group_by_category(issue)
     assert [t for t, _, _ in buckets] == [
-        Category.INDUSTRY.value, Category.COMMUNITY.value, "Elsewhere"
+        Category.COMMUNITY.value, Category.INDUSTRY.value, "Elsewhere"
     ]
     # Slug keys the section's colour, so it must survive alongside the title.
-    assert [sl for _, sl, _ in buckets] == ["industry", "community", "elsewhere"]
+    assert [sl for _, sl, _ in buckets] == ["community", "industry", "elsewhere"]
+
+
+def test_community_leads_the_issue():
+    """An editorial call, not an accident of enum order: the reader is a
+    hobbyist, and what other hobbyists are building is why they opened this."""
+    assert list(Category)[0] is Category.COMMUNITY
 
 
 def test_empty_issue_still_renders():
@@ -1495,3 +1501,50 @@ def test_the_archive_database_is_committed_back():
     ignored = Path(".gitignore").read_text(encoding="utf-8")
     assert "dailydive.sqlite3" not in ignored
     assert "\nsite/issues/\n" not in ignored
+
+
+# ------------------------------------------------------------ community filing
+
+def test_channels_and_forums_are_community_by_their_type():
+    """A tank tour is a tank tour whatever it is about. Left to the text, the
+    model files these under whichever subject the title mentions, scattering
+    the community across five sections."""
+    for kind in (SourceType.YOUTUBE, SourceType.YOUTUBE_API, SourceType.XENFORO, SourceType.REDDIT):
+        s = Source(id="x", name="X", url="https://x.invalid/f", type=kind)
+        assert s.is_community, kind
+
+
+def test_a_hobbyist_site_opts_in_because_its_type_cannot_tell():
+    """Reefs.com is an ordinary WordPress feed, shaped exactly like the trade
+    press. Only the flag distinguishes them."""
+    plain = Source(id="a", name="A", url="https://a.invalid/feed", type=SourceType.WORDPRESS)
+    hobby = Source(id="b", name="B", url="https://b.invalid/feed", type=SourceType.WORDPRESS, community=True)
+    assert not plain.is_community
+    assert hobby.is_community
+
+
+def test_the_configured_community_sources_are_the_expected_ones():
+    ids = {s.id for s in config.load_sources(Path("sources.toml")) if s.is_community}
+    assert "reefs" in ids
+    assert all(i.startswith("yt-") for i in ids - {"reefs"}), ids
+
+
+def test_a_community_source_overrides_the_models_category():
+    """The source knows better than a title and a description here."""
+    from dailydive.score import ItemScore, apply_scores
+
+    vid = item(url="https://youtube.invalid/watch?v=1", source_id="yt-brs")
+    scored = {vid.uid: ItemScore(uid=vid.uid, relevance=0.8, category=Category.HUSBANDRY,
+                                 is_promo=False, gist="A tank tour that mentions alkalinity.")}
+    out = apply_scores([vid], scored, community_sources=frozenset({"yt-brs"}))
+    assert out[0].category_hint is Category.COMMUNITY
+
+
+def test_a_non_community_source_keeps_the_models_category():
+    from dailydive.score import ItemScore, apply_scores
+
+    art = item(url="https://reefbuilders.invalid/a", source_id="reefbuilders")
+    scored = {art.uid: ItemScore(uid=art.uid, relevance=0.8, category=Category.HUSBANDRY,
+                                 is_promo=False, gist="A husbandry article.")}
+    out = apply_scores([art], scored, community_sources=frozenset({"yt-brs"}))
+    assert out[0].category_hint is Category.HUSBANDRY

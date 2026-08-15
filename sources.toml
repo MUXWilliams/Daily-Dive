@@ -39,12 +39,18 @@ category_hint = "Husbandry & Science"
 
 # Verified live: 10 items, newest "Treating Brown Jelly". Long-running
 # hobbyist site, heavier on husbandry than on industry news.
+#
+# community = true because type cannot tell: this is an ordinary WordPress
+# feed, indistinguishable from the trade press by shape, but it is hobbyists
+# writing for hobbyists. Forums and channels get the same treatment
+# automatically from their source type — see Source.is_community.
 [[source]]
 id = "reefs"
 name = "Reefs.com"
 url = "https://reefs.com/feed/"
 type = "wordpress"
-category_hint = "Husbandry & Science"
+category_hint = "Community"
+community = true
 
 # PARKED — 10 items, newest 1295 days old. The articles are good and the site
 # still serves them, but nothing has been published in three and a half years.
