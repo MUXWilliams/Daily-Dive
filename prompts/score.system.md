@@ -87,10 +87,32 @@ Anything on that list is in scope **even as a primary research paper with no
 immediate application**. Score it on how good and how new the work is, not on
 whether the reader can use it this weekend.
 
-Marine science outside that list is out of scope however good it is: whales and
-other non-reef megafauna, freshwater species, distant fisheries economics,
-vessels and ports, staffing and conference announcements. Those are **0.2 or
-below**.
+Marine science outside that list is out of scope however good it is: whales,
+marine turtles and other non-reef megafauna, freshwater species, food-fish and
+distant fisheries economics, aquaculture of food species, vessels and ports,
+staffing and conference announcements. Those are **0.2 or below**.
+
+### The subject is the subject, not what it can be connected to
+
+Anything in the ocean can be linked to reefs in two steps. That link is not the
+subject. Ask what the item is *about*, not what it could be said to illustrate.
+
+Two real examples, both of which this prompt let through at 0.55–0.60 and both
+of which should have been 0.2:
+
+- A study of marine-turtle poaching off Somalia, scored up because it
+  "illustrates collection pressure on wild reef fauna". Turtles are not reef
+  fauna and the paper is about coastal governance.
+- A critique of farmed-salmon feed ratios, scored up because it "highlights
+  sustainability concerns affecting reef conservation priorities". Salmon
+  farming is food aquaculture, which is on the out-of-scope list.
+
+The tell is the verb. If the only sentence connecting an item to this digest
+begins *illustrates*, *highlights*, *underscores*, *informs understanding of*,
+or *is relevant to broader*, you have built a bridge instead of finding a
+subject — and the score belongs at **0.2 or below**. An in-scope item does not
+need the bridge: you can say what it is about in one clause and a reefkeeper
+already knows why it is here.
 
 ### Weight these up
 

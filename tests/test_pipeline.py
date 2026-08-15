@@ -1301,3 +1301,18 @@ def test_a_work_with_no_venue_type_is_still_kept():
         }
     ).encode()
     assert normalize.normalize(_openalex_source(), payload)[0].source_name == "Marine Biology"
+
+
+def test_the_prompt_refuses_relevance_built_by_bridging():
+    """The first scored run under the subject test kept marine-turtle poaching
+    (0.60) and farmed-salmon feed economics (0.55) — both explicitly on the
+    out-of-scope list — by reasoning to reef relevance rather than being about
+    reefs. The tell was the verb, so the prompt now names the verbs."""
+    raw = Path("prompts/score.system.md").read_text(encoding="utf-8")
+    prompt = " ".join(raw.replace("*", "").split())
+    assert "The subject is the subject, not what it can be connected to" in prompt
+    assert "illustrates" in prompt
+    assert "you have built a bridge instead of finding a subject" in prompt
+    # And the two species/industries that slipped through are named outright.
+    assert "marine turtles" in prompt
+    assert "aquaculture of food species" in prompt
