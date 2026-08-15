@@ -7,6 +7,7 @@ a public page.
 
 from __future__ import annotations
 
+import struct
 from datetime import datetime
 from pathlib import Path
 
@@ -124,26 +125,68 @@ def group_by_category(issue: Issue) -> list[tuple[str, str, list]]:
     return buckets
 
 
-# Drop a banner here and the page uses it; leave it out and the page draws its
-# own. Either way the masthead renders — the artwork is an upgrade, never a
-# dependency, so a missing file can't produce a broken header in production.
-HEADER_IMAGE = "assets/dailydive-header.png"
+# Drop a banner in assets/ and the page uses it; leave it out and the page
+# draws its own. Either way the masthead renders — the artwork is an upgrade,
+# never a dependency, so a missing file cannot produce a broken header.
+#
+# Several names are accepted, current convention first, so replacing the
+# artwork does not mean editing code. "masthead" rather than a filename with
+# the publication in it: the publication can be renamed and the file should not
+# have to be.
+HEADER_CANDIDATES = (
+    "assets/masthead.png",
+    "assets/masthead.webp",
+    "assets/masthead.jpg",
+    "assets/dailydive-header.png",  # the original name, kept working
+)
 
 
-def find_header_image(out_dir: Path, *, depth: int = 0) -> str | None:
-    """Relative path to the banner, or None if it isn't there.
+def _png_size(path: Path) -> tuple[int, int] | None:
+    """Pixel dimensions from a PNG header, or None if unreadable.
+
+    The template needs these to reserve the right space before the image
+    loads. They used to be typed into the template by hand, which meant any
+    replacement banner of a different size would render at the old aspect
+    ratio and jump on load. Reading them makes new artwork a drop-in.
+    """
+    try:
+        with path.open("rb") as fh:
+            head = fh.read(24)
+    except OSError:
+        return None
+    if len(head) < 24 or head[:8] != b"\x89PNG\r\n\x1a\n" or head[12:16] != b"IHDR":
+        return None
+    width, height = struct.unpack(">II", head[16:24])
+    return (width, height) if width and height else None
+
+
+def find_header_image(
+    out_dir: Path, *, depth: int = 0
+) -> tuple[str, int | None, int | None] | None:
+    """Relative path to the banner and its size, or None if there isn't one.
 
     Relative rather than absolute so the page renders correctly both on the
     live site and when opened straight off disk — `depth` is how many
     directories down from the site root the page sits, so the dated permalink
     under issues/ gets the `../` it needs.
+
+    Dimensions come back None for formats this cannot measure, and the template
+    omits the attributes: CSS still sizes the image, only the layout
+    reservation is lost.
     """
-    if not (out_dir / HEADER_IMAGE).is_file():
-        return None
-    return ("../" * depth) + HEADER_IMAGE
+    for name in HEADER_CANDIDATES:
+        path = out_dir / name
+        if not path.is_file():
+            continue
+        size = _png_size(path) if path.suffix == ".png" else None
+        width, height = size if size else (None, None)
+        return (("../" * depth) + name, width, height)
+    return None
 
 
-def render_issue(issue: Issue, *, header_image: str | None = None) -> str:
+def render_issue(
+    issue: Issue, *, header: tuple[str, int | None, int | None] | None = None
+) -> str:
     for item in issue.items:
         assert_attributable(item)
 
@@ -157,7 +200,9 @@ def render_issue(issue: Issue, *, header_image: str | None = None) -> str:
         issue=issue,
         sections=group_by_category(issue),
         generated_at=datetime.now(issue.date.tzinfo),
-        header_image=header_image,
+        header_image=header[0] if header else None,
+        header_width=header[1] if header else None,
+        header_height=header[2] if header else None,
         brand=brand,
         highlights=bullets,
         highlights_plus=plus,
@@ -173,7 +218,7 @@ def as_text(issue: Issue) -> str:
     kept, where it filed it, how confident it was, and whether the gist says
     anything the headline didn't.
     """
-    lines = [f"Daily Dive — {_datefmt(issue.date, 'full')} — {len(issue.items)} items"]
+    lines = [f"{brand.PUBLICATION} — {_datefmt(issue.date, 'full')} — {len(issue.items)} items"]
     for title, _slug, members in group_by_category(issue):
         lines += ["", f"## {title} ({len(members)})"]
         for item in members:
@@ -203,13 +248,13 @@ def write_issue(issue: Issue, out_dir: Path) -> Path:
     dated = out_dir / "issues" / f"{issue.date:%Y-%m-%d}.html"
     dated.parent.mkdir(parents=True, exist_ok=True)
     dated.write_text(
-        render_issue(issue, header_image=find_header_image(out_dir, depth=1)),
+        render_issue(issue, header=find_header_image(out_dir, depth=1)),
         encoding="utf-8",
     )
 
     index = out_dir / "index.html"
     index.write_text(
-        render_issue(issue, header_image=find_header_image(out_dir)),
+        render_issue(issue, header=find_header_image(out_dir)),
         encoding="utf-8",
     )
     return index

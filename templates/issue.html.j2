@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Daily Dive — {{ issue.date | datefmt }}</title>
-<meta name="description" content="A daily digest of saltwater and reef aquarium news. Every item links to its source.">
+<title>{{ brand.PUBLICATION }} — {{ issue.date | datefmt }}</title>
+<meta name="description" content="{{ brand.DESCRIPTION }}">
 <style>
   /* Single-theme by choice: white ground, the conventional register for a news
      aggregator. There is deliberately no dark variant — a digest read at 6am on
@@ -160,14 +160,16 @@
   <header class="masthead">
     {% if header_image %}
     <h1 class="wordmark">
-      <img src="{{ header_image }}" width="954" height="202"
-           alt="Daily Dive — The Lone Aquarist's daily news for the marine aquarist">
+      <img src="{{ header_image }}"
+           {%- if header_width %} width="{{ header_width }}"{% endif %}
+           {%- if header_height %} height="{{ header_height }}"{% endif %}
+           alt="{{ brand.PUBLICATION }} — {{ brand.SITE_NAME }}'s {{ brand.CADENCE }} news for the marine aquarist">
     </h1>
     {% else %}
     <div class="banner-fallback">
-      <p class="kicker">The Lone Aquarist's</p>
-      <h1 class="name">Daily Dive</h1>
-      <p class="tagline">Your daily news for the marine aquarist.</p>
+      <p class="kicker">{{ brand.SITE_NAME }}'s</p>
+      <h1 class="name">{{ brand.PUBLICATION }}</h1>
+      <p class="tagline">{{ brand.TAGLINE }}</p>
     </div>
     {% endif %}
     <p class="dateline">{{ issue.date | datefmt('full') }} · {{ issue.items|length }} item{{ '' if issue.items|length == 1 else 's' }}</p>
@@ -176,8 +178,8 @@
   {% if issue.items %}
   <section class="intro">
     <p>Howdy, it's {{ brand.EDITOR }} again.</p>
-    <p>Happy {{ issue.date | datefmt('weekday') }}, {{ brand.AUDIENCE }}, and welcome back to Daily Dive.</p>
-    <p class="lead-in">Here are the biggest things worth knowing today:</p>
+    <p>Happy {{ issue.date | datefmt('weekday') }}, {{ brand.AUDIENCE }}, and welcome back to {{ brand.PUBLICATION }}.</p>
+    <p class="lead-in">Here are the biggest things worth knowing:</p>
     <ul>
       {% for line in highlights %}
       <li>{{ line }}</li>
@@ -228,7 +230,7 @@
     </p>
     {% endif %}
     <p>
-      <em>Daily Dive</em> is an automated digest that links to reporting it does not own.
+      <em>{{ brand.PUBLICATION }}</em> is an automated digest that links to reporting it does not own.
       See <a href="/about.html">about &amp; sourcing policy</a> for how sources are selected
       and how to request removal.
     </p>

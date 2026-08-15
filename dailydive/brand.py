@@ -19,6 +19,20 @@ SITE_NAME = "The Lone Aquarist"
 PUBLICATION = "Daily Dive"
 SITE_URL = "https://www.theloneaquarist.com"
 
+# How often an issue goes out, as an adjective. Used in the tagline, the page
+# description and the masthead's alt text, so changing the cron and changing
+# this is one edit — the page can never claim a cadence it does not keep.
+CADENCE = "weekly"
+
+# The masthead's second line and the page's meta description. Derived rather
+# than written out, because the whole point of this file is that a rename is a
+# single edit here and not a search across templates.
+TAGLINE = f"Your {CADENCE} news for the marine aquarist."
+DESCRIPTION = (
+    f"A {CADENCE} digest of saltwater and reef aquarium news. "
+    "Every item links to its source."
+)
+
 BOT_NAME = "DailyDiveBot"
 BOT_VERSION = "0.1"
 

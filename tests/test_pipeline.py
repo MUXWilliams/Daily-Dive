@@ -13,7 +13,7 @@ import httpx
 import pytest
 from pydantic import ValidationError
 
-from dailydive import cli, config, ingest, normalize, render, store
+from dailydive import brand, cli, config, ingest, normalize, render, store
 from dailydive.models import (
     AttributionError,
     Category,
@@ -30,6 +30,12 @@ FIXTURES = Path(__file__).parent / "fixtures"
 def fixture_source(sid: str, **kw) -> Source:
     defaults = dict(id=sid, name=sid, url=f"https://example.invalid/{sid}.rss")
     return Source(**{**defaults, **kw})
+
+
+def _png(width: int, height: int) -> bytes:
+    """Just enough PNG for the size reader: signature + IHDR length/type/dims."""
+    import struct as _s
+    return b"\x89PNG\r\n\x1a\n" + _s.pack(">I", 13) + b"IHDR" + _s.pack(">II", width, height)
 
 
 def item(**kw) -> Item:
@@ -230,7 +236,9 @@ def test_dates_render_without_platform_specific_codes():
     assert render._datefmt(dt, "short") == "Aug 3"
 
     template = (render.TEMPLATE_DIR / "issue.html.j2").read_text(encoding="utf-8")
-    assert "%-" not in template
+    # A padding-stripped strftime code, not any "%-": Jinja's whitespace
+    # control writes {%- and that is not a date format.
+    assert not re.search(r"%-[a-zA-Z]", template)
 
     html = render.render_issue(Issue(date=dt, items=[item()]))
     assert "August 3, 2026" in html
@@ -298,12 +306,12 @@ def test_banner_is_used_when_present_and_carries_the_heading(tmp_path):
     """The artwork contains the wordmark, so the h1 wraps the image and the alt
     text is the heading — no duplicated text, and a real <h1> for a reader."""
     (tmp_path / "assets").mkdir()
-    (tmp_path / render.HEADER_IMAGE).write_bytes(b"\x89PNG\r\n\x1a\n")
+    (tmp_path / "assets/masthead.png").write_bytes(_png(954, 202))
 
     issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=[item()])
-    html = render.render_issue(issue, header_image=render.find_header_image(tmp_path))
+    html = render.render_issue(issue, header=render.find_header_image(tmp_path))
 
-    assert render.HEADER_IMAGE in html
+    assert "assets/masthead.png" in html
     # The class name also appears in the stylesheet, so check the markup.
     assert 'class="banner-fallback"' not in html
     assert '<h1 class="wordmark">' in html
@@ -314,32 +322,32 @@ def test_missing_banner_falls_back_rather_than_breaking(tmp_path):
     issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=[item()])
     assert render.find_header_image(tmp_path) is None
 
-    html = render.render_issue(issue, header_image=None)
+    html = render.render_issue(issue, header=None)
     assert 'class="banner-fallback"' in html
-    assert "Daily Dive" in html  # the wordmark still reaches the page
+    assert brand.PUBLICATION in html  # the wordmark still reaches the page
 
 
 def test_banner_path_resolves_from_the_dated_permalink(tmp_path):
     """index.html and issues/*.html sit at different depths; an absolute path
     would work live and break when opened off disk, so both get a relative one."""
     (tmp_path / "assets").mkdir()
-    (tmp_path / render.HEADER_IMAGE).write_bytes(b"\x89PNG\r\n\x1a\n")
+    (tmp_path / "assets/masthead.png").write_bytes(_png(954, 202))
 
-    assert render.find_header_image(tmp_path) == render.HEADER_IMAGE
-    assert render.find_header_image(tmp_path, depth=1) == "../" + render.HEADER_IMAGE
+    assert render.find_header_image(tmp_path)[0] == "assets/masthead.png"
+    assert render.find_header_image(tmp_path, depth=1)[0] == "../assets/masthead.png"
 
 
 def test_write_issue_gives_each_page_the_right_banner_path(tmp_path):
     (tmp_path / "assets").mkdir()
-    (tmp_path / render.HEADER_IMAGE).write_bytes(b"\x89PNG\r\n\x1a\n")
+    (tmp_path / "assets/masthead.png").write_bytes(_png(954, 202))
 
     issue = Issue(date=datetime(2026, 8, 13, tzinfo=UTC), items=[item()])
     render.write_issue(issue, tmp_path)
 
     index = (tmp_path / "index.html").read_text()
     dated = (tmp_path / "issues" / "2026-08-13.html").read_text()
-    assert f'src="{render.HEADER_IMAGE}"' in index
-    assert f'src="../{render.HEADER_IMAGE}"' in dated
+    assert 'src="assets/masthead.png"' in index
+    assert 'src="../assets/masthead.png"' in dated
 
 
 # --------------------------------------------------------------------- intro
@@ -1316,3 +1324,65 @@ def test_the_prompt_refuses_relevance_built_by_bridging():
     # And the two species/industries that slipped through are named outright.
     assert "marine turtles" in prompt
     assert "aquaculture of food species" in prompt
+
+
+# ------------------------------------------------------------------- masthead
+
+def test_the_publication_name_appears_nowhere_but_brand_py():
+    """A rename must be one edit. "Daily Dive" was hardcoded in six places
+    despite brand.py existing to prevent exactly that, which meant renaming the
+    publication was a search-and-replace across templates and Python."""
+    template = (render.TEMPLATE_DIR / "issue.html.j2").read_text(encoding="utf-8")
+    assert brand.PUBLICATION not in template
+    source = Path("dailydive/render.py").read_text(encoding="utf-8")
+    assert brand.PUBLICATION not in source
+
+
+def test_renaming_the_publication_changes_the_page(monkeypatch):
+    """The end the previous test is a means to: change the constant, and the
+    title, masthead, greeting and footer all follow."""
+    monkeypatch.setattr(brand, "PUBLICATION", "Reef Weekly")
+    html = render.render_issue(Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item()]))
+    assert "Reef Weekly" in html
+    assert "Daily Dive" not in html
+
+
+def test_the_page_never_claims_a_cadence_it_does_not_keep():
+    """The masthead said "daily" on a weekly. Cadence is one constant now, so
+    the tagline and description cannot drift from the cron."""
+    assert brand.CADENCE in brand.TAGLINE
+    assert brand.CADENCE in brand.DESCRIPTION
+    html = render.render_issue(Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[]))
+    assert brand.TAGLINE in html or brand.CADENCE in html
+
+
+def test_banner_dimensions_are_read_from_the_file_not_typed_in():
+    """The template used to hardcode 954x202. Replacement artwork of any other
+    size would render at the old aspect ratio and jump on load."""
+    found = render.find_header_image(Path("site"))
+    assert found is not None, "site/assets/masthead.png should be committed"
+    path, width, height = found
+    assert path == "assets/masthead.png"
+    assert (width, height) == (954, 202)
+
+
+def test_a_banner_of_a_different_size_reports_its_own_dimensions(tmp_path):
+    (tmp_path / "assets").mkdir()
+    (tmp_path / "assets/masthead.png").write_bytes(_png(1908, 404))
+    assert render.find_header_image(tmp_path)[1:] == (1908, 404)
+
+
+def test_an_unreadable_banner_still_renders_without_dimensions(tmp_path):
+    """A non-PNG or a truncated file loses the layout reservation, not the
+    image — CSS still sizes it."""
+    (tmp_path / "assets").mkdir()
+    (tmp_path / "assets/masthead.webp").write_bytes(b"RIFF????WEBP")
+    path, width, height = render.find_header_image(tmp_path)
+    assert path == "assets/masthead.webp"
+    assert (width, height) == (None, None)
+    html = render.render_issue(
+        Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item()]),
+        header=render.find_header_image(tmp_path),
+    )
+    assert "masthead.webp" in html
+    assert "width=" not in html.split("</h1>")[0].split('<h1 class="wordmark">')[-1]
