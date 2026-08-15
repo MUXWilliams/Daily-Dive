@@ -33,6 +33,24 @@ CREATE TABLE IF NOT EXISTS items (
 CREATE INDEX IF NOT EXISTS items_published ON items (published_at DESC);
 CREATE INDEX IF NOT EXISTS items_first_seen ON items (first_seen_at DESC);
 
+-- What actually reached a page, as opposed to what was merely fetched.
+--
+-- The items table above is a SEEN log: everything the crawler pulls goes in,
+-- including what scoring dropped as irrelevant or promotional. Of the first
+-- 644 rows, 24 were ever published. So "have we run this before?" cannot be
+-- answered from it, and an editor's pick checked against it would be rejected
+-- for a story a machine glanced at and discarded.
+--
+-- Separate table rather than a column on items, because a published item is
+-- not necessarily one the crawler ever fetched — a pick comes from a source
+-- the crawler cannot reach at all.
+CREATE TABLE IF NOT EXISTS published (
+    uid        TEXT PRIMARY KEY,
+    issue_date TEXT NOT NULL,
+    url        TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS published_issue ON published (issue_date DESC);
+
 -- Conditional GET cache, so a normal morning re-fetches almost nothing.
 CREATE TABLE IF NOT EXISTS http_cache (
     url           TEXT PRIMARY KEY,
@@ -116,3 +134,23 @@ def save_cache_headers(conn: sqlite3.Connection, url: str, etag: str | None, las
         "last_modified=excluded.last_modified, fetched_at=excluded.fetched_at",
         (url, etag, last_modified, datetime.now(UTC).isoformat()),
     )
+
+
+def record_published(conn: sqlite3.Connection, items: Iterable[Item], issue_date: datetime) -> int:
+    """Note that these items reached a page. Returns how many were new.
+
+    Called after the issue is built, not before — the point of this table is
+    that it means published, and recording an intention would make it mean
+    something weaker.
+    """
+    rows = [(i.uid, issue_date.date().isoformat(), i.canonical_url) for i in items]
+    before = conn.execute("SELECT COUNT(*) FROM published").fetchone()[0]
+    conn.executemany(
+        "INSERT OR IGNORE INTO published (uid, issue_date, url) VALUES (?, ?, ?)", rows
+    )
+    return conn.execute("SELECT COUNT(*) FROM published").fetchone()[0] - before
+
+
+def published_uids(conn: sqlite3.Connection) -> set[str]:
+    """Everything that has ever appeared in an issue."""
+    return {row[0] for row in conn.execute("SELECT uid FROM published")}

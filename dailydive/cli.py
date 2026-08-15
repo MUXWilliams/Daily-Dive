@@ -18,7 +18,7 @@ from pathlib import Path
 
 import httpx
 
-from . import brand, config, ingest, mailbox, normalize, render, youtube
+from . import brand, config, ingest, mailbox, normalize, picks, render, youtube
 from . import score as score_mod
 from . import store
 from .models import Issue, Item, Source, SourceType
@@ -120,6 +120,74 @@ def _collect_offline(sources: list[Source]) -> list[Item]:
     return normalize.dedupe(items)
 
 
+# Set by the Actions runner. Absent locally, which is why a missing token is a
+# skipped section and not an error — same posture as a missing YouTube key.
+GITHUB_TOKEN_ENV = "GITHUB_TOKEN"
+GITHUB_REPO_ENV = "GITHUB_REPOSITORY"
+
+
+def _bucket() -> picks.Bucket | None:
+    token = os.environ.get(GITHUB_TOKEN_ENV, "").strip()
+    repo = os.environ.get(GITHUB_REPO_ENV, "").strip()
+    if not token or not repo:
+        log.info("no %s/%s — skipping the pick bucket", GITHUB_TOKEN_ENV, GITHUB_REPO_ENV)
+        return None
+    return picks.Bucket(repo, token)
+
+
+def _collect_picks(db: Path) -> tuple[list[Item], list[tuple[int, str]]]:
+    """Read the bucket, rejecting what cannot run and saying why.
+
+    A bucket that cannot be reached costs the picks, not the issue — the same
+    rule every other source follows.
+    """
+    bucket = _bucket()
+    if bucket is None:
+        return [], []
+    try:
+        with store.connect(db) as conn:
+            already = store.published_uids(conn)
+        items, rejected = picks.collect(bucket, published_uids=already)
+    except httpx.HTTPError as exc:
+        log.error("could not read the pick bucket: %s", exc)
+        return [], []
+
+    for number, reason in rejected:
+        log.warning("pick #%d rejected: %s", number, reason)
+        try:
+            bucket.comment(number, f"{reason}\n\nLeaving this open so it can be fixed.")
+        except httpx.HTTPError as exc:
+            log.error("could not comment on pick #%d: %s", number, exc)
+
+    log.info("%d pick(s) accepted, %d rejected", len(items), len(rejected))
+    return items, rejected
+
+
+def _answer_picks(issue: Issue) -> None:
+    """Close the issues whose picks made the page, saying where they landed.
+
+    Only the ones that survived to the end: a pick merged away by
+    collapse_similar did not run, and telling the editor it did would be a lie
+    they would find out about on Friday.
+    """
+    bucket = _bucket()
+    if bucket is None:
+        return
+    permalink = f"{brand.SITE_URL}/issues/{issue.date:%Y-%m-%d}.html"
+    for item in issue.items:
+        number = item.extra.get("pick_issue")
+        if not picks.is_pick(item) or not number:
+            continue
+        try:
+            bucket.close(
+                int(number),
+                f"Published in the {render._datefmt(issue.date)} issue "
+                f"under **{item.category_hint}**.\n\n{permalink}",
+            )
+        except (httpx.HTTPError, ValueError) as exc:
+            log.error("could not close pick #%s: %s", number, exc)
+
+
 def build_parser() -> argparse.ArgumentParser:
     """The CLI's argument surface, built separately from running it.
 
@@ -158,6 +226,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--score",
         action="store_true",
         help="run the Haiku scoring pass (needs ANTHROPIC_API_KEY; costs money)",
+    )
+    run.add_argument(
+        "--no-picks",
+        action="store_true",
+        help="skip the editor's pick bucket (needs GITHUB_TOKEN otherwise)",
     )
     run.add_argument(
         "--keep-shorts",
@@ -333,16 +406,35 @@ def main(argv: list[str] | None = None) -> int:
             community_sources=frozenset(s.id for s in sources if s.is_community),
         )
         log.info("scored %d items, kept %d", before, len(items))
-        # After scoring, not before: items arrive sorted by relevance, so the
-        # survivor of each group is the best-scored telling of that story.
-        deduped = normalize.collapse_similar(items)
-        if len(deduped) < len(items):
-            log.info("collapsed %d near-duplicate item(s)", len(items) - len(deduped))
-        items = deduped
         print("cost:\n" + spend.report())
+
+    # Picks join here: after scoring, so the model can never drop a story the
+    # editor deliberately chose, and before collapse_similar, so a pick and the
+    # crawler's coverage of the same story merge instead of both running.
+    #
+    # First in the list is load-bearing twice over. collapse_similar keeps the
+    # first of each group, so the pick survives and the crawled version becomes
+    # its "+N similar" credit; and the renderer preserves list order inside a
+    # section, so a pick leads its section. Both are what "a pick outranks the
+    # model" means in practice.
+    bucket_items: list[Item] = []
+    if not args.offline and not args.no_picks:
+        bucket_items, rejected = _collect_picks(args.db)
+        items = bucket_items + items
+        if args.score or bucket_items:
+            deduped = normalize.collapse_similar(items)
+            if len(deduped) < len(items):
+                log.info("collapsed %d near-duplicate item(s) after picks", len(items) - len(deduped))
+            items = deduped
 
     issue = Issue(date=datetime.now(UTC), items=items)
     path = render.write_issue(issue, args.out)
+    if not args.offline:
+        with store.connect(args.db) as conn:
+            fresh = store.record_published(conn, issue.items, issue.date)
+        log.info("recorded %d newly published item(s)", fresh)
+    if bucket_items:
+        _answer_picks(issue)
     print(f"wrote {path} ({len(items)} items from {len(issue.outlets)} outlets)")
     if args.print_issue:
         print()

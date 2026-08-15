@@ -1482,8 +1482,15 @@ def test_publishing_is_gated_on_a_full_successful_run():
 
 
 def test_the_workflow_can_write_what_it_needs_and_no_more():
+    """Each grant earns its place: contents commits the issue and the archive,
+    pages + id-token deploy, issues reads the pick bucket and answers it."""
     perms = _workflow()["permissions"]
-    assert perms == {"contents": "write", "pages": "write", "id-token": "write"}
+    assert perms == {
+        "contents": "write",
+        "pages": "write",
+        "id-token": "write",
+        "issues": "write",
+    }
 
 
 def test_deploys_do_not_cancel_each_other():
@@ -1669,3 +1676,162 @@ def test_sticky_positioning_is_not_gated_behind_reduced_motion():
     css = (render.TEMPLATE_DIR / "issue.html.j2").read_text(encoding="utf-8")
     for block in re.findall(r"@media \(prefers-reduced-motion[^{]*\{(.*?)\n  \}", css, re.S):
         assert "sticky" not in block, block
+
+
+# ----------------------------------------------------------------- editor picks
+
+def _pick_body(**over) -> str:
+    f = {"Headline": "Ecotech teases a Vectra successor",
+         "Link": "https://www.reef2reef.com/threads/vectra.1/",
+         "Outlet": "Reef2Reef", "Category": "Industry & Products",
+         "Industry beat": "Product",
+         "Why it matters": "Staff hinted at a successor in a customer thread, without dates.",
+         "Published": "2026-08-18"}
+    f.update(over)
+    return "\n".join(f"### {k}\n\n{v}\n" for k, v in f.items())
+
+
+def test_a_pick_becomes_an_item():
+    from dailydive import picks
+
+    item = picks.to_item(_pick_body(), number=7)
+    assert item.source_name == "Reef2Reef"
+    assert item.category_hint is Category.INDUSTRY
+    assert item.extra["beat"] == "Product"
+    assert item.extra["pick_issue"] == "7"
+    assert picks.is_pick(item)
+
+
+def test_a_pick_never_carries_an_author():
+    """Forum members didn't ask to be published, and the mistake isn't undoable
+    once it's on a public page and in git history."""
+    from dailydive import picks
+
+    item = picks.to_item(_pick_body(**{"Outlet": "Reef2Reef"}), number=1)
+    assert item.author is None
+    # And there is no field that could supply one.
+    assert "author" not in picks.parse_body(_pick_body())
+
+
+def test_a_blank_optional_field_is_treated_as_empty():
+    """GitHub writes _No response_ into an issue-form field left blank."""
+    from dailydive import picks
+
+    item = picks.to_item(_pick_body(**{"Why it matters": "_No response_",
+                                       "Industry beat": "_No response_"}), number=1)
+    assert "gist" not in item.extra and "beat" not in item.extra
+
+
+@pytest.mark.parametrize(
+    "override, expected",
+    [
+        ({"Headline": ""}, "missing a headline"),
+        ({"Link": ""}, "missing a link"),
+        ({"Outlet": ""}, "missing an outlet"),
+        ({"Link": "reef2reef.com/threads/1"}, "isn't a usable link"),
+        ({"Category": "Gossip"}, "don't recognise the category"),
+        ({"Why it matters": "word " * 41}, "ceiling is 40"),
+        ({"Published": "next tuesday"}, "couldn't read"),
+    ],
+)
+def test_a_bad_pick_is_rejected_with_a_reason_worth_reading(override, expected):
+    """The reason goes on the issue as a comment, so it has to be a sentence a
+    person can act on rather than a stack trace."""
+    from dailydive import picks
+
+    with pytest.raises(picks.PickError) as exc:
+        picks.to_item(_pick_body(**override), number=1)
+    assert expected in str(exc.value)
+
+
+class _FakeBucket:
+    """Stands in for the GitHub API. The decisions live outside the network."""
+
+    def __init__(self, issues):
+        self.issues = issues
+        self.comments: list[tuple[int, str]] = []
+        self.closed: list[int] = []
+
+    def open_picks(self):
+        return [i for i in self.issues if (i["user"]["login"].lower() in {"muxwilliams"})]
+
+    def comment(self, number, message):
+        self.comments.append((number, message))
+
+    def close(self, number, message):
+        self.comments.append((number, message))
+        self.closed.append(number)
+
+
+def test_only_allowlisted_authors_can_file_a_pick():
+    """The repo is public — anyone can open an issue on it. Without this, a
+    stranger puts a link on the front page."""
+    from dailydive import picks
+
+    bucket = _FakeBucket([
+        {"number": 1, "body": _pick_body(), "user": {"login": "MUXWilliams"}},
+        {"number": 2, "body": _pick_body(**{"Headline": "Buy my thing"}),
+         "user": {"login": "somebody-else"}},
+    ])
+    items, rejected = picks.collect(bucket, published_uids=set())
+    assert [i.title for i in items] == ["Ecotech teases a Vectra successor"]
+    # The stranger gets no reply at all — silence tells them nothing.
+    assert rejected == [] and bucket.comments == []
+
+
+def test_a_pick_for_something_already_published_is_rejected():
+    from dailydive import picks
+
+    item = picks.to_item(_pick_body(), number=1)
+    bucket = _FakeBucket([{"number": 1, "body": _pick_body(), "user": {"login": "muxwilliams"}}])
+    items, rejected = picks.collect(bucket, published_uids={item.uid})
+    assert items == []
+    assert "already ran" in rejected[0][1]
+
+
+def test_published_is_recorded_separately_from_seen(tmp_path):
+    """items is a SEEN log — everything fetched, including what scoring dropped.
+    Asking it "did we publish this?" rejects picks for stories a machine
+    glanced at and discarded."""
+    db = tmp_path / "t.sqlite3"
+    seen_only = item(url="https://a.invalid/never-ran")
+    ran = item(url="https://a.invalid/ran")
+    with store.connect(db) as conn:
+        store.record_items(conn, [seen_only, ran])
+        store.record_published(conn, [ran], datetime(2026, 8, 21, tzinfo=UTC))
+    with store.connect(db) as conn:
+        assert store.published_uids(conn) == {ran.uid}
+        assert store.known_uids(conn, [seen_only.uid]) == {seen_only.uid}
+
+
+def test_a_pick_survives_collapse_and_takes_the_crawlers_coverage_with_it():
+    """The collision that actually happens: same story, two outlets, different
+    URLs. collapse_similar keeps the first of each group, so a pick placed
+    first survives and the crawled version becomes its "+1 similar" credit."""
+    from dailydive import picks
+
+    pick = picks.to_item(_pick_body(**{
+        "Headline": "Ecotech teases a Vectra successor at MACNA"}), number=3)
+    crawled = item(url="https://reefbuilders.invalid/vectra",
+                   title="Ecotech teases a Vectra successor at MACNA")
+
+    out = normalize.collapse_similar([pick] + [crawled])
+    assert len(out) == 1
+    assert picks.is_pick(out[0]), "the pick must be the survivor, not the crawled copy"
+    assert out[0].extra["similar"] == "1"
+
+
+def test_without_the_ordering_the_crawler_would_win():
+    """States the dependency outright: pick-survives is ordering, not magic.
+    If picks ever stop being prepended, this is the test that explains why the
+    behaviour changed."""
+    from dailydive import picks
+
+    pick = picks.to_item(_pick_body(**{
+        "Headline": "Ecotech teases a Vectra successor at MACNA"}), number=3)
+    crawled = item(url="https://reefbuilders.invalid/vectra",
+                   title="Ecotech teases a Vectra successor at MACNA")
+
+    out = normalize.collapse_similar([crawled] + [pick])
+    assert len(out) == 1
+    assert not picks.is_pick(out[0])

@@ -53,6 +53,8 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  # Read the editor's pick bucket, then comment on and close what it used.
+  issues: write
 
 # One deploy at a time, and never cancel one in flight — a half-written Pages
 # deploy is a broken site, which is worse than a late one.
@@ -133,6 +135,10 @@ jobs:
           # with a warning and the rest of the issue builds normally.
           IMAP_USER: ${{ secrets.IMAP_USER }}
           IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+          # The pick bucket. Supplied by Actions, not a secret we manage — and
+          # without it the picks section is skipped, not the issue.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           # Inputs as data, not as script text — see the note on the probe step.
           IN_SOURCE: ${{ inputs.source }}
           IN_LIMIT: ${{ inputs.limit }}
