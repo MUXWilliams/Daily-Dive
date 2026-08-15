@@ -255,10 +255,11 @@ name = "Unverified channel 2"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUgveGhLDUg_6jL_WtT92dtw"
 type = "youtube_api"
 
-# Named by the editor from the channel's handle, @ReefBeefPodcast.
+# The handle is @ReefBeefPodcast; the channel calls itself Reef Beef, and the
+# credit line follows the name over the handle.
 [[source]]
 id = "yt-reefbeef"
-name = "Reef Beef Podcast"
+name = "Reef Beef"
 url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=UUSnbEFY3CG_ri7L5-Wwhezg"
 type = "youtube_api"
 
