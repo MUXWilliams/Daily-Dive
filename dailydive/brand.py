@@ -16,7 +16,7 @@ EDITOR = "Isaac"
 CONTACT_EMAIL = "theloneaquarist@gmail.com"
 
 SITE_NAME = "The Lone Aquarist"
-PUBLICATION = "Daily Dive"
+PUBLICATION = "Weekly Dive"
 SITE_URL = "https://www.theloneaquarist.com"
 
 # How often an issue goes out, as an adjective. Used in the tagline, the page
@@ -24,10 +24,14 @@ SITE_URL = "https://www.theloneaquarist.com"
 # this is one edit — the page can never claim a cadence it does not keep.
 CADENCE = "weekly"
 
-# The masthead's second line and the page's meta description. Derived rather
-# than written out, because the whole point of this file is that a rename is a
-# single edit here and not a search across templates.
-TAGLINE = f"Your {CADENCE} news for the marine aquarist."
+# The masthead's second line. Deliberately says nothing about cadence: the
+# publication is called Weekly Dive, so "Your weekly news" underneath it is a
+# stutter. The tagline's job is scope — what this covers — and the name's job
+# is rhythm.
+TAGLINE = "Saltwater and reef news for the marine aquarist."
+
+# The page's meta description, which no one reads beside the wordmark, so the
+# cadence belongs here where it is useful rather than redundant.
 DESCRIPTION = (
     f"A {CADENCE} digest of saltwater and reef aquarium news. "
     "Every item links to its source."

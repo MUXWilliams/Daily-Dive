@@ -1348,12 +1348,29 @@ def test_renaming_the_publication_changes_the_page(monkeypatch):
 
 
 def test_the_page_never_claims_a_cadence_it_does_not_keep():
-    """The masthead said "daily" on a weekly. Cadence is one constant now, so
-    the tagline and description cannot drift from the cron."""
-    assert brand.CADENCE in brand.TAGLINE
+    """The masthead said "daily" on a weekly for weeks before anyone noticed.
+
+    The name now carries the cadence — "Weekly Dive" — which is better copy and
+    a worse guarantee, because a name is free text. So the check is that the
+    name, the CADENCE constant and the actual cron all agree. Change the
+    schedule without changing the name and this fails, which is the point."""
     assert brand.CADENCE in brand.DESCRIPTION
-    html = render.render_issue(Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[]))
-    assert brand.TAGLINE in html or brand.CADENCE in html
+
+    words = {"daily": "daily", "weekly": "weekly", "monthly": "monthly"}
+    claimed = {w for w in words if w in brand.PUBLICATION.lower()}
+    assert claimed <= {brand.CADENCE}, (
+        f"{brand.PUBLICATION!r} claims {claimed}, but CADENCE is {brand.CADENCE!r}"
+    )
+
+    workflow = Path(".github/workflows/daily.yml").read_text(encoding="utf-8")
+    cron = re.search(r'cron:\s*"([^"]+)"', workflow).group(1)
+    minute, hour, dom, month, dow = cron.split()
+    if brand.CADENCE == "weekly":
+        # A single day-of-week, a fixed hour, and every day-of-month: that is
+        # once a week and nothing else.
+        assert dow not in ("*", "?") and "," not in dow and "-" not in dow, cron
+        assert dom == "*" and month == "*", cron
+        assert hour.isdigit() and minute.isdigit(), cron
 
 
 def test_banner_dimensions_are_read_from_the_file_not_typed_in():
