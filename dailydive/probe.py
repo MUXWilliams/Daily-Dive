@@ -78,6 +78,15 @@ CANDIDATES: list[str] = [
     "https://bsky.app/profile/acarreiro.bsky.social/rss",
     "https://bsky.app/profile/ubcoceans.bsky.social/rss",
     "https://bsky.app/profile/uncw-cms.bsky.social/rss",
+    # --- Open-access journals ------------------------------------------------
+    # JZAR is the closest of these to the hobby: public-aquarium husbandry,
+    # life-support systems and quarantine, which is the same craft at a larger
+    # scale. Diamond open access on OJS, whose standard feed path this is.
+    "https://jzar.org/jzar/gateway/plugin/WebFeedGatewayPlugin/rss2",
+    # Frontiers publishes on the order of a hundred marine papers a month, most
+    # of them fisheries and oceanography. Probing to see the shape and volume
+    # before deciding whether a whole-journal feed is usable at all.
+    "https://www.frontiersin.org/journals/marine-science/rss",
     # SETTLED, do not re-probe: humble.fish 403s on both XenForo shapes, the
     # same wall as Reef2Reef. Maxspect's feed was found at the Joomla
     # "?format=feed&type=rss" shape and is now in sources.toml.
@@ -115,6 +124,12 @@ DISCOVER_TARGETS: list[str] = [
     # If the guessed feed paths miss, ask the site itself.
     "https://coralreefs.org/",
     "https://link.springer.com/journal/338",
+    # Drum and Croaker is the practitioner journal for public-aquarium life
+    # support. Published as static PDFs with no feed as far as anyone can tell
+    # — asking the page directly rather than assuming, since a feed would make
+    # it usable and its absence means it never can be under the no-scrape rule.
+    "http://drumandcroaker.org/",
+    "https://srac.msstate.edu/factsheets.html",
 ]
 
 
