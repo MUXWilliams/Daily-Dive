@@ -1249,3 +1249,55 @@ def test_the_query_window_reaches_further_back_than_the_publishing_window():
     """An index lags the journal, so a query cut to exactly the publishing
     window would drop papers that are genuinely new to us."""
     assert ingest.QUERY_WINDOW_DAYS > normalize.DEFAULT_MAX_AGE_DAYS
+
+
+def test_repository_deposits_are_dropped_rather_than_credited_to_the_repository():
+    """The first live run credited a "Defensive Technical Disclosure" to
+    "Zenodo (CERN European Organization for Nuclear Research)" — which names
+    where the file sits, not who published it. type:article does not catch
+    these; only the venue type does."""
+    payload = json.dumps(
+        {
+            "results": [
+                {
+                    "display_name": "The Arrow: Open Ceramic System for Coral Restoration",
+                    "publication_date": "2026-08-13",
+                    "doi": "https://doi.org/10.5281/zenodo.21910906",
+                    "primary_location": {
+                        "source": {
+                            "display_name": "Zenodo (CERN European Organization for Nuclear Research)",
+                            "type": "repository",
+                        }
+                    },
+                },
+                {
+                    "display_name": "A real paper in a real journal",
+                    "publication_date": "2026-08-13",
+                    "doi": "https://doi.org/10.1007/real",
+                    "primary_location": {
+                        "source": {"display_name": "Coral Reefs", "type": "journal"}
+                    },
+                },
+            ]
+        }
+    ).encode()
+    items = normalize.normalize(_openalex_source(), payload)
+    assert [i.source_name for i in items] == ["Coral Reefs"]
+
+
+def test_a_work_with_no_venue_type_is_still_kept():
+    """The venue check drops known repositories, not everything it can't
+    classify — an absent type is missing metadata, not a deposit."""
+    payload = json.dumps(
+        {
+            "results": [
+                {
+                    "display_name": "Typeless but published",
+                    "publication_date": "2026-08-13",
+                    "doi": "https://doi.org/10.1234/typeless",
+                    "primary_location": {"source": {"display_name": "Marine Biology"}},
+                }
+            ]
+        }
+    ).encode()
+    assert normalize.normalize(_openalex_source(), payload)[0].source_name == "Marine Biology"

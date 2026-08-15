@@ -197,6 +197,11 @@ def _normalize_youtube_api(source: Source, body: bytes) -> list[Item]:
     return items
 
 
+# OpenAlex venue types that host work rather than publish it. A record here
+# has no publisher to credit — see the drop in _normalize_openalex.
+REPOSITORY_VENUES = frozenset({"repository", "other"})
+
+
 def _inflate_abstract(inverted: dict[str, list[int]] | None) -> str | None:
     """Rebuild an abstract from OpenAlex's inverted index.
 
@@ -285,6 +290,21 @@ def _normalize_openalex(source: Source, body: bytes) -> list[Item]:
             # paper may be fine; we just cannot say who published it, and this
             # project does not publish a line it cannot credit.
             log.warning("%s: %r has no journal to credit, dropped", source.id, title)
+            continue
+
+        venue_type = ((work.get("primary_location") or {}).get("source") or {}).get("type")
+        if venue_type in REPOSITORY_VENUES:
+            # A repository is a warehouse, not a publisher. The first live run
+            # credited a "Defensive Technical Disclosure" to "Zenodo (CERN
+            # European Organization for Nuclear Research)" — which names where
+            # the file is stored, not who stands behind the work, and reads on
+            # the page as though CERN published a coral paper.
+            #
+            # type:article in the query does not catch these: the record is
+            # typed as an article and only its venue gives it away. This is a
+            # source about the published literature, so a deposit is out of
+            # scope even when it is good work.
+            log.info("%s: %r is a %s deposit, dropped", source.id, title, venue_type)
             continue
 
         authorships = work.get("authorships") or []
