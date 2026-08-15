@@ -96,9 +96,26 @@ jobs:
       - name: List configured sources
         run: daily-dive sources
 
+      # Every input below reaches the shell through `env:` rather than through
+      # ${{ }} interpolation. Two reasons, and the first one already bit:
+      #
+      #   1. Interpolation pastes the value into the script text, so a URL
+      #      containing & — which every API query does — is read by bash as a
+      #      control operator and the command is torn into background jobs.
+      #      That failed silently here: the step "succeeded" in zero seconds
+      #      having probed nothing.
+      #   2. It is also how script injection works. Anyone who can dispatch
+      #      this workflow could otherwise run arbitrary commands on the
+      #      runner, with the secrets in scope.
+      #
+      # Read through $VAR, the value is data. set -f stops the ? in a query
+      # string being treated as a glob.
       - name: Probe candidate feed URLs
         if: inputs.probe || inputs.probe_urls != ''
+        env:
+          PROBE_URLS: ${{ inputs.probe_urls }}
         run: |
+          set -f
           # tee, not redirect: the step summary is the readable form, but the
           # verdicts also need to be in the log, which is the only place a
           # tool (or a person on a restricted network) can actually get at them.
@@ -108,8 +125,10 @@ jobs:
           {
             echo "### Candidate feed probe"
             echo ""
-            if [ -n "${{ inputs.probe_urls }}" ]; then
-              daily-dive probe --markdown ${{ inputs.probe_urls }} 2>/dev/null || true
+            if [ -n "$PROBE_URLS" ]; then
+              # Unquoted on purpose: the input is a space-separated list and
+              # word splitting is what turns it into separate arguments.
+              daily-dive probe --markdown $PROBE_URLS 2>/dev/null || true
             else
               daily-dive probe --markdown --discover 2>/dev/null || true
             fi
@@ -134,16 +153,21 @@ jobs:
           # with a warning and the rest of the issue builds normally.
           IMAP_USER: ${{ secrets.IMAP_USER }}
           IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+          # Inputs as data, not as script text — see the note on the probe step.
+          IN_SOURCE: ${{ inputs.source }}
+          IN_LIMIT: ${{ inputs.limit }}
+          IN_THRESHOLD: ${{ inputs.threshold }}
+          IN_SCORE: ${{ inputs.score || github.event_name == 'schedule' }}
         run: |
           ARGS=""
-          if [ -n "${{ inputs.source }}" ]; then ARGS="$ARGS --source ${{ inputs.source }}"; fi
-          if [ -n "${{ inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ inputs.limit }}"; fi
+          if [ -n "$IN_SOURCE" ]; then ARGS="$ARGS --source $IN_SOURCE"; fi
+          if [ -n "$IN_LIMIT" ]; then ARGS="$ARGS --limit $IN_LIMIT"; fi
           # inputs.* are empty on a schedule event, so without this the weekly
           # run would quietly build an unscored issue.
-          if [ "${{ inputs.score || github.event_name == 'schedule' }}" = "true" ]; then
+          if [ "$IN_SCORE" = "true" ]; then
             ARGS="$ARGS --score"
           fi
-          if [ -n "${{ inputs.threshold }}" ]; then ARGS="$ARGS --threshold ${{ inputs.threshold }}"; fi
+          if [ -n "$IN_THRESHOLD" ]; then ARGS="$ARGS --threshold $IN_THRESHOLD"; fi
           # --print puts the issue in the log as text. The page ships as an
           # artifact, but reviewing the editorial judgment shouldn't require
           # downloading and unzipping anything.
