@@ -186,6 +186,20 @@ def build_parser() -> argparse.ArgumentParser:
     checking.add_argument("--days", type=int, default=30, help="how far back to look")
     checking.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
 
+    previewing = sub.add_parser(
+        "preview",
+        help="render the template against a frozen issue (no network, no cost)",
+        parents=[common],
+    )
+    previewing.add_argument(
+        "--out", type=Path, default=Path("site/preview"), help="output directory"
+    )
+    previewing.add_argument(
+        "--linked-assets",
+        action="store_true",
+        help="reference assets/ instead of inlining them (smaller file, only opens in place)",
+    )
+
     listing = sub.add_parser("sources", help="list configured feeds", parents=[common])
     listing.add_argument("--sources-file", type=Path, default=config.DEFAULT_SOURCES)
 
@@ -242,6 +256,13 @@ def main(argv: list[str] | None = None) -> int:
         except (imaplib.IMAP4.error, OSError) as exc:
             log.error("mailbox check failed: %s", exc)
             return 1
+        return 0
+
+    if args.command == "preview":
+        from . import preview as preview_mod
+
+        path = preview_mod.write_preview(args.out, standalone=not args.linked_assets)
+        print(f"wrote {path}")
         return 0
 
     if args.command == "sources":

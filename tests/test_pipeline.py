@@ -1548,3 +1548,67 @@ def test_a_non_community_source_keeps_the_models_category():
                                  is_promo=False, gist="A husbandry article.")}
     out = apply_scores([art], scored, community_sources=frozenset({"yt-brs"}))
     assert out[0].category_hint is Category.HUSBANDRY
+
+
+# -------------------------------------------------------------------- preview
+
+def test_the_preview_covers_every_section():
+    """The point of the fixture. A layout change judged against a partial issue
+    is a layout change judged against the easy case — the real issue that seeded
+    this had no Events and nothing uncategorized."""
+    from dailydive import preview
+
+    issue = preview.load_issue()
+    titles = [t for t, _, _ in render.group_by_category(issue)]
+    assert titles[0] == Category.COMMUNITY.value  # order is part of the design
+    for category in Category:
+        assert category.value in titles, category
+    assert "Elsewhere" in titles
+
+
+def test_the_preview_exercises_the_item_level_badges():
+    """Runtime, beat and near-duplicate badges appear on a minority of items,
+    which is exactly why a preview without them is misleading."""
+    from dailydive import preview
+
+    extras = [i.extra for i in preview.load_issue().items]
+    assert any("duration_s" in e for e in extras)
+    assert any("beat" in e for e in extras)
+    assert any("similar" in e for e in extras)
+    assert sum("gist" in e for e in extras) > 10
+
+
+def test_the_preview_needs_no_network_and_no_key(tmp_path, monkeypatch):
+    """It has to be free, or it is not a design loop."""
+    from dailydive import preview
+
+    def refuse(*a, **k):
+        raise AssertionError("preview must not open a socket")
+
+    monkeypatch.setattr("socket.socket.connect", refuse)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    path = preview.write_preview(tmp_path, site_dir=Path("site"))
+    assert path.read_text(encoding="utf-8").lstrip().startswith("<!doctype html>")
+
+
+def test_the_preview_inlines_the_masthead_so_it_renders_anywhere(tmp_path):
+    """It gets looked at in a chat window, not in the directory it was written
+    to. A broken image reads as a broken design."""
+    from dailydive import preview
+
+    html = preview.write_preview(tmp_path, site_dir=Path("site")).read_text(encoding="utf-8")
+    assert 'src="data:image/png;base64,' in html
+    assert 'src="assets/masthead.png"' not in html
+    # The og:image must stay an absolute live URL — no unfurler takes a data URI.
+    assert f'content="{brand.SITE_URL}/assets/masthead.png"' in html
+
+
+def test_the_synthetic_preview_items_are_labelled_as_such():
+    """Two items are invented to cover empty sections. Nothing invented should
+    ever be mistakable for reporting, even in a preview."""
+    from dailydive import preview
+
+    invented = [i for i in preview.load_issue().items if "example.invalid" in i.url]
+    assert invented, "the fixture should carry the coverage items"
+    for i in invented:
+        assert i.title.startswith("[SYNTHETIC]"), i.title
