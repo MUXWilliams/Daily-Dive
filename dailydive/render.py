@@ -258,7 +258,13 @@ def as_text(issue: Issue) -> str:
             )
             if item.extra.get("gist"):
                 lines.append(f"      {item.extra['gist']}")
-            lines.append(f"      — {item.source_name} · {item.url}")
+            # The byline belongs here too. The HTML credit line carries it and
+            # the plain-text form dropped it, which mattered the first time a
+            # source's configured name had to be checked against what the
+            # publisher actually calls itself — the API knows, and this is
+            # where a run says so.
+            by = f" · {item.author}" if item.author else ""
+            lines.append(f"      — {item.source_name}{by} · {item.url}")
     return "\n".join(lines)
 
 

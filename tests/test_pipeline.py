@@ -1835,3 +1835,17 @@ def test_without_the_ordering_the_crawler_would_win():
     out = normalize.collapse_similar([crawled] + [pick])
     assert len(out) == 1
     assert not picks.is_pick(out[0])
+
+
+def test_the_plain_text_issue_carries_the_byline():
+    """The HTML credit line has it and the text form dropped it. It is how a
+    run reports what a publisher actually calls itself, which is the check
+    against a configured name typed from memory."""
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC),
+                  items=[item(author="Melev's Reef")])
+    assert "Melev's Reef" in render.as_text(issue)
+
+
+def test_a_missing_byline_leaves_no_dangling_separator():
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item(author=None)])
+    assert " ·  · " not in render.as_text(issue)
