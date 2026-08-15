@@ -58,6 +58,15 @@ class SourceType(StrEnum):
     # A mailbox, not a URL. Some outlets that block crawlers still send
     # newsletters, and an inbox is the door they left open.
     IMAP = "imap"
+    # An index of the literature rather than a publisher of it. OpenAlex is
+    # free, needs no key, and answers the question no single feed can: what
+    # came out this week, across every journal at once.
+    #
+    # The one source type whose outlet name is not fixed by config. Crediting
+    # a paper to the index that found it instead of the journal that published
+    # it would be a plain miscredit, so the name is read per item — see
+    # normalize._normalize_openalex.
+    OPENALEX = "openalex"
     GENERIC = "generic"
 
 

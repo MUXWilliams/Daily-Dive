@@ -383,6 +383,37 @@ type = "generic"
 section = "Journal"
 category_hint = "Husbandry & Science"
 
+# DISABLED pending one probe. Everything below is built and tested; what has
+# not been verified is the filter syntax, which cannot be checked from a desk.
+# Run the workflow with probe_urls set to this URL, and enable it if the probe
+# says ok. A wrong filter fails quietly here — OpenAlex answers 200 with an
+# error body and no results, so a broken query is indistinguishable from a
+# quiet week unless something looks. That is what probe._probe_json is for.
+#
+# One source, many outlets. OpenAlex indexes the literature rather than
+# publishing it, so `name` below is only the fallback label in listings: each
+# paper is credited to its own journal, read from the record. Crediting a
+# Coral Reefs paper to OpenAlex would be a plain miscredit, and
+# normalize._normalize_openalex drops any work whose journal it cannot
+# determine rather than inventing one.
+#
+# {since} becomes a real date at fetch time — see ingest.resolve_window. The
+# query reaches back 21 days against a 7-day publishing window on purpose:
+# indexing lags publication, so a 7-day query would miss papers that are new
+# to us. normalize.recent still does the real windowing.
+#
+# is_oa:true is an editorial choice, not a technical one. A citation the
+# reader cannot open is not worth much, so this asks only for papers they can
+# actually read.
+[[source]]
+id = "openalex-coral"
+name = "OpenAlex"
+url = "https://api.openalex.org/works?filter=title_and_abstract.search:coral,from_publication_date:{since},is_oa:true&sort=publication_date:desc&per-page=25&mailto=theloneaquarist@gmail.com"
+type = "openalex"
+section = "Journal"
+category_hint = "Husbandry & Science"
+enabled = false
+
 # ------------------------------------------------------------- newsletters
 #
 # Read over IMAP from the `digest` Gmail label. One source per sender, not one

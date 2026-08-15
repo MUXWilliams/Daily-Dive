@@ -22,6 +22,10 @@ on:
         type: boolean
         required: false
         default: false
+      probe_urls:
+        description: "Probe only these URLs (space-separated). Skips the build, so the verdicts land at the end of the log."
+        required: false
+        default: ""
       score:
         description: "Run the AI scoring pass (needs the ANTHROPIC_API_KEY secret — costs a few cents)"
         type: boolean
@@ -93,20 +97,31 @@ jobs:
         run: daily-dive sources
 
       - name: Probe candidate feed URLs
-        if: inputs.probe
+        if: inputs.probe || inputs.probe_urls != ''
         run: |
           # tee, not redirect: the step summary is the readable form, but the
           # verdicts also need to be in the log, which is the only place a
           # tool (or a person on a restricted network) can actually get at them.
+          #
+          # With explicit URLs, --discover is dropped: discovery walks a fixed
+          # list of pages and has nothing to do with the URLs you asked about.
           {
             echo "### Candidate feed probe"
             echo ""
-            daily-dive probe --markdown --discover 2>/dev/null || true
+            if [ -n "${{ inputs.probe_urls }}" ]; then
+              daily-dive probe --markdown ${{ inputs.probe_urls }} 2>/dev/null || true
+            else
+              daily-dive probe --markdown --discover 2>/dev/null || true
+            fi
             echo ""
           } | tee -a $GITHUB_STEP_SUMMARY
 
+      # Skipped when specific URLs were asked about. The build runs --verbose,
+      # which buries the probe table under thousands of lines of HTTP debug
+      # output — and reading that table is the entire point of a targeted probe.
       - name: Build issue from live feeds
         id: build
+        if: inputs.probe_urls == ''
         continue-on-error: true
         env:
           # Absent unless the secret is set; the CLI only reads it under --score,

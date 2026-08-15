@@ -8,6 +8,7 @@ somewhere with real network access (the Actions workflow does).
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from html.parser import HTMLParser
@@ -16,6 +17,7 @@ from urllib.parse import urljoin
 import feedparser
 import httpx
 
+from . import ingest
 from .ingest import TIMEOUT, USER_AGENT, Fetcher
 
 # Candidates worth testing when no URLs are given. Trimmed as answers come in —
@@ -102,6 +104,31 @@ CANDIDATES: list[str] = [
     "https://www.climate.gov/news-features/department/enso-blog/feed",
     "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/rss.xml",
     "https://www.pmel.noaa.gov/elnino/rss.xml",
+    # --- OpenAlex ------------------------------------------------------------
+    # The direct answer to "which papers came out this week", across every
+    # journal at once rather than one journal at a time. Free, no key, and the
+    # mailto puts us in their polite pool, which is their documented ask.
+    #
+    # Probed rather than configured because the filter syntax cannot be checked
+    # from a desk and a wrong filter fails quietly: OpenAlex answers 200 with
+    # an error body and no results, so a broken query looks exactly like a
+    # quiet week. probe._probe_json exists to tell those two apart.
+    #
+    # Note for anyone working from the source document: its example uses
+    # `concepts.id`, which OpenAlex has deprecated in favour of `topics`. These
+    # use a title/abstract search instead, which needs no ID lookup and does
+    # not silently return nothing when an ID moves.
+    (
+        "https://api.openalex.org/works"
+        "?filter=title_and_abstract.search:coral,from_publication_date:{since},is_oa:true"
+        "&sort=publication_date:desc&per-page=25&mailto=theloneaquarist@gmail.com"
+    ),
+    (
+        "https://api.openalex.org/works"
+        "?filter=title_and_abstract.search:reef%20aquarium%20OR%20scleractinia%20OR%20zooxanthellae"
+        ",from_publication_date:{since},is_oa:true"
+        "&sort=publication_date:desc&per-page=25&mailto=theloneaquarist@gmail.com"
+    ),
     # SETTLED, do not re-probe: humble.fish 403s on both XenForo shapes, the
     # same wall as Reef2Reef. Maxspect's feed was found at the Joomla
     # "?format=feed&type=rss" shape and is now in sources.toml. Frontiers in
@@ -263,12 +290,56 @@ def _newest_age_days(parsed: feedparser.FeedParserDict) -> int | None:
     return (datetime.now(UTC) - max(stamps)).days
 
 
+def _probe_json(url: str, body: bytes) -> ProbeResult | None:
+    """Read a JSON API response, for the sources that aren't feeds.
+
+    Two of the source types here speak JSON rather than RSS, and until now the
+    probe could only say "not-a-feed" about them — which meant the one thing
+    the probe exists for, checking a URL before configuring it, was unavailable
+    for exactly the URLs whose query syntax is easiest to get wrong.
+
+    Recognizes the OpenAlex and YouTube result shapes. Returns None when the
+    body isn't JSON at all, so the caller falls through to feedparser.
+    """
+    try:
+        payload = json.loads(body)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return None
+    if not isinstance(payload, dict):
+        return None
+
+    if error := (payload.get("error") or payload.get("message")):
+        # OpenAlex reports a bad filter with 200 + an error body, so this is
+        # the difference between "no results" and "the query is wrong".
+        return ProbeResult(url, "not-a-feed", f"API error: {str(error)[:90]}")
+
+    results = payload.get("results")
+    if results is None:
+        results = payload.get("items")
+    if results is None:
+        return None
+
+    count = len(results)
+    if not count:
+        return ProbeResult(url, "empty", "valid JSON query, but it matched nothing")
+
+    first = results[0] if isinstance(results[0], dict) else {}
+    headline = first.get("display_name") or first.get("title") or "?"
+    venue = ((first.get("primary_location") or {}).get("source") or {}).get("display_name")
+    total = (payload.get("meta") or {}).get("count")
+    detail = f"{count} returned"
+    if total is not None:
+        detail += f" of {total} matching"
+    detail += f": {str(headline)[:60]}"
+    return ProbeResult(url, "ok", detail, count, venue or "JSON API")
+
+
 def probe_one(url: str, fetcher: Fetcher, client: httpx.Client) -> ProbeResult:
     if not fetcher.allowed(url):
         return ProbeResult(url, "robots", "robots.txt disallows this path — use an official API instead")
 
     try:
-        resp = client.get(url)
+        resp = client.get(ingest.resolve_window(url))
     except httpx.HTTPError as exc:
         return ProbeResult(url, "network-error", f"{type(exc).__name__}: {exc}")
 
@@ -277,6 +348,9 @@ def probe_one(url: str, fetcher: Fetcher, client: httpx.Client) -> ProbeResult:
         if resp.status_code == 403:
             hint = " (bot protection, most likely — treat as 'not welcome' unless they say otherwise)"
         return ProbeResult(url, "http-error", f"HTTP {resp.status_code}{hint}")
+
+    if (json_result := _probe_json(url, resp.content)) is not None:
+        return json_result
 
     parsed = feedparser.parse(resp.content)
     title = (parsed.feed or {}).get("title")

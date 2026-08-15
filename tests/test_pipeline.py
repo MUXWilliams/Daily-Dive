@@ -1104,3 +1104,148 @@ def test_the_prompt_puts_deep_science_in_scope():
     assert "public-aquarium husbandry item is 0.7 or better" in prompt
     # And the out-of-scope list still exists, or the section swamps the issue.
     assert "non-reef megafauna" in prompt
+
+
+# ------------------------------------------------------------------ openalex
+#
+# The deep-science source. Its distinguishing property is that one response
+# carries many outlets, so the attribution rules have to hold per item rather
+# than per source — which is what most of these tests are about.
+
+_OPENALEX_PAYLOAD = json.dumps(
+    {
+        "results": [
+            {
+                "display_name": "Thermal tolerance in Acropora under repeat bleaching",
+                "publication_date": "2026-08-13",
+                "doi": "https://doi.org/10.1007/s00338-026-12345-6",
+                "primary_location": {
+                    "source": {"display_name": "Coral Reefs"},
+                    "landing_page_url": "https://link.springer.com/article/10.1007/s00338-026-12345-6",
+                },
+                "best_oa_location": {
+                    "landing_page_url": "https://europepmc.org/article/MED/12345678"
+                },
+                "authorships": [
+                    {"author": {"display_name": "A. Researcher"}},
+                    {"author": {"display_name": "B. Coauthor"}},
+                ],
+                "abstract_inverted_index": {
+                    "Corals": [0], "bleach": [1], "when": [2], "warm": [3]
+                },
+            },
+            {
+                # No venue: a preprint or an unregistered record. Uncreditable.
+                "display_name": "A paper from nowhere in particular",
+                "publication_date": "2026-08-12",
+                "doi": "https://doi.org/10.9999/nowhere",
+                "primary_location": {},
+                "authorships": [],
+            },
+            {
+                # No link at all. Nothing to send a reader to.
+                "display_name": "A paper with no resolvable link",
+                "publication_date": "2026-08-12",
+                "primary_location": {"source": {"display_name": "Some Journal"}},
+            },
+        ]
+    }
+).encode()
+
+
+def _openalex_source() -> Source:
+    return Source(
+        id="openalex-reef",
+        name="OpenAlex",
+        url="https://api.openalex.org/works?filter=from_publication_date:{since}",
+        type=SourceType.OPENALEX,
+        section="Journal",
+    )
+
+
+def test_a_paper_is_credited_to_its_journal_not_to_the_index():
+    """The point of the whole source type. OpenAlex found the paper; Coral
+    Reefs published it, and Coral Reefs is who gets the byline."""
+    items = normalize.normalize(_openalex_source(), _OPENALEX_PAYLOAD)
+    assert [i.source_name for i in items] == ["Coral Reefs"]
+    assert "OpenAlex" not in items[0].source_name
+
+
+def test_a_work_with_no_journal_is_dropped_rather_than_credited_loosely():
+    titles = [i.title for i in normalize.normalize(_openalex_source(), _OPENALEX_PAYLOAD)]
+    assert "A paper from nowhere in particular" not in titles
+
+
+def test_a_work_with_no_link_is_dropped():
+    titles = [i.title for i in normalize.normalize(_openalex_source(), _OPENALEX_PAYLOAD)]
+    assert "A paper with no resolvable link" not in titles
+
+
+def test_the_readable_open_access_link_beats_the_doi():
+    """A DOI is the durable citation but can resolve to a paywall. The reader
+    gets the version they can actually open; the DOI is kept alongside."""
+    item = normalize.normalize(_openalex_source(), _OPENALEX_PAYLOAD)[0]
+    assert item.url == "https://europepmc.org/article/MED/12345678"
+    assert item.extra["doi"] == "https://doi.org/10.1007/s00338-026-12345-6"
+
+
+def test_the_doi_is_used_when_there_is_no_open_access_copy():
+    payload = json.dumps(
+        {
+            "results": [
+                {
+                    "display_name": "Paywalled but citable",
+                    "publication_date": "2026-08-13",
+                    "doi": "https://doi.org/10.1234/paywalled",
+                    "primary_location": {"source": {"display_name": "Marine Biology"}},
+                }
+            ]
+        }
+    ).encode()
+    assert normalize.normalize(_openalex_source(), payload)[0].url == "https://doi.org/10.1234/paywalled"
+
+
+def test_long_author_lists_collapse_to_et_al():
+    """Papers in this literature routinely carry dozens of authors."""
+    item = normalize.normalize(_openalex_source(), _OPENALEX_PAYLOAD)[0]
+    assert item.author == "A. Researcher et al."
+
+
+def test_the_inverted_abstract_is_reconstructed_in_order():
+    item = normalize.normalize(_openalex_source(), _OPENALEX_PAYLOAD)[0]
+    assert item.raw_text == "Corals bleach when warm"
+
+
+def test_an_openalex_error_yields_no_items_and_no_crash():
+    body = json.dumps({"error": "Invalid query parameters", "message": "bad filter"}).encode()
+    assert normalize.normalize(_openalex_source(), body) == []
+
+
+def test_openalex_dates_are_timezone_aware():
+    """A naive datetime would blow up the recency comparison against feeds."""
+    item = normalize.normalize(_openalex_source(), _OPENALEX_PAYLOAD)[0]
+    assert item.published_at.tzinfo is not None
+    assert item.published_at == datetime(2026, 8, 13, tzinfo=UTC)
+
+
+# ------------------------------------------------------- the {since} window
+
+def test_a_since_placeholder_becomes_a_real_date():
+    resolved = ingest.resolve_window(
+        "https://api.openalex.org/works?filter=from_publication_date:{since}", days=21
+    )
+    expected = (datetime.now(UTC) - timedelta(days=21)).date().isoformat()
+    assert resolved.endswith(expected)
+    assert "{since}" not in resolved
+
+
+def test_urls_without_the_placeholder_are_left_exactly_alone():
+    """Every RSS source in the file goes through this, so it must be inert."""
+    for url in ("https://reefbuilders.com/feed/", "https://bsky.app/profile/x/rss"):
+        assert ingest.resolve_window(url) == url
+
+
+def test_the_query_window_reaches_further_back_than_the_publishing_window():
+    """An index lags the journal, so a query cut to exactly the publishing
+    window would drop papers that are genuinely new to us."""
+    assert ingest.QUERY_WINDOW_DAYS > normalize.DEFAULT_MAX_AGE_DAYS

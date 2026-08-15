@@ -197,10 +197,137 @@ def _normalize_youtube_api(source: Source, body: bytes) -> list[Item]:
     return items
 
 
+def _inflate_abstract(inverted: dict[str, list[int]] | None) -> str | None:
+    """Rebuild an abstract from OpenAlex's inverted index.
+
+    OpenAlex stores abstracts as {word: [positions]} rather than as text — a
+    workaround for publishers who license the index but not the prose. Putting
+    each word back at its positions reconstructs it, which is what every
+    OpenAlex client does and what the field is for.
+
+    Gaps are possible if positions are sparse, so this reads as best-effort
+    context for the scorer rather than as text anyone will see: raw_text is
+    never rendered.
+    """
+    if not inverted:
+        return None
+    positions: dict[int, str] = {}
+    for word, spots in inverted.items():
+        for spot in spots:
+            positions[spot] = word
+    if not positions:
+        return None
+    return " ".join(positions[i] for i in sorted(positions))
+
+
+def _openalex_url(work: dict) -> str | None:
+    """Where to send a reader for this paper.
+
+    Preference order is deliberate. An open-access landing page is a page the
+    reader can actually read; a DOI is the durable citation but may resolve to
+    a paywall. The primary location comes last because it is whatever the
+    publisher registered, paywall or not.
+
+    A link nobody can open is not much of a citation, so the readable one wins
+    over the canonical one.
+    """
+    best = work.get("best_oa_location") or {}
+    for candidate in (
+        best.get("landing_page_url"),
+        work.get("doi"),
+        (work.get("primary_location") or {}).get("landing_page_url"),
+    ):
+        if candidate:
+            return candidate
+    return None
+
+
+def _normalize_openalex(source: Source, body: bytes) -> list[Item]:
+    """OpenAlex /works JSON -> Items, each credited to its own journal.
+
+    Every other source in this project has one outlet, named once in
+    sources.toml. This one has as many outlets as it has results, because
+    OpenAlex is an index and not a publisher: crediting a paper in Coral Reefs
+    to "OpenAlex" would be exactly the miscredit the whole attribution design
+    exists to prevent. So source_name is read per item from the work's own
+    primary location, and a work with no identifiable journal is dropped
+    rather than credited to something convenient.
+
+    The authors line is trimmed to the first author plus "et al." — a paper
+    with two hundred authors is common in this literature and would otherwise
+    fill the page.
+    """
+    try:
+        payload = json.loads(body)
+    except json.JSONDecodeError as exc:
+        log.warning("%s: response was not JSON (%s)", source.id, exc)
+        return []
+
+    if error := payload.get("error"):
+        # A malformed filter is the likely cause and it fails silently
+        # otherwise: the query returns an error object, no results, and the
+        # section simply never appears.
+        log.error("%s: OpenAlex error: %s — %s", source.id, error, payload.get("message", ""))
+        return []
+
+    items: list[Item] = []
+    for work in payload.get("results", []):
+        title = work.get("display_name") or work.get("title")
+        stamp = work.get("publication_date")
+        url = _openalex_url(work)
+        journal = ((work.get("primary_location") or {}).get("source") or {}).get("display_name")
+
+        if not title or not stamp or not url:
+            log.warning("%s: work missing title, date or link, dropped", source.id)
+            continue
+        if not journal:
+            # Preprints and records with no registered venue land here. The
+            # paper may be fine; we just cannot say who published it, and this
+            # project does not publish a line it cannot credit.
+            log.warning("%s: %r has no journal to credit, dropped", source.id, title)
+            continue
+
+        authorships = work.get("authorships") or []
+        author = None
+        if authorships:
+            first = (authorships[0].get("author") or {}).get("display_name")
+            if first:
+                author = f"{first} et al." if len(authorships) > 1 else first
+
+        extra = {"venue": journal}
+        if source.section:
+            extra["section"] = source.section
+        if doi := work.get("doi"):
+            extra["doi"] = doi
+
+        try:
+            items.append(
+                Item(
+                    source_id=source.id,
+                    source_name=journal,
+                    title=title,
+                    url=url,
+                    # OpenAlex dates are plain YYYY-MM-DD. Read as UTC midnight
+                    # so they compare against feed timestamps at all.
+                    published_at=datetime.fromisoformat(stamp).replace(tzinfo=UTC),
+                    author=author,
+                    raw_text=_text(_inflate_abstract(work.get("abstract_inverted_index"))),
+                    category_hint=source.category_hint,
+                    extra=extra,
+                )
+            )
+        except (AttributionError, ValueError) as exc:
+            log.warning("%s: %r dropped (%s)", source.id, title, exc)
+
+    return items
+
+
 def normalize(source: Source, body: bytes) -> list[Item]:
     """Parse one feed body into Items, dropping anything uncreditable."""
     if source.type is SourceType.YOUTUBE_API:
         return _normalize_youtube_api(source, body)
+    if source.type is SourceType.OPENALEX:
+        return _normalize_openalex(source, body)
 
     parsed = feedparser.parse(body)
     if parsed.bozo and not parsed.entries:
