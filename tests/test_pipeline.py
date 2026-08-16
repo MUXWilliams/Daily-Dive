@@ -1986,3 +1986,13 @@ def test_the_archive_names_the_story_a_reader_sees_first(tmp_path):
 
     assert render.group_by_category(issue)[0][0] == Category.COMMUNITY.value
     assert archive.entry_for(issue)["lead"] == "What leads the page"
+
+
+def test_the_preview_carries_the_same_chrome_as_a_real_front_page(tmp_path):
+    """A preview missing a piece of the live page is the one thing a preview
+    must never be."""
+    from dailydive import preview
+
+    html = preview.write_preview(tmp_path, site_dir=Path("site")).read_text(encoding="utf-8")
+    assert 'href="archive.html"' in html
+    assert "back issues" in html

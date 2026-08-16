@@ -88,7 +88,12 @@ def write_preview(out_dir: Path, *, site_dir: Path = Path("site"), standalone: b
 
     out_dir.mkdir(parents=True, exist_ok=True)
     issue = load_issue()
-    html = render.render_issue(issue, header=render.find_header_image(site_dir))
+    # Same archive link a real front page carries. Without it the staging page
+    # is missing a piece of chrome the live page has, which is the one thing a
+    # preview must never be.
+    html = render.render_issue(
+        issue, header=render.find_header_image(site_dir), archive_href="archive.html"
+    )
     if standalone:
         html = inline_assets(html, site_dir)
     path = out_dir / "index.html"
