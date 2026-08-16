@@ -1,0 +1,47 @@
+name: Redeploy the site
+
+# Publishes the committed site/ exactly as it stands, without building an
+# issue. The build workflow can only deploy what it has just generated, which
+# means a correction to an already-published page — or the removal of one —
+# cannot reach readers until the next issue runs.
+#
+# Written because a page built from test fixtures, carrying invented headlines
+# credited to real outlets, reached the live site and there was no way to take
+# it down for five days.
+on:
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # A guard, not a formality. This workflow publishes whatever is in the
+      # repo, so it is the one place a fixture-built page could reach readers
+      # without any scoring or review standing in the way.
+      - name: Refuse to deploy synthetic content
+        run: |
+          if grep -rl "example.invalid\|\[SYNTHETIC\]" site/ ; then
+            echo "Those files carry synthetic markers and must not be published." >&2
+            exit 1
+          fi
+          echo "No synthetic markers found in site/."
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+      - id: deploy
+        uses: actions/deploy-pages@v4
