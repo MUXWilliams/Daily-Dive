@@ -209,6 +209,7 @@ def render_issue(
     *,
     header: tuple[str, int | None, int | None] | None = None,
     canonical_path: str = "",
+    archive_href: str = "",
 ) -> str:
     for item in issue.items:
         assert_attributable(item)
@@ -230,6 +231,7 @@ def render_issue(
         highlights=bullets,
         highlights_plus=plus,
         canonical_path=canonical_path,
+        archive_href=archive_href,
         og_description=og_description(issue),
     )
 
@@ -283,13 +285,14 @@ def write_issue(issue: Issue, out_dir: Path) -> Path:
             issue,
             header=find_header_image(out_dir, depth=1),
             canonical_path=f"issues/{issue.date:%Y-%m-%d}.html",
+            archive_href="../archive.html",
         ),
         encoding="utf-8",
     )
 
     index = out_dir / "index.html"
     index.write_text(
-        render_issue(issue, header=find_header_image(out_dir)),
+        render_issue(issue, header=find_header_image(out_dir), archive_href="archive.html"),
         encoding="utf-8",
     )
     return index

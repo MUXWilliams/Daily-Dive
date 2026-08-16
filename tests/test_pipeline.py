@@ -1892,3 +1892,97 @@ def test_the_cli_gate_and_the_workflow_gate_test_the_same_things():
     source = Path("dailydive/cli.py").read_text(encoding="utf-8")
     gate = re.search(r"def _is_publishing_run.*?return [^\n]+", source, re.S).group(0)
     assert "args.source" in gate and "args.limit" in gate and "args.offline" in gate
+
+
+# --------------------------------------------------------------------- archive
+
+def _issue_on(day, lead="A lead story", n=3):
+    from dailydive.models import Item as I
+    titles = [lead] + [f"Story {i}" for i in range(n - 1)]
+    return Issue(date=datetime(2026, 8, day, tzinfo=UTC), items=[
+        I(source_id="s", source_name=f"Outlet {i % 2}", title=t,
+          url=f"https://ex.invalid/{day}/{i}", published_at=datetime(2026, 8, day, tzinfo=UTC))
+        for i, t in enumerate(titles)])
+
+
+def test_the_archive_lists_issues_newest_first(tmp_path):
+    from dailydive import archive
+
+    archive.record(tmp_path, _issue_on(15))
+    entries = archive.record(tmp_path, _issue_on(16))
+    assert [e["date"] for e in entries] == ["2026-08-16", "2026-08-15"]
+
+
+def test_rerunning_a_day_replaces_its_entry_rather_than_duplicating_it(tmp_path):
+    """A re-run overwrites the dated permalink, so the index has to describe the
+    page that is actually there."""
+    from dailydive import archive
+
+    archive.record(tmp_path, _issue_on(16, lead="First attempt", n=2))
+    entries = archive.record(tmp_path, _issue_on(16, lead="Second attempt", n=9))
+    assert len(entries) == 1
+    assert entries[0]["lead"] == "Second attempt"
+    assert entries[0]["items"] == 9
+
+
+def test_a_corrupt_index_costs_the_listing_not_the_issue(tmp_path):
+    """Losing the archive page is recoverable. Failing the run is not."""
+    from dailydive import archive
+
+    (tmp_path / "issues").mkdir()
+    (tmp_path / archive.INDEX).write_text("{not json at all", encoding="utf-8")
+    entries = archive.record(tmp_path, _issue_on(16))
+    assert len(entries) == 1
+
+
+def test_every_issue_page_links_to_the_archive_from_its_own_depth(tmp_path):
+    """index.html and issues/*.html sit at different depths; one relative path
+    cannot serve both."""
+    from dailydive import archive
+
+    issue = _issue_on(16)
+    render.write_issue(issue, tmp_path)
+    archive.record(tmp_path, issue)
+    assert archive.write_page(tmp_path) is not None
+
+    index = (tmp_path / "index.html").read_text(encoding="utf-8")
+    dated = (tmp_path / "issues/2026-08-16.html").read_text(encoding="utf-8")
+    assert 'href="archive.html"' in index
+    assert 'href="../archive.html"' in dated
+
+
+def test_the_archive_page_names_each_issue_by_date_and_lead(tmp_path):
+    from dailydive import archive
+
+    archive.record(tmp_path, _issue_on(16, lead="Repeated bleaching in the Florida Keys", n=6))
+    html = archive.write_page(tmp_path).read_text(encoding="utf-8")
+    assert "Sunday, August 16, 2026" in html
+    assert "Repeated bleaching in the Florida Keys" in html
+    assert "6 items" in html
+    assert 'href="issues/2026-08-16.html"' in html
+
+
+def test_no_archive_page_when_there_is_nothing_to_list(tmp_path):
+    from dailydive import archive
+
+    assert archive.write_page(tmp_path) is None
+
+
+def test_the_archive_names_the_story_a_reader_sees_first(tmp_path):
+    """Not the highest-scoring one. Those diverged when Community moved to the
+    top of the stack, and naming a story the reader must scroll to find
+    describes a different page than the one the line links to."""
+    from dailydive import archive
+    from dailydive.models import Item as I
+
+    top_scorer = I(source_id="s", source_name="Journal", title="A high-scoring paper",
+                   url="https://ex.invalid/paper", published_at=datetime(2026, 8, 16, tzinfo=UTC),
+                   category_hint=Category.WILD_REEFS)
+    what_you_see = I(source_id="s", source_name="Reef2Reef", title="What leads the page",
+                     url="https://ex.invalid/thread", published_at=datetime(2026, 8, 16, tzinfo=UTC),
+                     category_hint=Category.COMMUNITY)
+    # Relevance order puts the paper first; section order puts Community first.
+    issue = Issue(date=datetime(2026, 8, 16, tzinfo=UTC), items=[top_scorer, what_you_see])
+
+    assert render.group_by_category(issue)[0][0] == Category.COMMUNITY.value
+    assert archive.entry_for(issue)["lead"] == "What leads the page"

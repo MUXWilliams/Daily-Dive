@@ -18,7 +18,7 @@ from pathlib import Path
 
 import httpx
 
-from . import brand, config, ingest, mailbox, normalize, picks, render, youtube
+from . import archive, brand, config, ingest, mailbox, normalize, picks, render, youtube
 from . import score as score_mod
 from . import store
 from .models import Issue, Item, Source, SourceType
@@ -450,6 +450,9 @@ def main(argv: list[str] | None = None) -> int:
         with store.connect(args.db) as conn:
             fresh = store.record_published(conn, issue.items, issue.date)
         log.info("recorded %d newly published item(s)", fresh)
+        entries = archive.record(args.out, issue)
+        archive.write_page(args.out)
+        log.info("archive now lists %d issue(s)", len(entries))
         if bucket_items:
             _answer_picks(issue)
     elif bucket_items:

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ brand.PUBLICATION }} — back issues</title>
+<meta name="description" content="Every issue of {{ brand.PUBLICATION }}, by date.">
+<link rel="canonical" href="{{ brand.SITE_URL }}/archive.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ brand.SITE_NAME }}">
+<meta property="og:title" content="{{ brand.PUBLICATION }} — back issues">
+<meta property="og:description" content="{{ entries|length }} issue{{ '' if entries|length == 1 else 's' }} of {{ brand.PUBLICATION }}, by date.">
+<meta property="og:url" content="{{ brand.SITE_URL }}/archive.html">
+<style>
+  /* The same ground, ink and measure as an issue — this is the same
+     publication, and an archive that looked like a different site would read
+     as one. Every colour stated so the page holds anywhere. */
+  :root {
+    --page: #ffffff; --ink: #16191d; --ink-soft: #545e69; --ink-faint: #8b959f;
+    --rule: #e4e8eb; --link: #0b5fbe;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 42rem; margin: 0 auto; padding: 2.25rem 1.15rem 4rem; }
+
+  h1.wordmark { margin: 0; font-size: 0; line-height: 0; }
+  h1.wordmark img { display: block; width: 100%; height: auto; border-radius: 8px; }
+  .fallback {
+    border-radius: 8px; padding: 1.5rem 1.4rem 1.6rem; color: #fff;
+    background: linear-gradient(155deg, #3585b8 0%, #1d5f92 45%, #102a3f 100%);
+  }
+  .fallback .name { margin: 0; font-size: 2rem; font-weight: 700; letter-spacing: -.035em; }
+
+  .dateline {
+    margin: .8rem 0 0; font-size: .79rem; color: var(--ink-faint);
+    padding-bottom: .7rem; border-bottom: 1px solid var(--rule);
+  }
+  .dateline a { color: var(--link); }
+
+  h2.section {
+    margin: 1.6rem 0 .2rem; font-size: 1.05rem; font-weight: 800; letter-spacing: -.015em;
+  }
+  p.blurb { margin: 0 0 .6rem; font-size: .88rem; color: var(--ink-soft); }
+
+  ol.issues { list-style: none; margin: 0; padding: 0; }
+  ol.issues li { padding: .8rem 0; border-bottom: 1px solid var(--rule); }
+  ol.issues li:last-child { border-bottom: none; }
+
+  a.date {
+    display: block; font-size: 1rem; font-weight: 700; letter-spacing: -.01em;
+    color: var(--ink); text-decoration: none;
+  }
+  a.date:hover { color: var(--link); text-decoration: underline; }
+  .lead {
+    margin: .2rem 0 0; font-size: .9rem; line-height: 1.45; color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+  .count {
+    margin: .22rem 0 0; font-size: .78rem; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  footer {
+    margin-top: 2.6rem; padding-top: 1.1rem; border-top: 1px solid var(--rule);
+    font-size: .82rem; line-height: 1.55; color: var(--ink-faint);
+  }
+  footer a { color: var(--link); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    {% if header %}
+    <h1 class="wordmark">
+      <a href="./"><img src="{{ header[0] }}"
+        {%- if header[1] %} width="{{ header[1] }}"{% endif %}
+        {%- if header[2] %} height="{{ header[2] }}"{% endif %}
+        alt="{{ brand.PUBLICATION }} — {{ brand.SITE_NAME }}. {{ brand.TAGLINE }}"></a>
+    </h1>
+    {% else %}
+    <div class="fallback"><p class="name">{{ brand.PUBLICATION }}</p></div>
+    {% endif %}
+    <p class="dateline"><a href="./">← the current issue</a></p>
+  </header>
+
+  <h2 class="section">Back issues</h2>
+  <p class="blurb">
+    Every issue, newest first. Each one stays at its own address permanently —
+    links in an issue keep working after it leaves the front page.
+  </p>
+
+  <ol class="issues">
+    {% for e in entries %}
+    <li>
+      <a class="date" href="{{ e.href }}">{{ e.when | datefmt('full') }}</a>
+      {% if e.lead %}<p class="lead">Led by “{{ e.lead }}”</p>{% endif %}
+      <p class="count">
+        {{ e['items'] }} item{{ '' if e['items'] == 1 else 's' }}
+        from {{ e.outlets }} outlet{{ '' if e.outlets == 1 else 's' }}
+      </p>
+    </li>
+    {% endfor %}
+  </ol>
+
+  <footer>
+    <p>
+      <em>{{ brand.PUBLICATION }}</em> is an automated digest that links to
+      reporting it does not own. Every item credits and links its source.
+      Something wrong, or want a story removed?
+      <a href="mailto:{{ brand.CONTACT_EMAIL }}">{{ brand.CONTACT_EMAIL }}</a>.
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
