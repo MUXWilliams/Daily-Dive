@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import email.message
 import json
 import re
@@ -1863,3 +1864,31 @@ def test_the_allowlist_covers_the_account_that_files_not_just_the_repo_owner():
     ]
     items, _ = picks.collect(bucket, published_uids=set())
     assert len(items) == 1
+
+
+def _run_args(**over):
+    base = dict(offline=False, source=None, limit=None)
+    base.update(over)
+    return argparse.Namespace(**base)
+
+
+def test_a_partial_run_does_not_claim_to_have_published():
+    """The workflow refuses to deploy a --source or --limit build. Without the
+    same test in the CLI, a five-item test run marks those items published and
+    closes the pick issues that fed it — pointing at a page nobody served."""
+    assert cli._is_publishing_run(_run_args())
+    assert not cli._is_publishing_run(_run_args(source=["reefbuilders"]))
+    assert not cli._is_publishing_run(_run_args(limit=5))
+    assert not cli._is_publishing_run(_run_args(offline=True))
+
+
+def test_the_cli_gate_and_the_workflow_gate_test_the_same_things():
+    """They are two implementations of one rule, and drift between them is
+    silent — the workflow would skip the deploy while the CLI recorded it."""
+    steps = {s.get("name"): s for s in _workflow()["jobs"]["build"]["steps"]}
+    script = steps["Decide whether this run publishes"]["run"]
+    for token in ("IN_SOURCE", "IN_LIMIT"):
+        assert token in script
+    source = Path("dailydive/cli.py").read_text(encoding="utf-8")
+    gate = re.search(r"def _is_publishing_run.*?return [^\n]+", source, re.S).group(0)
+    assert "args.source" in gate and "args.limit" in gate and "args.offline" in gate

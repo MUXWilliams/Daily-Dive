@@ -188,6 +188,17 @@ def _answer_picks(issue: Issue) -> None:
             log.error("could not close pick #%s: %s", number, exc)
 
 
+def _is_publishing_run(args: argparse.Namespace) -> bool:
+    """Whether this run's output is going to actually reach readers.
+
+    Mirrors the publish gate in .github/workflows/daily.yml on purpose. The
+    workflow decides whether to deploy; this decides whether to record the
+    consequences of deploying. Both have to agree, or the archive says a story
+    ran when no page carrying it was ever served.
+    """
+    return not args.offline and not args.source and not args.limit
+
+
 def build_parser() -> argparse.ArgumentParser:
     """The CLI's argument surface, built separately from running it.
 
@@ -429,12 +440,23 @@ def main(argv: list[str] | None = None) -> int:
 
     issue = Issue(date=datetime.now(UTC), items=items)
     path = render.write_issue(issue, args.out)
-    if not args.offline:
+
+    # Everything below claims the issue reached readers, and only a full run
+    # does. The workflow refuses to deploy a --source or --limit build because
+    # it is knowingly partial; without the same test here, a five-item test run
+    # would mark those items published and close the pick issues that fed it —
+    # with a link to a page nobody deployed.
+    if _is_publishing_run(args):
         with store.connect(args.db) as conn:
             fresh = store.record_published(conn, issue.items, issue.date)
         log.info("recorded %d newly published item(s)", fresh)
-    if bucket_items:
-        _answer_picks(issue)
+        if bucket_items:
+            _answer_picks(issue)
+    elif bucket_items:
+        log.info(
+            "%d pick(s) included but left open: a partial run doesn't publish",
+            len(bucket_items),
+        )
     print(f"wrote {path} ({len(items)} items from {len(issue.outlets)} outlets)")
     if args.print_issue:
         print()
