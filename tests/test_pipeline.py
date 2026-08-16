@@ -6,6 +6,7 @@ import argparse
 import email.message
 import json
 import re
+import struct
 
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -1382,12 +1383,21 @@ def test_the_page_never_claims_a_cadence_it_does_not_keep():
 
 def test_banner_dimensions_are_read_from_the_file_not_typed_in():
     """The template used to hardcode 954x202. Replacement artwork of any other
-    size would render at the old aspect ratio and jump on load."""
+    size would render at the old aspect ratio and jump on load.
+
+    This asserts the reported size matches the file, NOT a fixed pair. An
+    earlier version hardcoded the then-current dimensions and duly broke the
+    moment new artwork landed — a test that makes a drop-in not a drop-in is
+    testing the opposite of the property it is named for.
+    """
     found = render.find_header_image(Path("site"))
     assert found is not None, "site/assets/masthead.png should be committed"
     path, width, height = found
     assert path == "assets/masthead.png"
-    assert (width, height) == (954, 202)
+
+    raw = (Path("site") / path).read_bytes()
+    actual = struct.unpack(">II", raw[16:24])
+    assert (width, height) == actual
 
 
 def test_a_banner_of_a_different_size_reports_its_own_dimensions(tmp_path):
