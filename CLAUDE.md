@@ -106,6 +106,13 @@ picks → collapse → resource → render → commit → deploy`
 | Editorial rules | `prompts/score.system.md`, `docs/industry-brief.md` |
 | Delivery plan | `docs/delivery.md` |
 | Archive index | `site/issues/index.json` |
+| Skills | `.claude/skills/preview/SKILL.md`, `.claude/skills/add-source/SKILL.md` |
+| What this teaches | `docs/learning.md` |
+
+Skills hold **procedures**; tests hold **invariants**. The hard rules above are
+enforced in the type system and in CI on purpose — restating them as prose in a
+skill would put them in a third place that can drift from the first two, which
+is exactly how `site/about.html` ended up naming the wrong publication.
 
 `dailydive.sqlite3` is committed and load-bearing: `items` is a *seen* log,
 `published` is what actually reached a page, `http_cache` holds ETags. Losing
