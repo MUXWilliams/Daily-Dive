@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<style>
+  /* Deliberately not the issue's stylesheet. This is a tool, not the
+     publication, and dressing it up as the publication would invite reading it
+     as one. Same type stack so it feels related; everything else is its own. */
+  :root {
+    --page: #ffffff; --ink: #16191d; --ink-soft: #545e69; --ink-faint: #8b959f;
+    --rule: #e4e8eb; --link: #0b5fbe; --ground: #f6f7f8;
+    --lead: #1a6b3f; --include: #2a6234; --borderline: #8a5512; --drop: #8a2d2d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 38rem; margin: 0 auto; padding: 1rem 1.1rem 8rem; }
+
+  header { position: sticky; top: 0; background: var(--page); padding: .7rem 0 .6rem;
+           border-bottom: 1px solid var(--rule); z-index: 2; }
+  .bar { height: 5px; background: var(--ground); border-radius: 3px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--link); width: 0; transition: width .15s; }
+  .counts { display: flex; justify-content: space-between; gap: 1rem;
+            font-size: .78rem; color: var(--ink-faint); margin-top: .45rem;
+            font-variant-numeric: tabular-nums; }
+
+  .card { padding: 1.6rem 0 0; }
+  .meta { font-size: .78rem; color: var(--ink-faint); margin: 0 0 .5rem; }
+  .meta .outlet { color: var(--ink-soft); font-weight: 700; }
+  h1 { font-size: 1.3rem; line-height: 1.28; letter-spacing: -.02em; margin: 0 0 .6rem;
+       text-wrap: pretty; }
+  .excerpt { font-size: .95rem; line-height: 1.55; color: var(--ink-soft); margin: 0 0 .8rem; }
+  .open { font-size: .85rem; }
+  .open a { color: var(--link); }
+
+  /* Fixed to the bottom: on a phone this is a thumb-reach problem, and 128
+     items is a lot of reaching. */
+  .choices {
+    position: fixed; left: 0; right: 0; bottom: 0; background: var(--page);
+    border-top: 1px solid var(--rule); padding: .6rem 1.1rem calc(.6rem + env(safe-area-inset-bottom));
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem;
+    max-width: 38rem; margin: 0 auto;
+  }
+  @media (min-width: 30rem) { .choices { grid-template-columns: repeat(4, 1fr); } }
+  button.choice {
+    font: inherit; font-size: .9rem; font-weight: 700; color: #fff; border: 0;
+    border-radius: 8px; padding: .75rem .4rem; cursor: pointer; line-height: 1.2;
+  }
+  button.choice small { display: block; font-size: .68rem; font-weight: 600; opacity: .8; }
+  .choice[data-b="lead"]       { background: var(--lead); }
+  .choice[data-b="include"]    { background: var(--include); }
+  .choice[data-b="borderline"] { background: var(--borderline); }
+  .choice[data-b="drop"]       { background: var(--drop); }
+  .choice[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+  .nav { display: flex; gap: .6rem; align-items: center; margin-top: 1.4rem;
+         font-size: .85rem; color: var(--ink-faint); }
+  .nav button { font: inherit; background: var(--ground); border: 1px solid var(--rule);
+                border-radius: 6px; padding: .35rem .7rem; cursor: pointer; color: var(--ink); }
+
+  .done { padding: 2rem 0; }
+  .done h2 { margin: 0 0 .5rem; }
+  textarea { width: 100%; height: 9rem; font-family: ui-monospace, Menlo, Consolas, monospace;
+             font-size: .75rem; border: 1px solid var(--rule); border-radius: 8px; padding: .6rem; }
+  .hint { font-size: .8rem; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="bar"><i id="fill"></i></div>
+    <div class="counts">
+      <span id="pos">—</span>
+      <span id="tally"></span>
+    </div>
+  </header>
+
+  <div id="card" class="card"></div>
+
+  <div class="nav">
+    <button type="button" id="back">← back</button>
+    <button type="button" id="skip">skip</button>
+    <span id="saved">saved as you go</span>
+  </div>
+
+  <div id="done" class="done" hidden>
+    <h2>All done.</h2>
+    <p class="hint">Copy this and paste it back into the chat, or save it as
+      <code>tests/fixtures/labels.json</code>.</p>
+    <p><button type="button" id="copy">Copy to clipboard</button></p>
+    <textarea id="out" readonly></textarea>
+  </div>
+
+</div>
+
+<script>
+// The items, and nothing else. No relevance, no model category, no gist —
+// they are not in this payload at all, so there is nothing here to anchor on.
+const ITEMS = {{ items_json | safe }};
+const BUCKETS = {{ buckets | tojson }};
+const KEY = "weeklydive-labels-v1";
+
+const labels = JSON.parse(localStorage.getItem(KEY) || "{}");
+let i = 0;
+
+// Resume where the last session stopped rather than at the top: an hour of
+// labelling will not happen in one sitting.
+while (i < ITEMS.length && labels[ITEMS[i].uid]) i++;
+
+const $ = (id) => document.getElementById(id);
+
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+}
+
+function draw() {
+  const n = Object.keys(labels).length;
+  $("fill").style.width = (100 * n / ITEMS.length).toFixed(1) + "%";
+  $("tally").textContent = n + " / " + ITEMS.length + " labelled";
+
+  if (i >= ITEMS.length) {
+    $("card").hidden = true;
+    document.querySelector(".choices").hidden = true;
+    $("pos").textContent = "complete";
+    $("done").hidden = false;
+    $("out").value = JSON.stringify({ labels }, null, 1);
+    return;
+  }
+
+  const it = ITEMS[i];
+  $("pos").textContent = "item " + (i + 1) + " of " + ITEMS.length;
+  $("card").innerHTML =
+    '<p class="meta"><span class="outlet">' + esc(it.source) + "</span> · " + esc(it.date) + "</p>" +
+    "<h1>" + esc(it.title) + "</h1>" +
+    (it.excerpt ? '<p class="excerpt">' + esc(it.excerpt) + "</p>" : "") +
+    '<p class="open"><a href="' + esc(it.url) + '" target="_blank" rel="noopener">open the source →</a></p>';
+
+  for (const b of document.querySelectorAll(".choice")) {
+    b.setAttribute("aria-pressed", labels[it.uid] === b.dataset.b ? "true" : "false");
+  }
+}
+
+function choose(bucket) {
+  if (i >= ITEMS.length) return;
+  labels[ITEMS[i].uid] = bucket;
+  localStorage.setItem(KEY, JSON.stringify(labels));
+  i++;
+  draw();
+}
+
+const bar = document.createElement("div");
+bar.className = "choices";
+bar.innerHTML = BUCKETS.map((b, n) =>
+  '<button type="button" class="choice" data-b="' + b + '">' +
+  b[0].toUpperCase() + b.slice(1) + "<small>press " + (n + 1) + "</small></button>"
+).join("");
+document.body.appendChild(bar);
+bar.addEventListener("click", (e) => {
+  const btn = e.target.closest(".choice");
+  if (btn) choose(btn.dataset.b);
+});
+
+$("back").addEventListener("click", () => { if (i > 0) { i--; draw(); } });
+$("skip").addEventListener("click", () => { if (i < ITEMS.length) { i++; draw(); } });
+$("copy").addEventListener("click", async () => {
+  const el = $("out");
+  try {
+    await navigator.clipboard.writeText(el.value);
+    $("copy").textContent = "Copied";
+  } catch (err) {
+    // Clipboard access is refused in some embedded viewers. Selecting the text
+    // always works, so fall back to that rather than failing silently.
+    el.focus(); el.select();
+    $("copy").textContent = "Select all and copy";
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const n = parseInt(e.key, 10);
+  if (n >= 1 && n <= BUCKETS.length) { choose(BUCKETS[n - 1]); e.preventDefault(); }
+  else if (e.key === "ArrowLeft" && i > 0) { i--; draw(); }
+  else if (e.key === "ArrowRight" && i < ITEMS.length) { i++; draw(); }
+});
+
+draw();
+</script>
+</body>
+</html>

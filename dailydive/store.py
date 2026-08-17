@@ -51,6 +51,30 @@ CREATE TABLE IF NOT EXISTS published (
 );
 CREATE INDEX IF NOT EXISTS published_issue ON published (issue_date DESC);
 
+-- What the scorer decided, including what it threw away.
+--
+-- Keeping the drops is the whole point. An item the editor would have run and
+-- the model discarded never appears anywhere, so that class of error is
+-- invisible in production — there is no symptom to notice. Without this table
+-- it is also unmeasurable after the fact, because the score existed only in
+-- memory during the run that produced it.
+--
+-- Keyed by prompt_hash as well as uid, so a scoring prompt change does not
+-- overwrite the record of what the previous prompt thought. That is what makes
+-- "did that edit help?" answerable instead of a matter of recollection.
+CREATE TABLE IF NOT EXISTS scores (
+    uid         TEXT NOT NULL,
+    prompt_hash TEXT NOT NULL,
+    model       TEXT NOT NULL,
+    relevance   REAL NOT NULL,
+    category    TEXT,
+    promo       INTEGER,
+    gist        TEXT,
+    scored_at   TEXT NOT NULL,
+    PRIMARY KEY (uid, prompt_hash, model)
+);
+CREATE INDEX IF NOT EXISTS scores_uid ON scores (uid);
+
 -- Conditional GET cache, so a normal morning re-fetches almost nothing.
 CREATE TABLE IF NOT EXISTS http_cache (
     url           TEXT PRIMARY KEY,
@@ -154,3 +178,62 @@ def record_published(conn: sqlite3.Connection, items: Iterable[Item], issue_date
 def published_uids(conn: sqlite3.Connection) -> set[str]:
     """Everything that has ever appeared in an issue."""
     return {row[0] for row in conn.execute("SELECT uid FROM published")}
+
+
+def record_scores(
+    conn: sqlite3.Connection,
+    scores: dict[str, object],
+    *,
+    prompt_hash: str,
+    model: str,
+) -> int:
+    """Store what the scorer decided. Returns how many rows were written.
+
+    Every score, not just the ones above threshold. The drops are the half that
+    cannot be recovered later and the half that hides the expensive mistakes.
+
+    REPLACE rather than IGNORE: re-scoring the same item under the same prompt
+    and model should land on the same answer, and where it doesn't — the model
+    is not deterministic — the newer verdict is the one that matches whatever
+    issue was just built.
+    """
+    now = datetime.now(UTC).isoformat()
+    rows = [
+        (
+            uid,
+            prompt_hash,
+            model,
+            float(s.relevance),
+            s.category.value if s.category is not None else None,
+            int(bool(s.is_promo)),
+            s.gist,
+            now,
+        )
+        for uid, s in scores.items()
+    ]
+    if not rows:
+        return 0
+    conn.executemany(
+        "INSERT OR REPLACE INTO scores"
+        " (uid, prompt_hash, model, relevance, category, promo, gist, scored_at)"
+        " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        rows,
+    )
+    return len(rows)
+
+
+def scores_for(
+    conn: sqlite3.Connection, *, prompt_hash: str, model: str
+) -> dict[str, sqlite3.Row]:
+    """Every stored score for one prompt version and model, keyed by uid.
+
+    Scoped to a single (prompt, model) pair on purpose: mixing verdicts from two
+    prompt versions into one number would measure neither of them.
+    """
+    return {
+        row["uid"]: row
+        for row in conn.execute(
+            "SELECT * FROM scores WHERE prompt_hash = ? AND model = ?",
+            (prompt_hash, model),
+        )
+    }

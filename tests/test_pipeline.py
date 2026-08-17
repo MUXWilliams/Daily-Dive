@@ -2224,3 +2224,171 @@ def test_a_byline_that_repeats_the_outlet_is_not_printed_twice():
     named = item(source_name="Reef Builders", author="Jake Adams", category_hint=Category.COMMUNITY)
     html = render.render_issue(Issue(date=datetime(2026, 8, 15, tzinfo=UTC), items=[named]))
     assert "Jake Adams" in html
+
+
+# ------------------------------------------------------------------- eval
+
+def _seed(conn, *, slug, first_seen, published):
+    """One row in the seen log, with control over both timestamps."""
+    url = f"https://example.invalid/{slug}"
+    conn.execute(
+        "INSERT OR REPLACE INTO items (uid, source_id, source_name, title, url,"
+        " canonical_url, published_at, author, raw_text, category_hint, first_seen_at)"
+        " VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        (slug, "src", "Some Outlet", slug, url, url, published, None, "body", None, first_seen),
+    )
+
+
+def test_eligible_excludes_items_seen_long_after_publication(tmp_path):
+    """A YouTube channel hands back fifty videos on first fetch, most of them
+    years old. Those never reached the scorer, and labelling them would measure
+    nothing at the cost of an hour."""
+    from dailydive import eval as eval_mod
+
+    with store.connect(tmp_path / "db.sqlite3") as conn:
+        _seed(conn, slug="fresh", first_seen="2026-08-15T00:00:00+00:00",
+              published="2026-08-14T00:00:00+00:00")
+        _seed(conn, slug="backcatalogue", first_seen="2026-08-15T00:00:00+00:00",
+              published="2023-03-17T00:00:00+00:00")
+        got = eval_mod.eligible(conn, max_age_days=7)
+
+    assert [i.title for i in got] == ["fresh"]
+
+
+def test_eval_reconstructs_the_uid_the_row_was_stored_under(tmp_path):
+    """Labels are keyed by uid and so are scores, but eval rebuilds Items from
+    the seen log rather than reading the stored uid — so the derivation has to
+    round-trip. If it ever stops, labels quietly stop matching scores and the
+    report is computed over an empty intersection, which looks like a clean run
+    rather than a broken one."""
+    from dailydive import eval as eval_mod
+
+    original = item(title="A real headline", url="https://example.invalid/story?utm_source=x")
+    with store.connect(tmp_path / "db.sqlite3") as conn:
+        store.record_items(conn, [original])
+        row = conn.execute("SELECT * FROM items").fetchone()
+        assert eval_mod._item(row).uid == row["uid"] == original.uid
+
+
+def test_prompt_hash_changes_when_the_prompt_does(tmp_path):
+    """A hand-maintained version string is a thing somebody forgets to bump on
+    the one edit that mattered."""
+    from dailydive import score as score_module
+
+    a = tmp_path / "a.md"
+    b = tmp_path / "b.md"
+    a.write_text("score things carefully", encoding="utf-8")
+    b.write_text("score things carefully.", encoding="utf-8")
+
+    assert score_module.prompt_hash(a) == score_module.prompt_hash(a)
+    assert score_module.prompt_hash(a) != score_module.prompt_hash(b)
+    assert len(score_module.prompt_hash(a)) == 12
+
+
+def test_the_labelling_sheet_never_shows_the_model_score():
+    """Anti-anchoring, and the reason it is a test rather than a note: a number
+    in view decides the label before the reader has finished reading, so a sheet
+    that leaks one produces an expensive confirmation of what the model already
+    thought."""
+    from dailydive import eval as eval_mod
+
+    scored = item(
+        title="How to dose alkalinity",
+        extra={"relevance": "0.93", "gist": "A gist the model wrote", "beat": "MADEUPBEAT"},
+        category_hint=Category.HUSBANDRY,
+    )
+    html = eval_mod.build_sheet([scored])
+
+    assert "0.93" not in html
+    assert "A gist the model wrote" not in html
+    assert "MADEUPBEAT" not in html
+    assert "How to dose alkalinity" in html   # the item itself is there
+
+
+def test_labels_that_drifted_from_the_item_set_are_an_error(tmp_path):
+    """A label file out of step with the items produces a number that looks
+    fine and means nothing, which is worse than a crash."""
+    from dailydive import eval as eval_mod
+
+    path = tmp_path / "labels.json"
+    path.write_text(json.dumps({"labels": {"nosuchuid": "lead"}}), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="not in the item set"):
+        eval_mod.load_labels(path, known={"realuid"})
+
+    path.write_text(json.dumps({"labels": {"realuid": "brilliant"}}), encoding="utf-8")
+    with pytest.raises(ValueError, match="unknown bucket"):
+        eval_mod.load_labels(path, known={"realuid"})
+
+
+class _Scored:
+    def __init__(self, relevance, category=None):
+        self.relevance = relevance
+        self.category = category
+
+
+def test_report_separates_the_two_error_classes_and_excludes_borderline():
+    """False negatives never reach a page, so they cannot be noticed in
+    production — they are the number this whole exercise exists to produce.
+    Borderline items are excluded from the headline figure: being marked wrong
+    for disagreeing about a coin flip is noise."""
+    from dailydive import eval as eval_mod
+
+    items = {
+        "agree_keep": item(title="Kept by both"),
+        "agree_drop": item(title="Dropped by both"),
+        "miss": item(title="Editor wanted it, model dropped it"),
+        "extra": item(title="Model ran it, editor would not"),
+        "coinflip": item(title="Called a coin flip"),
+    }
+    labels = {
+        "agree_keep": "include", "agree_drop": "drop",
+        "miss": "lead", "extra": "drop", "coinflip": "borderline",
+    }
+    scores = {
+        "agree_keep": _Scored(0.80), "agree_drop": _Scored(0.10),
+        "miss": _Scored(0.20), "extra": _Scored(0.70), "coinflip": _Scored(0.90),
+    }
+
+    rep = eval_mod.report(labels, scores, items, threshold=0.45)
+
+    assert rep.judged == 4                      # the coin flip is not judged
+    assert rep.agreed == 2
+    assert rep.accuracy == 0.5
+    assert [d.uid for d in rep.false_negatives] == ["miss"]
+    assert [d.uid for d in rep.false_positives] == ["extra"]
+    assert [d.uid for d in rep.borderline] == ["coinflip"]
+
+
+def test_a_labelled_item_that_was_never_scored_is_reported_not_assumed():
+    """Treating a missing score as a drop would silently invent agreement."""
+    from dailydive import eval as eval_mod
+
+    items = {"orphan": item(title="Never scored")}
+    rep = eval_mod.report({"orphan": "lead"}, {}, items, threshold=0.45)
+
+    assert rep.unscored == ["orphan"]
+    assert rep.judged == 0
+    assert not rep.false_negatives
+
+
+def test_scores_round_trip_including_the_ones_below_threshold(tmp_path):
+    """Keeping the drops is the point: they are the half that cannot be
+    recovered later and the half that hides the expensive mistakes."""
+    from dailydive.score import ItemScore
+
+    scores = {
+        "kept": ItemScore(uid="kept", category=Category.HUSBANDRY, relevance=0.9, gist="g"),
+        "dropped": ItemScore(uid="dropped", category=None, relevance=0.1, gist="g"),
+    }
+    db = tmp_path / "db.sqlite3"
+    with store.connect(db) as conn:
+        assert store.record_scores(conn, scores, prompt_hash="abc123", model="m") == 2
+
+    with store.connect(db) as conn:
+        back = store.scores_for(conn, prompt_hash="abc123", model="m")
+        assert set(back) == {"kept", "dropped"}
+        assert back["dropped"]["relevance"] == 0.1
+        assert back["dropped"]["category"] is None
+        # A different prompt version must not see the previous one's verdicts.
+        assert store.scores_for(conn, prompt_hash="different", model="m") == {}

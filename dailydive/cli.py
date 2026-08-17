@@ -306,7 +306,96 @@ def build_parser() -> argparse.ArgumentParser:
         help="also ask known sites what feeds they advertise (HTML autodiscovery)",
     )
 
+    evaluating = sub.add_parser(
+        "eval",
+        help="measure the scorer against hand-labelled items",
+        parents=[common],
+    )
+    eval_sub = evaluating.add_subparsers(dest="eval_command", required=True)
+
+    sheet = eval_sub.add_parser("sheet", help="build the labelling page", parents=[common])
+    sheet.add_argument("--out", type=Path, required=True, help="where to write the HTML")
+    sheet.add_argument("--db", type=Path, default=store.DEFAULT_DB)
+    sheet.add_argument(
+        "--max-age-days",
+        type=int,
+        default=normalize.DEFAULT_MAX_AGE_DAYS,
+        help="how fresh an item had to be when first seen to count as scored",
+    )
+    sheet.add_argument("--limit", type=int, default=None, help="cap the number of items")
+
+    rep = eval_sub.add_parser(
+        "report", help="score the labelled items and compare", parents=[common]
+    )
+    rep.add_argument("--labels", type=Path, required=True, help="the exported label JSON")
+    rep.add_argument("--db", type=Path, default=store.DEFAULT_DB)
+    rep.add_argument(
+        "--max-age-days", type=int, default=normalize.DEFAULT_MAX_AGE_DAYS
+    )
+    rep.add_argument(
+        "--threshold", type=float, default=score_mod.DEFAULT_THRESHOLD,
+        help=f"the shipping threshold to judge against (default {score_mod.DEFAULT_THRESHOLD})",
+    )
+    rep.add_argument(
+        "--rescore",
+        action="store_true",
+        help="call the API for items with no stored score under the current prompt",
+    )
+
     return parser
+
+
+def _cmd_eval(args) -> int:
+    from . import eval as eval_mod
+
+    with store.connect(args.db) as conn:
+        items = eval_mod.eligible(conn, max_age_days=args.max_age_days)
+
+    if args.eval_command == "sheet":
+        if args.limit:
+            items = items[: args.limit]
+        if not items:
+            log.error("no eligible items — nothing to label")
+            return 1
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(eval_mod.build_sheet(items), encoding="utf-8")
+        print(f"wrote {args.out} ({len(items)} items to label)")
+        return 0
+
+    by_uid = {i.uid: i for i in items}
+    labels = eval_mod.load_labels(args.labels, known=set(by_uid))
+
+    prompt_hash = score_mod.prompt_hash()
+    with store.connect(args.db) as conn:
+        stored = store.scores_for(conn, prompt_hash=prompt_hash, model=score_mod.MODEL)
+
+    missing = [by_uid[uid] for uid in labels if uid not in stored]
+    if missing and args.rescore:
+        try:
+            import anthropic
+        except ImportError:
+            log.error("--rescore needs the anthropic package: pip install -e '.[ai]'")
+            return 2
+        log.info("scoring %d labelled item(s) not yet seen under prompt %s", len(missing), prompt_hash)
+        spend = RunSpend()
+        fresh = score_mod.score_items(
+            missing, client=anthropic.Anthropic(), spend=spend.stage("eval", score_mod.MODEL)
+        )
+        with store.connect(args.db) as conn:
+            store.record_scores(conn, fresh, prompt_hash=prompt_hash, model=score_mod.MODEL)
+        stored.update(fresh)
+        print("cost:\n" + spend.report())
+    elif missing:
+        log.warning(
+            "%d labelled item(s) have no score under prompt %s — pass --rescore to fill them",
+            len(missing),
+            prompt_hash,
+        )
+
+    result = eval_mod.report(labels, stored, by_uid, threshold=args.threshold)
+    print(f"prompt {prompt_hash} · model {score_mod.MODEL}\n")
+    print(eval_mod.format_report(result))
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -316,6 +405,9 @@ def main(argv: list[str] | None = None) -> int:
         level=logging.DEBUG if getattr(args, "verbose", False) else logging.INFO,
         format="%(levelname)s %(name)s: %(message)s",
     )
+
+    if args.command == "eval":
+        return _cmd_eval(args)
 
     if args.command == "probe":
         from . import probe as probe_mod
@@ -410,6 +502,19 @@ def main(argv: list[str] | None = None) -> int:
         client = anthropic.Anthropic()  # resolves ANTHROPIC_API_KEY / ant profile
         stage = spend.stage("score", score_mod.MODEL)
         scores = score_mod.score_items(items, client=client, spend=stage)
+
+        # Recorded before the threshold is applied, so the drops survive. An
+        # item the editor would have run and the model discarded leaves no
+        # trace anywhere else — no page, no log line, nothing to notice — so
+        # this table is the only place that class of error can be found.
+        # Unconditional, unlike `published`: a partial run's verdicts are just
+        # as real as a full run's, and claim nothing about publication.
+        with store.connect(args.db) as conn:
+            written = store.record_scores(
+                conn, scores, prompt_hash=score_mod.prompt_hash(), model=score_mod.MODEL
+            )
+        log.info("recorded %d score(s) for prompt %s", written, score_mod.prompt_hash())
+
         items = score_mod.apply_scores(
             items,
             scores,

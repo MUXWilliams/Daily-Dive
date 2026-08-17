@@ -21,6 +21,7 @@ Three things worth knowing before editing:
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 from pathlib import Path
@@ -75,6 +76,21 @@ class ScoreBatch(BaseModel):
 
 def load_system_prompt(path: Path = PROMPT_PATH) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def prompt_hash(path: Path = PROMPT_PATH) -> str:
+    """Short digest of the scoring prompt, identifying the version that ran.
+
+    Derived rather than hand-maintained. A version string in a file is a thing
+    someone forgets to bump on the one edit that mattered; a hash changes
+    exactly when the prompt changes and never when it doesn't. Same reasoning
+    that moved the publication name into brand.py after the about page spent
+    weeks naming the wrong one.
+
+    Twelve hex characters — enough that a collision is not a real concern here,
+    short enough to read in a table.
+    """
+    return hashlib.sha256(path.read_bytes()).hexdigest()[:12]
 
 
 def _item_payload(item: Item) -> dict[str, object]:

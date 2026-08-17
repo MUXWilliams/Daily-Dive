@@ -188,10 +188,13 @@ observed in this system.
 
 ### Prompts are not versioned
 
-`prompts/` holds one file and no changelog, so a change in output quality cannot
-be attributed to a change in instructions. Scores are not persisted either
-(`store.py` keeps a seen log and a published log, not relevance), so re-rendering
-an old issue costs a fresh scoring pass and past judgements cannot be revisited.
+`prompts/` holds one file and no changelog, so *what* changed between two
+versions has to be read out of the git history rather than stated.
+
+Scores were not persisted either, which was the worse half of this and is now
+fixed — see the correction under *What to build next*. Until it was, past
+judgements could not be revisited at all and re-rendering an old issue cost a
+fresh scoring pass.
 
 ---
 
@@ -199,11 +202,44 @@ an old issue costs a fresh scoring pass and past judgements cannot be revisited.
 
 In this order, because each step makes the next one measurable.
 
-### 1. Label a hundred items by hand
+> **Corrected after starting step 1.** This list originally put score
+> persistence last, as a convenience. That was wrong, and finding out why is
+> itself the lesson. Relevance was never stored anywhere — `items` is a seen
+> log, `published` is what shipped, and no table held a score. So agreement
+> could not be measured retroactively at all, and worse, *no measurement could
+> ever be compared to another one*: a prompt edit had nothing to be diffed
+> against. Persistence is not step 4, it is the precondition for step 1 being
+> repeatable rather than a one-off. It is now built, and this list is renumbered
+> to say so.
+>
+> The second surprise: the seen log held 808 items but only ~128 had ever
+> reached the scorer. The rest were dropped by the recency filter before any
+> model saw them — YouTube returns fifty videos per channel on first fetch,
+> most of them years old. Sampling naively would have spent an hour labelling
+> items nothing had judged. **Check what your eval corpus actually is before
+> labelling it.**
 
-Take 100 real items from past runs and score each 0–1 the way it *should* have
-been scored. Roughly two hours. Store it as a fixture next to
-`tests/fixtures/preview-issue.json`.
+### 0. Persist what the scorer decided — done
+
+`store.scores`, keyed by `(uid, prompt_hash, model)`, written for every scored
+item *including the ones below threshold*. The drops are the half that hides
+the expensive mistakes, and the half that cannot be recovered later.
+
+`prompt_hash` is derived from the prompt file rather than hand-maintained,
+because a version string is a thing somebody forgets to bump on the one edit
+that mattered.
+
+### 1. Label the eligible set by hand
+
+`daily-dive eval sheet` builds a labelling page from the items that plausibly
+reached the scorer; `daily-dive eval report` scores them and compares. Four
+ordinal buckets — Lead, Include, Borderline, Drop — rather than a 0–1 number,
+because a human's 0.6 at item 10 does not mean their 0.6 at item 90.
+
+**The sheet never shows the model's score.** A number in view decides the label
+before you have finished reading, and an anchored label is an expensive way to
+confirm what the model already thought. A test asserts no relevance value
+appears in the rendered page.
 
 This is the highest-value thing on the list, and it is worth being clear about
 why. Every open question right now — is the bridge rule holding, is 0.45 the
@@ -213,7 +249,10 @@ unanswerable without a labelled set. It also forces the editorial standard
 ("depth, not marketing fluff") to become specific, which is useful even if no
 model is ever run against it.
 
-Measure: agreement with the model, and where the disagreements cluster.
+The output that matters is not the accuracy percentage. It is the
+**false-negative list**: items you would have run and the model discarded.
+Those never reach a page, so no amount of reading the published issue would
+reveal them.
 
 ### 2. Compare models on that set
 
@@ -228,11 +267,10 @@ Two or three items, a generated summary, then a verification pass asking whether
 each sentence is supported by the source item. Keep it small; the point is to
 watch it fail, not to ship prose.
 
-### 4. Version the prompts, persist the scores
+### 4. Version the prompts
 
-A changelog in `prompts/`, and relevance stored in `store.py`. Together they
-make it possible to diff issue quality across prompt versions instead of
-recalling how it felt.
+A changelog in `prompts/`. The hash already identifies *which* prompt ran; a
+changelog says *what changed and why*, which is the half a hash cannot carry.
 
 ---
 
