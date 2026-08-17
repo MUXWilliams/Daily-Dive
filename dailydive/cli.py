@@ -341,6 +341,12 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="call the API for items with no stored score under the current prompt",
     )
+    rep.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="also write the report here; %%s in the path becomes the prompt hash",
+    )
 
     return parser
 
@@ -393,8 +399,22 @@ def _cmd_eval(args) -> int:
         )
 
     result = eval_mod.report(labels, stored, by_uid, threshold=args.threshold)
-    print(f"prompt {prompt_hash} · model {score_mod.MODEL}\n")
-    print(eval_mod.format_report(result))
+    header = (
+        f"# Scoring eval — prompt `{prompt_hash}`\n\n"
+        f"Model `{score_mod.MODEL}` · {len(labels)} hand-labelled items"
+        f" · generated {datetime.now(UTC):%Y-%m-%d}\n"
+    )
+    body = eval_mod.format_report(result)
+    print(header)
+    print(body)
+
+    if args.out:
+        # One report per prompt version, so "did that edit help" is a diff
+        # between two committed files rather than a matter of recollection.
+        path = Path(str(args.out).replace("%s", prompt_hash))
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(header + "\n" + body + "\n", encoding="utf-8")
+        print(f"\nwrote {path}")
     return 0
 
 

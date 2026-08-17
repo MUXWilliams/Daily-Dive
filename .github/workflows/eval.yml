@@ -1,0 +1,104 @@
+name: Score eval
+
+# Measure the scorer against the editor's hand labels.
+#
+# Manual only, and deliberately separate from the build. This is a measurement
+# you want on demand — after a prompt edit, before a model change — not one
+# coupled to a schedule you don't control. It also touches nothing the site
+# depends on: no Pages deploy, no issue is built, nothing published.
+#
+# Cost: 128 labelled items is 7 batches of 20, well under two cents.
+on:
+  workflow_dispatch:
+    inputs:
+      threshold:
+        description: "Threshold to judge against, 0-1 (blank = 0.45, the shipping default)"
+        required: false
+        default: ""
+      commit:
+        description: "Commit the report to docs/eval/"
+        type: boolean
+        required: false
+        default: true
+
+# contents only. This workflow writes a report and the scores DB; it must never
+# be able to touch Pages, and it has no reason to read the issue bucket.
+permissions:
+  contents: write
+
+# Two eval runs at once would race on the same scores table and the same report
+# file. Queue them rather than cancelling: a run that already spent the tokens
+# should be allowed to finish and record what it learned.
+concurrency:
+  group: eval
+  cancel-in-progress: false
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -e ".[dev,ai]"
+
+      - name: Tests
+        run: pytest -q
+
+      # Fail before spending anything, with a sentence rather than a stack
+      # trace 20 seconds into the first batch.
+      - name: Check the API key is present
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "The ANTHROPIC_API_KEY secret isn't set — the eval needs it to score." >&2
+            echo "Settings -> Secrets and variables -> Actions -> New repository secret." >&2
+            exit 1
+          fi
+
+      # Inputs reach the shell through env, never through ${{ }} interpolation.
+      # A workflow input containing & was once read as a background operator,
+      # which is both a bug and a script-injection hole.
+      - name: Score the labelled items and compare
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          IN_THRESHOLD: ${{ inputs.threshold }}
+        run: |
+          set -eu -o pipefail
+          args=""
+          if [ -n "$IN_THRESHOLD" ]; then args="--threshold $IN_THRESHOLD"; fi
+          # shellcheck disable=SC2086
+          daily-dive eval report \
+            --labels tests/fixtures/labels.json \
+            --rescore \
+            --out "docs/eval/%s.md" \
+            $args | tee eval-report.txt
+
+      # Readable without opening the log or the repo.
+      - name: Summary
+        if: always()
+        run: |
+          if [ -f eval-report.txt ]; then
+            cat eval-report.txt >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # The scores DB is committed alongside the report: it is what makes the
+      # next run a comparison rather than a fresh measurement.
+      - name: Commit the report
+        if: inputs.commit
+        run: |
+          set -eu
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/eval dailydive.sqlite3
+          if git diff --cached --quiet; then
+            echo "Nothing changed — the same prompt scored the same items the same way."
+            exit 0
+          fi
+          git commit -m "Score eval for the current prompt"
+          git push

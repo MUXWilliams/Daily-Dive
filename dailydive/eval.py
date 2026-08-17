@@ -56,6 +56,15 @@ BUCKETS: dict[str, tuple[float, float]] = {
 KEEP = frozenset({"lead", "include"})
 DROP = frozenset({"drop"})
 
+# Ordinal rank for the correlation. The gaps are not meaningful — only the
+# order is — which is exactly what a rank correlation assumes.
+ORDINAL = {"drop": 0, "borderline": 1, "include": 2, "lead": 3}
+
+# How many items an issue actually carries. `precision_at(ISSUE_SIZE)` is the
+# number that describes what a reader receives, as opposed to what the scorer
+# believes.
+ISSUE_SIZE = 20
+
 
 def eligible(conn: sqlite3.Connection, *, max_age_days: int = 7) -> list[Item]:
     """Items that plausibly reached the scorer, newest first.
@@ -160,10 +169,33 @@ def load_labels(path: Path, *, known: set[str] | None = None) -> dict[str, str]:
 
 
 # --------------------------------------------------------------- the report
+#
+# What the labels can and cannot support.
+#
+# The labels answer "does this belong in an issue at all" — admissibility. They
+# were made without counting slots. The threshold answers a different question:
+# an issue has room for about twenty items and the threshold is what keeps it to
+# twenty. That is rationing, not admission.
+#
+# Conflating the two produces a false-negative list of everything the editor
+# would have allowed and the threshold rationed away, which is technically
+# correct and practically useless — and a useless number is how a measurement
+# stops being believed. So the report is built around the comparisons the labels
+# genuinely license:
+#
+#   * an editor DROP that scored above threshold is an error, full stop;
+#   * an editor LEAD that scored below threshold is an error, full stop — a
+#     lead is not a marginal call, it is a story the editor would have put at
+#     the top of a section;
+#   * an editor INCLUDE below threshold may be an error or may be correct
+#     rationing. Listed, never counted.
+#
+# And the production question is ranking rather than classification: of the
+# twenty items that would actually ship, how many did the editor want?
 
 
 @dataclass
-class Disagreement:
+class Row:
     uid: str
     title: str
     source_id: str
@@ -173,30 +205,88 @@ class Disagreement:
 
 @dataclass
 class Report:
-    """The comparison. `false_negatives` is the deliverable; the rest is context."""
+    """`leads_missed` is the deliverable. The rest is context for it."""
 
     threshold: float
-    judged: int = 0
-    agreed: int = 0
-    borderline: list[Disagreement] = field(default_factory=list)
-    false_negatives: list[Disagreement] = field(default_factory=list)
-    false_positives: list[Disagreement] = field(default_factory=list)
+    scored: int = 0
+
+    # Unambiguous, in both directions.
+    leads_missed: list[Row] = field(default_factory=list)
+    drops_admitted: list[Row] = field(default_factory=list)
+
+    # Real disagreements that the labels cannot adjudicate.
+    includes_below: list[Row] = field(default_factory=list)
+    borderline: list[Row] = field(default_factory=list)
+
+    ranked: list[Row] = field(default_factory=list)   # every scored row, best first
     unscored: list[str] = field(default_factory=list)
+    rho: float | None = None
+
     category_judged: int = 0
     category_agreed: int = 0
 
-    @property
-    def accuracy(self) -> float:
-        return self.agreed / self.judged if self.judged else 0.0
+    def precision_at(self, n: int) -> tuple[int, int]:
+        """Of the model's top n, how many the editor would have admitted.
+
+        Returns (hits, considered). `considered` is min(n, scored) rather than n,
+        so a run with fewer than n scored items reports what it actually
+        measured instead of quietly counting missing items as misses.
+        """
+        top = self.ranked[:n]
+        return sum(1 for r in top if r.label in KEEP), len(top)
 
     def by_source(self) -> dict[str, int]:
-        """Disagreements per source. A source that consistently confuses the
-        scorer is a config problem — wrong category_hint, wrong feed — not a
-        prompt problem, and the two get fixed in different files."""
+        """Unambiguous errors per source. A source that consistently confuses
+        the scorer is a config problem — wrong feed, wrong category_hint — and
+        gets fixed in sources.toml, not in the prompt."""
         counts: dict[str, int] = {}
-        for d in self.false_negatives + self.false_positives:
-            counts[d.source_id] = counts.get(d.source_id, 0) + 1
+        for r in self.leads_missed + self.drops_admitted:
+            counts[r.source_id] = counts.get(r.source_id, 0) + 1
         return dict(sorted(counts.items(), key=lambda kv: kv[1], reverse=True))
+
+
+def _ranks(values: list[float]) -> list[float]:
+    """Tie-corrected ranks: tied values share their average rank.
+
+    Ties are the normal case here, not an edge case — the editor's scale has
+    four values across 128 items, so almost everything is tied. Ranking them
+    arbitrarily would invent an ordering the editor never expressed.
+    """
+    order = sorted(range(len(values)), key=lambda i: values[i])
+    ranks = [0.0] * len(values)
+    i = 0
+    while i < len(order):
+        j = i
+        while j + 1 < len(order) and values[order[j + 1]] == values[order[i]]:
+            j += 1
+        shared = (i + j) / 2 + 1
+        for k in range(i, j + 1):
+            ranks[order[k]] = shared
+        i = j + 1
+    return ranks
+
+
+def spearman(xs: list[float], ys: list[float]) -> float | None:
+    """Spearman's rho: Pearson on tie-corrected ranks.
+
+    Written out rather than imported. scipy is a large dependency to add for one
+    coefficient in a project whose whole architecture is "no server, no
+    dependencies that need patching".
+
+    Returns None when either series is constant — the correlation is undefined
+    there, and returning 0.0 would read as "no relationship" when the truth is
+    "not measurable".
+    """
+    if len(xs) != len(ys) or len(xs) < 2:
+        return None
+    rx, ry = _ranks(xs), _ranks(ys)
+    mx, my = sum(rx) / len(rx), sum(ry) / len(ry)
+    num = sum((a - mx) * (b - my) for a, b in zip(rx, ry))
+    dx = sum((a - mx) ** 2 for a in rx)
+    dy = sum((b - my) ** 2 for b in ry)
+    if dx == 0 or dy == 0:
+        return None
+    return num / (dx * dy) ** 0.5
 
 
 def report(
@@ -206,14 +296,10 @@ def report(
     *,
     threshold: float,
 ) -> Report:
-    """Compare labels against scores at the shipping threshold.
-
-    Borderline-labelled items are counted and listed but excluded from the
-    headline figure. Being marked wrong for disagreeing about something the
-    editor themselves called a coin flip is noise, and noise in the headline
-    number is how a measurement stops being believed.
-    """
+    """Compare labels against scores. See the note above for what is countable."""
     rep = Report(threshold=threshold)
+    xs: list[float] = []
+    ys: list[float] = []
 
     for uid, bucket in labels.items():
         item = items.get(uid)
@@ -221,71 +307,98 @@ def report(
             continue
         score = scores.get(uid)
         if score is None:
-            # Scored nothing for this item — a failed batch, or a re-run that
-            # did not cover it. Counted, never silently treated as a drop.
+            # A failed batch, or a re-run that did not cover it. Counted, never
+            # silently treated as a drop — that would invent agreement.
             rep.unscored.append(uid)
             continue
 
         relevance = float(score.relevance)
-        row = Disagreement(uid, item.title, item.source_id, bucket, relevance)
-        model_keeps = relevance >= threshold
+        row = Row(uid, item.title, item.source_id, bucket, relevance)
+        rep.scored += 1
+        rep.ranked.append(row)
+        xs.append(relevance)
+        ys.append(float(ORDINAL[bucket]))
 
+        above = relevance >= threshold
         if bucket == "borderline":
             rep.borderline.append(row)
-        else:
-            rep.judged += 1
-            editor_keeps = bucket in KEEP
-            if editor_keeps == model_keeps:
-                rep.agreed += 1
-            elif editor_keeps:
-                rep.false_negatives.append(row)
-            else:
-                rep.false_positives.append(row)
+        elif bucket == "lead" and not above:
+            rep.leads_missed.append(row)
+        elif bucket == "drop" and above:
+            rep.drops_admitted.append(row)
+        elif bucket == "include" and not above:
+            rep.includes_below.append(row)
 
-        # Category is judged only where both sides think the item belongs —
-        # asking where a dropped item "should" have been filed is a question
-        # neither party answered.
         assigned = getattr(score, "category", None)
-        if model_keeps and bucket in KEEP and assigned is not None and item.category_hint:
+        if above and bucket in KEEP and assigned is not None and item.category_hint:
             rep.category_judged += 1
             if assigned == item.category_hint:
                 rep.category_agreed += 1
 
-    rep.false_negatives.sort(key=lambda d: d.relevance)
-    rep.false_positives.sort(key=lambda d: -d.relevance)
+    rep.ranked.sort(key=lambda r: -r.relevance)
+    rep.leads_missed.sort(key=lambda r: r.relevance)
+    rep.drops_admitted.sort(key=lambda r: -r.relevance)
+    rep.includes_below.sort(key=lambda r: r.relevance)
+    rep.rho = spearman(xs, ys)
     return rep
 
 
 def format_report(rep: Report) -> str:
-    """The report as text, for a terminal or a CI log."""
+    """The report as markdown, for a terminal, a CI log, or docs/eval/."""
+    if not rep.scored:
+        return (
+            f"No scored items among {len(rep.unscored)} labelled.\n"
+            "Nothing to measure — run with --rescore, or check that the prompt "
+            "hash matches the one the scores were stored under."
+        )
+
+    hits20, of20 = rep.precision_at(ISSUE_SIZE)
+    hits10, of10 = rep.precision_at(10)
     lines = [
-        f"Judged {rep.judged} items at threshold {rep.threshold:.2f}"
-        f" — agreed on {rep.agreed} ({rep.accuracy:.0%})",
-        f"Borderline, excluded from that figure: {len(rep.borderline)}",
+        f"Scored {rep.scored} labelled items at threshold {rep.threshold:.2f}.",
+        "",
+        "## What a reader would receive",
+        f"- Top {of20} by relevance: **{hits20}/{of20} ({hits20/of20:.0%})** the editor would admit",
+        f"- Top {of10}: **{hits10}/{of10} ({hits10/of10:.0%})**",
     ]
-    if rep.unscored:
-        lines.append(f"Labelled but never scored: {len(rep.unscored)}")
+    if rep.rho is not None:
+        lines.append(f"- Rank agreement (Spearman ρ): **{rep.rho:+.2f}**")
     if rep.category_judged:
         share = rep.category_agreed / rep.category_judged
         lines.append(
-            f"Category agreement where both sides kept the item:"
+            f"- Category agreement where both sides kept the item:"
             f" {rep.category_agreed}/{rep.category_judged} ({share:.0%})"
         )
+    if rep.unscored:
+        lines.append(f"- Labelled but never scored: {len(rep.unscored)}")
 
     lines += [
         "",
-        f"## False negatives — you'd have run these, the model dropped them ({len(rep.false_negatives)})",
-        "   These never reach a page, so nothing in production would show them.",
+        f"## Leads the model buried ({len(rep.leads_missed)})",
+        "Editor marked these a lead; the model scored them below threshold, so",
+        "they never reached a page. Nothing in production would reveal them.",
+        "",
     ]
-    for d in rep.false_negatives:
-        lines.append(f"  [{d.relevance:.2f}] ({d.label}) {d.title}  — {d.source_id}")
+    lines += [f"- `{r.relevance:.2f}` {r.title} — *{r.source_id}*" for r in rep.leads_missed] or ["_None._"]
 
-    lines += ["", f"## False positives — the model ran these, you'd have dropped them ({len(rep.false_positives)})"]
-    for d in rep.false_positives:
-        lines.append(f"  [{d.relevance:.2f}] {d.title}  — {d.source_id}")
+    lines += [
+        "",
+        f"## Items the model ran that the editor would drop ({len(rep.drops_admitted)})",
+        "",
+    ]
+    lines += [f"- `{r.relevance:.2f}` {r.title} — *{r.source_id}*" for r in rep.drops_admitted] or ["_None._"]
+
+    lines += [
+        "",
+        f"## Admitted by the editor, below threshold ({len(rep.includes_below)})",
+        "Not counted as errors. The editor judged whether these *belong*; the",
+        "threshold decides how many *fit*. Some of this list is correct rationing.",
+        "",
+    ]
+    lines += [f"- `{r.relevance:.2f}` {r.title} — *{r.source_id}*" for r in rep.includes_below] or ["_None._"]
 
     counts = rep.by_source()
     if counts:
-        lines += ["", "## Disagreements by source"]
-        lines += [f"  {sid}: {n}" for sid, n in counts.items()]
+        lines += ["", "## Unambiguous errors by source", ""]
+        lines += [f"- `{sid}`: {n}" for sid, n in counts.items()]
     return "\n".join(lines)

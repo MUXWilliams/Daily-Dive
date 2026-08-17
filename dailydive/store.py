@@ -9,10 +9,11 @@ from __future__ import annotations
 import sqlite3
 from collections.abc import Iterable, Iterator
 from contextlib import contextmanager
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
-from .models import Item
+from .models import Category, Item
 
 DEFAULT_DB = Path("dailydive.sqlite3")
 
@@ -222,18 +223,45 @@ def record_scores(
     return len(rows)
 
 
+@dataclass(frozen=True)
+class StoredScore:
+    """A score read back from the database.
+
+    Deliberately the same shape as `score.ItemScore` — attribute access, and a
+    real `Category` rather than the string the column holds. The eval merges
+    stored verdicts with freshly-scored ones into a single dict, so the two have
+    to be interchangeable; a bare sqlite3.Row is not, and the mismatch surfaced
+    as an AttributeError only once the report ran end to end.
+
+    Rebuilding the enum matters as much as the attribute access: compared as a
+    string, the category check silently never matches and reports 0% agreement
+    on a scorer that was right every time.
+    """
+
+    uid: str
+    relevance: float
+    category: Category | None
+    is_promo: bool
+    gist: str
+
+
 def scores_for(
     conn: sqlite3.Connection, *, prompt_hash: str, model: str
-) -> dict[str, sqlite3.Row]:
+) -> dict[str, StoredScore]:
     """Every stored score for one prompt version and model, keyed by uid.
 
     Scoped to a single (prompt, model) pair on purpose: mixing verdicts from two
     prompt versions into one number would measure neither of them.
     """
-    return {
-        row["uid"]: row
-        for row in conn.execute(
-            "SELECT * FROM scores WHERE prompt_hash = ? AND model = ?",
-            (prompt_hash, model),
+    out: dict[str, StoredScore] = {}
+    for row in conn.execute(
+        "SELECT * FROM scores WHERE prompt_hash = ? AND model = ?", (prompt_hash, model)
+    ):
+        out[row["uid"]] = StoredScore(
+            uid=row["uid"],
+            relevance=float(row["relevance"]),
+            category=Category(row["category"]) if row["category"] else None,
+            is_promo=bool(row["promo"]),
+            gist=row["gist"] or "",
         )
-    }
+    return out

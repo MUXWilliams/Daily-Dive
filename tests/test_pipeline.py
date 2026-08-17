@@ -2327,49 +2327,6 @@ class _Scored:
         self.category = category
 
 
-def test_report_separates_the_two_error_classes_and_excludes_borderline():
-    """False negatives never reach a page, so they cannot be noticed in
-    production — they are the number this whole exercise exists to produce.
-    Borderline items are excluded from the headline figure: being marked wrong
-    for disagreeing about a coin flip is noise."""
-    from dailydive import eval as eval_mod
-
-    items = {
-        "agree_keep": item(title="Kept by both"),
-        "agree_drop": item(title="Dropped by both"),
-        "miss": item(title="Editor wanted it, model dropped it"),
-        "extra": item(title="Model ran it, editor would not"),
-        "coinflip": item(title="Called a coin flip"),
-    }
-    labels = {
-        "agree_keep": "include", "agree_drop": "drop",
-        "miss": "lead", "extra": "drop", "coinflip": "borderline",
-    }
-    scores = {
-        "agree_keep": _Scored(0.80), "agree_drop": _Scored(0.10),
-        "miss": _Scored(0.20), "extra": _Scored(0.70), "coinflip": _Scored(0.90),
-    }
-
-    rep = eval_mod.report(labels, scores, items, threshold=0.45)
-
-    assert rep.judged == 4                      # the coin flip is not judged
-    assert rep.agreed == 2
-    assert rep.accuracy == 0.5
-    assert [d.uid for d in rep.false_negatives] == ["miss"]
-    assert [d.uid for d in rep.false_positives] == ["extra"]
-    assert [d.uid for d in rep.borderline] == ["coinflip"]
-
-
-def test_a_labelled_item_that_was_never_scored_is_reported_not_assumed():
-    """Treating a missing score as a drop would silently invent agreement."""
-    from dailydive import eval as eval_mod
-
-    items = {"orphan": item(title="Never scored")}
-    rep = eval_mod.report({"orphan": "lead"}, {}, items, threshold=0.45)
-
-    assert rep.unscored == ["orphan"]
-    assert rep.judged == 0
-    assert not rep.false_negatives
 
 
 def test_scores_round_trip_including_the_ones_below_threshold(tmp_path):
@@ -2388,7 +2345,156 @@ def test_scores_round_trip_including_the_ones_below_threshold(tmp_path):
     with store.connect(db) as conn:
         back = store.scores_for(conn, prompt_hash="abc123", model="m")
         assert set(back) == {"kept", "dropped"}
-        assert back["dropped"]["relevance"] == 0.1
-        assert back["dropped"]["category"] is None
+        assert back["dropped"].relevance == 0.1
+        assert back["dropped"].category is None
+        assert back["kept"].category is Category.HUSBANDRY
         # A different prompt version must not see the previous one's verdicts.
         assert store.scores_for(conn, prompt_hash="different", model="m") == {}
+
+
+def _rep(pairs, threshold=0.45):
+    """Build a report from (uid, label, relevance) triples."""
+    from dailydive import eval as eval_mod
+
+    items = {uid: item(title=uid) for uid, _, _ in pairs}
+    labels = {uid: label for uid, label, _ in pairs}
+    scores = {uid: _Scored(rel) for uid, _, rel in pairs}
+    return eval_mod.report(labels, scores, items, threshold=threshold)
+
+
+def test_a_buried_lead_is_an_error_but_a_buried_include_is_not():
+    """The distinction the whole report rests on. The labels judge whether an
+    item BELONGS; the threshold decides how many FIT. An include below the line
+    may be correct rationing. A lead below the line cannot be — a lead is a
+    story the editor would have put at the top of a section."""
+    rep = _rep([
+        ("buried_lead", "lead", 0.20),
+        ("buried_include", "include", 0.20),
+        ("kept_lead", "lead", 0.90),
+    ])
+
+    assert [r.uid for r in rep.leads_missed] == ["buried_lead"]
+    assert [r.uid for r in rep.includes_below] == ["buried_include"]
+    # The rationed include must not be counted as an error anywhere.
+    assert "buried_include" not in {r.uid for r in rep.leads_missed + rep.drops_admitted}
+    assert rep.by_source() == {"s": 1}
+
+
+def test_a_drop_the_model_ran_is_an_unambiguous_error():
+    rep = _rep([("shipped_junk", "drop", 0.70), ("dropped_junk", "drop", 0.10)])
+    assert [r.uid for r in rep.drops_admitted] == ["shipped_junk"]
+
+
+def test_borderline_items_are_listed_but_never_counted_as_errors():
+    rep = _rep([("coinflip", "borderline", 0.90), ("other", "borderline", 0.10)])
+    assert len(rep.borderline) == 2
+    assert not rep.leads_missed and not rep.drops_admitted and not rep.includes_below
+
+
+def test_precision_at_reports_what_it_measured_not_what_was_asked_for():
+    """A run with fewer than n scored items must not count missing items as
+    misses — that reads as a bad model rather than a short run."""
+    rep = _rep([
+        ("best", "lead", 0.95),
+        ("good", "include", 0.80),
+        ("junk", "drop", 0.60),
+    ])
+    assert rep.precision_at(2) == (2, 2)
+    assert rep.precision_at(3) == (2, 3)
+    assert rep.precision_at(20) == (2, 3)      # considered is 3, not 20
+
+
+def test_precision_at_reads_the_models_ordering_not_the_input_order():
+    rep = _rep([
+        ("listed_first_but_scored_low", "drop", 0.10),
+        ("listed_last_but_scored_high", "lead", 0.99),
+    ])
+    assert [r.uid for r in rep.ranked][0] == "listed_last_but_scored_high"
+    assert rep.precision_at(1) == (1, 1)
+
+
+def test_spearman_handles_the_perfect_reversed_and_tied_cases():
+    """Ties are the normal case here, not an edge case: the editor's scale has
+    four values across 128 items, so almost everything is tied."""
+    from dailydive import eval as eval_mod
+
+    assert eval_mod.spearman([1, 2, 3, 4], [1, 2, 3, 4]) == pytest.approx(1.0)
+    assert eval_mod.spearman([1, 2, 3, 4], [4, 3, 2, 1]) == pytest.approx(-1.0)
+    # Heavy ties on one side, perfectly ordered otherwise. rho is strong but
+    # capped below 1.0 at 4/sqrt(20), because tied ranks cannot express an
+    # ordering as fine as the other series has. That ceiling matters when
+    # reading the real report: with four buckets over 128 items the editor's
+    # series is mostly ties, so a middling rho may be the scale's limit rather
+    # than the model's failing.
+    assert eval_mod.spearman([0.1, 0.2, 0.8, 0.9], [0, 0, 3, 3]) == pytest.approx(0.894427, abs=1e-5)
+    # A constant series has no measurable correlation. None, not 0.0, which
+    # would read as "no relationship" rather than "not measurable".
+    assert eval_mod.spearman([0.5, 0.5, 0.5], [1, 2, 3]) is None
+    assert eval_mod.spearman([1.0], [1.0]) is None
+
+
+def test_a_labelled_item_that_was_never_scored_is_reported_not_assumed():
+    """Treating a missing score as a drop would silently invent agreement."""
+    from dailydive import eval as eval_mod
+
+    items = {"orphan": item(title="Never scored")}
+    rep = eval_mod.report({"orphan": "lead"}, {}, items, threshold=0.45)
+
+    assert rep.unscored == ["orphan"]
+    assert rep.scored == 0
+    assert not rep.leads_missed
+
+
+def test_a_report_with_nothing_scored_says_so_instead_of_printing_a_score():
+    """The failure I'd most likely ship: a confident 0% built from no data."""
+    from dailydive import eval as eval_mod
+
+    items = {"orphan": item(title="Never scored")}
+    rep = eval_mod.report({"orphan": "lead"}, {}, items, threshold=0.45)
+    text = eval_mod.format_report(rep)
+
+    assert "Nothing to measure" in text
+    assert "0%" not in text
+
+
+def test_the_committed_labels_still_match_the_items_they_describe():
+    """Labels are data, not output. If the seen log or the uid derivation moves
+    under them, they silently stop matching and every future report is computed
+    over an empty intersection — which looks like a clean run."""
+    from dailydive import eval as eval_mod
+
+    path = Path("tests/fixtures/labels.json")
+    labels = eval_mod.load_labels(path)
+    assert len(labels) == 128
+    assert set(labels.values()) <= set(eval_mod.BUCKETS)
+
+
+def test_stored_and_fresh_scores_are_interchangeable(tmp_path):
+    """The eval merges scores read from the DB with freshly-scored ones into one
+    dict, so both have to answer to the same interface. They did not: scores_for
+    returned sqlite3.Row, which is subscript-only, and report() reads
+    .relevance. It surfaced as an AttributeError the first time the report ran
+    end to end, which is late.
+
+    The category matters just as much. Held as the raw string the column
+    stores, the comparison against Item.category_hint silently never matches
+    and the report claims 0% category agreement on a scorer that was right
+    every time."""
+    from dailydive import eval as eval_mod
+    from dailydive.score import ItemScore
+
+    fresh = ItemScore(uid="u", category=Category.HUSBANDRY, relevance=0.7, gist="g")
+    with store.connect(tmp_path / "db.sqlite3") as conn:
+        store.record_scores(conn, {"u": fresh}, prompt_hash="p", model="m")
+        stored = store.scores_for(conn, prompt_hash="p", model="m")["u"]
+
+    assert stored.relevance == fresh.relevance
+    assert stored.category == fresh.category
+    assert isinstance(stored.category, Category)
+
+    # Both shapes must survive the same code path.
+    items = {"u": item(title="A story", category_hint=Category.HUSBANDRY)}
+    for score in (fresh, stored):
+        rep = eval_mod.report({"u": "include"}, {"u": score}, items, threshold=0.45)
+        assert rep.scored == 1
+        assert rep.category_agreed == 1

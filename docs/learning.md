@@ -249,10 +249,42 @@ unanswerable without a labelled set. It also forces the editorial standard
 ("depth, not marketing fluff") to become specific, which is useful even if no
 model is ever run against it.
 
-The output that matters is not the accuracy percentage. It is the
-**false-negative list**: items you would have run and the model discarded.
-Those never reach a page, so no amount of reading the published issue would
-reveal them.
+The output that matters is not an accuracy percentage. It is the list of items
+you would have led with and the model discarded — those never reach a page, so
+no amount of reading the published issue would reveal them.
+
+**What labelling revealed, before a single item was scored.** The editor admits
+76% of these items (90 of 118, borderline excluded); the pipeline ships about
+13% of what it fetches. That gap is not straightforwardly a scorer failure,
+and working out why is the lesson:
+
+> The labels answer *does this belong in an issue at all* — admissibility. The
+> threshold answers *how many fit* — rationing. They are different questions,
+> and a report that compares an admissibility label against a rationing decision
+> produces a false-negative list of fifty items that is technically correct and
+> practically useless.
+
+So the report only counts what the labels genuinely license. An editor **Drop**
+that scored above threshold is an error, full stop. An editor **Lead** that
+scored below it is an error, full stop — a lead is not a marginal call. An
+**Include** below threshold is listed but never counted, because it may be
+correct rationing. And the production question is ranking rather than
+classification: of the twenty items that would actually ship, how many did the
+editor want? That is `precision@20`.
+
+**The eval design was wrong until the labels existed to expose it.** Which is
+the general lesson about quality measurement: you cannot design the metric
+before you have the labels, because the labels are what tell you which question
+you actually asked.
+
+Two findings were legible in the labels alone, and both are config decisions
+rather than prompt ones — a distinction worth making before touching either:
+
+- `openalex-coral`: **15 of 16 admitted.** The editor wants essentially every
+  journal paper, which is exactly what the publication claims to differentiate
+  on.
+- `ubcoceans-bsky`: **10 of 26.** The largest single source and the least
+  admitted. That is fixed in `sources.toml`.
 
 ### 2. Compare models on that set
 
