@@ -2476,10 +2476,8 @@ def test_stored_and_fresh_scores_are_interchangeable(tmp_path):
     .relevance. It surfaced as an AttributeError the first time the report ran
     end to end, which is late.
 
-    The category matters just as much. Held as the raw string the column
-    stores, the comparison against Item.category_hint silently never matches
-    and the report claims 0% category agreement on a scorer that was right
-    every time."""
+    The category is rebuilt as an enum for the same reason — anything reading
+    it should not have to know which source the score came from."""
     from dailydive import eval as eval_mod
     from dailydive.score import ItemScore
 
@@ -2492,9 +2490,9 @@ def test_stored_and_fresh_scores_are_interchangeable(tmp_path):
     assert stored.category == fresh.category
     assert isinstance(stored.category, Category)
 
-    # Both shapes must survive the same code path.
+    # Both shapes must survive the same code path and rank identically.
     items = {"u": item(title="A story", category_hint=Category.HUSBANDRY)}
     for score in (fresh, stored):
         rep = eval_mod.report({"u": "include"}, {"u": score}, items, threshold=0.45)
         assert rep.scored == 1
-        assert rep.category_agreed == 1
+        assert rep.ranked[0].relevance == 0.7

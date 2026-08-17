@@ -222,8 +222,17 @@ class Report:
     unscored: list[str] = field(default_factory=list)
     rho: float | None = None
 
-    category_judged: int = 0
-    category_agreed: int = 0
+    # There is deliberately no category metric here. The first version had one
+    # and it measured the wrong thing. The labels carry a relevance bucket and
+    # nothing else, so the only category available to compare against was
+    # Item.category_hint — which is the source's configured default in
+    # sources.toml, described in that file as "provisional bucket until the
+    # scoring pass assigns for real". It reported 57% "category agreement" on
+    # the first real run, which was agreement with a placeholder.
+    #
+    # A misleading number inside a committed measurement is worse than no
+    # number, because whoever reads it next will not know the story. Measuring
+    # this properly means asking for a category on the labelling sheet.
 
     def precision_at(self, n: int) -> tuple[int, int]:
         """Of the model's top n, how many the editor would have admitted.
@@ -329,12 +338,6 @@ def report(
         elif bucket == "include" and not above:
             rep.includes_below.append(row)
 
-        assigned = getattr(score, "category", None)
-        if above and bucket in KEEP and assigned is not None and item.category_hint:
-            rep.category_judged += 1
-            if assigned == item.category_hint:
-                rep.category_agreed += 1
-
     rep.ranked.sort(key=lambda r: -r.relevance)
     rep.leads_missed.sort(key=lambda r: r.relevance)
     rep.drops_admitted.sort(key=lambda r: -r.relevance)
@@ -363,12 +366,6 @@ def format_report(rep: Report) -> str:
     ]
     if rep.rho is not None:
         lines.append(f"- Rank agreement (Spearman ρ): **{rep.rho:+.2f}**")
-    if rep.category_judged:
-        share = rep.category_agreed / rep.category_judged
-        lines.append(
-            f"- Category agreement where both sides kept the item:"
-            f" {rep.category_agreed}/{rep.category_judged} ({share:.0%})"
-        )
     if rep.unscored:
         lines.append(f"- Labelled but never scored: {len(rep.unscored)}")
 
