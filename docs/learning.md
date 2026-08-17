@@ -315,3 +315,54 @@ changelog says *what changed and why*, which is the half a hash cannot carry.
 - Assume confident completion claims are sometimes false, and build the check
   that does not depend on them.
 - A system with no quality measurement can only be argued about.
+
+---
+
+## Appendix — reading the first real eval
+
+The first report (`docs/eval/bbd4b48d3628.md`) is a good worked example of why
+a quality measurement is worth building, because almost every conclusion I drew
+from the summary numbers was wrong until I looked at the individual items.
+
+**The headline was good and slightly misleading.** precision@20 was 19/20 and
+precision@10 was 10/10: what actually ships is what the editor wants. But rank
+agreement was only +0.38, and 27 of 128 items scored *exactly* 0.00. A scorer
+emitting a hard zero for 21% of its input is not grading, it is rejecting — and
+that pattern is invisible in any summary statistic.
+
+**My first diagnosis was wrong.** From the report alone the picture looked like
+an inversion: World Wide Corals' hashtag-stacked clip titles scoring 0.50–0.65
+while a Frontiers paper scored 0.00. "The scorer prefers marketing to
+substance" is a tidy story and it was not the story. Pulling the gists and the
+body text showed three unrelated causes:
+
+1. **A thin body produced a zero regardless of the title.** The gists said so
+   outright: *"Link only, no content provided to evaluate"*, *"A headline-only
+   post... Cannot evaluate the topic."* The model was obeying the prompt's own
+   rules — "content that is only a link" and "do not guess" — on feeds whose
+   body happens to be a bare URL or a truncated WordPress excerpt. The prompt
+   never said a headline is content. **This was the single largest cause and it
+   was a prompt bug, not a judgement failure.**
+
+2. **The out-of-scope list was narrower than the editorial direction.** Kelp
+   forests, a seahorse-evolution paper and Black Sea fish nutrition were all
+   correctly excluded *by the rules as written* — and all three were labelled
+   leads. The seahorse case was a straight error (seahorses are marine
+   ornamentals; they are sold in every livestock catalogue the reader browses)
+   and is fixed. The other two are an editorial question, not a bug.
+
+3. **The "marketing" false positives were four clips of one video.** All four
+   share a single body description, so the model scored the same text four
+   times; the editor discriminated between them on their titles, marking one a
+   lead and two drops. That is a deduplication problem as much as a scoring one.
+
+**The lesson.** Summary statistics told me something was wrong and pointed at
+the wrong cause. The false-negative list — items, gists, body text, read one at
+a time — told me what was actually happening. Build the list, then read it; do
+not stop at the percentage.
+
+A related finding worth keeping: one item's stored body was
+`&#8230; The post How Can The Reef Keeping Hobby Grow? appeared first on
+Reefs.com`, which is WordPress boilerplate with an undecoded HTML entity. That
+is an ingestion bug in `normalize.py`, discovered only because the eval put a
+model's confused gist next to the text that confused it.

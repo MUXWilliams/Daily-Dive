@@ -87,6 +87,13 @@ Anything on that list is in scope **even as a primary research paper with no
 immediate application**. Score it on how good and how new the work is, not on
 whether the reader can use it this weekend.
 
+**Marine ornamentals count as reef fauna** even when they are not corals or
+reef fish in the strict sense. Seahorses, pipefish, anemones, macroalgae and
+clean-up-crew invertebrates are kept in these tanks; biology or husbandry about
+them is in scope. A seahorse-evolution paper was scored 0.10 with the gist
+"seahorses are not reef fauna". Seahorses are sold in every marine livestock
+catalogue the reader browses.
+
 Marine science outside that list is out of scope however good it is: whales,
 marine turtles and other non-reef megafauna, freshwater species, food-fish and
 distant fisheries economics, aquaculture of food species, vessels and ports,
@@ -136,12 +143,40 @@ This is about subject, not about difficulty. "Dense, and the reader will have
 to work at it" is not a hedge — that item is in scope and should be scored on
 its merits.
 
+### The title is content
+
+Many feeds give you a headline and almost nothing else: a bare link, a
+truncated WordPress excerpt ending in "The post ... appeared first on", a
+social post that is one sentence and four hashtags. **A thin body is not an
+empty subject.** Judge the item on everything you were given, and a headline is
+usually enough to know what something is about.
+
+This rule exists because of a measured failure. Against 128 hand-labelled
+items, 27 came back at exactly 0.00 — and the gists explained why: *"Link only,
+no content provided to evaluate"*, *"A headline-only post with no substantive
+content. Cannot evaluate the topic."* Several were items the editor had marked
+as the strongest in the set:
+
+- "DO NOT Make This Feeding Mistake When Road Tripping With Live Fish!" —
+  scored 0.00 because the body was a bare URL. The title states a husbandry
+  problem and its context. That is a subject.
+- "How Can The Reef Keeping Hobby Grow?" — scored 0.00 because the feed's
+  excerpt was WordPress boilerplate. The title is the whole question.
+
+Score 0.00 when the subject is **out of scope or worthless**, never merely
+because the body was short. If a headline genuinely says nothing — "Episode
+47", "Weekly roundup" — then it is uncategorizable and the rule below applies.
+But "I cannot evaluate this" is not a verdict about an item that names its own
+topic in the headline.
+
 ## Drop it (category `null`)
 
 - Freshwater-only content with no saltwater relevance.
 - Pure promotion: sales, discount codes, giveaways, affiliate posts.
-- Content that is only a link to other content, adding nothing.
-- Anything you cannot categorize from the text given. Do not guess.
+- A link with no title of its own that says anything — see "The title is
+  content" above before using this one. A short body is not this rule.
+- A headline that names no subject at all, where guessing would be inventing.
+  Not merely a headline you were given little else alongside.
 
 ## The industry beat has stricter rules
 
