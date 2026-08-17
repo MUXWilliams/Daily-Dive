@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>About &amp; sourcing policy — Weekly Dive</title>
-<meta name="description" content="How Weekly Dive selects sources, credits them, and handles removal requests.">
-<link rel="canonical" href="https://www.theloneaquarist.com/about.html">
+<title>About &amp; sourcing policy — {{ brand.PUBLICATION }}</title>
+<meta name="description" content="How {{ brand.PUBLICATION }} selects sources, credits them, and handles removal requests.">
+<link rel="canonical" href="{{ brand.SITE_URL }}/about.html">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="The Lone Aquarist">
-<meta property="og:title" content="About &amp; sourcing policy — Weekly Dive">
-<meta property="og:description" content="How Weekly Dive selects sources, credits them, and handles removal requests.">
-<meta property="og:url" content="https://www.theloneaquarist.com/about.html">
+<meta property="og:site_name" content="{{ brand.SITE_NAME }}">
+<meta property="og:title" content="About &amp; sourcing policy — {{ brand.PUBLICATION }}">
+<meta property="og:description" content="How {{ brand.PUBLICATION }} selects sources, credits them, and handles removal requests.">
+<meta property="og:url" content="{{ brand.SITE_URL }}/about.html">
 <style>
   /* The same ground, ink and measure as an issue and the archive. This page
      used to be hand-written and had drifted into its own palette, its own font
@@ -69,25 +69,36 @@
 <div class="wrap">
 
   <header>
+    {% if header %}
     <h1 class="wordmark">
-      <a href="./"><img src="assets/masthead.png" width="1908" height="404"        alt="Weekly Dive — The Lone Aquarist. Saltwater and reef news for the marine aquarist."></a>
+      <a href="./"><img src="{{ header[0] }}"
+        {%- if header[1] %} width="{{ header[1] }}"{% endif %}
+        {%- if header[2] %} height="{{ header[2] }}"{% endif %}
+        alt="{{ brand.PUBLICATION }} — {{ brand.SITE_NAME }}. {{ brand.TAGLINE }}"></a>
     </h1>
+    {% else %}
+    <div class="fallback"><p class="name">{{ brand.PUBLICATION }}</p></div>
+    {% endif %}
     <p class="dateline"><a href="./">← the current issue</a></p>
   </header>
 
   <h2 class="title">About &amp; sourcing policy</h2>
 
+  {# Publication name and cadence come from brand.py, never typed. The previous
+     hand-written version of this page said "Daily Dive" and "each morning" for
+     weeks after the rename, because nothing tied the words to the source of
+     truth. #}
   <p>
-    <strong>The Lone Aquarist's Weekly Dive</strong> is a
-    weekly digest of saltwater and reef aquarium news across
+    <strong>{{ brand.SITE_NAME }}'s {{ brand.PUBLICATION }}</strong> is a
+    {{ brand.CADENCE }} digest of saltwater and reef aquarium news across
     industry and product announcements, husbandry and science, notable forum
     discussion, new videos, livestock and coral news, wild reef conditions, and
     club events.
   </p>
 
   <p>
-    It is assembled automatically each week and
-    reviewed and edited by one person — me, Isaac. This is a
+    It is assembled automatically each {{ brand.CADENCE_NOUN }} and
+    reviewed and edited by one person — me, {{ brand.EDITOR }}. This is a
     personal project, but also a shared publication for those interested in the
     deeper side of the reef aquarium hobby and industry. I am not affiliated
     with any of the outlets it links to.
@@ -115,7 +126,10 @@
   <h3>How the crawler behaves</h3>
   <ul>
     <li>Honors <code>robots.txt</code> on every request.</li>
-    <li>Identifies itself as <code>DailyDiveBot</code> with a working contact address.</li>
+    {# DailyDiveBot is deliberately NOT renamed alongside the publication:
+       publishers may have allowlisted the string, and changing it would make us
+       an unrecognised agent overnight. Leave it. #}
+    <li>Identifies itself as <code>{{ brand.BOT_NAME }}</code> with a working contact address.</li>
     <li>No more than one request per second per site.</li>
     <li>Uses conditional requests, so an unchanged feed costs the host almost nothing.</li>
   </ul>
@@ -124,7 +138,7 @@
   <p>
     If you publish something that appears here and you'd like it removed, your feed
     excluded, or a credit corrected, email
-    <a href="mailto:theloneaquarist@gmail.com">theloneaquarist@gmail.com</a>.
+    <a href="mailto:{{ brand.CONTACT_EMAIL }}">{{ brand.CONTACT_EMAIL }}</a>.
     No justification needed — I'll remove it and it stays removed.
   </p>
 
@@ -133,7 +147,7 @@
       <a href="./">Current issue</a> · <a href="archive.html">Back issues</a>
     </p>
     <p>
-      <em>Weekly Dive</em> is an automated digest that links to
+      <em>{{ brand.PUBLICATION }}</em> is an automated digest that links to
       reporting it does not own. Every item credits and links its source.
     </p>
   </footer>

@@ -44,7 +44,7 @@ Repo: `MUXWilliams/Daily-Dive` (the name predates the rename; leave it).
 ## The pipeline
 
 `ingest → normalize → dedupe/archive → shorts filter → recency → score →
-picks → collapse → render → commit → deploy`
+picks → collapse → resource → render → commit → deploy`
 
 - **`sources.toml`** is the file edited most. 26 live sources: WordPress feeds,
   8 YouTube channels via the Data API, 10 Bluesky accounts, 2 IMAP newsletters,
@@ -57,7 +57,15 @@ picks → collapse → render → commit → deploy`
   issues labelled `pick`. They join after scoring (so the model cannot drop
   them) and are prepended (so they survive `collapse_similar` and lead their
   section).
-- **`render.py` + `templates/`** — HTML only. No model writes prose.
+- **`render.pick_resource` + `thumbs.py`** — one video is promoted out of its
+  category to a **Resource** section at the foot of the page, with a still.
+  Chosen by `RESOURCE_WORDS` (how-to / tips / tricks / mistakes) over raw score,
+  because the section should hold something you'd come back to. Resource is
+  deliberately **not** a `Category` member — the enum stays closed so the model
+  cannot file things there.
+- **`render.py` + `templates/`** — HTML only. No model writes prose. Every page
+  renders from a template, including `about.html`, which was static until it
+  spent weeks calling the publication by its old name.
 
 ## Conventions learned the hard way
 
@@ -79,6 +87,13 @@ picks → collapse → render → commit → deploy`
   before a real browser proved which change actually did it.
 - **Don't pipe pytest through `tail` in a `&&` chain.** It masks the exit code,
   and a failing test gets pushed.
+- **Images are fetched at build time and committed, never hotlinked.** A
+  hotlinked thumbnail makes every reader's browser call Google just by opening
+  the page, breaks the offline preview, and gets stripped by mail clients later.
+  `thumbs.py` validates JPEG magic bytes and dimensions before writing, because
+  YouTube answers a missing `maxresdefault` with a 200 and a 1 KB grey
+  rectangle. Committed thumbnails are **never** deleted — back issues reference
+  theirs forever.
 
 ## Where things are
 

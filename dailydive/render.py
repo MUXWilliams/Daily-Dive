@@ -7,6 +7,7 @@ a public page.
 
 from __future__ import annotations
 
+import re
 import struct
 from datetime import datetime
 from pathlib import Path
@@ -105,24 +106,77 @@ def _runtime(seconds: str | int) -> str:
     return f"{hours}h {minutes}m" if hours else f"{minutes} min"
 
 
-def group_by_category(issue: Issue) -> list[tuple[str, str, list]]:
+def group_by_category(issue: Issue, *, exclude: object = None) -> list[tuple[str, str, list]]:
     """Section the issue, in the canonical category order, skipping empties.
 
     Returns (title, slug, items). The slug keys the section's colour in the
     stylesheet — one hue per category, carried through the heading, the source
     name, and the link hover, so the colour tells the reader where they are
     before they read a word.
+
+    `exclude` drops a single item, which is how the Resource video avoids
+    appearing twice: once in its own section at the foot of the page and again
+    under Community. Compared by identity, not equality — two items can be
+    equal-by-value and only one of them is the one being promoted.
     """
+    kept = [i for i in issue.items if i is not exclude]
+
     buckets: list[tuple[str, str, list]] = []
     for category in Category:
-        members = [i for i in issue.items if i.category_hint is category]
+        members = [i for i in kept if i.category_hint is category]
         if members:
             buckets.append((category.value, category.slug, members))
 
-    uncategorized = [i for i in issue.items if i.category_hint is None]
+    uncategorized = [i for i in kept if i.category_hint is None]
     if uncategorized:
         buckets.append(("Elsewhere", "elsewhere", uncategorized))
     return buckets
+
+
+# Titles that announce instruction rather than news. The section is called
+# Resource, so what fills it should be something you'd come back to, not
+# whichever video happened to score highest that week.
+#
+# Word boundaries and explicit stems, not a substring test: `"tip" in title`
+# files "multiple" and "multiples" under tips, and a bare "mistake" stem would
+# eventually be shortened by someone into one that catches "misuse". Adding a
+# word here is a one-line edit and is meant to be.
+RESOURCE_WORDS = re.compile(r"\b(how[\s-]?to|tips?|tricks?|resources?|mistakes?)\b", re.I)
+
+
+def _relevance(item) -> float:
+    """The score the model gave, or 0 for an item that never went through it."""
+    try:
+        return float(item.extra.get("relevance", 0))
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def pick_resource(issue: Issue):
+    """The one video promoted to the Resource section, or None.
+
+    Order of preference:
+
+    1. An editor's pick. Picks outrank the model everywhere else in this
+       pipeline — a video chosen by hand should not lose the slot to a keyword.
+    2. The highest-scoring video whose title reads as instructional.
+    3. The highest-scoring video, so a week with no how-to still fills the slot.
+       An empty section in a fixed layout reads as a bug to a reader who does
+       not know the rule.
+
+    Videos are identified by `extra["video_id"]`, which normalize.py sets for
+    both the RSS and Data API paths — so this needs no network and no quota.
+    """
+    videos = [i for i in issue.items if i.extra.get("video_id")]
+    if not videos:
+        return None
+
+    picks = [i for i in videos if i.extra.get("pick")]
+    if picks:
+        return max(picks, key=_relevance)
+
+    instructional = [i for i in videos if RESOURCE_WORDS.search(i.title)]
+    return max(instructional or videos, key=_relevance)
 
 
 # Drop a banner in assets/ and the page uses it; leave it out and the page
@@ -210,6 +264,7 @@ def render_issue(
     header: tuple[str, int | None, int | None] | None = None,
     canonical_path: str = "",
     archive_href: str = "",
+    thumb: tuple[str, int | None, int | None] | None = None,
 ) -> str:
     for item in issue.items:
         assert_attributable(item)
@@ -220,9 +275,14 @@ def render_issue(
     env.filters["runtime"] = _runtime
     template = env.get_template("issue.html.j2")
     bullets, plus = highlights(issue)
+    resource = pick_resource(issue)
     return template.render(
         issue=issue,
-        sections=group_by_category(issue),
+        sections=group_by_category(issue, exclude=resource),
+        resource=resource,
+        # The image is optional even when the video isn't: a thumbnail that
+        # failed to fetch costs the picture, not the section.
+        thumb=thumb,
         generated_at=datetime.now(issue.date.tzinfo),
         header_image=header[0] if header else None,
         header_width=header[1] if header else None,
@@ -246,7 +306,13 @@ def as_text(issue: Issue) -> str:
     anything the headline didn't.
     """
     lines = [f"{brand.PUBLICATION} — {_datefmt(issue.date, 'full')} — {len(issue.items)} items"]
-    for title, _slug, members in group_by_category(issue):
+    # Same sectioning as the page, Resource included, so reviewing a run in a CI
+    # log tells you where things actually landed.
+    resource = pick_resource(issue)
+    sections = group_by_category(issue, exclude=resource)
+    if resource is not None:
+        sections = [*sections, ("Resource", "resource", [resource])]
+    for title, _slug, members in sections:
         lines += ["", f"## {title} ({len(members)})"]
         for item in members:
             score = item.extra.get("relevance")
@@ -270,13 +336,44 @@ def as_text(issue: Issue) -> str:
     return "\n".join(lines)
 
 
+def write_about(out_dir: Path) -> Path:
+    """Write the about & sourcing policy page.
+
+    Rendered rather than hand-written. It was hand-written for most of this
+    project's life, which is exactly why it spent weeks telling readers the
+    publication was called Daily Dive and went out every morning: nothing tied
+    the words on it to `brand.py`. Every other page on the site renders from a
+    template and none of them drifted.
+
+    Takes no Issue — the page says nothing about today — so it is safe to call
+    on any run that writes the site.
+    """
+    out_dir.mkdir(parents=True, exist_ok=True)
+    html = _env().get_template("about.html.j2").render(
+        brand=brand,
+        header=find_header_image(out_dir),
+    )
+    path = out_dir / "about.html"
+    path.write_text(html, encoding="utf-8")
+    return path
+
+
 def write_issue(issue: Issue, out_dir: Path) -> Path:
     """Write the issue to out_dir/index.html and a dated permalink.
 
     Rendered twice, because the two pages sit at different depths and the
     banner path has to resolve from each of them.
+
+    The Resource thumbnail is read from disk, never fetched here — a render must
+    stay offline so `daily-dive preview` and the tests keep working. Whatever
+    put the file there (`cli`, on a publishing run) is what talks to the
+    network; if nothing did, the section renders without its picture.
     """
+    from . import thumbs
+
     out_dir.mkdir(parents=True, exist_ok=True)
+    resource = pick_resource(issue)
+    video_id = resource.extra.get("video_id") if resource else None
 
     dated = out_dir / "issues" / f"{issue.date:%Y-%m-%d}.html"
     dated.parent.mkdir(parents=True, exist_ok=True)
@@ -286,13 +383,19 @@ def write_issue(issue: Issue, out_dir: Path) -> Path:
             header=find_header_image(out_dir, depth=1),
             canonical_path=f"issues/{issue.date:%Y-%m-%d}.html",
             archive_href="../archive.html",
+            thumb=thumbs.existing(video_id, out_dir, depth=1) if video_id else None,
         ),
         encoding="utf-8",
     )
 
     index = out_dir / "index.html"
     index.write_text(
-        render_issue(issue, header=find_header_image(out_dir), archive_href="archive.html"),
+        render_issue(
+            issue,
+            header=find_header_image(out_dir),
+            archive_href="archive.html",
+            thumb=thumbs.existing(video_id, out_dir) if video_id else None,
+        ),
         encoding="utf-8",
     )
     return index

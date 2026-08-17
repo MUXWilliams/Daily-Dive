@@ -24,6 +24,12 @@ SITE_URL = "https://www.theloneaquarist.com"
 # this is one edit — the page can never claim a cadence it does not keep.
 CADENCE = "weekly"
 
+# The same cadence as a noun, for prose that needs "each week" rather than
+# "a weekly digest". Stated rather than derived: stripping "ly" off CADENCE
+# works for "weekly" and turns "daily" into "dai", and a cadence change is
+# already a two-line edit here.
+CADENCE_NOUN = "week"
+
 # The masthead's second line. Deliberately says nothing about cadence: the
 # publication is called Weekly Dive, so "Your weekly news" underneath it is a
 # stutter. The tagline's job is scope — what this covers — and the name's job

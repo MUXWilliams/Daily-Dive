@@ -54,7 +54,10 @@ def entry_for(issue: Issue) -> Entry:
     # find is describing a different page than the one it links to.
     from . import render
 
-    sections = render.group_by_category(issue)
+    # The Resource video is excluded for the same reason: it renders at the foot
+    # of the page, so naming it here would describe a story the reader has to
+    # scroll past everything else to reach.
+    sections = render.group_by_category(issue, exclude=render.pick_resource(issue))
     lead = sections[0][2][0].title if sections else ""
     return {
         "date": f"{issue.date:%Y-%m-%d}",

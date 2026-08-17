@@ -48,6 +48,9 @@
     --c-wild-reefs:     #1a5182;  --c-wild-reefs-tint: #eaeff5;
     --c-events:         #4b4a6e;  --c-events-tint:     #eeedf4;
     --c-elsewhere:      #545e69;  --c-elsewhere-tint:  #f2f3f5;
+    /* Resource is a placement, not a category — but it is a section on the
+       page, so it needs a hue to belong to the set. */
+    --c-resource:       #1f5f6d;  --c-resource-tint:   #eaf2f4;
   }
 
   /* Each section sets --hue and --tint once; everything inside reads from them. */
@@ -58,6 +61,7 @@
   .sec-wild-reefs { --hue: var(--c-wild-reefs); --tint: var(--c-wild-reefs-tint); }
   .sec-events     { --hue: var(--c-events);     --tint: var(--c-events-tint); }
   .sec-elsewhere  { --hue: var(--c-elsewhere);  --tint: var(--c-elsewhere-tint); }
+  .sec-resource   { --hue: var(--c-resource);   --tint: var(--c-resource-tint); }
 
   * { box-sizing: border-box; }
   body {
@@ -187,6 +191,24 @@
     letter-spacing: .07em; text-transform: uppercase; padding: .1rem .32rem; border-radius: 2px;
   }
 
+  /* -------------------------------- resource -------------------------------
+     One video, pulled out of its category and given the foot of the page. The
+     only picture on the page besides the masthead, so it carries the section
+     on its own — no list, no count. */
+  section.resource { margin-top: .85rem; }
+  section.resource > div.body { padding: .8rem .95rem .95rem; }
+  a.thumb { display: block; }
+  a.thumb img {
+    display: block; width: 100%; height: auto;
+    /* The box is reserved by the width/height attributes, but hqdefault is 4:3
+       with letterbox bars baked in and maxresdefault is 16:9. Cropping to 16:9
+       makes both render the same shape — and on the 4:3 fallback the part it
+       trims is the black bar. */
+    aspect-ratio: 16 / 9; object-fit: cover;
+    background: color-mix(in srgb, var(--hue) 12%, #fff);
+  }
+  section.resource a.headline { margin-top: .6rem; font-size: 1.02rem; }
+
   /* --------------------------------- footer -------------------------------- */
   .empty { color: var(--ink-soft); font-style: italic; padding: 2rem 0; }
   footer {
@@ -256,7 +278,10 @@
             {% if item.extra.duration_s %}<span class="runtime">{{ item.extra.duration_s | runtime }}</span>{% endif %}
             {% if item.extra.similar %}<span class="alsoran">+{{ item.extra.similar }} similar</span>{% endif %}
             <span class="source">{{ item.source_name }}</span>
-            {% if item.author %}<span>· {{ item.author }}</span>{% endif %}
+            {# The YouTube API sets author to the channel title, which is already
+               the source name — printing both gave "ReefDudes · ReefDudes". A
+               byline that repeats the outlet credits nobody new. #}
+            {% if item.author and item.author != item.source_name %}<span>· {{ item.author }}</span>{% endif %}
             <span>· {{ item.published_at | datefmt('short') }}</span>
             <span>· {{ item.url | host }}</span>
           </p>
@@ -265,6 +290,37 @@
       </ul>
     </section>
     {% endfor %}
+
+    {# One video, promoted out of its category to the foot of the stack. Chosen
+       in render.pick_resource: an editor's pick first, then the best-scoring
+       instructional title, then the best-scoring video. Excluded from the
+       sections above so it appears exactly once. #}
+    {% if resource %}
+    <section class="card sec-resource resource">
+      <h2><span>Resource</span></h2>
+      <div class="body">
+        {% if thumb %}
+        <a class="thumb" href="{{ resource.url }}" rel="noopener nofollow external">
+          <img src="{{ thumb[0] }}"
+            {%- if thumb[1] %} width="{{ thumb[1] }}"{% endif %}
+            {%- if thumb[2] %} height="{{ thumb[2] }}"{% endif %}
+            alt="{{ resource.title }} — {{ resource.source_name }}" loading="lazy">
+        </a>
+        {% endif %}
+        <a class="headline" href="{{ resource.url }}" rel="noopener nofollow external">{{ resource.title }}</a>
+        {% if resource.extra.gist %}
+        <p class="gist">{{ resource.extra.gist }}</p>
+        {% endif %}
+        <p class="credit">
+          {% if resource.extra.duration_s %}<span class="runtime">{{ resource.extra.duration_s | runtime }}</span>{% endif %}
+          <span class="source">{{ resource.source_name }}</span>
+          {% if resource.author and resource.author != resource.source_name %}<span>· {{ resource.author }}</span>{% endif %}
+          <span>· {{ resource.published_at | datefmt('short') }}</span>
+          <span>· {{ resource.url | host }}</span>
+        </p>
+      </div>
+    </section>
+    {% endif %}
   </div>
 
   <footer>

@@ -41,7 +41,7 @@ def load_issue(fixture: Path = FIXTURE) -> Issue:
             extra["gist"] = entry["gist"]
         # Badges that only some items carry. Included so a layout change is
         # judged against the messy case rather than the tidy one.
-        for key in ("duration_s", "beat", "similar"):
+        for key in ("duration_s", "beat", "similar", "video_id"):
             if entry.get(key) is not None:
                 extra[key] = str(entry[key])
         # Descending, so the ordering matches a scored issue.
@@ -70,8 +70,13 @@ def inline_assets(html: str, site_dir: Path) -> str:
     file makes the page look broken in a way the design is not. Inlining costs
     a larger file and buys a page that renders correctly anywhere.
     """
-    for asset in sorted(site_dir.glob("assets/*")):
-        ref = f"assets/{asset.name}"
+    # Recursive: thumbnails live in assets/thumbs/, and a non-recursive glob
+    # skipped them silently — the Resource section came out with a broken image
+    # where its picture should be.
+    for asset in sorted(site_dir.glob("assets/**/*")):
+        if not asset.is_file():
+            continue
+        ref = asset.relative_to(site_dir).as_posix()
         if ref not in html:
             continue
         mime = mimetypes.guess_type(asset.name)[0] or "application/octet-stream"
@@ -91,8 +96,18 @@ def write_preview(out_dir: Path, *, site_dir: Path = Path("site"), standalone: b
     # Same archive link a real front page carries. Without it the staging page
     # is missing a piece of chrome the live page has, which is the one thing a
     # preview must never be.
+    # Read from disk, never fetched — the preview stays offline. If no run has
+    # committed this video's still yet, the Resource section renders text-only,
+    # which is exactly what the live page would do in the same situation.
+    from . import thumbs
+
+    resource = render.pick_resource(issue)
+    video_id = resource.extra.get("video_id") if resource else None
     html = render.render_issue(
-        issue, header=render.find_header_image(site_dir), archive_href="archive.html"
+        issue,
+        header=render.find_header_image(site_dir),
+        archive_href="archive.html",
+        thumb=thumbs.existing(video_id, site_dir) if video_id else None,
     )
     if standalone:
         html = inline_assets(html, site_dir)

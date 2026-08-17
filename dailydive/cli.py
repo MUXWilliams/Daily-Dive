@@ -18,7 +18,7 @@ from pathlib import Path
 
 import httpx
 
-from . import archive, brand, config, ingest, mailbox, normalize, picks, render, youtube
+from . import archive, brand, config, ingest, mailbox, normalize, picks, render, thumbs, youtube
 from . import score as score_mod
 from . import store
 from .models import Issue, Item, Source, SourceType
@@ -439,7 +439,21 @@ def main(argv: list[str] | None = None) -> int:
             items = deduped
 
     issue = Issue(date=datetime.now(UTC), items=items)
+
+    # The Resource video's thumbnail, fetched before the render so write_issue
+    # finds it on disk. Only on a publishing run: a --source or --limit build is
+    # a probe, and a probe should not be writing assets into the site or
+    # committing binaries nobody asked for. Failure is logged inside and costs
+    # the picture, never the issue.
+    resource = render.pick_resource(issue)
+    if resource is not None and _is_publishing_run(args):
+        thumbs.fetch(resource.extra["video_id"], args.out)
+
     path = render.write_issue(issue, args.out)
+    # Unconditional, unlike the archive below: the about page says nothing about
+    # this issue, so a partial run rewriting it claims nothing it shouldn't. It
+    # is also the page most likely to be stale, having been static until now.
+    render.write_about(args.out)
 
     # Everything below claims the issue reached readers, and only a full run
     # does. The workflow refuses to deploy a --source or --limit build because
