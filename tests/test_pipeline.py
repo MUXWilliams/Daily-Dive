@@ -2800,3 +2800,57 @@ def test_markers_are_never_committed():
     ignored = Path(".gitignore").read_text(encoding="utf-8")
     assert ".run-built" in ignored
     assert ".send-failed" in ignored
+
+
+def test_a_shouting_headline_is_recased_for_the_subject_line():
+    """OpenAlex hands back some journal titles in full caps, and the first real
+    send went out as "Weekly Dive — INTEGRATED ASSESSMENT OF CORAL REEFS...".
+    All-caps is a long-standing spam-filter signal and it reads as shouting."""
+    from dailydive import render
+
+    shouted = "INTEGRATED ASSESSMENT OF CORAL REEFS AND REEF FISH ASSEMBLAGES IN KAIMANA MARINE PROTECTED AREAS, WEST PAPUA"
+    got = render._unshout(shouted)
+
+    assert got.startswith("Integrated Assessment of Coral Reefs")
+    assert "WEST PAPUA" not in got
+    assert "West Papua" in got, "proper nouns must survive"
+    assert " Of " not in got and " And " not in got, "minor words stay lowercase"
+
+
+def test_acronyms_survive_the_recasing():
+    """Title-casing turns PAM into Pam. These are terms the reader knows by
+    their capitals."""
+    from dailydive import render
+
+    assert "RGB" in render._unshout("BEYOND PAM: DIGITAL PHOTOGRAPHY AND RGB COLOR ANALYSIS")
+    assert "PAM" in render._unshout("BEYOND PAM: DIGITAL PHOTOGRAPHY AND RGB COLOR ANALYSIS")
+    assert "NOAA" in render._unshout("NOAA ISSUES A BLEACHING ALERT FOR THE FLORIDA KEYS")
+
+
+def test_a_normally_cased_headline_is_left_exactly_alone():
+    """The bar is "this arrived shouting", not "this contains capitals". A
+    headline with a few emphatic words is the outlet's own styling."""
+    from dailydive import render
+
+    for untouched in [
+        "Beyond PAM: digital photography and RGB color analysis as a method",
+        "DO NOT Make This Feeding Mistake When Road Tripping With Live Fish!",
+        "NOAA issues a bleaching alert for the Florida Keys",
+        "Short",
+    ]:
+        assert render._unshout(untouched) == untouched
+
+
+def test_only_the_subject_is_recased_never_the_published_headline():
+    """The title on the page is the outlet's own words, reproduced as given.
+    Normalising it in place would be editing someone else's copy under their
+    byline — a subject line is ours to compose, a headline is not."""
+    from dailydive import render
+
+    shouted = "INTEGRATED ASSESSMENT OF CORAL REEFS AND REEF FISH ASSEMBLAGES"
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC),
+                  items=[item(title=shouted, category_hint=Category.HUSBANDRY)])
+
+    assert "Integrated Assessment" in render.subject(issue)
+    assert shouted in render.render_issue(issue), "the page must show the outlet's own casing"
+    assert shouted in render.render_email(issue), "so must the email body"

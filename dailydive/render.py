@@ -296,6 +296,56 @@ def render_issue(
     )
 
 
+# Acronyms worth preserving when a shouting headline is re-cased. Title-casing
+# turns "PAM" into "Pam", and these are terms the reader knows by their capitals.
+# Short and domain-specific on purpose: a long list starts mangling ordinary
+# words that happen to match.
+ACRONYMS = frozenset({
+    "PAM", "RGB", "DNA", "RNA", "LED", "SPS", "LPS", "NOAA", "ENSO", "UV",
+    "ICP", "MPA", "MPAS", "PAR", "GFO", "ATS", "CITES", "USA", "US", "UK",
+    "AI", "API", "PH", "CO2", "SST", "ROV", "OA",
+})
+
+# Words that stay lowercase inside a headline unless they lead it.
+_MINOR = frozenset({
+    "a", "an", "and", "as", "at", "but", "by", "for", "in", "nor", "of",
+    "on", "or", "the", "to", "vs", "via", "with", "from", "into",
+})
+
+
+def _unshout(title: str) -> str:
+    """Re-case a headline that arrived in capitals.
+
+    OpenAlex and some journals hand back titles in full caps. Passed straight
+    into a subject line that is two problems at once: all-caps is a long-
+    standing spam-filter signal, and it reads as shouting at a reader who did
+    not ask to be shouted at.
+
+    Applied ONLY to the subject line, never to the title shown on the page or
+    in the email body. Those are the outlet's own words and this project
+    reproduces them as given — normalising a headline in place would be editing
+    someone else's copy under their byline. A subject line is ours to compose.
+    """
+    letters = [c for c in title if c.isalpha()]
+    if len(letters) < 12:
+        return title
+    upper_share = sum(1 for c in letters if c.isupper()) / len(letters)
+    if upper_share < 0.7:
+        return title
+
+    words = title.split()
+    out: list[str] = []
+    for i, word in enumerate(words):
+        stripped = word.strip(".,:;!?()[]\"'")
+        if stripped.upper() in ACRONYMS:
+            out.append(word.upper())
+        elif i and stripped.lower() in _MINOR:
+            out.append(word.lower())
+        else:
+            out.append(word[:1].upper() + word[1:].lower())
+    return " ".join(out)
+
+
 def subject(issue: Issue) -> str:
     """The subject line.
 
@@ -304,7 +354,7 @@ def subject(issue: Issue) -> str:
     subscribed to. Same reasoning as og_description, which solved the same
     problem for link previews.
     """
-    lead = issue.items[0].title if issue.items else ""
+    lead = _unshout(issue.items[0].title) if issue.items else ""
     if len(lead) > 70:
         lead = lead[:69].rstrip() + "\u2026"
     if not lead:
