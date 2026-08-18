@@ -208,7 +208,12 @@ jobs:
           set -o pipefail
           daily-dive run $ARGS --verbose 2>&1 | tee run.log
 
+      # Only when the build actually ran. site/ is committed, so on a skipped
+      # build these steps found last week's page on disk and reported it as
+      # this run's output — "Built the page", with last week's headlines under
+      # it, on a run that built nothing.
       - name: Summarize what each feed returned
+        if: steps.build.outcome != 'skipped'
         if: always()
         run: |
           {
@@ -256,6 +261,7 @@ jobs:
           } >> $GITHUB_STEP_SUMMARY
 
       - name: Upload the built page
+        if: steps.build.outcome != 'skipped'
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -288,10 +294,14 @@ jobs:
           BUILD_OUTCOME: ${{ steps.build.outcome }}
         run: |
           reason=""
-          if [ "$BUILD_OUTCOME" != "success" ]; then
-            reason="the build did not succeed"
-          elif [ "$IN_SENDCHECK" = "true" ]; then
+          # Deliberate skips first. BUILD_OUTCOME is "skipped" — not "success" —
+          # when the build was intentionally not run, so testing it first
+          # reported a key check as "the build did not succeed", which reads as
+          # a failure on a green run.
+          if [ "$IN_SENDCHECK" = "true" ]; then
             reason="this run was a key check, not a build"
+          elif [ "$BUILD_OUTCOME" != "success" ]; then
+            reason="the build did not succeed"
           elif [ -n "$IN_SOURCE$IN_LIMIT$IN_PROBE_URLS" ]; then
             reason="this is a partial run (source, limit or probe_urls was set)"
           elif [ ! -s site/index.html ]; then
