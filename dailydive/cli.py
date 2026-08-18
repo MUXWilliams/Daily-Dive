@@ -255,6 +255,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="also print the issue as plain text (readable in a CI log)",
     )
     run.add_argument(
+        "--send",
+        action="store_true",
+        help="email the issue to the list after publishing (needs BUTTONDOWN_API_KEY)",
+    )
+    run.add_argument(
         "--threshold",
         type=float,
         default=None,
@@ -306,6 +311,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="also ask known sites what feeds they advertise (HTML autodiscovery)",
     )
 
+    sending = sub.add_parser(
+        "send",
+        help="email the issue to the list (needs BUTTONDOWN_API_KEY)",
+        parents=[common],
+    )
+    sending.add_argument("--out", type=Path, default=Path("site"),
+                         help="site directory the issue was built into")
+    sending.add_argument("--db", type=Path, default=store.DEFAULT_DB)
+    sending.add_argument("--check", action="store_true",
+                         help="verify the API key by reading the list. Sends nothing.")
+    sending.add_argument("--dry-run", action="store_true",
+                         help="print the exact request without sending it. Needs no key.")
+    sending.add_argument("--draft", action="store_true",
+                         help="create it as a draft in the service rather than sending")
+    sending.add_argument("--fixture", action="store_true",
+                         help="render the frozen preview issue instead of a real one")
+
     evaluating = sub.add_parser(
         "eval",
         help="measure the scorer against hand-labelled items",
@@ -349,6 +371,53 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     return parser
+
+
+def _cmd_send(args) -> int:
+    """Email the issue. See dailydive/deliver.py for why this is thin."""
+    from . import deliver, preview as preview_mod
+
+    if args.check:
+        # A read, not a send. The first interaction with a new service should
+        # never be the irreversible one.
+        try:
+            print(deliver.check())
+        except deliver.DeliveryError as exc:
+            log.error("%s", exc)
+            return 1
+        return 0
+
+    if args.fixture:
+        issue = preview_mod.load_issue()
+    else:
+        # Rebuilt from the archive index rather than re-run: sending must never
+        # cost a scoring pass, and must never be able to produce a different
+        # issue than the one already published at its permalink.
+        log.error(
+            "sending a real issue is wired into `run --send`; use --fixture to "
+            "exercise the template, or --dry-run from a run."
+        )
+        return 2
+
+    thumb_url = None
+    resource = render.pick_resource(issue)
+    if resource is not None and resource.extra.get("video_id"):
+        rel = thumbs.existing(resource.extra["video_id"], args.out)
+        if rel:
+            thumb_url = f"{brand.SITE_URL}/{rel[0]}"
+
+    html = render.render_email(issue, thumb_url=thumb_url)
+
+    if args.dry_run:
+        print(deliver.preview(issue, html, draft=args.draft))
+        return 0
+
+    try:
+        print(deliver.send(issue, html, draft=args.draft))
+    except deliver.DeliveryError as exc:
+        log.error("%s", exc)
+        return 1
+    return 0
 
 
 def _cmd_eval(args) -> int:
@@ -425,6 +494,9 @@ def main(argv: list[str] | None = None) -> int:
         level=logging.DEBUG if getattr(args, "verbose", False) else logging.INFO,
         format="%(levelname)s %(name)s: %(message)s",
     )
+
+    if args.command == "send":
+        return _cmd_send(args)
 
     if args.command == "eval":
         return _cmd_eval(args)
@@ -579,6 +651,7 @@ def main(argv: list[str] | None = None) -> int:
     # this issue, so a partial run rewriting it claims nothing it shouldn't. It
     # is also the page most likely to be stale, having been static until now.
     render.write_about(args.out)
+    render.write_subscribe(args.out)
 
     # Everything below claims the issue reached readers, and only a full run
     # does. The workflow refuses to deploy a --source or --limit build because
@@ -594,6 +667,28 @@ def main(argv: list[str] | None = None) -> int:
         log.info("archive now lists %d issue(s)", len(entries))
         if bucket_items:
             _answer_picks(issue)
+
+        # Sending lives inside the publish gate for the same reason recording
+        # published items does: a --source or --limit run is knowingly partial,
+        # and an email is the one output that cannot be taken back. A page can
+        # be redeployed; an inbox cannot.
+        if args.send:
+            from . import deliver
+
+            thumb_url = None
+            if resource is not None and resource.extra.get("video_id"):
+                rel = thumbs.existing(resource.extra["video_id"], args.out)
+                if rel:
+                    thumb_url = f"{brand.SITE_URL}/{rel[0]}"
+            try:
+                print(deliver.send(issue, render.render_email(issue, thumb_url=thumb_url)))
+            except deliver.DeliveryError as exc:
+                # Loud, and the run goes red. A send that fails quietly is a
+                # week nobody receives, noticed by nobody.
+                log.error("%s", exc)
+                return 1
+    elif args.send:
+        log.warning("not sending: a partial run never emails anyone")
     elif bucket_items:
         log.info(
             "%d pick(s) included but left open: a partial run doesn't publish",

@@ -106,3 +106,37 @@ edit. That is fine for a list of one. It does not survive a list of thirty.
 The through-line: pay for the part that genuinely needs a server, keep
 generating and rendering here, and do not buy a CMS for a pipeline that already
 renders itself.
+
+
+---
+
+## Resolved: Buttondown, August 2026
+
+The staged plan above resolved to its second bullet without passing through the
+first. SES-then-a-hosted-list was two integrations for one outcome: most of the
+SES work — MIME assembly, DKIM, deliverability tuning, unsubscribe headers — is
+retired the moment a hosted list takes over the sending. Going straight to the
+list skips that, and it buys the part this project actually cannot build,
+which was never the sending.
+
+**What it cost the codebase:** `templates/email.html.j2` (the real work, and
+identical under any sender), `dailydive/deliver.py` (~180 lines, the entire
+provider-specific surface), a `--send` flag on `run`, one workflow input, and a
+link in three footers. Nothing in ingest, scoring, picks, store, archive or eval
+changed. The site is untouched — Buttondown is a mailing list, not a CMS, which
+is exactly why Ghost was rejected above.
+
+**The public URL is ours.** `site/subscribe.html` is a static redirect to the
+provider's form. Switching providers means editing one file rather than chasing
+every forum post the old link reached.
+
+**Two things left open.** Sending from `theloneaquarist.com` rather than the
+provider's domain is likely a paid feature and was not verified — the container
+that built this cannot reach `docs.buttondown.com`. And the API constants in
+`deliver.py` were written without the documentation in front of them, which is
+why `send --dry-run` and `send --check` exist: the request can be read before it
+is made, and the first real call is a read.
+
+**Sending is off by default, including on the schedule.** Scoring defaults on
+for the weekly run; sending does not. A page can be redeployed. An inbox cannot
+be un-sent.

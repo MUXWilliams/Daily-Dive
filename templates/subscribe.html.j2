@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscribe — {{ brand.PUBLICATION }}</title>
+<meta name="description" content="Get {{ brand.PUBLICATION }} in your inbox, {{ brand.CADENCE }}.">
+<link rel="canonical" href="{{ brand.SITE_URL }}/subscribe.html">
+{#- The redirect that makes the public URL ours.
+
+    The signup form has to live on the mailing-list provider — a static site
+    cannot accept a form POST, which is the whole reason this project pays
+    anyone at all. But the URL that gets printed, posted to a forum and pasted
+    into a club's chat should be theloneaquarist.com/subscribe, permanently.
+    Moving providers then means editing this one file rather than chasing every
+    place the link was shared.
+
+    Belt and braces: a meta refresh, and a real link for anyone whose browser
+    or reader ignores it. No JavaScript — a redirect that needs a script to work
+    is a redirect that fails silently in exactly the readers most likely to
+    block one. #}
+<meta http-equiv="refresh" content="0; url={{ subscribe_url }}">
+<style>
+  body {
+    margin: 0; background: #ffffff; color: #16191d;
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 34rem; margin: 0 auto; padding: 4rem 1.15rem; text-align: center; }
+  h1 { font-size: 1.4rem; letter-spacing: -.02em; margin: 0 0 .6rem; }
+  p { color: #545e69; margin: 0 0 1.2rem; }
+  a.go {
+    display: inline-block; background: #0b5fbe; color: #fff; text-decoration: none;
+    padding: .7rem 1.3rem; border-radius: 8px; font-weight: 700;
+  }
+  a.back { color: #0b5fbe; font-size: .85rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>{{ brand.PUBLICATION }}</h1>
+  <p>{{ brand.TAGLINE }} One email a {{ brand.CADENCE_NOUN }}, free.</p>
+  <p><a class="go" href="{{ subscribe_url }}">Continue to the signup form</a></p>
+  <p><a class="back" href="./">← back to the current issue</a></p>
+</div>
+</body>
+</html>

@@ -1350,10 +1350,14 @@ def test_the_publication_name_appears_nowhere_but_brand_py():
     """A rename must be one edit. "Daily Dive" was hardcoded in six places
     despite brand.py existing to prevent exactly that, which meant renaming the
     publication was a search-and-replace across templates and Python."""
-    template = (render.TEMPLATE_DIR / "issue.html.j2").read_text(encoding="utf-8")
-    assert brand.PUBLICATION not in template
-    source = Path("dailydive/render.py").read_text(encoding="utf-8")
-    assert brand.PUBLICATION not in source
+    # Every template, not just the issue page. The email template was added
+    # later and put the name in its header comment on the first try, which is
+    # how this drifts: prose in a file nobody re-reads after a rename.
+    for template in sorted(render.TEMPLATE_DIR.glob("*.j2")):
+        assert brand.PUBLICATION not in template.read_text(encoding="utf-8"), template.name
+    for module in ("render.py", "deliver.py"):
+        source = Path("dailydive") / module
+        assert brand.PUBLICATION not in source.read_text(encoding="utf-8"), module
 
 
 def test_renaming_the_publication_changes_the_page(monkeypatch):
@@ -2496,3 +2500,148 @@ def test_stored_and_fresh_scores_are_interchangeable(tmp_path):
         rep = eval_mod.report({"u": "include"}, {"u": score}, items, threshold=0.45)
         assert rep.scored == 1
         assert rep.ranked[0].relevance == 0.7
+
+
+# ---------------------------------------------------------------- delivery
+
+def _email(**kw) -> str:
+    from dailydive import render
+
+    issue = Issue(
+        date=datetime(2026, 8, 21, tzinfo=UTC),
+        items=kw.pop("items", [item(category_hint=Category.COMMUNITY)]),
+    )
+    return render.render_email(issue, **kw)
+
+
+def test_the_email_avoids_everything_mail_clients_break_on():
+    """issue.html.j2 cannot be reused and this is why. Custom properties and
+    color-mix() are unsupported in every major client; sticky, grid and flex
+    are ignored by Outlook; a <style> block can be stripped outright. A digest
+    that arrives unstyled is a digest nobody reads."""
+    html = _email()
+    for banned in ("color-mix(", "var(--", "position:sticky", "position: sticky",
+                   "display:flex", "display: grid", "<style"):
+        assert banned not in html, banned
+
+
+def test_every_item_in_the_email_is_credited_with_an_absolute_url():
+    """Attribution applies in an inbox exactly as on the page — and a relative
+    href, which merely looks wrong on the web, is meaningless in email."""
+    from dailydive import render
+
+    it = item(source_name="Reef Builders", url="https://reefbuilders.com/story",
+              category_hint=Category.INDUSTRY)
+    html = render.render_email(Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[it]))
+
+    assert "Reef Builders" in html
+    assert 'href="https://reefbuilders.com/story"' in html
+    # No root-relative links anywhere: they resolve against nothing in a mail client.
+    assert 'href="/' not in html
+    assert 'src="/' not in html
+
+
+def test_the_subject_names_the_lead_story():
+    """"Weekly Dive — August 21" tells a reader only what they subscribed to."""
+    from dailydive import render
+
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC),
+                  items=[item(title="Fluval unveils a new gyre pump")])
+    assert render.subject(issue) == f"{brand.PUBLICATION} — Fluval unveils a new gyre pump"
+
+    # An issue with no items still needs a subject rather than a dangling dash.
+    empty = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[])
+    assert render.subject(empty).startswith(f"{brand.PUBLICATION} — ")
+    assert "Friday, August 21, 2026" in render.subject(empty)
+
+
+def test_sending_an_empty_issue_is_refused():
+    """An email whose body is a masthead and a footer spends subscriber
+    goodwill to say nothing, and goodwill is all a newsletter has."""
+    from dailydive import deliver
+
+    with pytest.raises(deliver.DeliveryError, match="no items"):
+        deliver.send(Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[]), "<p>x</p>")
+
+
+def test_a_refused_send_raises_rather_than_logging_and_moving_on(monkeypatch):
+    """A send that fails quietly is a week nobody receives, noticed by nobody.
+    The run has to go red."""
+    from dailydive import deliver
+
+    monkeypatch.setenv(deliver.ENV_KEY, "k")
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(422, text="that field is not valid")
+
+    client = httpx.Client(transport=httpx.MockTransport(handler))
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item()])
+    with pytest.raises(deliver.DeliveryError, match="422"):
+        deliver.send(issue, "<p>x</p>", client=client)
+
+
+def test_a_successful_send_reports_what_it_did(monkeypatch):
+    from dailydive import deliver
+
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["url"] = str(request.url)
+        seen["auth"] = request.headers.get(deliver.AUTH_HEADER)
+        seen["body"] = json.loads(request.content)
+        return httpx.Response(201, json={"id": "abc"})
+
+    monkeypatch.setenv(deliver.ENV_KEY, "secret-key")
+    client = httpx.Client(transport=httpx.MockTransport(handler))
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC),
+                  items=[item(title="A headline")])
+
+    out = deliver.send(issue, "<p>body</p>", client=client)
+    assert "sent" in out
+    assert seen["url"] == deliver.EMAILS_ENDPOINT
+    assert seen["auth"] == "Token secret-key"
+    assert seen["body"][deliver.FIELD_SUBJECT] == f"{brand.PUBLICATION} — A headline"
+    assert seen["body"][deliver.FIELD_STATUS] == deliver.STATUS_SEND
+
+
+def test_the_api_key_comes_from_the_environment_and_nowhere_else(monkeypatch):
+    """The repo is public. A committed key is a leaked credential, not a
+    configuration mistake."""
+    from dailydive import deliver
+
+    monkeypatch.delenv(deliver.ENV_KEY, raising=False)
+    with pytest.raises(deliver.DeliveryError, match="not set"):
+        deliver.api_key()
+
+    monkeypatch.setenv(deliver.ENV_KEY, "   ")
+    with pytest.raises(deliver.DeliveryError, match="not set"):
+        deliver.api_key()
+
+
+def test_the_dry_run_redacts_the_key_and_sends_nothing(monkeypatch):
+    """It exists to be pasted next to the docs, which means it must be safe to
+    paste anywhere."""
+    from dailydive import deliver
+
+    monkeypatch.setenv(deliver.ENV_KEY, "super-secret")
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item()])
+    out = deliver.preview(issue, "<p>" + "x" * 5000 + "</p>")
+
+    assert "super-secret" not in out
+    assert "****" in out
+    assert deliver.EMAILS_ENDPOINT in out
+    # The body is summarised, not dumped — 40KB of table markup defeats the point.
+    assert "x" * 100 not in out
+
+
+def test_the_subscribe_page_points_at_the_list_and_needs_no_javascript(tmp_path):
+    """A redirect that needs a script fails silently in exactly the readers most
+    likely to block one."""
+    from dailydive import deliver, render
+
+    html = render.write_subscribe(tmp_path).read_text(encoding="utf-8")
+    assert deliver.SUBSCRIBE_URL in html
+    assert "http-equiv=\"refresh\"" in html
+    assert "<script" not in html
+    # A real link too, for anything that ignores the meta refresh.
+    assert f'href="{deliver.SUBSCRIBE_URL}"' in html

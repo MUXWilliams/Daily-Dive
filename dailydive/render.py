@@ -296,6 +296,57 @@ def render_issue(
     )
 
 
+def subject(issue: Issue) -> str:
+    """The subject line.
+
+    Concrete beats standing. Naming the lead story tells someone scanning an
+    inbox what is actually inside; a date tells them only what they already
+    subscribed to. Same reasoning as og_description, which solved the same
+    problem for link previews.
+    """
+    lead = issue.items[0].title if issue.items else ""
+    if len(lead) > 70:
+        lead = lead[:69].rstrip() + "\u2026"
+    if not lead:
+        return f"{brand.PUBLICATION} — {_datefmt(issue.date, 'full')}"
+    return f"{brand.PUBLICATION} — {lead}"
+
+
+def render_email(
+    issue: Issue, *, thumb_url: str | None = None
+) -> str:
+    """The issue as email-safe HTML.
+
+    A separate template rather than a variant of the page. `issue.html.j2` is
+    built on CSS custom properties, color-mix() and position:sticky; none
+    survive Outlook and the first two do not survive Gmail, so reusing it would
+    produce something that previews correctly in a browser and arrives
+    unstyled.
+
+    `thumb_url` is absolute and optional. Relative paths mean nothing in an
+    inbox, and a missing image costs the picture rather than the section.
+    """
+    for item in issue.items:
+        assert_attributable(item)
+
+    env = _env()
+    env.filters["host"] = _host
+    env.filters["datefmt"] = _datefmt
+    env.filters["runtime"] = _runtime
+    bullets, plus = highlights(issue)
+    resource = pick_resource(issue)
+    return env.get_template("email.html.j2").render(
+        issue=issue,
+        sections=group_by_category(issue, exclude=resource),
+        resource=resource,
+        thumb=thumb_url,
+        brand=brand,
+        highlights=bullets,
+        highlights_plus=plus,
+        preheader=og_description(issue),
+    )
+
+
 def as_text(issue: Issue) -> str:
     """The issue as plain text, for reading in a terminal or a CI log.
 
@@ -354,6 +405,26 @@ def write_about(out_dir: Path) -> Path:
         header=find_header_image(out_dir),
     )
     path = out_dir / "about.html"
+    path.write_text(html, encoding="utf-8")
+    return path
+
+
+def write_subscribe(out_dir: Path) -> Path:
+    """Write the subscribe redirect.
+
+    The signup form lives with the mailing-list provider because a static site
+    cannot accept a form POST — that is the one thing this project pays anyone
+    for. This page exists so the *shareable* URL is still ours: switching
+    providers means editing one file, not chasing every forum post and chat
+    message the old link reached.
+    """
+    from . import deliver
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    html = _env().get_template("subscribe.html.j2").render(
+        brand=brand, subscribe_url=deliver.SUBSCRIBE_URL
+    )
+    path = out_dir / "subscribe.html"
     path.write_text(html, encoding="utf-8")
     return path
 

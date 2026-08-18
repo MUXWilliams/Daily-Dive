@@ -40,6 +40,11 @@ on:
         description: "Minimum relevance to publish, 0-1 (blank = 0.45). Only used with scoring."
         required: false
         default: ""
+      send:
+        description: "Email the issue to the list. Off by default, including on the schedule — an inbox cannot be un-sent."
+        type: boolean
+        required: false
+        default: false
   schedule:
     # Friday 10:00 UTC — 6am US Eastern in summer, 5am in winter. Cron has no
     # notion of daylight saving, so the local hour shifts by one twice a year;
@@ -144,6 +149,13 @@ jobs:
           IN_LIMIT: ${{ inputs.limit }}
           IN_THRESHOLD: ${{ inputs.threshold }}
           IN_SCORE: ${{ inputs.score || github.event_name == 'schedule' }}
+          # The mailing list. Absent unless the secret is set; the CLI only
+          # reads it under --send, so an unsent run is unaffected.
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          # Deliberately NOT defaulted true on the schedule, unlike scoring.
+          # A page can be redeployed; an inbox cannot be un-sent, so sending
+          # stays something a human turns on for a given run.
+          IN_SEND: ${{ inputs.send }}
         run: |
           ARGS=""
           if [ -n "$IN_SOURCE" ]; then ARGS="$ARGS --source $IN_SOURCE"; fi
@@ -154,6 +166,7 @@ jobs:
             ARGS="$ARGS --score"
           fi
           if [ -n "$IN_THRESHOLD" ]; then ARGS="$ARGS --threshold $IN_THRESHOLD"; fi
+          if [ "$IN_SEND" = "true" ]; then ARGS="$ARGS --send"; fi
           # --print puts the issue in the log as text. The page ships as an
           # artifact, but reviewing the editorial judgment shouldn't require
           # downloading and unzipping anything.
