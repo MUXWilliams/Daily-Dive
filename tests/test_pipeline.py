@@ -2713,11 +2713,90 @@ def test_a_key_check_run_cannot_publish():
     gate = next(s for s in wf["jobs"]["build"]["steps"] if s.get("id") == "gate")
     script = gate["run"]
 
-    # Comment lines dropped first: the comment above the gate explains the
-    # ordering and mentions BUILD_OUTCOME, which made an earlier version of
-    # this test fail against a workflow that was correct.
+    # Comment lines dropped first: the comments around the gate name the same
+    # variables the conditions do, which made an earlier version of this test
+    # fail against a workflow that was correct.
     code = "\n".join(l for l in script.splitlines() if not l.strip().startswith("#"))
     assert "IN_SENDCHECK" in code
-    assert code.index("IN_SENDCHECK") < code.index("BUILD_OUTCOME"), (
-        "the build outcome is tested before the deliberate-skip reasons"
+    assert code.index("IN_SENDCHECK") < code.index(".run-built"), (
+        "a key check must be recognised before anything else is considered"
     )
+
+
+def test_the_send_carries_buttondowns_confirmation_header(monkeypatch):
+    """Buttondown refuses a first API send with HTTP 400
+    sending_requires_confirmation unless this header is present. It is their
+    interlock against mailing a list while poking at the API, and the first
+    real send hit it."""
+    from dailydive import deliver
+
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["confirm"] = request.headers.get(deliver.CONFIRM_HEADER)
+        return httpx.Response(201, json={"id": "x"})
+
+    monkeypatch.setenv(deliver.ENV_KEY, "k")
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item()])
+
+    deliver.send(issue, "<p>x</p>", client=httpx.Client(transport=httpx.MockTransport(handler)))
+    assert seen["confirm"] == "true"
+
+    # A draft reaches nobody, so there is no interlock to satisfy.
+    deliver.send(issue, "<p>x</p>", draft=True,
+                 client=httpx.Client(transport=httpx.MockTransport(handler)))
+    assert seen["confirm"] is None
+
+
+def test_the_dry_run_shows_the_confirmation_header():
+    """It exists to be compared against the docs, so it has to show every
+    header the real request sends — the missing one is what broke the send."""
+    from dailydive import deliver
+
+    issue = Issue(date=datetime(2026, 8, 21, tzinfo=UTC), items=[item()])
+    assert deliver.CONFIRM_HEADER in deliver.preview(issue, "<p>x</p>")
+
+
+def test_a_refused_send_still_lets_the_issue_publish(tmp_path, monkeypatch):
+    """The page is canonical and the email is a copy of it. Returning non-zero
+    on a refused send failed the build step, which skipped the deploy — so
+    losing the copy lost the original. The first real send did exactly that."""
+    monkeypatch.chdir(tmp_path)
+    from dailydive import cli
+
+    # A run that built a page and then failed to send leaves both markers.
+    cli.BUILT_MARKER.write_text("2026-08-21 12 items\n", encoding="utf-8")
+    cli.SEND_FAILED_MARKER.write_text("HTTP 400\n", encoding="utf-8")
+
+    assert cli.BUILT_MARKER.exists(), "the publish gate keys off this"
+    assert cli.SEND_FAILED_MARKER.exists(), "the post-deploy failure keys off this"
+
+
+def test_the_publish_gate_reads_the_marker_not_the_exit_code():
+    """site/ is committed, so `-s site/index.html` cannot distinguish a page
+    this run built from one already on disk — and the build's exit code cannot
+    distinguish a failed issue from a refused email."""
+    wf = _strict_yaml(Path(".github/workflows/daily.yml"))
+    gate = next(s for s in wf["jobs"]["build"]["steps"] if s.get("id") == "gate")
+    code = "\n".join(l for l in gate["run"].splitlines() if not l.strip().startswith("#"))
+
+    assert ".run-built" in code
+    assert "BUILD_OUTCOME" not in code, "publishing must not hinge on the build's exit code"
+
+
+def test_the_send_failure_is_reported_after_the_deploy():
+    """Ordering is the whole fix: red run, published issue."""
+    wf = _strict_yaml(Path(".github/workflows/daily.yml"))
+    names = [s.get("name", "") for s in wf["jobs"]["build"]["steps"]]
+
+    deploy = next(i for i, n in enumerate(names) if n == "Deploy to Pages")
+    fail = next(i for i, n in enumerate(names) if n == "Fail if the send was refused")
+    assert fail > deploy, "a refused send must not be able to skip the deploy"
+
+
+def test_markers_are_never_committed():
+    """They describe one run, not state. A committed .run-built would let a
+    later run publish a page it did not build."""
+    ignored = Path(".gitignore").read_text(encoding="utf-8")
+    assert ".run-built" in ignored
+    assert ".send-failed" in ignored

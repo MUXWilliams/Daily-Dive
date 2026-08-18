@@ -28,6 +28,12 @@ log = logging.getLogger("dailydive")
 
 FIXTURE_DIR = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
 
+# Written into the working directory, gitignored, describing this run only.
+# The workflow reads them because it cannot otherwise distinguish a page this
+# run built from one already committed, nor a failed send from a failed issue.
+BUILT_MARKER = Path(".run-built")
+SEND_FAILED_MARKER = Path(".send-failed")
+
 
 def _collect_mail(source: Source, days: int, client: httpx.Client) -> list[Item]:
     """Newsletters for one IMAP source, or nothing if we have no credentials."""
@@ -635,6 +641,11 @@ def main(argv: list[str] | None = None) -> int:
                 log.info("collapsed %d near-duplicate item(s) after picks", len(items) - len(deduped))
             items = deduped
 
+    # Stale markers from a previous run in the same checkout would let the
+    # workflow publish a page this run never built.
+    for marker in (BUILT_MARKER, SEND_FAILED_MARKER):
+        marker.unlink(missing_ok=True)
+
     issue = Issue(date=datetime.now(UTC), items=items)
 
     # The Resource video's thumbnail, fetched before the render so write_issue
@@ -652,6 +663,11 @@ def main(argv: list[str] | None = None) -> int:
     # is also the page most likely to be stale, having been static until now.
     render.write_about(args.out)
     render.write_subscribe(args.out)
+
+    # Proof that THIS run produced a page. site/ is committed, so a workflow
+    # step that merely checks for site/index.html cannot tell a fresh build
+    # from last week's file sitting on disk.
+    BUILT_MARKER.write_text(f"{issue.date:%Y-%m-%d} {len(issue.items)} items\n", encoding="utf-8")
 
     # Everything below claims the issue reached readers, and only a full run
     # does. The workflow refuses to deploy a --source or --limit build because
@@ -683,10 +699,16 @@ def main(argv: list[str] | None = None) -> int:
             try:
                 print(deliver.send(issue, render.render_email(issue, thumb_url=thumb_url)))
             except deliver.DeliveryError as exc:
-                # Loud, and the run goes red. A send that fails quietly is a
-                # week nobody receives, noticed by nobody.
+                # Loud, and the run goes red — but NOT here. Returning non-zero
+                # at this point failed the build step, which skipped the deploy,
+                # so a refused email cost the whole issue its publication. The
+                # page is the canonical artifact and the email is a copy of it;
+                # losing the copy must never lose the original.
+                #
+                # The marker is picked up by a workflow step that runs after the
+                # deploy and fails the run there instead.
                 log.error("%s", exc)
-                return 1
+                SEND_FAILED_MARKER.write_text(f"{exc}\n", encoding="utf-8")
     elif args.send:
         log.warning("not sending: a partial run never emails anyone")
     elif bucket_items:

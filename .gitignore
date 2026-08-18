@@ -18,3 +18,9 @@ site/preview/
 # The protection that replaced the ignore is the publish gate in daily.yml: a
 # partial run never commits, and --offline never runs in CI at all. Do not
 # `git add site/index.html` by hand from a local --offline build.
+
+# Run markers. Written by `daily-dive run` so the workflow can tell "this run
+# built a page" from "a page was already committed here", and "the send failed"
+# from "the issue failed". Never committed — they describe one run, not state.
+.run-built
+.send-failed

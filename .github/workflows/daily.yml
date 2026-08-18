@@ -304,12 +304,15 @@ jobs:
           # a failure on a green run.
           if [ "$IN_SENDCHECK" = "true" ]; then
             reason="this run was a key check, not a build"
-          elif [ "$BUILD_OUTCOME" != "success" ]; then
-            reason="the build did not succeed"
+          elif [ ! -f .run-built ]; then
+            # The marker, not the exit code. A refused email used to fail the
+            # build step and skip the deploy, so losing the copy lost the
+            # original. The marker says "this run wrote a page", which is the
+            # actual precondition for publishing — and site/index.html alone
+            # cannot say it, because site/ is committed.
+            reason="this run did not build a page"
           elif [ -n "$IN_SOURCE$IN_LIMIT$IN_PROBE_URLS" ]; then
             reason="this is a partial run (source, limit or probe_urls was set)"
-          elif [ ! -s site/index.html ]; then
-            reason="no page was built"
           fi
           if [ -n "$reason" ]; then
             echo "publish=false" >> "$GITHUB_OUTPUT"
@@ -383,6 +386,18 @@ jobs:
       #
       # Read through $VAR, the value is data. set -f stops the ? in a query
       # string being treated as a glob.
+      # After the deploy, deliberately. The page is the canonical artifact and
+      # the email is a copy of it; a refused send has to turn the run red
+      # without ever costing the issue its publication.
+      - name: Fail if the send was refused
+        if: always()
+        run: |
+          if [ -f .send-failed ]; then
+            echo "The issue published, but the email was refused:" >&2
+            cat .send-failed >&2
+            exit 1
+          fi
+
       - name: Probe candidate feed URLs
         if: inputs.probe || inputs.probe_urls != ''
         env:

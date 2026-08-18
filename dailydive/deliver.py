@@ -53,6 +53,19 @@ FIELD_BODY = "body"
 FIELD_STATUS = "status"
 STATUS_SEND = "about_to_send"
 STATUS_DRAFT = "draft"
+
+# Buttondown's own interlock. The first API send against a key is refused with
+# HTTP 400 `sending_requires_confirmation` unless this header is present:
+#
+#   "Creating an email with status 'about_to_send' requires the
+#    X-Buttondown-Live-Dangerously header. This is only required once per
+#    API key."
+#
+# It exists so nobody mails a list by accident while exploring the API, which
+# is a good instinct on their part. We satisfy it deliberately rather than
+# working around it: the send here is already gated behind a publishing run, a
+# non-empty issue, and an explicit workflow input that is off by default.
+CONFIRM_HEADER = "X-Buttondown-Live-Dangerously"
 # --- End of the unverified surface.
 
 ENV_KEY = "BUTTONDOWN_API_KEY"
@@ -87,11 +100,14 @@ def api_key() -> str:
     return key
 
 
-def _headers(key: str) -> dict[str, str]:
-    return {
+def _headers(key: str, *, confirm: bool = False) -> dict[str, str]:
+    headers = {
         AUTH_HEADER: f"{AUTH_PREFIX} {key}",
         "Content-Type": "application/json",
     }
+    if confirm:
+        headers[CONFIRM_HEADER] = "true"
+    return headers
 
 
 def payload(issue: Issue, html: str, *, draft: bool = False) -> dict[str, Any]:
@@ -119,6 +135,7 @@ def preview(issue: Issue, html: str, *, draft: bool = False) -> str:
         f"POST {EMAILS_ENDPOINT}",
         f"{AUTH_HEADER}: {AUTH_PREFIX} ****",
         "Content-Type: application/json",
+        *([] if draft else [f"{CONFIRM_HEADER}: true"]),
         "",
         json.dumps(shown, indent=2),
     ]
@@ -176,7 +193,11 @@ def send(
     client = client or httpx.Client(timeout=TIMEOUT)
     try:
         resp = client.post(
-            EMAILS_ENDPOINT, headers=_headers(key), json=payload(issue, html, draft=draft)
+            EMAILS_ENDPOINT,
+            # The confirmation header only on a real send. A draft creates
+            # nothing that reaches anyone, so it has no interlock to satisfy.
+            headers=_headers(key, confirm=not draft),
+            json=payload(issue, html, draft=draft),
         )
     except httpx.HTTPError as exc:
         raise DeliveryError(f"the send failed: {exc}") from exc
