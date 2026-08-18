@@ -16,6 +16,10 @@ ai = [
 ]
 dev = [
     "pytest>=8.0",
+    # Only for the workflow tests. PyYAML accepts duplicate keys silently and
+    # GitHub does not, which is how a workflow with two `if:` on one step
+    # passed a local check and then failed to start — see tests.
+    "pyyaml>=6.0",
 ]
 
 [project.scripts]

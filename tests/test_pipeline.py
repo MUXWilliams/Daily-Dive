@@ -2645,3 +2645,79 @@ def test_the_subscribe_page_points_at_the_list_and_needs_no_javascript(tmp_path)
     assert "<script" not in html
     # A real link too, for anything that ignores the meta refresh.
     assert f'href="{deliver.SUBSCRIBE_URL}"' in html
+
+
+# ---------------------------------------------------------------- workflows
+
+def _strict_yaml(path: Path):
+    """Load YAML, refusing duplicate keys.
+
+    PyYAML's default is to accept a duplicate key and keep the last one.
+    GitHub refuses the file outright. That gap is not theoretical: a step here
+    was given a second `if:` while it already had one, the local check passed,
+    and the workflow failed to start with "'if' is already defined" — after
+    being pushed.
+    """
+    import yaml
+
+    class Strict(yaml.SafeLoader):
+        pass
+
+    def no_dupes(loader, node, deep=False):
+        seen = set()
+        for key_node, _ in node.value:
+            key = loader.construct_object(key_node, deep=deep)
+            if key in seen:
+                raise ValueError(f"duplicate key {key!r} on line {key_node.start_mark.line + 1}")
+            seen.add(key)
+        return yaml.SafeLoader.construct_mapping(loader, node, deep)
+
+    Strict.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, no_dupes)
+    return yaml.load(path.read_text(encoding="utf-8"), Loader=Strict)
+
+
+@pytest.mark.parametrize("name", ["daily.yml", "deploy.yml", "eval.yml"])
+def test_workflows_parse_the_way_github_parses_them(name):
+    """A workflow that fails to start is only discovered by pushing it."""
+    _strict_yaml(Path(".github/workflows") / name)
+
+
+def test_a_duplicate_key_is_actually_caught(tmp_path):
+    """The guard above is worthless if it silently accepts what it is meant to
+    reject — and PyYAML's default loader does exactly that."""
+    bad = tmp_path / "bad.yml"
+    bad.write_text("steps:\n  - name: x\n    if: always()\n    if: never()\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="duplicate key 'if'"):
+        _strict_yaml(bad)
+
+
+def test_steps_that_read_the_working_tree_require_the_build_to_have_run():
+    """site/ is committed, so any step reading it cannot tell "this run made
+    it" from "it was already there". On a skipped build the summary reported
+    last week's page as this run's output, and the artifact packaged it."""
+    wf = _strict_yaml(Path(".github/workflows/daily.yml"))
+    steps = {s.get("name"): s for s in wf["jobs"]["build"]["steps"] if s.get("name")}
+
+    for name in ("Summarize what each feed returned", "Upload the built page"):
+        cond = steps[name].get("if", "")
+        assert "skipped" in cond, f"{name} does not check whether the build ran: {cond!r}"
+        # always() must survive: these are most wanted when the build FAILED.
+        assert "always()" in cond, f"{name} lost its always(): {cond!r}"
+
+
+def test_a_key_check_run_cannot_publish():
+    """The gate must name the deliberate skip before testing the build's
+    outcome — a skipped build is not a failed one, and reporting it as one
+    reads as breakage on a green run."""
+    wf = _strict_yaml(Path(".github/workflows/daily.yml"))
+    gate = next(s for s in wf["jobs"]["build"]["steps"] if s.get("id") == "gate")
+    script = gate["run"]
+
+    # Comment lines dropped first: the comment above the gate explains the
+    # ordering and mentions BUILD_OUTCOME, which made an earlier version of
+    # this test fail against a workflow that was correct.
+    code = "\n".join(l for l in script.splitlines() if not l.strip().startswith("#"))
+    assert "IN_SENDCHECK" in code
+    assert code.index("IN_SENDCHECK") < code.index("BUILD_OUTCOME"), (
+        "the build outcome is tested before the deliberate-skip reasons"
+    )
