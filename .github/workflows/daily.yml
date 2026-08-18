@@ -36,6 +36,11 @@ on:
         type: boolean
         required: false
         default: false
+      sendcheck:
+        description: "Verify the mailing-list API key by reading the list (sends nothing)"
+        type: boolean
+        required: false
+        default: false
       threshold:
         description: "Minimum relevance to publish, 0-1 (blank = 0.45). Only used with scoring."
         required: false
@@ -117,6 +122,29 @@ jobs:
           fi
           daily-dive mailcheck
 
+      # A read, never a send. The first thing this project does against a new
+      # service should not be the irreversible thing — the same reason
+      # mailcheck opens the mailbox readonly. Also the only way to prove the
+      # API constants in deliver.py are right, since they were written without
+      # the documentation reachable.
+      - name: Check the mailing-list key
+        if: inputs.sendcheck
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+        run: |
+          if [ -z "$BUTTONDOWN_API_KEY" ]; then
+            echo "BUTTONDOWN_API_KEY secret is not set." >&2
+            exit 1
+          fi
+          daily-dive send --check
+
+      # What the send would actually post, with the key redacted. Needs no
+      # secret and reaches no network, so it is safe to run at any time and
+      # safe to paste anywhere.
+      - name: Show the request a send would make
+        if: inputs.sendcheck
+        run: daily-dive send --fixture --dry-run
+
       - name: List configured sources
         run: daily-dive sources
 
@@ -127,7 +155,11 @@ jobs:
       # the log, which pushed the table out of reach twice.
       - name: Build issue from live feeds
         id: build
-        if: inputs.probe_urls == ''
+        # sendcheck joins probe_urls as a reason not to build. Without this a
+        # dispatch that only wanted to verify the API key would build an
+        # UNSCORED issue and publish it over the live site, because a full run
+        # with no --source or --limit passes the publish gate.
+        if: inputs.probe_urls == '' && !inputs.sendcheck
         continue-on-error: true
         env:
           # Absent unless the secret is set; the CLI only reads it under --score,
@@ -252,11 +284,14 @@ jobs:
           IN_SOURCE: ${{ inputs.source }}
           IN_LIMIT: ${{ inputs.limit }}
           IN_PROBE_URLS: ${{ inputs.probe_urls }}
+          IN_SENDCHECK: ${{ inputs.sendcheck }}
           BUILD_OUTCOME: ${{ steps.build.outcome }}
         run: |
           reason=""
           if [ "$BUILD_OUTCOME" != "success" ]; then
             reason="the build did not succeed"
+          elif [ "$IN_SENDCHECK" = "true" ]; then
+            reason="this run was a key check, not a build"
           elif [ -n "$IN_SOURCE$IN_LIMIT$IN_PROBE_URLS" ]; then
             reason="this is a partial run (source, limit or probe_urls was set)"
           elif [ ! -s site/index.html ]; then
