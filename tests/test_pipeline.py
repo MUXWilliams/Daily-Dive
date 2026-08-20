@@ -2946,3 +2946,19 @@ def test_the_picks_guide_quotes_the_real_rejection_messages():
         )
     assert "isn't a usable link" in str(badlink.value)
     assert "isn't a usable link" in doc
+
+
+def test_the_friday_run_sends_without_being_asked():
+    """The whole point of a scheduled newsletter is that nobody has to remember
+    it. Scoring already defaults on for the schedule; sending was opt-in only
+    until the first send had been proved end to end by hand."""
+    wf = _strict_yaml(Path(".github/workflows/daily.yml"))
+    build = next(s for s in wf["jobs"]["build"]["steps"]
+                 if s.get("name") == "Build issue from live feeds")
+
+    send = build["env"]["IN_SEND"]
+    assert "schedule" in send, f"the Friday run would not send: {send!r}"
+    assert "inputs.send" in send, "a manual dispatch must still be able to ask for it"
+
+    # And the flag has to actually reach the CLI.
+    assert '--send' in build["run"]

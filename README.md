@@ -210,9 +210,12 @@ a diff rather than a recollection.
 The page is the canonical artifact; the email is a copy of it. A refused send
 turns the run red but never costs the issue its publication.
 
-Sending is **off by default, including on the schedule** — scoring defaults on
-for the weekly run and sending does not. A page can be redeployed; an inbox
-cannot be un-sent.
+Sending runs **automatically on the Friday schedule**, alongside scoring. It was
+opt-in until the first send had been proved end to end by hand — an inbox cannot
+be un-sent, so that was worth doing once before letting it run unattended.
+
+A **manual dispatch still has to tick `send`**, because a mid-week run by hand
+is almost always a test.
 
 Signup is the part that genuinely needs a server, which this project does not
 have: a static site cannot accept a form POST, and the repo is public so

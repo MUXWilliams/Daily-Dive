@@ -46,7 +46,7 @@ on:
         required: false
         default: ""
       send:
-        description: "Email the issue to the list. Off by default, including on the schedule — an inbox cannot be un-sent."
+        description: "Email the issue to the list. Automatic on the Friday schedule; tick this only for a manual send."
         type: boolean
         required: false
         default: false
@@ -184,10 +184,12 @@ jobs:
           # The mailing list. Absent unless the secret is set; the CLI only
           # reads it under --send, so an unsent run is unaffected.
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
-          # Deliberately NOT defaulted true on the schedule, unlike scoring.
-          # A page can be redeployed; an inbox cannot be un-sent, so sending
-          # stays something a human turns on for a given run.
-          IN_SEND: ${{ inputs.send }}
+          # On for the scheduled Friday run, exactly like scoring. It was
+          # opt-in until the first send had actually been proved end to end —
+          # an inbox cannot be un-sent, so that was worth doing once by hand
+          # before letting it run unattended. A manual dispatch still has to
+          # tick the box, because a mid-week dispatch is usually a test.
+          IN_SEND: ${{ inputs.send || github.event_name == 'schedule' }}
         run: |
           ARGS=""
           if [ -n "$IN_SOURCE" ]; then ARGS="$ARGS --source $IN_SOURCE"; fi

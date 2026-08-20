@@ -137,6 +137,6 @@ that built this cannot reach `docs.buttondown.com`. And the API constants in
 why `send --dry-run` and `send --check` exist: the request can be read before it
 is made, and the first real call is a read.
 
-**Sending is off by default, including on the schedule.** Scoring defaults on
-for the weekly run; sending does not. A page can be redeployed. An inbox cannot
-be un-sent.
+**Sending is automatic on the Friday schedule**, alongside scoring, since the
+first send was proved end to end by hand. A manual dispatch still has to ask for
+it — a mid-week run is almost always a test, and an inbox cannot be un-sent.
