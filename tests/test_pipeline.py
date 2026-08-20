@@ -2896,3 +2896,53 @@ def test_the_readme_source_count_matches_sources_toml():
     assert int(claimed.group(1)) == enabled, (
         f"README says {claimed.group(1)} live sources, sources.toml has {enabled}"
     )
+
+
+# ------------------------------------------------------------- picks guide
+
+def test_the_picks_guide_matches_the_code_it_describes():
+    """docs/picks.md is what the editor follows at 11pm on a Thursday. A guide
+    describing a form the parser no longer reads is worse than no guide — it
+    fails in a way that looks like the pipeline is broken."""
+    from dailydive import picks
+
+    doc = Path("docs/picks.md").read_text(encoding="utf-8")
+
+    assert f"`{picks.LABEL}` label" in doc, "the required label must be named"
+    assert str(picks.GIST_MAX_WORDS) in doc, "the gist ceiling must be stated"
+
+    # Every allowlisted account, so the silent-ignore failure is diagnosable.
+    for account in picks.AUTHORS:
+        assert account in doc, account
+
+    # Every category, because a typo here is a rejected pick.
+    for category in Category:
+        assert category.value in doc, category.value
+
+    # Every field the parser reads must be documented, and vice versa: a field
+    # in the guide the parser ignores sends the editor chasing a phantom.
+    documented = set(re.findall(r"^### ([A-Z][A-Za-z ]+)$", doc, re.M))
+    parsed = set(picks.parse_body("\n".join(f"### {f}\n\nx" for f in documented)))
+    assert {f.lower() for f in documented} == parsed, documented ^ {p.title() for p in parsed}
+
+
+def test_the_picks_guide_quotes_the_real_rejection_messages():
+    """They are quoted verbatim so the editor can match what GitHub shows them
+    against the table. Reworded messages would silently stop matching."""
+    from dailydive import picks
+
+    doc = Path("docs/picks.md").read_text(encoding="utf-8")
+
+    with pytest.raises(picks.PickError) as missing:
+        picks.to_item("### Headline\n\nJust a headline")
+    # The stable prefix, not the field list — which varies with what is absent.
+    assert str(missing.value).startswith("This is missing")
+    assert "This is missing" in doc
+
+    with pytest.raises(picks.PickError) as badlink:
+        picks.to_item(
+            "### Headline\n\nx\n### Link\n\nnotaurl\n### Outlet\n\nR2R\n"
+            "### Category\n\nCommunity"
+        )
+    assert "isn't a usable link" in str(badlink.value)
+    assert "isn't a usable link" in doc

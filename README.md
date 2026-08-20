@@ -241,6 +241,7 @@ Buttondown is free under 100 subscribers, and a scoring run is about 3¢.
 |---|---|
 | Session briefing | [`CLAUDE.md`](CLAUDE.md) — read this first if you are picking the project up |
 | What it teaches | [`docs/learning.md`](docs/learning.md) — what building this demonstrated about AI systems, including what went wrong |
+| Submitting a pick | [`docs/picks.md`](docs/picks.md) — the form, the GitHub issue, and how it reaches the page |
 | Delivery reasoning | [`docs/delivery.md`](docs/delivery.md) |
 | Editorial rules | [`prompts/score.system.md`](prompts/score.system.md) |
 | Procedures | `.claude/skills/` — the staging preview loop, and adding a source |

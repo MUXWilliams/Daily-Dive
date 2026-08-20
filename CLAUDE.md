@@ -44,15 +44,16 @@ Repo: `MUXWilliams/Daily-Dive` (the name predates the rename; leave it).
 ## The pipeline
 
 `ingest → normalize → dedupe/archive → shorts filter → recency → score →
-picks → collapse → resource → render → commit → deploy`
+picks → collapse → resource → render → commit → deploy → send`
 
-- **`sources.toml`** is the file edited most. 26 live sources: WordPress feeds,
-  8 YouTube channels via the Data API, 10 Bluesky accounts, 2 IMAP newsletters,
-  2 OpenAlex journal queries.
+- **`sources.toml`** is the file edited most. 29 live sources: 10 Bluesky accounts,
+  8 YouTube channels via the Data API, 4 IMAP newsletters, 3 WordPress feeds,
+  2 OpenAlex journal queries, 2 others.
 - **`score.py` + `prompts/score.system.md`** — one Haiku pass over every item,
   batched. Assigns a category, a 0–1 relevance, a promo flag and a ≤40-word
-  gist. Below `DEFAULT_THRESHOLD` (0.45) is dropped. Costs roughly $0.07–0.10
-  a run; total spend to date is well under a dollar.
+  gist. Below `DEFAULT_THRESHOLD` (0.45) is dropped. Costs about 3c a run; total
+  spend to date is well under a dollar. Every verdict is stored in `scores`,
+  including the drops — that is the only place a false negative is visible.
 - **`picks.py`** — the editor files stories the crawler cannot reach as GitHub
   issues labelled `pick`. They join after scoring (so the model cannot drop
   them) and are prepended (so they survive `collapse_similar` and lead their
@@ -104,7 +105,9 @@ picks → collapse → resource → render → commit → deploy`
 | Build | `.github/workflows/daily.yml` — Friday 10:00 UTC, plus manual |
 | Redeploy | `.github/workflows/deploy.yml` — publishes committed `site/` as-is |
 | Editorial rules | `prompts/score.system.md`, `docs/industry-brief.md` |
-| Delivery plan | `docs/delivery.md` |
+| Submitting a pick | `docs/picks.md` |
+| Delivery | `docs/delivery.md`, `dailydive/deliver.py` — Buttondown, off by default |
+| Scoring eval | `dailydive/eval.py`, `tests/fixtures/labels.json`, `docs/eval/` |
 | Archive index | `site/issues/index.json` |
 | Skills | `.claude/skills/preview/SKILL.md`, `.claude/skills/add-source/SKILL.md` |
 | What this teaches | `docs/learning.md` |
@@ -115,8 +118,9 @@ skill would put them in a third place that can drift from the first two, which
 is exactly how `site/about.html` ended up naming the wrong publication.
 
 `dailydive.sqlite3` is committed and load-bearing: `items` is a *seen* log,
-`published` is what actually reached a page, `http_cache` holds ETags. Losing
-it means re-publishing old stories.
+`published` is what actually reached a page, `scores` is every verdict the
+model reached including the ones it discarded, and `http_cache` holds ETags.
+Losing it means re-publishing old stories and losing every past measurement.
 
 ## Editorial direction
 
@@ -139,8 +143,8 @@ are building is why they opened it.
   The prompt fix has only faced a six-item run.
 - **JZAR and ENSO** have no working feed. Both are in `probe.DISCOVER_TARGETS`
   for HTML autodiscovery. El Niño was asked for by name and nothing covers it.
-- **Score persistence** — gists and relevance are not stored, so re-rendering
-  an issue after a template change costs a scoring pass.
+- **RSS is the next thing.** `site/issues/index.json` is already the right
+  shape for it; email shipped first because signup was the blocking problem.
 - **Seen vs published for the crawler** — items dropped under the old scoring
   prompt can never be reconsidered.
 - **Delivery (v3)** — RSS, then email. See `docs/delivery.md`; the sequencing
