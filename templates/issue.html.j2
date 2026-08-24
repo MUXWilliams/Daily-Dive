@@ -209,6 +209,46 @@
   }
   section.resource a.headline { margin-top: .6rem; font-size: 1.02rem; }
 
+  /* -------------------------------- subscribe ------------------------------
+     Placed after the last section rather than above the items: someone who
+     read to the bottom has just demonstrated they want this, and the page is
+     built to be read in two minutes without an ask in the middle of it. */
+  .subscribe {
+    margin-top: 1.8rem; padding: 1.15rem 1.15rem 1.2rem;
+    background: var(--ground); border: 1px solid var(--rule); border-radius: 10px;
+  }
+  .subscribe h2 {
+    margin: 0; font-size: 1rem; font-weight: 800; letter-spacing: -.015em; color: var(--ink);
+  }
+  .subscribe .pitch { margin: .3rem 0 .8rem; font-size: .88rem; color: var(--ink-soft); }
+  .subscribe .row { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .subscribe input[type="email"] {
+    flex: 1 1 14rem; min-width: 0; font: inherit; font-size: .95rem;
+    padding: .6rem .7rem; color: var(--ink); background: var(--page);
+    border: 1px solid var(--rule); border-radius: 8px;
+    /* 16px on iOS or Safari zooms the page on focus. .95rem of 15px is 14.25,
+       so the min-height carries the tap target instead of the font size. */
+    min-height: 44px;
+  }
+  .subscribe input[type="email"]:focus-visible {
+    outline: 2px solid var(--link); outline-offset: 1px; border-color: var(--link);
+  }
+  .subscribe button {
+    font: inherit; font-size: .95rem; font-weight: 700; min-height: 44px;
+    padding: .6rem 1.1rem; color: #fff; background: var(--link);
+    border: 0; border-radius: 8px; cursor: pointer;
+  }
+  .subscribe button:hover { background: #094a95; }
+  .subscribe .note { margin: .6rem 0 0; font-size: .75rem; color: var(--ink-faint); }
+  .subscribe .note a { color: var(--ink-faint); }
+
+  /* Present for screen readers and keyboard users, absent visually — the
+     heading above already carries the same words. */
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; margin: -1px;
+    padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+
   /* --------------------------------- footer -------------------------------- */
   .empty { color: var(--ink-soft); font-style: italic; padding: 2rem 0; }
   footer {
@@ -322,6 +362,8 @@
     </section>
     {% endif %}
   </div>
+
+  {% include "_subscribe-form.html.j2" %}
 
   <footer>
     {% if issue.outlets %}

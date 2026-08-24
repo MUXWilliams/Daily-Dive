@@ -266,6 +266,8 @@ def render_issue(
     archive_href: str = "",
     thumb: tuple[str, int | None, int | None] | None = None,
 ) -> str:
+    from . import deliver
+
     for item in issue.items:
         assert_attributable(item)
 
@@ -293,6 +295,8 @@ def render_issue(
         canonical_path=canonical_path,
         archive_href=archive_href,
         og_description=og_description(issue),
+        subscribe_action=deliver.EMBED_ACTION,
+        referral_url=deliver.REFERRAL_URL,
     )
 
 
@@ -472,7 +476,10 @@ def write_subscribe(out_dir: Path) -> Path:
 
     out_dir.mkdir(parents=True, exist_ok=True)
     html = _env().get_template("subscribe.html.j2").render(
-        brand=brand, subscribe_url=deliver.SUBSCRIBE_URL
+        brand=brand,
+        subscribe_action=deliver.EMBED_ACTION,
+        referral_url=deliver.REFERRAL_URL,
+        header=find_header_image(out_dir),
     )
     path = out_dir / "subscribe.html"
     path.write_text(html, encoding="utf-8")

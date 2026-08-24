@@ -72,6 +72,23 @@ ENV_KEY = "BUTTONDOWN_API_KEY"
 USERNAME = "the_lone_aquarist"
 SUBSCRIBE_URL = f"https://buttondown.com/{USERNAME}"
 
+# Where the on-site signup form posts. Taken verbatim from the embed snippet
+# Buttondown generated, not written from memory — the endpoint constants above
+# were guessed and the first send failed on a missing header because of it.
+#
+# Derived from USERNAME rather than pasted whole, so a rename cannot leave the
+# form posting to an account that no longer exists.
+#
+# The form embed is used rather than their iframe deliberately. An iframe loads
+# a third-party document on every visit to the page, subscriber or not, which
+# sits badly with a publication that switched off open and click tracking on
+# purpose. It also cannot be styled, and theirs ships fixed at 220px with
+# scrolling disabled, so anything taller is clipped unreachably.
+EMBED_ACTION = f"https://buttondown.com/api/emails/embed-subscribe/{USERNAME}"
+
+# Their attribution link, kept. This is a free tier and the credit is fair.
+REFERRAL_URL = f"https://buttondown.com/refer/{USERNAME}"
+
 TIMEOUT = httpx.Timeout(30.0, connect=10.0)
 
 

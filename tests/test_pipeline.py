@@ -2634,19 +2634,6 @@ def test_the_dry_run_redacts_the_key_and_sends_nothing(monkeypatch):
     assert "x" * 100 not in out
 
 
-def test_the_subscribe_page_points_at_the_list_and_needs_no_javascript(tmp_path):
-    """A redirect that needs a script fails silently in exactly the readers most
-    likely to block one."""
-    from dailydive import deliver, render
-
-    html = render.write_subscribe(tmp_path).read_text(encoding="utf-8")
-    assert deliver.SUBSCRIBE_URL in html
-    assert "http-equiv=\"refresh\"" in html
-    assert "<script" not in html
-    # A real link too, for anything that ignores the meta refresh.
-    assert f'href="{deliver.SUBSCRIBE_URL}"' in html
-
-
 # ---------------------------------------------------------------- workflows
 
 def _strict_yaml(path: Path):
@@ -2962,3 +2949,84 @@ def test_the_friday_run_sends_without_being_asked():
 
     # And the flag has to actually reach the CLI.
     assert '--send' in build["run"]
+
+
+# ---------------------------------------------------------- subscribe form
+
+def test_the_form_posts_to_the_address_buttondown_gave_us():
+    """The action came from their generated embed snippet, not from memory.
+    The API constants in deliver.py were guessed and the first send failed on a
+    missing header because of it."""
+    from dailydive import deliver, preview, render
+
+    html = render.render_issue(preview.load_issue())
+    assert f'action="{deliver.EMBED_ACTION}"' in html
+    assert 'method="post"' in html
+    assert 'name="email"' in html
+    assert deliver.USERNAME in deliver.EMBED_ACTION
+
+
+def test_the_email_input_has_a_real_label():
+    """A placeholder is not a label: it disappears on focus and is not reliably
+    announced. The visible heading carries the words, so the label is
+    visually-hidden rather than absent."""
+    from dailydive import preview, render
+
+    html = render.render_issue(preview.load_issue())
+    assert 'for="bd-email"' in html
+    assert 'id="bd-email"' in html
+    assert 'type="email"' in html
+    assert "required" in html.split('id="bd-email"', 1)[1][:200]
+
+
+def test_buttondowns_referral_link_cannot_reach_back_through_window_opener():
+    """Their snippet ships target="_blank" with no rel. Without noopener the
+    opened page can navigate ours."""
+    from dailydive import preview, render
+
+    html = render.render_issue(preview.load_issue())
+    frag = html.split('href="https://buttondown.com/refer/', 1)[1][:160]
+    assert 'target="_blank"' in frag
+    assert 'rel="noopener"' in frag
+
+
+def test_the_form_sits_before_the_footer_not_inside_it():
+    """Placement is the decision: after the last section, so it follows someone
+    who has just read to the bottom rather than interrupting the items."""
+    from dailydive import preview, render
+
+    html = render.render_issue(preview.load_issue())
+    assert html.index('class="subscribe"') < html.index("<footer>")
+
+
+def test_no_iframe_anywhere_on_the_site():
+    """The form embed was chosen over their iframe on purpose: an iframe fetches
+    a third-party document on every visit from every reader, which would undo
+    the decision to switch off open and click tracking. It also cannot be styled
+    and ships fixed at 220px with scrolling disabled."""
+    from dailydive import preview, render
+
+    pages = [render.render_issue(preview.load_issue())]
+    for name in ("subscribe.html.j2", "about.html.j2"):
+        pages.append(
+            render._env().get_template(name).render(
+                brand=brand, header=None,
+                subscribe_action="x", referral_url="y",
+            )
+        )
+    for page in pages:
+        assert "<iframe" not in page
+        assert "as_embed=true" not in page
+
+
+def test_the_subscribe_page_is_a_real_page_now(tmp_path):
+    """It was a meta-refresh to the provider's hosted page. A reader clicking
+    Subscribe left the domain immediately; now they stay until they submit."""
+    from dailydive import deliver, render
+
+    html = render.write_subscribe(tmp_path).read_text(encoding="utf-8")
+
+    assert "http-equiv=\"refresh\"" not in html
+    assert "<script" not in html, "the no-JavaScript decision still holds"
+    assert f'action="{deliver.EMBED_ACTION}"' in html
+    assert brand.TAGLINE in html

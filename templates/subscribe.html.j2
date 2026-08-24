@@ -6,41 +6,117 @@
 <title>Subscribe — {{ brand.PUBLICATION }}</title>
 <meta name="description" content="Get {{ brand.PUBLICATION }} in your inbox, {{ brand.CADENCE }}.">
 <link rel="canonical" href="{{ brand.SITE_URL }}/subscribe.html">
-{#- The redirect that makes the public URL ours.
-
-    The signup form has to live on the mailing-list provider — a static site
-    cannot accept a form POST, which is the whole reason this project pays
-    anyone at all. But the URL that gets printed, posted to a forum and pasted
-    into a club's chat should be theloneaquarist.com/subscribe, permanently.
-    Moving providers then means editing this one file rather than chasing every
-    place the link was shared.
-
-    Belt and braces: a meta refresh, and a real link for anyone whose browser
-    or reader ignores it. No JavaScript — a redirect that needs a script to work
-    is a redirect that fails silently in exactly the readers most likely to
-    block one. #}
-<meta http-equiv="refresh" content="0; url={{ subscribe_url }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ brand.SITE_NAME }}">
+<meta property="og:title" content="Subscribe to {{ brand.PUBLICATION }}">
+<meta property="og:description" content="{{ brand.TAGLINE }} One email a {{ brand.CADENCE_NOUN }}, free.">
+<meta property="og:url" content="{{ brand.SITE_URL }}/subscribe.html">
+{#- This was a meta-refresh to the provider's hosted page. It is a real page
+    now: the form posts to them directly, so a reader stays on this domain until
+    the moment they actually submit. The URL was always the point — it is what
+    gets printed, posted to a forum and pasted into a club's chat, and it keeps
+    working if the provider ever changes. #}
 <style>
+  /* The same ground, ink and measure as an issue. Single-theme by choice. */
+  :root {
+    --page: #ffffff; --ground: #f6f7f8; --ink: #16191d; --ink-soft: #545e69;
+    --ink-faint: #8b959f; --rule: #e4e8eb; --link: #0b5fbe;
+  }
+  * { box-sizing: border-box; }
   body {
-    margin: 0; background: #ffffff; color: #16191d;
+    margin: 0; background: var(--page); color: var(--ink);
     font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
   }
-  .wrap { max-width: 34rem; margin: 0 auto; padding: 4rem 1.15rem; text-align: center; }
-  h1 { font-size: 1.4rem; letter-spacing: -.02em; margin: 0 0 .6rem; }
-  p { color: #545e69; margin: 0 0 1.2rem; }
-  a.go {
-    display: inline-block; background: #0b5fbe; color: #fff; text-decoration: none;
-    padding: .7rem 1.3rem; border-radius: 8px; font-weight: 700;
+  .wrap { max-width: 34rem; margin: 0 auto; padding: 2.25rem 1.15rem 4rem; }
+
+  h1.wordmark { margin: 0 0 1.2rem; font-size: 0; line-height: 0; }
+  h1.wordmark img { display: block; width: 100%; height: auto; border-radius: 8px; }
+  .fallback {
+    border-radius: 8px; padding: 1.5rem 1.4rem 1.6rem; color: #fff; margin-bottom: 1.2rem;
+    background: linear-gradient(155deg, #3585b8 0%, #1d5f92 45%, #102a3f 100%);
   }
-  a.back { color: #0b5fbe; font-size: .85rem; }
+  .fallback .name { margin: 0; font-size: 2rem; font-weight: 700; letter-spacing: -.035em; }
+
+  p.lede { margin: 0 0 1.2rem; font-size: 1rem; line-height: 1.6; color: var(--ink-soft); }
+  p.lede strong { color: var(--ink); }
+
+  ul.what { margin: 0 0 1.4rem; padding-left: 1.15rem; font-size: .92rem; color: var(--ink-soft); }
+  ul.what li { margin: .35rem 0; }
+
+  .subscribe {
+    padding: 1.15rem 1.15rem 1.2rem;
+    background: var(--ground); border: 1px solid var(--rule); border-radius: 10px;
+  }
+  .subscribe h2 { margin: 0; font-size: 1rem; font-weight: 800; letter-spacing: -.015em; }
+  .subscribe .pitch { margin: .3rem 0 .8rem; font-size: .88rem; color: var(--ink-soft); }
+  .subscribe .row { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .subscribe input[type="email"] {
+    flex: 1 1 14rem; min-width: 0; font: inherit; font-size: .95rem; min-height: 44px;
+    padding: .6rem .7rem; color: var(--ink); background: var(--page);
+    border: 1px solid var(--rule); border-radius: 8px;
+  }
+  .subscribe input[type="email"]:focus-visible {
+    outline: 2px solid var(--link); outline-offset: 1px; border-color: var(--link);
+  }
+  .subscribe button {
+    font: inherit; font-size: .95rem; font-weight: 700; min-height: 44px;
+    padding: .6rem 1.1rem; color: #fff; background: var(--link);
+    border: 0; border-radius: 8px; cursor: pointer;
+  }
+  .subscribe button:hover { background: #094a95; }
+  .subscribe .note { margin: .6rem 0 0; font-size: .75rem; color: var(--ink-faint); }
+  .subscribe .note a { color: var(--ink-faint); }
+
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; margin: -1px;
+    padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+
+  footer {
+    margin-top: 2rem; padding-top: 1.1rem; border-top: 1px solid var(--rule);
+    font-size: .82rem; color: var(--ink-faint);
+  }
+  footer a { color: var(--link); }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>{{ brand.PUBLICATION }}</h1>
-  <p>{{ brand.TAGLINE }} One email a {{ brand.CADENCE_NOUN }}, free.</p>
-  <p><a class="go" href="{{ subscribe_url }}">Continue to the signup form</a></p>
-  <p><a class="back" href="./">← back to the current issue</a></p>
+
+  {% if header %}
+  <h1 class="wordmark">
+    <a href="./"><img src="{{ header[0] }}"
+      {%- if header[1] %} width="{{ header[1] }}"{% endif %}
+      {%- if header[2] %} height="{{ header[2] }}"{% endif %}
+      alt="{{ brand.PUBLICATION }} — {{ brand.SITE_NAME }}. {{ brand.TAGLINE }}"></a>
+  </h1>
+  {% else %}
+  <div class="fallback"><p class="name">{{ brand.PUBLICATION }}</p></div>
+  {% endif %}
+
+  <p class="lede">
+    <strong>{{ brand.TAGLINE }}</strong>
+    One email a {{ brand.CADENCE_NOUN }}, free, carrying what was worth reading
+    that {{ brand.CADENCE_NOUN }} in the reef aquarium hobby — and the science
+    underneath it.
+  </p>
+
+  <ul class="what">
+    <li>Industry and product news, husbandry and science, wild reef conditions.</li>
+    <li>Primary literature and public-aquarium practice, not only the trade press.</li>
+    <li>Every item credits and links its source. Nothing here is reproduced.</li>
+  </ul>
+
+  {% include "_subscribe-form.html.j2" %}
+
+  <footer>
+    <p>
+      <a href="./">Read the current issue</a> ·
+      <a href="archive.html">Back issues</a> ·
+      <a href="about.html">About &amp; sourcing policy</a>
+    </p>
+  </footer>
+
 </div>
 </body>
 </html>

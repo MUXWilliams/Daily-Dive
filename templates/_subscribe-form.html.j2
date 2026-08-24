@@ -1,0 +1,49 @@
+{#-
+  The signup form, shared by the issue page and the subscribe page.
+
+  Buttondown's form embed rather than their iframe. Three reasons, all of which
+  matter more here than they would on an ordinary site:
+
+  * An iframe fetches a third-party document on every visit, from every reader,
+    subscriber or not. This publication switched off open and click tracking
+    deliberately; loading someone else's page for everyone would undo that one
+    layer out.
+  * An iframe cannot be styled. Every colour on this site is stated explicitly
+    and the theme is single by choice; theirs arrives with a 1px #ccc border
+    matching nothing.
+  * Theirs ships fixed at height:220px with scrolling="no", so anything taller
+    than that is clipped with no way to reach it.
+
+  Submitting navigates to Buttondown's confirmation page. That is the trade, and
+  it is a fair one — their page explains the double opt-in and tells the reader
+  to go and confirm, which a "thanks!" in place would not.
+
+  Two changes to the snippet Buttondown generated:
+  * `required` on the input, so an empty submit is caught by the browser rather
+    than by a round trip to their server.
+  * `rel="noopener"` on their referral link. target="_blank" without it leaves
+    the opened page able to reach back through window.opener.
+-#}
+<section class="subscribe" aria-labelledby="subscribe-heading">
+  <h2 id="subscribe-heading">Get it in your inbox</h2>
+  <p class="pitch">
+    One email a {{ brand.CADENCE_NOUN }}, free. Every item links to its source.
+  </p>
+  <form action="{{ subscribe_action }}" method="post" class="embeddable-buttondown-form">
+    {#- A real label, not a placeholder doing its job. A placeholder vanishes on
+        focus and is not reliably announced by a screen reader. Visually hidden
+        here because the heading above already says it, but present for anyone
+        navigating by form controls. -#}
+    <label for="bd-email" class="visually-hidden">Your email address</label>
+    <div class="row">
+      <input id="bd-email" type="email" name="email" required
+             autocomplete="email" placeholder="you@example.com"
+             aria-describedby="subscribe-note">
+      <button type="submit">Subscribe</button>
+    </div>
+    <p class="note" id="subscribe-note">
+      No spam, and unsubscribe in one click.
+      <a href="{{ referral_url }}" target="_blank" rel="noopener">Powered by Buttondown</a>.
+    </p>
+  </form>
+</section>
