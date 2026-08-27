@@ -46,6 +46,12 @@ Repo: `MUXWilliams/Daily-Dive` (the name predates the rename; leave it).
 `ingest → normalize → dedupe/archive → shorts filter → recency → score →
 picks → collapse → resource → render → commit → deploy → send`
 
+- **Newsletter sources are three steps, not one.** Sign up with
+  `theloneaquarist+feeds@gmail.com`; a Gmail filter labels it `digest`; then add
+  a `[[source]]` block with the sender. The plus-tag and the label are different
+  things and easy to conflate — `+feeds` is what goes in a signup form, `digest`
+  is the only thing the code reads. Miss the third step and the mail arrives,
+  gets labelled, and is silently ignored.
 - **`sources.toml`** is the file edited most. 29 live sources: 10 Bluesky accounts,
   8 YouTube channels via the Data API, 4 IMAP newsletters, 3 WordPress feeds,
   2 OpenAlex journal queries, 2 others.
@@ -109,6 +115,7 @@ picks → collapse → resource → render → commit → deploy → send`
 | Delivery | `docs/delivery.md`, `dailydive/deliver.py` — Buttondown, off by default |
 | Scoring eval | `dailydive/eval.py`, `tests/fixtures/labels.json`, `docs/eval/` |
 | Archive index | `site/issues/index.json` |
+| Newsletter signups | `theloneaquarist+feeds@gmail.com`, filtered to the Gmail label `digest` |
 | Skills | `.claude/skills/preview/SKILL.md`, `.claude/skills/add-source/SKILL.md` |
 | What this teaches | `docs/learning.md` |
 

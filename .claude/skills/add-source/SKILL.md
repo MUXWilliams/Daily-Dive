@@ -59,6 +59,31 @@ individual.** Forum members did not ask to be published. A pick from Reef2Reef
 is credited "Reef2Reef", not a username, and there is no author field on the
 form.
 
+### 3b. Newsletter sources need three steps, not one
+
+The crawler cannot reach some outlets, but they all run newsletters. That path
+is: sign up, get it labelled, then configure it.
+
+1. Sign up with **`theloneaquarist+feeds@gmail.com`**.
+2. A Gmail filter matches that plus-address and applies the label **`digest`**.
+   One filter covers every future subscription, which is why it beats a filter
+   per sender.
+3. Add the `[[source]]` block with the sender in `senders`.
+
+**The plus-tag and the label are different things and are easy to conflate** —
+`+feeds` is what you type into someone's signup form, and Gmail leaves it in the
+`To:` header for the filter to match. `digest` is the label that filter applies,
+and it is the only thing the code reads: the source URLs are
+`imap://imap.gmail.com/digest`, and the IMAP search is `SINCE` plus `FROM`,
+never the `To:` header.
+
+Miss step 3 and the mail arrives, gets labelled, and is silently ignored.
+
+`daily-dive mailcheck` opens the mailbox read-only and lists the senders it can
+actually see — use it to get the real sender address rather than guessing it
+from the display name. `FORBIDDEN_MAILBOXES` refuses `inbox` and All Mail: this
+repo is public and so is its Actions log.
+
 ### 4. YouTube specifics
 
 - A channel id `UC…` maps to its uploads playlist by swapping the prefix to

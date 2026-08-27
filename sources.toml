@@ -482,6 +482,23 @@ category_hint = "Husbandry & Science"
 
 # ------------------------------------------------------------- newsletters
 #
+# HOW TO ADD A NEWSLETTER, in three steps. Miss the third and the mail arrives,
+# gets labelled, and is silently ignored:
+#
+#   1. Sign up with  theloneaquarist+feeds@gmail.com
+#   2. A Gmail filter matches that plus-address and applies the label `digest`
+#   3. Add a [[source]] block here with the sender in `senders`
+#
+# The plus-tag and the label are two different things and are easy to conflate.
+# `+feeds` is what you type into someone's signup form; Gmail ignores it for
+# delivery but leaves it in the To: header, which is what the filter matches on.
+# `digest` is the label that filter applies, and it is the only thing this code
+# reads — see the URLs below. Nothing here inspects the To: header at all; the
+# IMAP search is SINCE plus FROM.
+#
+# One filter on the plus-address covers every future subscription, which is why
+# it beats a filter per sender.
+#
 # Read over IMAP from the `digest` Gmail label. One source per sender, not one
 # source for the mailbox: every item has to be credited to the outlet that
 # actually wrote it, and a single "newsletters" source would have credited a
