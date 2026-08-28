@@ -51,10 +51,17 @@ on:
         required: false
         default: false
   schedule:
-    # Friday 10:00 UTC — 6am US Eastern in summer, 5am in winter. Cron has no
+    # Friday 10:17 UTC — 6am US Eastern in summer, 5am in winter. Cron has no
     # notion of daylight saving, so the local hour shifts by one twice a year;
     # that is the accepted cost of not running a timezone-aware scheduler.
-    - cron: "0 10 * * 5"
+    #
+    # :17 rather than :00 on purpose. GitHub runs scheduled workflows on shared
+    # infrastructure, best-effort, and drops or delays them under load — worst
+    # at the top of the hour, when the most crons across the whole platform fire
+    # at once. The 2026-08-28 run never fired at all: correct cron, recent repo
+    # activity, no run recorded, no trace anywhere. An odd minute is the one
+    # cheap thing that measurably helps.
+    - cron: "17 10 * * 5"
 
 # A publishing run needs three grants beyond the default read: contents to
 # commit the issue and the archive DB back, and pages + id-token for the
