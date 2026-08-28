@@ -5,28 +5,121 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Subscribe — Weekly Dive</title>
 <meta name="description" content="Get Weekly Dive in your inbox, weekly.">
-<link rel="canonical" href="https://www.theloneaquarist.com/subscribe.html"><meta http-equiv="refresh" content="0; url=https://buttondown.com/the_lone_aquarist">
-<style>
+<link rel="canonical" href="https://www.theloneaquarist.com/subscribe.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Lone Aquarist">
+<meta property="og:title" content="Subscribe to Weekly Dive">
+<meta property="og:description" content="Saltwater and reef news for the marine aquarist. One email a week, free.">
+<meta property="og:url" content="https://www.theloneaquarist.com/subscribe.html"><style>
+  /* The same ground, ink and measure as an issue. Single-theme by choice. */
+  :root {
+    --page: #ffffff; --ground: #f6f7f8; --ink: #16191d; --ink-soft: #545e69;
+    --ink-faint: #8b959f; --rule: #e4e8eb; --link: #0b5fbe;
+  }
+  * { box-sizing: border-box; }
   body {
-    margin: 0; background: #ffffff; color: #16191d;
+    margin: 0; background: var(--page); color: var(--ink);
     font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
   }
-  .wrap { max-width: 34rem; margin: 0 auto; padding: 4rem 1.15rem; text-align: center; }
-  h1 { font-size: 1.4rem; letter-spacing: -.02em; margin: 0 0 .6rem; }
-  p { color: #545e69; margin: 0 0 1.2rem; }
-  a.go {
-    display: inline-block; background: #0b5fbe; color: #fff; text-decoration: none;
-    padding: .7rem 1.3rem; border-radius: 8px; font-weight: 700;
+  .wrap { max-width: 34rem; margin: 0 auto; padding: 2.25rem 1.15rem 4rem; }
+
+  h1.wordmark { margin: 0 0 1.2rem; font-size: 0; line-height: 0; }
+  h1.wordmark img { display: block; width: 100%; height: auto; border-radius: 8px; }
+  .fallback {
+    border-radius: 8px; padding: 1.5rem 1.4rem 1.6rem; color: #fff; margin-bottom: 1.2rem;
+    background: linear-gradient(155deg, #3585b8 0%, #1d5f92 45%, #102a3f 100%);
   }
-  a.back { color: #0b5fbe; font-size: .85rem; }
+  .fallback .name { margin: 0; font-size: 2rem; font-weight: 700; letter-spacing: -.035em; }
+
+  p.lede { margin: 0 0 1.2rem; font-size: 1rem; line-height: 1.6; color: var(--ink-soft); }
+  p.lede strong { color: var(--ink); }
+
+  ul.what { margin: 0 0 1.4rem; padding-left: 1.15rem; font-size: .92rem; color: var(--ink-soft); }
+  ul.what li { margin: .35rem 0; }
+
+  .subscribe {
+    padding: 1.15rem 1.15rem 1.2rem;
+    background: var(--ground); border: 1px solid var(--rule); border-radius: 10px;
+  }
+  .subscribe h2 { margin: 0; font-size: 1rem; font-weight: 800; letter-spacing: -.015em; }
+  .subscribe .pitch { margin: .3rem 0 .8rem; font-size: .88rem; color: var(--ink-soft); }
+  .subscribe .row { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .subscribe input[type="email"] {
+    flex: 1 1 14rem; min-width: 0; font: inherit; font-size: .95rem; min-height: 44px;
+    padding: .6rem .7rem; color: var(--ink); background: var(--page);
+    border: 1px solid var(--rule); border-radius: 8px;
+  }
+  .subscribe input[type="email"]:focus-visible {
+    outline: 2px solid var(--link); outline-offset: 1px; border-color: var(--link);
+  }
+  .subscribe button {
+    font: inherit; font-size: .95rem; font-weight: 700; min-height: 44px;
+    padding: .6rem 1.1rem; color: #fff; background: var(--link);
+    border: 0; border-radius: 8px; cursor: pointer;
+  }
+  .subscribe button:hover { background: #094a95; }
+  .subscribe .note { margin: .6rem 0 0; font-size: .75rem; color: var(--ink-faint); }
+  .subscribe .note a { color: var(--ink-faint); }
+
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; margin: -1px;
+    padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+
+  footer {
+    margin-top: 2rem; padding-top: 1.1rem; border-top: 1px solid var(--rule);
+    font-size: .82rem; color: var(--ink-faint);
+  }
+  footer a { color: var(--link); }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Weekly Dive</h1>
-  <p>Saltwater and reef news for the marine aquarist. One email a week, free.</p>
-  <p><a class="go" href="https://buttondown.com/the_lone_aquarist">Continue to the signup form</a></p>
-  <p><a class="back" href="./">← back to the current issue</a></p>
+
+  <h1 class="wordmark">
+    <a href="./"><img src="assets/masthead.png" width="1908" height="404"      alt="Weekly Dive — The Lone Aquarist. Saltwater and reef news for the marine aquarist."></a>
+  </h1>
+
+  <p class="lede">
+    <strong>Saltwater and reef news for the marine aquarist.</strong>
+    One email a week, free, carrying what was worth reading
+    that week in the reef aquarium hobby — and the science
+    underneath it.
+  </p>
+
+  <ul class="what">
+    <li>Industry and product news, husbandry and science, wild reef conditions.</li>
+    <li>Primary literature and public-aquarium practice, not only the trade press.</li>
+    <li>Every item credits and links its source. Nothing here is reproduced.</li>
+  </ul>
+
+<section class="subscribe" aria-labelledby="subscribe-heading">
+  <h2 id="subscribe-heading">Get it in your inbox</h2>
+  <p class="pitch">
+    One email a week, free. Every item links to its source.
+  </p>
+  <form action="https://buttondown.com/api/emails/embed-subscribe/the_lone_aquarist" method="post" class="embeddable-buttondown-form"><label for="bd-email" class="visually-hidden">Your email address</label>
+    <div class="row">
+      <input id="bd-email" type="email" name="email" required
+             autocomplete="email" placeholder="you@example.com"
+             aria-describedby="subscribe-note">
+      <button type="submit">Subscribe</button>
+    </div>
+    <p class="note" id="subscribe-note">
+      No spam, and unsubscribe in one click.
+      <a href="https://buttondown.com/refer/the_lone_aquarist" target="_blank" rel="noopener">Powered by Buttondown</a>.
+    </p>
+  </form>
+</section>
+  <footer>
+    <p>
+      <a href="./">Read the current issue</a> ·
+      <a href="archive.html">Back issues</a> ·
+      <a href="about.html">About &amp; sourcing policy</a>
+    </p>
+  </footer>
+
 </div>
 </body>
 </html>
