@@ -953,8 +953,23 @@ WORKFLOW_TEXT = WORKFLOW.read_text(encoding="utf-8")
 
 def test_the_schedule_is_weekly_and_matches_the_recency_window():
     """A window longer than the cadence republishes last issue's leftovers; a
-    shorter one drops stories nobody has seen yet."""
-    assert 'cron: "0 10 * * 5"' in WORKFLOW_TEXT  # Friday
+    shorter one drops stories nobody has seen yet.
+
+    Asserts the day and the frequency, not the exact minute. The minute is an
+    operational detail — it moved off :00 after a scheduled run was dropped,
+    which GitHub does most often at the top of the hour — and pinning it here
+    turned a deliberate reliability fix into a test failure.
+    """
+    crons = re.findall(r'cron:\s*"([^"]+)"', WORKFLOW_TEXT)
+    assert len(crons) == 1, f"expected exactly one schedule, found {crons}"
+
+    minute, hour, dom, month, dow = crons[0].split()
+    assert dow == "5", "the issue goes out on Friday"
+    assert dom == "*" and month == "*", "weekly, not monthly or annual"
+    assert minute != "0", (
+        "scheduled runs at the top of the hour are the ones GitHub drops "
+        "under load — see the comment above the cron"
+    )
     assert normalize.DEFAULT_MAX_AGE_DAYS == 7
 
 
