@@ -134,19 +134,14 @@ already knows why it is here.
 
 ### Your own hedge is a score, not a caveat
 
-If the honest second sentence of your gist would be a hedge about **subject** —
-"tangential to reef keeping", "not really about reefs", "outside the aquarium
-world" — then the item has failed the subject test above, and the score must
-say so: **0.2 or below**. Do not write the hedge and then score it 0.4.
+If the honest second sentence of your gist would be a hedge — "tangential to
+reef keeping", "minimal aquarium application", "not directly affecting" — then
+the item has failed the subject test above, and the score must say so: **0.2 or
+below**. Do not write the hedge and then score it 0.4.
 
 This is about subject, not about difficulty. "Dense, and the reader will have
 to work at it" is not a hedge — that item is in scope and should be scored on
 its merits.
-
-Nor is it about application. "No direct aquarium application", "without
-husbandry consequence" — that is the actionability test, which the subject test
-above has already rejected. An in-scope paper with no application is **0.6 or
-better** on the strength of the work, not 0.35 with an apology attached.
 
 ### The title is content
 

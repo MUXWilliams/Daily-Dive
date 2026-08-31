@@ -945,8 +945,6 @@ def test_the_prompt_forbids_hedging_and_publishing():
     # an earlier version pinned the exact wording and broke the moment the rule
     # was correctly broadened, which is a test failing for being right.
     assert "not about difficulty" in prompt
-    assert "Nor is it about application" in prompt
-    assert "in-scope paper with no application" in prompt
 
 
 def test_the_prompt_gives_one_ordered_answer_per_beat():
