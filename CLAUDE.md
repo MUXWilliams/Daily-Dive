@@ -144,6 +144,14 @@ is written into it, including two real items that slipped through and why.
 Community leads the issue: the reader is a hobbyist, and what other hobbyists
 are building is why they opened it.
 
+**Issue length is not a problem to solve.** Runs have gone 6 → 13 → 36 items
+and the editor's call on the 36 was that it is not too long. Do not propose a
+cap, and do not raise `DEFAULT_THRESHOLD` to shorten an issue — the threshold
+exists to keep weak items out, not to hit a target length, and moving it for
+length would drop good items on a busy week and admit weak ones on a quiet
+one. A digest that varies with how much actually happened is telling the truth
+about the week.
+
 ## Open threads
 
 - **The bridge rule is untested at scale.** Marine-turtle poaching and
