@@ -23,9 +23,14 @@ may have allowlisted the user-agent string.)*
 - **29 live sources**: 10 Bluesky accounts, 8 YouTube channels via the Data API,
   4 IMAP newsletters, 3 WordPress feeds, 2 OpenAlex journal queries, 2 others.
 - **Scores every item** with one batched Claude Haiku pass — category, 0–1
-  relevance, promo flag, ≤40-word gist. About **3¢ a run**.
+  relevance, promo flag, ≤40-word gist. About **0.08¢ an item**, so a run costs
+  what the week costs: 39 items in mid-August was 3¢, the 104-item run on
+  28 August was 8¢.
 - **Publishes** to GitHub Pages: a front page, a dated permalink per issue, an
-  archive, and an about & sourcing policy page.
+  archive, an about & sourcing policy page, a subscribe page, and a generated
+  `robots.txt` and `sitemap.xml`.
+- **Takes signups on its own domain** — a Buttondown form embedded in the issue
+  footer and on `/subscribe`, rather than an iframe or an off-site bounce.
 - **Emails** the issue to a Buttondown list, off by default and behind the same
   gate that decides whether a run publishes at all.
 - **Accepts editor's picks** — stories the crawler cannot reach, filed as GitHub
@@ -47,7 +52,8 @@ uv run pytest -q                           # the whole suite, offline and free
 ```
 
 Output lands in `site/` — `index.html`, a dated permalink under `site/issues/`,
-plus `archive.html`, `about.html` and `subscribe.html`.
+plus `archive.html`, `about.html`, `subscribe.html`, `robots.txt` and
+`sitemap.xml`.
 
 Useful while iterating:
 
@@ -76,6 +82,9 @@ picks → collapse → resource → render → commit → deploy → send
 | `picks.py` | editor's picks from GitHub issues |
 | `thumbs.py` | the Resource video's still, fetched and validated at build time |
 | `render.py` | `Issue` → page, permalink, archive, about, email |
+| `archive.py` | the back-issue index — a JSON sidecar, not a scan of the HTML |
+| `seo.py` | `robots.txt` and `sitemap.xml`, generated from that index |
+| `pricing.py` | token accounting, so cost questions have answers |
 | `deliver.py` | one POST to the mailing list — the only provider-specific file |
 | `eval.py` | scoring quality, measured against hand labels |
 | `store.py` | SQLite: seen log, published log, scores, HTTP cache |
@@ -186,9 +195,12 @@ everything below the threshold before rendering.
 
 Notes worth knowing before editing `score.py` or `prompts/score.system.md`:
 
-- **The system prompt is a frozen, cacheable prefix.** Interpolating anything
-  per-request would invalidate the cache and quietly multiply cost. Watch
-  `cache hit` in the cost line rather than assuming.
+- **The system prompt is a frozen prefix, marked cacheable.** Interpolating
+  anything per-request would invalidate the cache and quietly multiply cost.
+  It does not always *take*, though: at roughly 2,800 tokens the prompt sits
+  under Haiku's 4,096-token cache minimum, and a measured run reported
+  `cache hit 0%`. Read the number in the cost line rather than assuming the
+  marking worked.
 - **The model never writes a URL.** Links are attached from source data on
   either side of the call, so a hallucinated link is unrepresentable rather than
   merely unlikely.
@@ -205,6 +217,25 @@ the editor would drop that the model ran. Reports land in
 `docs/eval/<prompt-hash>.md`, one per prompt version, so "did that edit help" is
 a diff rather than a recollection.
 
+The file name is a hash of the prompt itself, so it changes exactly when the
+prompt changes and never when it doesn't — nobody has to remember to bump a
+version.
+
+Three versions in, that has already earned its keep in both directions:
+
+| Prompt | Top 20 | ρ | Leads buried |
+|---|---|---|---|
+| `bbd4b48d3628` | 19/20 | +0.38 | 9 |
+| `7a3c49dadcca` | **20/20** | **+0.48** | 8 |
+| `c2407f69c031` | 19/20 | +0.46 | 9 |
+
+The middle one is the current best. The third was an attempted fix that made
+things worse and was reverted — and the reports are why that is a sentence
+rather than an argument. Two things it caught that no amount of reading the
+prompt would have: quoting an item's *wrong* score as an example anchors the
+model to that number, and inserting a thousand tokens above a working rule can
+break it by displacement alone.
+
 ## Delivery
 
 The page is the canonical artifact; the email is a copy of it. A refused send
@@ -219,9 +250,43 @@ is almost always a test.
 
 Signup is the part that genuinely needs a server, which this project does not
 have: a static site cannot accept a form POST, and the repo is public so
-subscriber addresses can never live in it. Buttondown solves exactly that, and
-`site/subscribe.html` is a redirect so the shareable URL stays ours. See
-[`docs/delivery.md`](docs/delivery.md) for the reasoning.
+subscriber addresses can never live in it. Buttondown solves exactly that.
+
+`site/subscribe.html` was a meta-refresh to their hosted page; it is a real page
+now, carrying an embedded form that also sits in every issue footer. A reader
+stays on this domain until the moment they submit. The **form embed rather than
+the iframe** was deliberate — an iframe loads a third-party document on every
+visit from every reader, subscriber or not, which would quietly undo the
+decision to switch open and click tracking off. It also cannot be styled, and
+theirs ships fixed at 220px with scrolling disabled. See
+[`docs/delivery.md`](docs/delivery.md) for the rest of the reasoning.
+
+## Being findable
+
+`seo.py` writes `robots.txt` and `sitemap.xml` on every publishing run,
+generated from `site/issues/index.json` rather than by scanning the output —
+the same sidecar the archive page reads, and the one RSS will read next.
+
+The sitemap is the part that matters. The dated permalinks are linked from
+exactly one page, `archive.html`, so a crawler that never reaches it never
+learns a back issue exists.
+
+Three choices worth keeping:
+
+- **`lastmod` only where a real date is known.** Issues and the front page have
+  one; `about.html` and `subscribe.html` do not. Inventing a timestamp to make
+  the file look complete tells a crawler something untrue.
+- **No `changefreq`, no `priority`.** Google ignores both, and a field nobody
+  reads drifts without anyone noticing.
+- **Inside the publish gate.** A `--source` or `--limit` run has published
+  nothing, and a sitemap is a claim about what is live.
+
+The half that is not code — the Search Console property, verified by DNS rather
+than by a token committed to a public repo — is in
+[`docs/indexing.md`](docs/indexing.md), along with the honest note that indexed
+is not the same as found. An aggregator whose unique text is a gist per item
+ranks on inbound links and on the primary literature that makes it different,
+not on markup.
 
 ## Roadmap
 
@@ -229,14 +294,20 @@ subscriber addresses can never live in it. Buttondown solves exactly that, and
 |---|---|
 | **v0** ✅ | Pipeline with no AI. Fetch, dedupe, render, full attribution. |
 | **v1** ✅ | Haiku pass scores and categorizes every item. |
-| **v2** ✅ | Picks, archive, Resource section, scoring eval, email delivery. |
+| **v2** ✅ | Picks, archive, Resource section, scoring eval, email delivery, on-site signup, search indexing. |
 | **v3** | RSS out. `site/issues/index.json` is already the right shape for it. |
 | **later** | A writing pass with a grounding check — the piece that would teach the most about where these models fail, and the one still unbuilt. |
 
 ## Cost
 
-Under a dollar total to date. Actions and Pages are free on a public repo,
-Buttondown is free under 100 subscribers, and a scoring run is about 3¢.
+Comfortably under a dollar to date. Actions and Pages are free on a public
+repo, and Buttondown is free under 100 subscribers.
+
+Scoring is the only line item, at roughly **0.08¢ an item** measured — so it
+scales with the week rather than being a fixed figure. The 104-item run on
+28 August cost about 8¢; a full 128-item eval pass measured $0.10. An earlier
+claim of "3¢ a run" was accurate when issues were 39 items and simply aged.
+`pricing.py` prints the real number on every run, which is the point of it.
 
 ## Reading further
 
@@ -246,6 +317,7 @@ Buttondown is free under 100 subscribers, and a scoring run is about 3¢.
 | What it teaches | [`docs/learning.md`](docs/learning.md) — what building this demonstrated about AI systems, including what went wrong |
 | Submitting a pick | [`docs/picks.md`](docs/picks.md) — the form, the GitHub issue, and how it reaches the page |
 | Delivery reasoning | [`docs/delivery.md`](docs/delivery.md) |
+| Getting indexed | [`docs/indexing.md`](docs/indexing.md) — robots, sitemap, Search Console |
 | Editorial rules | [`prompts/score.system.md`](prompts/score.system.md) |
 | Procedures | `.claude/skills/` — the staging preview loop, and adding a source |
 
