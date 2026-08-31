@@ -929,9 +929,24 @@ def test_the_prompt_forbids_hedging_and_publishing():
     prompt = " ".join(raw.replace("*", "").split())
     assert "tangential" in prompt
     assert "0.2 or below" in prompt
-    # The hedge rule must stay about subject, not about difficulty — otherwise
-    # it goes back to killing the deep science the issue exists to carry.
-    assert "This is about subject, not about difficulty" in prompt
+    # The hedge rule must stay about SUBJECT. Two things it must never fire on,
+    # because both are how it goes back to killing the deep science the issue
+    # exists to carry:
+    #
+    #   difficulty     — "dense, the reader will have to work at it"
+    #   applicability  — "no direct aquarium application"
+    #
+    # The second was measured, not imagined. Told that seahorses are reef fauna,
+    # the scorer stopped writing "not reef fauna" and started writing "without
+    # husbandry consequence" — same verdict, new sentence — and two items the
+    # editor had marked as leads fell from 0.45 and 0.50 to 0.35 and 0.40.
+    #
+    # Asserted as the pair of carve-outs rather than as one literal sentence:
+    # an earlier version pinned the exact wording and broke the moment the rule
+    # was correctly broadened, which is a test failing for being right.
+    assert "not about difficulty" in prompt or "Difficulty." in prompt
+    assert "actionability test arriving in the last sentence" in prompt
+    assert "in-scope paper with no application" in prompt
 
 
 def test_the_prompt_gives_one_ordered_answer_per_beat():
