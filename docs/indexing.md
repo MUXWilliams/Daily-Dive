@@ -42,6 +42,20 @@ None of this is code, and none of it can be done from the build container —
 the egress proxy blocks `theloneaquarist.com` outright, so nothing here was
 verified against the live host.
 
+**Done, 31 August 2026.** Domain property verified by DNS TXT; sitemap
+submitted and reporting 9 URLs, which matches the file exactly; indexing
+requested for the home page and the archive. Steps 1–3 are kept below because
+they will be needed again if the domain moves or the property is ever lost —
+and because the TXT record must stay in the zone forever. Deleting it
+un-verifies the property and takes the history with it.
+
+One thing that cost a deploy and is worth writing down: `robots.txt` and
+`sitemap.xml` 404'd after a redeploy because the work was still on a branch.
+`deploy.yml` publishes **`main`'s committed `site/`** — it has no idea a branch
+exists. Merge first, then redeploy, then check the URL loads, and only then
+submit anything to Google. A sitemap submission against a 404 records an error
+on the property.
+
 ### 1. Add the site to Google Search Console
 
 <https://search.google.com/search-console>

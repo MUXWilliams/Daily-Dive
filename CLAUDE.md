@@ -154,9 +154,13 @@ are building is why they opened it.
 - **RSS is the next thing.** `site/issues/index.json` is already the right
   shape for it — `seo.py` is a second consumer of it now; email shipped first
   because signup was the blocking problem.
-- **Search Console is unverified.** `robots.txt` and `sitemap.xml` ship, but
-  nobody has added the property or submitted the sitemap yet, and the container
-  cannot reach the live host to check. See `docs/indexing.md`.
+- **Indexing is set up, not yet earned.** The Search Console property is
+  verified and the sitemap is submitted (`docs/indexing.md`). What is still
+  open is whether the pages get *kept*: an aggregator whose unique text is a
+  gist per item is exactly the shape Google files under "Crawled – currently
+  not indexed", and the answer to that is editorial, not another file in
+  `site/`. The container cannot reach the live host, so the Pages report is the
+  only place the truth shows up.
 - **Seen vs published for the crawler** — items dropped under the old scoring
   prompt can never be reconsidered.
 - **Delivery (v3)** — RSS, then email. See `docs/delivery.md`; the sequencing
