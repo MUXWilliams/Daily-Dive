@@ -1,0 +1,8 @@
+# The Lone Aquarist — Weekly Dive
+# Every item on this site credits and links its source; nothing is reproduced.
+# Questions, or a request to be delisted: theloneaquarist@gmail.com
+
+User-agent: *
+Allow: /
+
+Sitemap: https://www.theloneaquarist.com/sitemap.xml

@@ -3045,3 +3045,115 @@ def test_the_subscribe_page_is_a_real_page_now(tmp_path):
     assert "<script" not in html, "the no-JavaScript decision still holds"
     assert f'action="{deliver.EMBED_ACTION}"' in html
     assert brand.TAGLINE in html
+
+
+# --- robots.txt and sitemap.xml -------------------------------------------
+#
+# The site was live for weeks with neither. These assert the two things that
+# make a sitemap worth having: that it lists the dated permalinks, which are
+# linked only from the archive page, and that it never invents a lastmod.
+
+
+def _seeded_archive(tmp_path):
+    """An archive index with two issues, written the way archive.py writes it."""
+    (tmp_path / "issues").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "issues" / "index.json").write_text(
+        json.dumps([
+            {"date": "2026-08-28", "href": "issues/2026-08-28.html",
+             "items": 36, "outlets": 22, "lead": "A lead"},
+            {"date": "2026-08-21", "href": "issues/2026-08-21.html",
+             "items": 13, "outlets": 10, "lead": "An older lead"},
+        ]),
+        encoding="utf-8",
+    )
+    return tmp_path
+
+
+def test_the_sitemap_carries_every_back_issue(tmp_path):
+    """The permalinks are why this file exists. Nothing links to them except
+    archive.html, so a crawler that never reaches that page never learns a
+    single back issue is there."""
+    from dailydive import seo
+
+    xml = seo.write_sitemap(_seeded_archive(tmp_path)).read_text(encoding="utf-8")
+
+    for path in ("/", "/archive.html", "/about.html", "/subscribe.html",
+                 "/issues/2026-08-28.html", "/issues/2026-08-21.html"):
+        assert f"<loc>{brand.SITE_URL}{path}</loc>" in xml
+
+
+def test_the_sitemap_only_dates_what_it_knows(tmp_path):
+    """A lastmod on about.html would have to be made up. An issue's lastmod is
+    its own date; the front page carries the newest issue, so it takes that."""
+    from dailydive import seo
+
+    found = dict(seo.urls(_seeded_archive(tmp_path)))
+
+    assert found[f"{brand.SITE_URL}/"] == "2026-08-28"
+    assert found[f"{brand.SITE_URL}/archive.html"] == "2026-08-28"
+    assert found[f"{brand.SITE_URL}/issues/2026-08-21.html"] == "2026-08-21"
+    assert found[f"{brand.SITE_URL}/about.html"] is None
+    assert found[f"{brand.SITE_URL}/subscribe.html"] is None
+
+
+def test_the_sitemap_is_well_formed_xml(tmp_path):
+    """Google rejects a malformed sitemap outright, and the failure is only
+    visible in Search Console days later."""
+    from xml.etree import ElementTree
+
+    from dailydive import seo
+
+    root = ElementTree.fromstring(seo.sitemap_xml(_seeded_archive(tmp_path)))
+    ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+    assert root.tag == f"{ns}urlset"
+    locs = [el.text for el in root.iter(f"{ns}loc")]
+    assert len(locs) == len(set(locs)), "a duplicated URL is a wasted crawl"
+    for loc in locs:
+        assert loc.startswith(brand.SITE_URL), "sitemap URLs must be absolute"
+
+
+def test_an_empty_archive_still_yields_a_valid_sitemap(tmp_path):
+    """First run, or a corrupt index that archive.load() recovered from as an
+    empty list. The static pages are still real and still worth listing."""
+    from dailydive import seo
+
+    found = dict(seo.urls(tmp_path))
+
+    assert found[f"{brand.SITE_URL}/"] is None, "no issue means no honest lastmod"
+    assert f"{brand.SITE_URL}/about.html" in found
+
+
+def test_robots_points_at_the_sitemap_and_blocks_nothing(tmp_path):
+    """The Sitemap line is the whole reason the file exists. A stray Disallow
+    here would be invisible until traffic never arrived."""
+    from dailydive import seo
+
+    text = seo.write_robots(tmp_path).read_text(encoding="utf-8")
+
+    assert f"Sitemap: {brand.SITE_URL}/sitemap.xml" in text
+    assert "User-agent: *" in text
+    assert brand.CONTACT_EMAIL in text
+    for line in text.splitlines():
+        assert not line.strip().lower().startswith("disallow:"), line
+
+
+def test_every_page_title_carries_the_site_name():
+    """"Weekly Dive" is the publication; "The Lone Aquarist" is what someone
+    types into Google. Not one of the four titles contained the site name, so
+    the brand query the editor most wants to win had nothing to match."""
+    from dailydive import preview, render
+
+    pages = {"issue": render.render_issue(preview.load_issue())}
+    for key, name in (("subscribe", "subscribe.html.j2"), ("about", "about.html.j2")):
+        pages[key] = render._env().get_template(name).render(
+            brand=brand, header=None, subscribe_action="x", referral_url="y",
+        )
+    env = render._env()
+    env.filters["datefmt"] = render._datefmt  # archive.write_page registers it
+    pages["archive"] = env.get_template("archive.html.j2").render(
+        brand=brand, header=None, entries=[],
+    )
+
+    for key, html in pages.items():
+        title = html.split("<title>", 1)[1].split("</title>", 1)[0]
+        assert brand.SITE_NAME in title, f"{key}: {title!r}"

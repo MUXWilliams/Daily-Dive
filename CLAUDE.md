@@ -115,6 +115,7 @@ picks → collapse → resource → render → commit → deploy → send`
 | Delivery | `docs/delivery.md`, `dailydive/deliver.py` — Buttondown, off by default |
 | Scoring eval | `dailydive/eval.py`, `tests/fixtures/labels.json`, `docs/eval/` |
 | Archive index | `site/issues/index.json` |
+| Search indexing | `docs/indexing.md`, `dailydive/seo.py` — robots.txt + sitemap.xml |
 | Newsletter signups | `theloneaquarist+feeds@gmail.com`, filtered to the Gmail label `digest` |
 | Skills | `.claude/skills/preview/SKILL.md`, `.claude/skills/add-source/SKILL.md` |
 | What this teaches | `docs/learning.md` |
@@ -151,7 +152,11 @@ are building is why they opened it.
 - **JZAR and ENSO** have no working feed. Both are in `probe.DISCOVER_TARGETS`
   for HTML autodiscovery. El Niño was asked for by name and nothing covers it.
 - **RSS is the next thing.** `site/issues/index.json` is already the right
-  shape for it; email shipped first because signup was the blocking problem.
+  shape for it — `seo.py` is a second consumer of it now; email shipped first
+  because signup was the blocking problem.
+- **Search Console is unverified.** `robots.txt` and `sitemap.xml` ship, but
+  nobody has added the property or submitted the sitemap yet, and the container
+  cannot reach the live host to check. See `docs/indexing.md`.
 - **Seen vs published for the crawler** — items dropped under the old scoring
   prompt can never be reconsidered.
 - **Delivery (v3)** — RSS, then email. See `docs/delivery.md`; the sequencing

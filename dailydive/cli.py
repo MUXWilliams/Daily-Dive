@@ -681,6 +681,15 @@ def main(argv: list[str] | None = None) -> int:
         entries = archive.record(args.out, issue)
         archive.write_page(args.out)
         log.info("archive now lists %d issue(s)", len(entries))
+
+        # After the archive index, never before: the sitemap is generated from
+        # it, and generating it first would publish a sitemap that omits the
+        # issue this run just built. Inside the publish gate for the same
+        # reason the archive is — a partial run has not published anything, and
+        # a sitemap is a claim about what is live.
+        from . import seo
+
+        seo.write_all(args.out)
         if bucket_items:
             _answer_picks(issue)
 
