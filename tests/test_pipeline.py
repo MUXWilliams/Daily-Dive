@@ -3172,3 +3172,13 @@ def test_every_page_title_carries_the_site_name():
     for key, html in pages.items():
         title = html.split("<title>", 1)[1].split("</title>", 1)[0]
         assert brand.SITE_NAME in title, f"{key}: {title!r}"
+
+
+def test_scoring_pins_temperature():
+    """Unset for four eval runs, which made every before/after partly a reading
+    of sampling noise: between two prompts differing by three lines, 87 of 128
+    items moved. An eval whose noise floor is the size of its effects is not a
+    measurement. Asserted in the source because the call is not exercised by
+    the offline suite — there is no client to observe."""
+    src = Path("dailydive/score.py").read_text(encoding="utf-8")
+    assert "temperature=0" in src

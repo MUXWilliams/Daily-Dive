@@ -156,6 +156,20 @@ def score_items(
             response = client.messages.parse(
                 model=MODEL,
                 max_tokens=8000,
+                # Pinned. This was unset — so the API default — for four eval
+                # runs, and the noise swamped what was being measured: between
+                # two prompts differing by three lines about a rule that named
+                # none of them, 87 of 128 items moved and six moved by 0.20 or
+                # more. A Bering Sea mooring went 0.35 to 0.65. Every "did that
+                # edit help" answer read partly as sampling, and there were no
+                # repeat runs to tell which part.
+                #
+                # Scoring is classification, not writing. Sampling diversity
+                # buys nothing here and costs reproducibility, which is the one
+                # thing an eval needs. Not perfectly deterministic even at 0 —
+                # batching and routing still move things — so a diff of one or
+                # two items remains weak evidence.
+                temperature=0,
                 system=system,
                 messages=[
                     {
