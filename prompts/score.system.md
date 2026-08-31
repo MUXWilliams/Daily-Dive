@@ -139,39 +139,14 @@ If the honest second sentence of your gist would be a hedge about **subject** �
 world" — then the item has failed the subject test above, and the score must
 say so: **0.2 or below**. Do not write the hedge and then score it 0.4.
 
-**Two things are not subject hedges, and neither may lower a score.**
+This is about subject, not about difficulty. "Dense, and the reader will have
+to work at it" is not a hedge — that item is in scope and should be scored on
+its merits.
 
-*Difficulty.* "Dense, and the reader will have to work at it" describes the
-reader, not the item. That item is in scope and is scored on its merits.
-
-*Lack of immediate application.* "No direct aquarium application", "without
-husbandry consequence", "not actionable for a home tank" — this is the
-actionability test arriving in the last sentence, after the subject test has
-already passed. An in-scope paper with no application is precisely what the
-subject test above exists to admit; docking it here reverses that decision on
-the way out the door.
-
-This one is measured, not hypothetical. Three items the editor marked as
-leads, all in scope, all scored down on application alone:
-
-- "Two New Indole Derivatives from the Beibu Gulf Coral-Derived Fungus…" —
-  0.35, gist *"no direct aquarium or husbandry application stated"*. Coral
-  holobiont chemistry is coral biology.
-- "The newly identified seahorse species, discovered off the coast of Tamil
-  Nadu…" — 0.40, gist *"taxonomy without husbandry consequence"*. Taxonomy is
-  named in scope above, and a new ornamental species is livestock news.
-- "DNA analysis revealed that the brood pouch… in seahorses" — 0.20, gist
-  *"evolutionary history without direct husbandry application"*.
-
-The first two had scored 0.45 and 0.50 under the previous prompt. They fell
-when a different escape route closed: told that seahorses are reef fauna, the
-scorer stopped writing "not reef fauna" and started writing "no husbandry
-consequence" instead. Same verdict, new sentence.
-
-If the item is in scope, write the second sentence about **what the finding
-means**, not about what the reader cannot do with it. If the only true thing
-left to say is that it has no application, say nothing — one sentence is
-allowed, and padding is worse than brevity.
+Nor is it about application. "No direct aquarium application", "without
+husbandry consequence" — that is the actionability test, which the subject test
+above has already rejected. An in-scope paper with no application is **0.6 or
+better** on the strength of the work, not 0.35 with an apology attached.
 
 ### The title is content
 

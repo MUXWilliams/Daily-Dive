@@ -944,8 +944,8 @@ def test_the_prompt_forbids_hedging_and_publishing():
     # Asserted as the pair of carve-outs rather than as one literal sentence:
     # an earlier version pinned the exact wording and broke the moment the rule
     # was correctly broadened, which is a test failing for being right.
-    assert "not about difficulty" in prompt or "Difficulty." in prompt
-    assert "actionability test arriving in the last sentence" in prompt
+    assert "not about difficulty" in prompt
+    assert "Nor is it about application" in prompt
     assert "in-scope paper with no application" in prompt
 
 
