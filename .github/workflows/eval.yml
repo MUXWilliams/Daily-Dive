@@ -7,7 +7,12 @@ name: Score eval
 # coupled to a schedule you don't control. It also touches nothing the site
 # depends on: no Pages deploy, no issue is built, nothing published.
 #
-# Cost: 128 labelled items is 7 batches of 20, well under two cents.
+# Cost: 128 labelled items is 7 batches of 20. Measured at $0.10, not the
+# "under two cents" this line used to claim — that estimate counted input
+# tokens and forgot output is 5x the price. The system prompt also does not
+# cache (see score.py: it is ~2800 tokens, under Haiku's 4096 minimum), so it
+# is resent on all 7 calls. Both are fine at this scale; the number is here so
+# nobody re-derives it.
 on:
   workflow_dispatch:
     inputs:
