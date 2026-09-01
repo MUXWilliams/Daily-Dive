@@ -85,6 +85,24 @@
     </tr></table>
   </td></tr>
 
+  {# --------------------------------------------------------------- intro #}
+  {#- The email had no greeting at all: masthead, then straight to bullets,
+      with the editor named once in the footer. The readers most likely to
+      notice a person behind this were the ones seeing no person at all.
+
+      Same words as the web intro rather than a second version of them, so the
+      two cannot drift the way about.html did. The tempo line is absent on an
+      ordinary week by design — see render.tempo. -#}
+  {% if issue.items %}
+  <tr><td style="padding:16px 22px 0; font-family:{{ FONT }}; font-size:15px; line-height:1.6; color:{{ INK }};">
+    <p style="margin:0 0 10px;">Howdy, it's {{ brand.EDITOR }} again.</p>
+    <p style="margin:0;">Happy {{ issue.date | datefmt('weekday') }}, {{ brand.AUDIENCE }}, and welcome back to {{ brand.PUBLICATION }}.</p>
+    {%- if tempo %}
+    <p style="margin:10px 0 0; font-style:italic; color:{{ SOFT }};">{{ tempo }}</p>
+    {%- endif %}
+  </td></tr>
+  {% endif %}
+
   {# ---------------------------------------------------------- highlights #}
   {% if highlights %}
   <tr><td style="padding:16px 22px 0; font-family:{{ FONT }}; font-size:15px; line-height:1.5; color:{{ INK }};">
@@ -99,6 +117,12 @@
     </ul>
   </td></tr>
   {% endif %}
+
+  {%- if issue.items %}
+  <tr><td style="padding:14px 22px 0; font-family:{{ FONT }}; font-size:15px; line-height:1.6; color:{{ INK }};">
+    Let's <em>dive</em> into the news touching our hobby&hellip;
+  </td></tr>
+  {%- endif %}
 
   {# ------------------------------------------------------------ sections #}
   {% for title, slug, items in sections %}

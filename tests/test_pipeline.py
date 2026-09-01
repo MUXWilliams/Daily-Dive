@@ -3251,3 +3251,41 @@ def test_no_page_claims_a_cadence_it_does_not_keep():
         visible = re.sub(r"\{#.*?#\}", "", raw, flags=re.S).lower()
         for word in ("this morning", "today's", "each morning", "every day"):
             assert word not in visible, f"{name} says {word!r}"
+
+
+def test_the_email_greets_the_reader_like_the_page_does():
+    """The email had no intro at all — masthead, then straight to bullets, with
+    the editor named once in the footer. The readers most likely to notice a
+    person behind this were the ones seeing no person at all."""
+    html = render.render_email(_sized_issue(20))
+
+    assert f"Howdy, it's {brand.EDITOR} again." in html
+    assert brand.AUDIENCE in html
+    assert "welcome back to" in html
+    # Above the bullets, as on the page.
+    assert html.index("Howdy") < html.index("This week")
+
+
+def test_the_email_carries_the_tempo_line_on_the_same_weeks_the_page_does():
+    """One rule, two templates. If these could disagree they eventually would,
+    which is how about.html spent weeks naming the wrong publication."""
+    for n in (6, 20, 34):
+        issue = _sized_issue(n)
+        line = render.tempo(issue)
+        html = render.render_email(issue)
+        if line is None:
+            assert "font-style:italic" not in html, f"{n} items"
+        else:
+            assert line in html, f"{n} items"
+            assert html.index(line) < html.index("This week")
+
+
+def test_the_email_intro_is_inlined_like_everything_else():
+    """A class attribute here would be styled by a <style> block that Gmail can
+    strip outright, and the greeting would arrive as unstyled text."""
+    html = render.render_email(_sized_issue(34))
+    intro = html[html.index("Howdy"):html.index("This week")]
+    assert "class=" not in intro
+    assert "style=" in intro
+    # Literal hex, never a CSS variable — email has no var().
+    assert "var(--" not in intro

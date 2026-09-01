@@ -458,6 +458,7 @@ def render_email(
         brand=brand,
         highlights=bullets,
         highlights_plus=plus,
+        tempo=tempo(issue),
         preheader=og_description(issue),
     )
 

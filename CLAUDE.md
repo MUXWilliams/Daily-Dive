@@ -175,11 +175,6 @@ about the week.
   issues, when a rolling median against `site/issues/index.json` becomes the
   better instrument — it is the wrong one today because the archive still holds
   three daily-era issues, and comparing a week against a day says nothing.
-- **The email has no intro block at all.** Its sections are masthead,
-  highlights, sections, resource, footer; `EDITOR` appears only as "Edited by
-  Isaac" in the footer. So the readers most likely to feel a human touch see
-  none. Adding one is introducing a voice, not editing a sentence — worth doing
-  deliberately rather than as a rider on a copy change.
 - **Seen vs published for the crawler** — items dropped under the old scoring
   prompt can never be reconsidered.
 - **Delivery (v3)** — RSS, then email. See `docs/delivery.md`; the sequencing
