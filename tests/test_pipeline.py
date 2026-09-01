@@ -3289,3 +3289,18 @@ def test_the_email_intro_is_inlined_like_everything_else():
     assert "style=" in intro
     # Literal hex, never a CSS variable — email has no var().
     assert "var(--" not in intro
+
+
+def test_the_page_and_the_email_greet_the_reader_identically():
+    """The greeting exists in two templates now. A copy edit applied to one and
+    not the other is the exact failure that had about.html naming the wrong
+    publication while every other page was right, so the sentence is compared
+    rather than trusted."""
+    issue = _sized_issue(20)
+
+    def greeting(html: str) -> str:
+        start = html.index("Happy ")
+        return " ".join(html[start:html.index(".", start) + 1].split())
+
+    assert greeting(render.render_issue(issue)) == greeting(render.render_email(issue))
+    assert f"welcome back to my {brand.PUBLICATION}." in render.render_issue(issue)

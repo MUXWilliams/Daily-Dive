@@ -291,7 +291,7 @@
   {% if issue.items %}
   <section class="intro">
     <p>Howdy, it's {{ brand.EDITOR }} again.</p>
-    <p>Happy {{ issue.date | datefmt('weekday') }}, {{ brand.AUDIENCE }}, and welcome back to {{ brand.PUBLICATION }}.</p>
+    <p>Happy {{ issue.date | datefmt('weekday') }}, {{ brand.AUDIENCE }}, and welcome back to my {{ brand.PUBLICATION }}.</p>
     {#- Only on an unusually light or heavy week. An ordinary week gets the
         greeting above and nothing else: a line that appeared every issue would
         become a slot the reader learns to skip. See render.tempo. #}
