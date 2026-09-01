@@ -46,6 +46,66 @@ def _host(url: str) -> str:
     return urlsplit(url).netloc.removeprefix("www.")
 
 
+# Item counts that make a week worth remarking on at the top of the issue.
+#
+# Both are judgement calls on two weekly issues — 13 items and 36 — and should
+# be revisited once site/issues/index.json holds eight or so Fridays. A rolling
+# median against recent issues is the better instrument then and the wrong one
+# now: the archive still contains three daily-era issues, and comparing a week
+# against a day says nothing.
+QUIET_BELOW = 12
+HEAVY_AT = 30
+
+# Pre-written and selected, never generated. No model writes prose on this
+# site, and an intro is the last place to start — it is the one paragraph a
+# reader takes as the editor speaking directly.
+#
+# Three per band so two quiet weeks running do not open with the same sentence.
+# A line that repeats verbatim reads as a filled template slot, which is the
+# opposite of what it is here to do.
+TEMPO_QUIET = (
+    "This week seems a little quiet.",
+    "A slower week out there.",
+    "Not much moving this week.",
+)
+TEMPO_HEAVY = (
+    "Busy week — plenty to get through.",
+    "A lot landed this week.",
+    "Heavy week; settle in.",
+)
+
+
+def tempo(issue: Issue) -> str | None:
+    """One sentence about the size of the week, or None on an ordinary one.
+
+    Derived from the item count for the same reason `highlights` is derived
+    from the ranked items: it is a claim about the issue, and it should not be
+    possible to make it while the issue says otherwise.
+
+    **None is the common case and is the point.** If every issue carried a
+    tempo line it would become a slot the reader learns to skip, and the line
+    only works by being the exception — the week someone noticed. An ordinary
+    week gets the standard greeting, unchanged.
+
+    Selection is by ISO week number rather than at random, so a given date
+    always renders the same sentence. `daily-dive preview` and the tests would
+    otherwise be non-reproducible, and this project has just spent an evening
+    learning what unpinned sampling does to a measurement.
+    """
+    count = len(issue.items)
+    if not count:
+        # Zero items is not a quiet week, it is a failed run, and the template
+        # has its own branch saying so.
+        return None
+    if count < QUIET_BELOW:
+        bank = TEMPO_QUIET
+    elif count >= HEAVY_AT:
+        bank = TEMPO_HEAVY
+    else:
+        return None
+    return bank[issue.date.isocalendar()[1] % len(bank)]
+
+
 def highlights(issue: Issue, limit: int = 4) -> tuple[list[str], str | None]:
     """The morning's headline bullets, plus a line covering the remainder.
 
@@ -292,6 +352,7 @@ def render_issue(
         brand=brand,
         highlights=bullets,
         highlights_plus=plus,
+        tempo=tempo(issue),
         canonical_path=canonical_path,
         archive_href=archive_href,
         og_description=og_description(issue),

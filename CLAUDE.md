@@ -169,6 +169,17 @@ about the week.
   not indexed", and the answer to that is editorial, not another file in
   `site/`. The container cannot reach the live host, so the Pages report is the
   only place the truth shows up.
+- **The tempo bands are calibrated on two issues.** `render.QUIET_BELOW` (12)
+  and `HEAVY_AT` (30) decide whether the intro remarks on the size of the week.
+  They are judgement calls on 13 and 36 items. Revisit at roughly eight weekly
+  issues, when a rolling median against `site/issues/index.json` becomes the
+  better instrument — it is the wrong one today because the archive still holds
+  three daily-era issues, and comparing a week against a day says nothing.
+- **The email has no intro block at all.** Its sections are masthead,
+  highlights, sections, resource, footer; `EDITOR` appears only as "Edited by
+  Isaac" in the footer. So the readers most likely to feel a human touch see
+  none. Adding one is introducing a voice, not editing a sentence — worth doing
+  deliberately rather than as a rider on a copy change.
 - **Seen vs published for the crawler** — items dropped under the old scoring
   prompt can never be reconsidered.
 - **Delivery (v3)** — RSS, then email. See `docs/delivery.md`; the sequencing

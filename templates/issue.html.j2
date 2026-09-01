@@ -111,6 +111,11 @@
   .intro p { margin: 0 0 .85rem; }
   .intro p:last-child { margin-bottom: 0; }
   .intro .lead-in { font-weight: 700; color: var(--ink); margin-bottom: .5rem; }
+  /* The week's tempo. Italic and slightly soft so it reads as an aside in the
+     editor's voice rather than another statement of fact — it sits between the
+     fixed greeting and the headline bullets, and should not compete with
+     either. Absent entirely on an ordinary week. */
+  .intro .tempo { font-style: italic; color: var(--ink-soft); }
   .intro ul {
     margin: 0 0 .95rem; padding-left: 1.15rem;
     display: grid; gap: .3rem;
@@ -287,6 +292,10 @@
   <section class="intro">
     <p>Howdy, it's {{ brand.EDITOR }} again.</p>
     <p>Happy {{ issue.date | datefmt('weekday') }}, {{ brand.AUDIENCE }}, and welcome back to {{ brand.PUBLICATION }}.</p>
+    {#- Only on an unusually light or heavy week. An ordinary week gets the
+        greeting above and nothing else: a line that appeared every issue would
+        become a slot the reader learns to skip. See render.tempo. #}
+    {% if tempo %}<p class="tempo">{{ tempo }}</p>{% endif %}
     <p class="lead-in">Here are the biggest things worth knowing:</p>
     <ul>
       {% for line in highlights %}
@@ -299,7 +308,7 @@
     <p>Let's <em>dive</em> into the news touching our hobby&hellip;</p>
   </section>
   {% else %}
-    <p class="empty">Nothing new in the feeds this morning.</p>
+    <p class="empty">Nothing new in the feeds this {{ brand.CADENCE_NOUN }}.</p>
   {% endif %}
 
   <div class="sections">
@@ -368,7 +377,7 @@
   <footer>
     {% if issue.outlets %}
     <p>
-      Every item above links to its source. Today's reporting comes from
+      Every item above links to its source. This {{ brand.CADENCE_NOUN }}'s reporting comes from
       {% for outlet in issue.outlets %}{{ outlet }}{% if not loop.last %}, {% endif %}{% endfor %}.
       Headlines and links belong to them; go read the originals.
     </p>

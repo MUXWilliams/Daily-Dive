@@ -3180,3 +3180,74 @@ def test_scoring_pins_temperature():
     the offline suite — there is no client to observe."""
     src = Path("dailydive/score.py").read_text(encoding="utf-8")
     assert "temperature=0" in src
+
+
+# --- the intro's tempo line ------------------------------------------------
+
+
+def _sized_issue(n: int, when: datetime | None = None) -> Issue:
+    """An issue with n items, for exercising the tempo bands."""
+    src = fixture_source("tempo-src")
+    when = when or datetime(2026, 8, 28, tzinfo=UTC)
+    return Issue(date=when, items=[
+        Item(source_id=src.id, source_name=src.name, title=f"Item {i}",
+             url=f"https://example.invalid/tempo/{i}", published_at=when)
+        for i in range(n)
+    ])
+
+
+def test_an_ordinary_week_gets_no_tempo_line():
+    """None is the common case and is the point. A line on every issue becomes
+    a slot the reader learns to skip; it only works by being the exception."""
+    for n in (render.QUIET_BELOW, 20, render.HEAVY_AT - 1):
+        assert render.tempo(_sized_issue(n)) is None, n
+
+
+def test_a_quiet_or_heavy_week_is_remarked_on():
+    assert render.tempo(_sized_issue(render.QUIET_BELOW - 1)) in render.TEMPO_QUIET
+    assert render.tempo(_sized_issue(render.HEAVY_AT)) in render.TEMPO_HEAVY
+    # The two real weekly issues so far: 13 items was ordinary, 36 was heavy.
+    assert render.tempo(_sized_issue(13)) is None
+    assert render.tempo(_sized_issue(36)) in render.TEMPO_HEAVY
+
+
+def test_an_empty_issue_is_a_failed_run_not_a_quiet_week():
+    """Zero items has its own message in the template. Calling that 'a little
+    quiet' would be describing a broken run as a slow news week."""
+    assert render.tempo(_sized_issue(0)) is None
+
+
+def test_the_tempo_line_is_stable_for_a_date_and_varies_between_weeks():
+    """Chosen by ISO week, not at random: preview and the tests have to be
+    reproducible. But two quiet weeks running must not open with the same
+    sentence, which is what would make it read as a filled template slot."""
+    a = datetime(2026, 8, 28, tzinfo=UTC)
+    b = datetime(2026, 9, 4, tzinfo=UTC)
+    assert a.isocalendar()[1] != b.isocalendar()[1], "not consecutive weeks"
+
+    assert render.tempo(_sized_issue(5, a)) == render.tempo(_sized_issue(5, a))
+    assert render.tempo(_sized_issue(5, a)) != render.tempo(_sized_issue(5, b))
+
+
+def test_the_tempo_line_renders_above_the_highlights():
+    """It belongs with the greeting, not with the bullets."""
+    html = render.render_issue(_sized_issue(40))
+    assert 'class="tempo"' in html
+    assert html.index('class="tempo"') < html.index('class="lead-in"')
+
+    ordinary = render.render_issue(_sized_issue(20))
+    assert 'class="tempo"' not in ordinary
+
+
+def test_no_page_claims_a_cadence_it_does_not_keep():
+    """"Nothing new in the feeds this morning" and "Today's reporting" both
+    shipped on a weekly publication. brand.CADENCE_NOUN exists precisely so the
+    cron and the prose cannot disagree — the same failure that had about.html
+    naming the wrong publication for weeks."""
+    for name in ("issue.html.j2", "email.html.j2", "archive.html.j2",
+                 "about.html.j2", "subscribe.html.j2"):
+        raw = (Path("templates") / name).read_text(encoding="utf-8")
+        # Jinja comments legitimately discuss the daily era as history.
+        visible = re.sub(r"\{#.*?#\}", "", raw, flags=re.S).lower()
+        for word in ("this morning", "today's", "each morning", "every day"):
+            assert word not in visible, f"{name} says {word!r}"

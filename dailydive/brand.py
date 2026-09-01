@@ -8,7 +8,7 @@ find the same address wherever they look.
 
 from __future__ import annotations
 
-# The person writing it. Appears in the morning greeting.
+# The person writing it. Appears in the greeting at the top of an issue.
 EDITOR = "Isaac"
 
 # Reachable by a publisher who wants something removed, and by anyone whose
