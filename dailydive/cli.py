@@ -601,6 +601,28 @@ def main(argv: list[str] | None = None) -> int:
         stage = spend.stage("score", score_mod.MODEL)
         scores = score_mod.score_items(items, client=client, spend=stage)
 
+        # A scoring pass that reached the model zero times is a failed run, not
+        # a quiet week — and it does not look like one anywhere downstream.
+        # Unscored items are dropped, so the issue silently shrinks to whatever
+        # bypasses scoring: the editor's picks, which join afterwards. On
+        # 2026-09-04 that shipped an issue of one item and emailed it, with
+        # every step green and "0 calls, 5 errors, $0.0000" in the cost line as
+        # the only evidence anything had gone wrong.
+        #
+        # Raised before the threshold, the picks, the render and the send. The
+        # earlier this stops, the less there is to take back — and an email is
+        # the one output that cannot be taken back at all.
+        if stage.errors and not stage.calls:
+            print("cost:\n" + spend.report())
+            log.error(
+                "scoring reached the model %d time(s) and failed %d — refusing to "
+                "build an issue from unscored items. Every item would be dropped "
+                "and the issue would be whatever bypasses scoring.",
+                stage.calls,
+                stage.errors,
+            )
+            return 1
+
         # Recorded before the threshold is applied, so the drops survive. An
         # item the editor would have run and the model discarded leaves no
         # trace anywhere else — no page, no log line, nothing to notice — so

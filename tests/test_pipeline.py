@@ -974,14 +974,23 @@ def test_the_schedule_is_weekly_and_matches_the_recency_window():
     turned a deliberate reliability fix into a test failure.
     """
     crons = re.findall(r'cron:\s*"([^"]+)"', WORKFLOW_TEXT)
-    assert len(crons) == 1, f"expected exactly one schedule, found {crons}"
+    # More than one is expected now: the second is the catch-up, which the
+    # guard job turns into a no-op on a week the first run worked. They are
+    # attempts at one issue, not two issues.
+    assert 1 <= len(crons) <= 3, f"one schedule plus catch-ups, found {crons}"
 
-    minute, hour, dom, month, dow = crons[0].split()
-    assert dow == "5", "the issue goes out on Friday"
-    assert dom == "*" and month == "*", "weekly, not monthly or annual"
-    assert minute != "0", (
-        "scheduled runs at the top of the hour are the ones GitHub drops "
-        "under load — see the comment above the cron"
+    hours = set()
+    for cron in crons:
+        minute, hour, dom, month, dow = cron.split()
+        assert dow == "5", f"the issue goes out on Friday: {cron}"
+        assert dom == "*" and month == "*", f"weekly, not monthly or annual: {cron}"
+        assert minute != "0", (
+            "scheduled runs at the top of the hour are the ones GitHub drops "
+            f"under load — see the comment above the cron: {cron}"
+        )
+        hours.add(hour)
+    assert len(hours) == len(crons), (
+        f"catch-ups must be hours apart, not minutes: {crons}"
     )
     assert normalize.DEFAULT_MAX_AGE_DAYS == 7
 
@@ -1413,14 +1422,17 @@ def test_the_page_never_claims_a_cadence_it_does_not_keep():
     )
 
     workflow = Path(".github/workflows/daily.yml").read_text(encoding="utf-8")
-    cron = re.search(r'cron:\s*"([^"]+)"', workflow).group(1)
-    minute, hour, dom, month, dow = cron.split()
-    if brand.CADENCE == "weekly":
-        # A single day-of-week, a fixed hour, and every day-of-month: that is
-        # once a week and nothing else.
-        assert dow not in ("*", "?") and "," not in dow and "-" not in dow, cron
-        assert dom == "*" and month == "*", cron
-        assert hour.isdigit() and minute.isdigit(), cron
+    # Every cron, not just the first: the catch-up is a second attempt at the
+    # same issue, so it has to claim the same cadence. A catch-up on a
+    # different day would publish twice a week under a name saying weekly.
+    for cron in re.findall(r'cron:\s*"([^"]+)"', workflow):
+        minute, hour, dom, month, dow = cron.split()
+        if brand.CADENCE == "weekly":
+            # A single day-of-week, a fixed hour, and every day-of-month: that
+            # is once a week and nothing else.
+            assert dow not in ("*", "?") and "," not in dow and "-" not in dow, cron
+            assert dom == "*" and month == "*", cron
+            assert hour.isdigit() and minute.isdigit(), cron
 
 
 def test_banner_dimensions_are_read_from_the_file_not_typed_in():
@@ -3172,14 +3184,44 @@ def test_every_page_title_carries_the_site_name():
         assert brand.SITE_NAME in title, f"{key}: {title!r}"
 
 
-def test_scoring_pins_temperature():
-    """Unset for four eval runs, which made every before/after partly a reading
-    of sampling noise: between two prompts differing by three lines, 87 of 128
-    items moved. An eval whose noise floor is the size of its effects is not a
-    measurement. Asserted in the source because the call is not exercised by
-    the offline suite — there is no client to observe."""
-    src = Path("dailydive/score.py").read_text(encoding="utf-8")
-    assert "temperature=0" in src
+def test_every_argument_we_pass_to_the_model_is_one_it_accepts():
+    """The scoring call is not exercised by the offline suite — there is no
+    client to observe — so nothing checked that its keywords were real.
+
+    On 2026-09-04 a `temperature=0` argument was added to `messages.parse`,
+    which takes an explicit keyword-only signature with no **kwargs and no
+    temperature. Every batch raised TypeError, score.py caught it per batch and
+    logged, and the run published one item — the editor's pick, which joins
+    after scoring — with a green tick and "0 calls, 5 errors, $0.0000" as the
+    only evidence. An issue went to subscribers.
+
+    The test that shipped alongside it asserted the string "temperature=0"
+    appeared in the source. It passed, and could never have failed for the
+    reason that mattered. This one reads the SDK's real signature.
+    """
+    anthropic = pytest.importorskip("anthropic")
+    import ast
+    import inspect
+
+    from anthropic.resources.messages import Messages
+
+    tree = ast.parse(Path("dailydive/score.py").read_text(encoding="utf-8"))
+    passed: set[str] = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        fn = node.func
+        if isinstance(fn, ast.Attribute) and fn.attr == "parse":
+            passed |= {kw.arg for kw in node.keywords if kw.arg}
+    assert passed, "no messages.parse call found — has score.py been restructured?"
+
+    accepted = set(inspect.signature(Messages.parse).parameters)
+    unknown = passed - accepted
+    assert not unknown, (
+        f"score.py passes {sorted(unknown)} to messages.parse, which accepts "
+        f"{sorted(accepted)}. Every batch would raise TypeError and the issue "
+        f"would publish unscored."
+    )
 
 
 # --- the intro's tempo line ------------------------------------------------
@@ -3304,3 +3346,53 @@ def test_the_page_and_the_email_greet_the_reader_identically():
 
     assert greeting(render.render_issue(issue)) == greeting(render.render_email(issue))
     assert f"welcome back to my {brand.PUBLICATION}." in render.render_issue(issue)
+
+
+def test_the_catch_up_run_cannot_publish_a_second_issue():
+    """Two crons fire on the same Friday. If both built, the second would
+    overwrite index.html with whatever few items were new since the first and
+    email that as the week's issue.
+
+    The guard job is what makes the second one safe, so these assert the three
+    properties it depends on rather than that the file mentions it."""
+    import yaml
+
+    spec = yaml.safe_load(WORKFLOW_TEXT)
+    guard, build = spec["jobs"]["guard"], spec["jobs"]["build"]
+
+    # The build only happens if the guard says so.
+    assert build["needs"] == "guard"
+    assert build["if"] == "needs.guard.outputs.build == 'true'"
+    assert guard["outputs"]["build"] == "${{ steps.check.outputs.build }}"
+
+    script = "".join(step.get("run", "") for step in guard["steps"])
+    # Published means the dated permalink exists, which is what the archive
+    # actually consists of — not a run-history lookup, which a re-run breaks.
+    assert "site/issues/${today}.html" in script
+    assert "date -u +%F" in script, "UTC, matching cli.py's datetime.now(UTC)"
+    # A manual dispatch is never skipped: someone running it by hand usually
+    # wants to replace what the automatic run produced.
+    assert '"$EVENT" != "schedule"' in script
+
+    # The guard reads; it must never be able to write, deploy, or send.
+    assert guard["permissions"] == {"contents": "read"}
+
+
+def test_a_scoring_pass_that_never_reached_the_model_stops_the_run():
+    """Unscored items are dropped, so a total scoring failure does not look
+    like a failure — it looks like a small issue. Picks join after scoring, so
+    what survives is the picks alone. That shipped and emailed a one-item issue
+    on 2026-09-04 with every step green.
+
+    The check is calls==0 with errors>0, not "few items": a genuinely quiet
+    week is allowed to be quiet, and a threshold on item count would either
+    block real weeks or miss this one."""
+    src = Path("dailydive/cli.py").read_text(encoding="utf-8")
+    block = src.split("score_mod.score_items(items,", 1)[1]
+
+    guard = block[: block.index("record_scores")]
+    assert "stage.errors and not stage.calls" in guard
+    assert "return 1" in guard
+    # Before anything irreversible: the send is the one that matters.
+    for later in ("apply_scores", "_answer_picks", "deliver"):
+        assert guard.find(later) == -1, f"{later} must come after the guard"

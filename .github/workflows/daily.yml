@@ -55,13 +55,25 @@ on:
     # notion of daylight saving, so the local hour shifts by one twice a year;
     # that is the accepted cost of not running a timezone-aware scheduler.
     #
-    # :17 rather than :00 on purpose. GitHub runs scheduled workflows on shared
-    # infrastructure, best-effort, and drops or delays them under load — worst
-    # at the top of the hour, when the most crons across the whole platform fire
-    # at once. The 2026-08-28 run never fired at all: correct cron, recent repo
-    # activity, no run recorded, no trace anywhere. An odd minute is the one
-    # cheap thing that measurably helps.
+    # :17 rather than :00 because GitHub runs scheduled workflows best-effort on
+    # shared infrastructure and drops them most often at the top of the hour.
+    # That was a theory and it did not hold: 2026-09-04 was the first Friday on
+    # :17 and it never fired either. Of the three Fridays this publication has
+    # had, exactly one scheduled run has ever started. The minute stays off :00
+    # because it costs nothing, not because it was shown to work.
     - cron: "17 10 * * 5"
+
+    # The catch-up. Four and a half hours later, and the reason the schedule is
+    # now merely late rather than missing: whatever drops the first run does not
+    # get a second vote. The `guard` job below exits this one silently when
+    # today's issue is already committed, so a normal week runs it and does
+    # nothing.
+    #
+    # Mitigation, not a diagnosis. If a Friday ever misses both, the answer is
+    # a trigger that is not GitHub's scheduler at all — an external ping to
+    # repository_dispatch — and this comment is the note to stop theorising and
+    # do that.
+    - cron: "47 14 * * 5"
 
 # A publishing run needs three grants beyond the default read: contents to
 # commit the issue and the archive DB back, and pages + id-token for the
@@ -80,7 +92,49 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Has today's issue already been published?
+  #
+  # Only a scheduled run asks. A manual dispatch always builds, because someone
+  # running it by hand has a reason — usually that the automatic run produced
+  # something wrong and they want it replaced.
+  #
+  # The test is the dated permalink in the repository, not the run history: it
+  # is what "published" actually means here, it survives a re-run, and it is
+  # true regardless of which cron or which person produced it.
+  guard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      build: ${{ steps.check.outputs.build }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: check
+        # Through env, never ${{ }} interpolation into the script — the house
+        # rule after a workflow input containing & was read as a background
+        # operator.
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          set -eu
+          today="$(date -u +%F)"
+          page="site/issues/${today}.html"
+          if [ "$EVENT" != "schedule" ]; then
+            echo "Manual run — building regardless of what is already published."
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif [ -f "$page" ]; then
+            echo "$page is already committed; an earlier run published today's issue."
+            echo "Nothing to do — this is the catch-up doing its job." >> "$GITHUB_STEP_SUMMARY"
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "No $page yet — building today's issue."
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
+    needs: guard
+    if: needs.guard.outputs.build == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
