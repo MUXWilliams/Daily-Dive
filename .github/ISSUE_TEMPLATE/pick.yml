@@ -86,11 +86,16 @@ body:
       description: >-
         Only for Industry & Products. Distribution is not ownership: "X will
         distribute Y" is Distribution, and a shutdown is Financial.
-      # Exactly entities.Beat, in declaration order — the brief's editorial
-      # priority. Until this dropdown existed, beat was written into the item
-      # unvalidated, so anything typed here reached the page.
+      # Exactly entities.IndustryBeat, in declaration order — the brief's
+      # editorial priority. Until this dropdown existed, beat was written into
+      # the item unvalidated, so anything typed here reached the page.
+      #
+      # No empty option. A dropdown that is not required already renders with
+      # nothing selected, and an empty string may fail GitHub's form schema —
+      # which would take the whole template out of the New issue chooser
+      # silently, the exact failure this file exists to end. A skipped dropdown
+      # writes "_no response_", which picks.parse_body maps to empty.
       options:
-        - ""
         - Ownership
         - Leadership
         - Distribution

@@ -106,4 +106,16 @@ jobs:
             exit 0
           fi
           git commit -m "Score eval for the current prompt"
-          git push
+          # The same retry daily.yml uses. This workflow's concurrency group is
+          # `eval` and the build's is `pages`, so the two can run at once and
+          # both push to main — which happened twice within minutes on
+          # 2026-09-04. Losing that race would fail the run and strand the
+          # report and the scores it had just paid for.
+          for attempt in 1 2 3; do
+            if git push; then exit 0; fi
+            echo "Push failed, rebasing and retrying ($attempt/3)..."
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            sleep $((attempt * 4))
+          done
+          echo "Could not push the eval report after three attempts." >&2
+          exit 1

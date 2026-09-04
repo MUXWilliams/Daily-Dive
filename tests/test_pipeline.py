@@ -3575,8 +3575,14 @@ def test_the_form_dropdowns_match_the_enums():
     assert fields["Category"]["attributes"]["options"] == [c.value for c in Category]
 
     beats = fields["Industry beat"]["attributes"]["options"]
-    assert beats[0] == "", "beat is optional — the empty option is the way out"
-    assert beats[1:] == [b.value for b in IndustryBeat]
+    assert beats == [b.value for b in IndustryBeat]
+    # No empty option. A non-required dropdown already renders with nothing
+    # selected, and an empty string may fail GitHub's form schema — which takes
+    # the whole template out of the New issue chooser silently, which is the
+    # exact failure this template exists to end. A skipped dropdown writes
+    # "_no response_", and the round-trip test above covers that case.
+    assert "" not in beats
+    assert not fields["Industry beat"].get("validations", {}).get("required")
 
 
 def test_the_label_workflow_agrees_with_picks_py():
@@ -3626,3 +3632,41 @@ def test_both_new_yaml_files_have_no_duplicate_keys():
     Strict.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, no_dupes)
     for path in (PICK_FORM, LABEL_WORKFLOW):
         yaml.load(path.read_text(encoding="utf-8"), Loader=Strict)
+
+
+def test_both_deploy_paths_refuse_synthetic_content():
+    """Hard rule 3, and the only one that had no test.
+
+    A page built from fixtures once reached the live site carrying five
+    invented headlines credited to Reef Builders and Reef2Reef. The guard
+    written afterwards went into deploy.yml — the redeploy a human triggers
+    deliberately — and not into daily.yml, which runs unattended every Friday
+    and is where an unreviewed page would actually come from.
+
+    Deleting either step left all 301 tests green until this existed."""
+    for name in ("daily.yml", "deploy.yml"):
+        text = (Path(".github/workflows") / name).read_text(encoding="utf-8")
+        step = "Refuse to deploy synthetic content"
+        assert step in text, f"{name} can publish site/ without checking it"
+        # Both markers, and the grep must fail the run rather than warn.
+        guard = text.split(step, 1)[1][:400]
+        assert "example.invalid" in guard and "SYNTHETIC" in guard, name
+        assert "exit 1" in guard, f"{name} finds synthetic content and continues"
+
+
+def test_the_synthetic_guard_runs_before_anything_is_served():
+    """In daily.yml it sits between the commit and Configure Pages: a synthetic
+    page that reached the repository stays in history where it can be examined,
+    and still never reaches a reader."""
+    text = (Path(".github/workflows") / "daily.yml").read_text(encoding="utf-8")
+    assert text.index("Refuse to deploy synthetic content") < text.index("Configure Pages")
+    assert text.index("Commit the issue") < text.index("Refuse to deploy synthetic content")
+
+
+def test_the_eval_survives_a_race_with_the_build():
+    """Different concurrency groups — `eval` and `pages` — so the two can push
+    to main at once, which they did twice within minutes on 2026-09-04. A bare
+    push would fail the run and strand the report it had just paid for."""
+    text = (Path(".github/workflows") / "eval.yml").read_text(encoding="utf-8")
+    commit = text.split("Commit the report", 1)[1]
+    assert "for attempt in" in commit and "git pull --rebase" in commit

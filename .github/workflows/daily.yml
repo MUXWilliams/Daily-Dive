@@ -420,6 +420,25 @@ jobs:
           echo "Could not push the issue after three attempts." >&2
           exit 1
 
+      # The same guard deploy.yml has carried since a fixture-built page
+      # reached the live site with five invented headlines credited to real
+      # outlets. It was only ever on the manual redeploy — the path a human
+      # triggers deliberately — and not on this one, which runs unattended
+      # every Friday and is where an unreviewed page would actually come from.
+      #
+      # After the commit rather than before it, so a synthetic page that
+      # somehow reached the repository is recorded in history and can be
+      # examined, rather than failing the run and vanishing with the runner.
+      # Nothing is served until the deploy below.
+      - name: Refuse to deploy synthetic content
+        if: steps.gate.outputs.publish == 'true'
+        run: |
+          if grep -rl "example.invalid\|\[SYNTHETIC\]" site/ ; then
+            echo "Those files carry synthetic markers and must not be published." >&2
+            exit 1
+          fi
+          echo "No synthetic markers found in site/."
+
       - name: Configure Pages
         if: steps.gate.outputs.publish == 'true'
         uses: actions/configure-pages@v5
