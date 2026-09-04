@@ -1,0 +1,81 @@
+name: Label a pick
+
+# The safety net under .github/ISSUE_TEMPLATE/pick.yml.
+#
+# The template applies the label on the normal path. This catches every other
+# one: the copy-and-paste flow docs/picks.md describes, the artifact form, a
+# blank issue, and anything filed from a phone that skipped the chooser.
+#
+# It exists because picks.Bucket queries GitHub with
+# {"state": "open", "labels": "pick"} — so an unlabelled pick is not rejected,
+# it is invisible. Two of the three picks filed on 2026-09-01 were lost that
+# way, with no error, no comment and no log line.
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+# Exactly one grant, and it is the only thing this workflow does. It must never
+# be able to reach Pages, contents, or the mailing list.
+permissions:
+  issues: write
+
+# One at a time per issue: an `edited` event arriving while `opened` is still
+# running would race on the same label.
+concurrency:
+  group: label-picks-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label it if it is a pick from the editor
+        # Every value reaches the script through env, never through ${{ }}
+        # interpolation into the shell. An issue body is attacker-controlled
+        # text on a public repository — the house rule came from a workflow
+        # input containing & being read as a background operator, and a body is
+        # far more hostile than an input.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          AUTHOR: ${{ github.event.issue.user.login }}
+          BODY: ${{ github.event.issue.body }}
+          # Mirrors picks.AUTHORS and picks.LABEL. Duplicated across the
+          # language boundary and asserted equal by a test, the same way the
+          # publish gate is duplicated between cli.py and daily.yml.
+          ALLOWED: "muxwilliams muxxworx"
+          LABEL: "pick"
+        run: |
+          set -eu
+
+          # Case-insensitive, because GitHub logins are and picks.py compares
+          # them lowercased.
+          author=$(printf '%s' "$AUTHOR" | tr '[:upper:]' '[:lower:]')
+          case " $ALLOWED " in
+            *" $author "*) ;;
+            *)
+              # Silently. An unrecognised author getting no response is the
+              # security posture, not an oversight — this repository is public
+              # and anyone can open an issue on it.
+              echo "Not an allowlisted author. Ignoring."
+              exit 0
+              ;;
+          esac
+
+          # Keyed on the body, not the title. docs/picks.md tells the editor
+          # the title is ignored, so matching on "Pick:" would reintroduce the
+          # same silent drop for anyone who titles it anything else. This is
+          # the heading picks.parse_body actually needs.
+          case "$BODY" in
+            *'### Headline'*) ;;
+            *)
+              echo "No '### Headline' section — this is an ordinary issue, not a pick."
+              exit 0
+              ;;
+          esac
+
+          # Idempotent, so an issue filed through the template — which already
+          # carries the label — is a no-op rather than an error.
+          gh issue edit "$NUMBER" --repo "$REPO" --add-label "$LABEL"
+          echo "Labelled #$NUMBER as '$LABEL'." >> "$GITHUB_STEP_SUMMARY"

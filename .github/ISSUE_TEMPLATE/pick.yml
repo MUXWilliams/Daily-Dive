@@ -1,0 +1,107 @@
+# An editor's pick, as a form.
+#
+# The `labels:` line below is the whole reason this file exists. picks.Bucket
+# queries GitHub with {"state": "open", "labels": "pick"}, so an unlabelled
+# issue is not rejected — it is never seen. Three picks were filed on
+# 2026-09-01; the one that carried the label ran, and the other two vanished
+# without an error, a comment or a log line. docs/picks.md said "Add the `pick`
+# label. This is not optional", which is documentation standing in for a
+# mechanism.
+#
+# The field labels are load-bearing. GitHub renders this form into the issue
+# body as "### <label>" followed by the value, and picks.parse_body reads those
+# headings lowercased. Rename one here and the pick silently loses that field.
+# A test asserts every label matches a key picks.py actually reads.
+name: Editor's pick
+description: File a story the crawler cannot reach, for the next issue.
+title: "Pick: "
+labels: ["pick"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One story per issue. It joins after scoring — the model cannot drop it —
+        and leads its section.
+
+        Everything here ends up on a public page, credited and linked.
+
+  - type: input
+    id: headline
+    attributes:
+      label: Headline
+      description: As the outlet wrote it. Not your summary of it.
+      placeholder: Coral skeleton records show El Niño episodes are intensifying
+    validations:
+      required: true
+
+  - type: input
+    id: link
+    attributes:
+      label: Link
+      description: The full URL, including https://.
+      placeholder: https://www.reef2reef.com/threads/example.123456/
+    validations:
+      required: true
+
+  - type: input
+    id: outlet
+    attributes:
+      label: Outlet
+      description: >-
+        The site that published it — "Reef2Reef", not a username. Forum members
+        did not ask to be published, and a pick never carries an author.
+      placeholder: Reef2Reef
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Which section it belongs in.
+      # Exactly models.Category, in declaration order. A test keeps them equal.
+      options:
+        - Community
+        - Industry & Products
+        - Husbandry & Science
+        - Livestock & Corals
+        - Wild Reefs
+        - Events
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-it-matters
+    attributes:
+      label: Why it matters
+      description: >-
+        Optional, and at most 40 words. What a reefkeeper does with this, not
+        why it is interesting. Leave it blank rather than padding it.
+      placeholder: The first long record of El Niño intensity, which is what sets bleaching risk.
+
+  - type: dropdown
+    id: industry-beat
+    attributes:
+      label: Industry beat
+      description: >-
+        Only for Industry & Products. Distribution is not ownership: "X will
+        distribute Y" is Distribution, and a shutdown is Financial.
+      # Exactly entities.Beat, in declaration order — the brief's editorial
+      # priority. Until this dropdown existed, beat was written into the item
+      # unvalidated, so anything typed here reached the page.
+      options:
+        - ""
+        - Ownership
+        - Leadership
+        - Distribution
+        - Product
+        - Safety
+        - Manufacturing
+        - Financial
+
+  - type: input
+    id: published
+    attributes:
+      label: Published
+      description: YYYY-MM-DD. Leave blank for today.
+      placeholder: 2026-09-04

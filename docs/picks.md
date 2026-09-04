@@ -148,9 +148,7 @@ Then, on GitHub:
 2. Paste the copied text as the body
 3. Give it any title you like — **the title is ignored**; the headline comes
    from the `### Headline` section
-4. **Add the `pick` label.** This is not optional. The build only looks at open
-   issues carrying that exact label
-5. Submit
+4. Submit
 
 The artifact cannot open GitHub for you — a published artifact is sandboxed and
 cannot navigate to another site — so copy-and-paste is the flow by design.
@@ -158,6 +156,42 @@ cannot navigate to another site — so copy-and-paste is the flow by design.
 **You do not need the form.** It exists to get the formatting right and to
 count your gist words. An issue you type by hand with the same `### Field`
 headings works identically.
+
+## The easier route: the issue template
+
+**Issues → New issue → "Editor's pick"** gives you the same fields as a real
+form, with Category and Industry beat as dropdowns, and applies the `pick`
+label itself. Nothing to remember and nothing to paste.
+
+The beat dropdown is worth noting: until it existed, whatever you typed there
+went onto the page unchecked — `picks.py` reads the field and never validated
+it.
+
+## About the label
+
+**You no longer add it by hand, and you should not have to.**
+
+The build finds picks by querying GitHub for open issues *labelled* `pick`. An
+unlabelled one is not rejected — it is never seen. No error, no comment, no log
+line, and nothing on Friday.
+
+That cost two picks on 2026-09-01. Three were filed; the one that happened to
+carry the label ran, and #8 and #9 sat open and invisible until someone went
+looking. This document used to say "**Add the `pick` label.** This is not
+optional", which is a document doing a mechanism's job.
+
+Now two things apply it:
+
+- **`.github/ISSUE_TEMPLATE/pick.yml`** declares `labels: ["pick"]`, so GitHub
+  attaches it before you see the page.
+- **`.github/workflows/label-picks.yml`** labels any issue from an allowlisted
+  author whose body contains a `### Headline` section. That covers the
+  copy-and-paste route above, a blank issue, and anything filed from a phone
+  that skipped the template chooser.
+
+It keys on the body rather than the title, because this document tells you the
+title is ignored — matching on `Pick:` would have quietly recreated the same
+trap for anyone who titled it something else.
 
 ### What GitHub is doing here
 
@@ -246,7 +280,11 @@ So, in order:
 1. **Is the account in the allowlist?** `AUTHORS` in
    [`dailydive/picks.py`](../dailydive/picks.py). Adding one is a reviewable
    one-line diff, deliberately — not a config change nobody sees.
-2. **Is the label exactly `pick`?** Not `picks`, not `Pick`.
+2. **Is the label exactly `pick`?** Not `picks`, not `Pick`. If it is missing
+   entirely, check the **Label a pick** workflow ran on the issue — it applies
+   the label to anything from an allowlisted author whose body carries a
+   `### Headline` section, so a missing label now means either the author or
+   that heading, not a forgotten click.
 3. **Is the issue open?**
 4. **Check the run log** for `N pick(s) accepted, M rejected`. If it says
    `ignored N pick issue(s) from non-allowlisted accounts`, it is item 1.

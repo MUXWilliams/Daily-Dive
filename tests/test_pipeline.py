@@ -15,7 +15,7 @@ import httpx
 import pytest
 from pydantic import ValidationError
 
-from dailydive import brand, cli, config, ingest, normalize, render, store
+from dailydive import brand, cli, config, ingest, normalize, picks, render, store
 from dailydive.models import (
     AttributionError,
     Category,
@@ -3493,3 +3493,136 @@ def test_only_a_publishing_run_remembers_what_it_fetched():
     # And the write itself lives only in _remember. Anything above it writing
     # the seen log is the ingest-time write coming back.
     assert "store.record_items" not in body.split("def _remember", 1)[0]
+
+
+# --- the pick form, and the label that made it necessary --------------------
+#
+# picks.Bucket queries GitHub with {"state": "open", "labels": "pick"}, so an
+# unlabelled pick is not rejected — it is never seen. Three were filed on
+# 2026-09-01 and the two without the label vanished silently. The template
+# applies it; the workflow catches everything filed outside the template.
+
+PICK_FORM = Path(".github/ISSUE_TEMPLATE/pick.yml")
+LABEL_WORKFLOW = Path(".github/workflows/label-picks.yml")
+
+
+def _form() -> dict:
+    import yaml
+    return yaml.safe_load(PICK_FORM.read_text(encoding="utf-8"))
+
+
+def _fields(form: dict) -> dict[str, dict]:
+    """Field label (as GitHub will render the heading) -> the field."""
+    return {
+        f["attributes"]["label"]: f
+        for f in form["body"]
+        if f["type"] != "markdown"
+    }
+
+
+def test_the_pick_form_round_trips_through_the_parser():
+    """The one that matters. Renders the form the way GitHub does — "### Label"
+    then the value, "_no response_" for a skipped field — and parses it.
+
+    If a field label here and a key in picks.py ever drift, the pick loses that
+    field silently, which is the failure mode this whole file exists to end."""
+    labels = list(_fields(_form()))
+    filled = {
+        "Headline": "Coral skeleton records show El Nino episodes intensifying",
+        "Link": "https://example.invalid/el-nino",
+        "Outlet": "Reef2Reef",
+        "Category": "Wild Reefs",
+        "Why it matters": "Sets bleaching risk for the season ahead.",
+        "Industry beat": picks._BLANK,
+        "Published": "2026-09-04",
+    }
+    assert set(filled) == set(labels), f"form fields changed: {labels}"
+
+    body = "\n\n".join(f"### {label}\n\n{filled[label]}" for label in labels)
+    item = picks.to_item(body, number=42)
+
+    assert item.title == filled["Headline"]
+    assert item.url == filled["Link"]
+    assert item.source_name == "Reef2Reef"
+    assert item.category_hint is Category.WILD_REEFS
+    assert item.extra["gist"] == filled["Why it matters"]
+    assert item.extra["pick_issue"] == "42"
+    assert "beat" not in item.extra, "a skipped dropdown must not become a beat"
+    assert item.author is None, "picks never carry an author — hard rule 4"
+
+
+def test_the_form_asks_for_everything_the_parser_requires():
+    fields = _fields(_form())
+    required = {n for n, f in fields.items() if f.get("validations", {}).get("required")}
+    assert required == {"Headline", "Link", "Outlet", "Category"}, (
+        "Category included: picks._category('') raises, so a blank one is a "
+        "PickError comment rather than a browser-side prompt"
+    )
+    assert not any("author" in n.lower() for n in fields), "hard rule 4"
+
+
+def test_the_form_declares_the_label_the_build_looks_for():
+    """The entire point of the file."""
+    assert picks.LABEL in _form()["labels"]
+
+
+def test_the_form_dropdowns_match_the_enums():
+    """A category the form offers and models.Category does not know raises a
+    PickError after submission, which is a worse place to find out."""
+    from dailydive.entities import IndustryBeat
+
+    fields = _fields(_form())
+    assert fields["Category"]["attributes"]["options"] == [c.value for c in Category]
+
+    beats = fields["Industry beat"]["attributes"]["options"]
+    assert beats[0] == "", "beat is optional — the empty option is the way out"
+    assert beats[1:] == [b.value for b in IndustryBeat]
+
+
+def test_the_label_workflow_agrees_with_picks_py():
+    """Duplicated across a language boundary, like the publish gate."""
+    import yaml
+
+    spec = yaml.safe_load(LABEL_WORKFLOW.read_text(encoding="utf-8"))
+    step = spec["jobs"]["label"]["steps"][0]
+
+    assert set(step["env"]["ALLOWED"].split()) == picks.AUTHORS
+    assert step["env"]["LABEL"] == picks.LABEL
+    # The heading it keys on has to be one the parser needs.
+    assert "### Headline" in step["run"]
+    assert "headline" in picks.parse_body("### Headline\n\nx")
+
+    # One grant, and only one. This must never reach Pages or the list.
+    assert spec["permissions"] == {"issues": "write"}
+
+
+def test_the_label_workflow_never_interpolates_an_issue_body_into_the_shell():
+    """An issue body is attacker-controlled text on a public repository. It
+    reaches the script through env or not at all."""
+    import yaml
+
+    spec = yaml.safe_load(LABEL_WORKFLOW.read_text(encoding="utf-8"))
+    for step in spec["jobs"]["label"]["steps"]:
+        assert "${{" not in step.get("run", ""), "no expression interpolation in a run block"
+
+
+def test_both_new_yaml_files_have_no_duplicate_keys():
+    """PyYAML accepts duplicate keys silently; GitHub rejects the file. That
+    combination has broken a workflow in this repo before, and "it parsed
+    locally" answered the wrong question."""
+    import yaml
+
+    class Strict(yaml.SafeLoader):
+        pass
+
+    def no_dupes(loader, node, deep=False):
+        seen = set()
+        for key_node, _ in node.value:
+            key = loader.construct_object(key_node, deep=deep)
+            assert key not in seen, f"duplicate key {key!r}"
+            seen.add(key)
+        return yaml.SafeLoader.construct_mapping(loader, node, deep)
+
+    Strict.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, no_dupes)
+    for path in (PICK_FORM, LABEL_WORKFLOW):
+        yaml.load(path.read_text(encoding="utf-8"), Loader=Strict)
