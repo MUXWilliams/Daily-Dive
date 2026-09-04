@@ -3396,3 +3396,100 @@ def test_a_scoring_pass_that_never_reached_the_model_stops_the_run():
     # Before anything irreversible: the send is the one that matters.
     for later in ("apply_scores", "_answer_picks", "deliver"):
         assert guard.find(later) == -1, f"{later} must come after the guard"
+
+
+# --- what a run is allowed to remember -------------------------------------
+#
+# The seen log and the HTTP cache used to be written during ingest. That made a
+# failed run destroy the week it failed on: 2026-09-04 fetched 113 items,
+# scored none of them because of a TypeError, published one, and left behind a
+# full seen log and 35 fresh ETags. Re-running found nothing new and every feed
+# answered 304. The week came back only by restoring the database from git.
+#
+# None of this path had a test. That is why it was invisible.
+
+
+FEED = """<?xml version="1.0"?><rss version="2.0"><channel><title>T</title>
+<item><title>A story</title><link>https://example.invalid/a</link>
+<pubDate>Fri, 04 Sep 2026 09:00:00 GMT</pubDate></item>
+</channel></rss>"""
+
+
+def _one_source_run(tmp_path, monkeypatch):
+    """_collect_live against a single mocked feed, with a real temp database."""
+    src = fixture_source("tempo-feed", url="https://example.invalid/feed.xml",
+                         type=SourceType.WORDPRESS)
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, text=FEED,
+                              headers={"ETag": 'W/"abc123"',
+                                       "Last-Modified": "Fri, 04 Sep 2026 09:00:00 GMT"})
+
+    real_fetcher = ingest.Fetcher
+    def fake_fetcher(*a, **kw):
+        return real_fetcher(client=httpx.Client(transport=httpx.MockTransport(handler)),
+                            respect_robots=False)
+    monkeypatch.setattr(ingest, "Fetcher", fake_fetcher)
+
+    db = tmp_path / "t.sqlite3"
+    return src, db, cli._collect_live([src], db, 30)
+
+
+def test_collecting_records_nothing(tmp_path, monkeypatch):
+    """Ingest reads the seen log and writes neither table. A run that fetches
+    and then fails must leave the week available to the next attempt."""
+    src, db, (fetched, fresh, pending) = _one_source_run(tmp_path, monkeypatch)
+
+    assert fetched and fresh, "the mocked feed should have produced an item"
+    assert pending, "the 200 should have produced a cache header to flush later"
+
+    with store.connect(db) as conn:
+        assert store.known_uids(conn, [i.uid for i in fetched]) == set(), (
+            "ingest wrote the seen log — a failed run would burn the week"
+        )
+        assert conn.execute("SELECT COUNT(*) FROM http_cache").fetchone()[0] == 0, (
+            "ingest wrote an ETag — the next attempt would be answered 304"
+        )
+
+
+def test_remembering_writes_both_tables(tmp_path, monkeypatch):
+    """And the same items are seen once _remember runs, so a *successful* run
+    still stops the next one republishing what it carried."""
+    src, db, (fetched, fresh, pending) = _one_source_run(tmp_path, monkeypatch)
+
+    cli._remember(db, fetched, pending)
+
+    with store.connect(db) as conn:
+        assert store.known_uids(conn, [i.uid for i in fetched]) == {i.uid for i in fetched}
+        cached = conn.execute("SELECT url, etag FROM http_cache").fetchall()
+    assert [r["etag"] for r in cached] == ['W/"abc123"']
+
+
+def test_a_failed_run_leaves_the_week_refetchable(tmp_path, monkeypatch):
+    """The whole point, end to end. Fetch, do not remember — as a failed run
+    does — then fetch again and check the items are still new."""
+    src, db, (first, fresh_first, _) = _one_source_run(tmp_path, monkeypatch)
+    _, _, (second, fresh_second, _) = _one_source_run(tmp_path, monkeypatch)
+
+    assert {i.uid for i in fresh_first} == {i.uid for i in fresh_second}, (
+        "the second attempt saw fewer new items than the first — the week was burned"
+    )
+
+
+def test_only_a_publishing_run_remembers_what_it_fetched():
+    """Placement, asserted in the source: _remember sits inside the publish
+    gate. A --limit run is a probe, and add-source/SKILL.md tells the editor to
+    prove a new feed with `run --limit 5`. The limit is applied after
+    collection, so recording at ingest marked the whole week seen to consider
+    five items."""
+    body = Path("dailydive/cli.py").read_text(encoding="utf-8")
+
+    # The last publish gate in the file is the one wrapping the publishing
+    # block, where record_published lives.
+    gate = body.rindex("if _is_publishing_run(args):")
+    assert body.index("_remember(args.db") > gate, "_remember must be inside the publish gate"
+    assert body.count("_remember(args.db") == 1, "called once, from the gate — not also at ingest"
+
+    # And the write itself lives only in _remember. Anything above it writing
+    # the seen log is the ingest-time write coming back.
+    assert "store.record_items" not in body.split("def _remember", 1)[0]

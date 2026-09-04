@@ -122,6 +122,13 @@ The limited run is a partial run, and the publish gate guarantees a partial run
 will not record items as published or close pick issues. `--print-issue` shows
 what the scorer kept, where it filed it, and how confident it was.
 
+It is also safe to run repeatedly, which it was not until recently. `--limit` is
+applied *after* collection, so the old code fetched the whole week, wrote every
+item to the seen log, and then considered five — a probe run silently consumed
+the news it was probing with, and the next real issue was missing it. The seen
+log and the HTTP cache are now flushed by `cli._remember` inside the publish
+gate, so a partial run reads them and writes neither.
+
 There are already tests asserting `sources.toml` parses and that ids are unique.
 Do not pipe `pytest` through `tail` in an `&&` chain — it masks the exit code.
 

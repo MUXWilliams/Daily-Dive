@@ -51,14 +51,54 @@ def _collect_mail(source: Source, days: int, client: httpx.Client) -> list[Item]
         return []
 
 
-def _collect_live(sources: list[Source], db: Path, days: int) -> tuple[list[Item], list[Item]]:
+PendingCache = list[tuple[str, str | None, str | None]]
+
+
+def _remember(db: Path, fetched: list[Item], pending_cache: PendingCache) -> None:
+    """Write down what this run consumed. Called only once it published.
+
+    Two tables, one rule: **the seen log and the HTTP cache record what a
+    successful run consumed, never what an attempt fetched.**
+
+    Both used to be written during ingest, and that made a failed run destroy
+    the week it failed on. On 2026-09-04 a scoring bug produced a one-item
+    issue; by then 113 items were in the seen log and 35 fresh ETags were in
+    the cache, so re-running found nothing new and every feed answered 304.
+    Recovering it meant restoring the database from git.
+
+    It also disarmed the catch-up cron before it ever ran. Retrying four hours
+    later is worthless if the first attempt already told the crawler it had
+    seen everything.
+
+    A partial run (`--source`, `--limit`) does not reach here either, which
+    fixes a quieter version of the same bug: `add-source/SKILL.md` tells the
+    editor to prove a new feed with `run --limit 5`, and that used to mark the
+    whole week seen — the limit is applied after collection, so all of it was
+    recorded and only five were ever considered.
+    """
+    with store.connect(db) as conn:
+        store.record_items(conn, fetched)
+        for url, etag, last_modified in pending_cache:
+            store.save_cache_headers(conn, url, etag, last_modified)
+    log.info(
+        "recorded %d fetched item(s) and %d cache header(s)", len(fetched), len(pending_cache)
+    )
+
+
+def _collect_live(
+    sources: list[Source], db: Path, days: int
+) -> tuple[list[Item], list[Item], PendingCache]:
     """Fetch everything, and say which of it is new.
 
-    Returns (everything fetched, items not seen in a previous run). The first
-    is what the volume table measures — "is this outlet publishing?" is a
-    question about the feed, not about our archive. The second is what an
-    issue may contain: a story that ran last week is not news this week, even
-    while it sits inside the recency window.
+    Returns (everything fetched, items not seen in a previous run, cache
+    headers awaiting a commit). The first is what the volume table measures —
+    "is this outlet publishing?" is a question about the feed, not about our
+    archive. The second is what an issue may contain: a story that ran last
+    week is not news this week, even while it sits inside the recency window.
+
+    **Writes nothing.** It reads the seen log to work out what is new and hands
+    the writes back, because whether a run deserves to be remembered is not
+    knowable from here. See `_remember`.
     """
     items: list[Item] = []
     with store.connect(db) as conn, ingest.Fetcher() as fetcher:
@@ -90,12 +130,11 @@ def _collect_live(sources: list[Source], db: Path, days: int) -> tuple[list[Item
             items.extend(found)
 
         items = normalize.dedupe(items)
-        # Ask before recording: once record_items runs, everything is known.
         seen = store.known_uids(conn, [i.uid for i in items])
         fresh = [i for i in items if i.uid not in seen]
-        store.record_items(conn, items)
+        pending = list(fetcher.pending_cache)
         log.info("%d items (%d new to the archive)", len(items), len(fresh))
-    return items, fresh
+    return items, fresh, pending
 
 
 def _drop_shorts(items: list[Item]) -> list[Item]:
@@ -568,11 +607,12 @@ def main(argv: list[str] | None = None) -> int:
         log.error("no enabled sources — check %s", args.sources_file)
         return 2
 
+    pending_cache: PendingCache = []
     if args.offline:
         fetched = _collect_offline(sources)
         items = fetched
     else:
-        fetched, items = _collect_live(sources, args.db, args.max_age_days)
+        fetched, items, pending_cache = _collect_live(sources, args.db, args.max_age_days)
         if len(items) < len(fetched):
             log.info("%d item(s) already ran in an earlier issue", len(fetched) - len(items))
     if fetched:
@@ -697,6 +737,11 @@ def main(argv: list[str] | None = None) -> int:
     # would mark those items published and close the pick issues that fed it —
     # with a link to a page nobody deployed.
     if _is_publishing_run(args):
+        # The seen log and the HTTP cache are written here, not at ingest, so
+        # that a run which fetched the week and then failed leaves the week
+        # available to the next attempt. See _remember.
+        if not args.offline:
+            _remember(args.db, fetched, pending_cache)
         with store.connect(args.db) as conn:
             fresh = store.record_published(conn, issue.items, issue.date)
         log.info("recorded %d newly published item(s)", fresh)

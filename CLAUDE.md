@@ -86,6 +86,14 @@ picks → collapse → resource → render → commit → deploy → send`
   and in the workflow. A partial run (`--source`/`--limit`) must never record
   items as published or close pick issues. A test asserts both check the same
   conditions.
+- **Nothing a run consumed is written down until it publishes.** The seen log
+  and the HTTP cache are flushed by `cli._remember`, inside that same gate,
+  never during ingest. Writing them at fetch time meant a failed run destroyed
+  the week it failed on: 2026-09-04 fetched 113 items, scored none of them,
+  and left behind a full seen log and 35 fresh ETags, so a re-run found nothing
+  new and every feed answered 304. The week came back only by restoring the
+  database from git. It also disarmed the catch-up cron, whose entire job is to
+  retry a few hours later. Ingest reads the seen log; it does not write it.
 - **`daily-dive preview`** renders the template against a frozen fixture — free,
   offline, deterministic. Use it for any layout change. `--artifact` emits the
   form used for the hosted staging page.
@@ -175,7 +183,11 @@ about the week.
   issues, when a rolling median against `site/issues/index.json` becomes the
   better instrument — it is the wrong one today because the archive still holds
   three daily-era issues, and comparing a week against a day says nothing.
-- **Seen vs published for the crawler** — items dropped under the old scoring
-  prompt can never be reconsidered.
+- **Seen vs published for the crawler** — still open, and narrower now. A
+  failed or partial run no longer burns the week (`cli._remember`), but a
+  *published* run still records everything it fetched, so an item the scorer
+  dropped is seen forever and cannot be reconsidered under a better prompt.
+  Fixing that means recording only what was scored above threshold, or keeping
+  a reconsider window, and neither has been thought through.
 - **Delivery (v3)** — RSS, then email. See `docs/delivery.md`; the sequencing
   decision is already made.

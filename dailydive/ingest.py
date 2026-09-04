@@ -100,6 +100,11 @@ class Fetcher:
         self._respect_robots = respect_robots
         self._robots: dict[str, RobotFileParser | None] = {}
         self._last_hit: dict[str, float] = {}
+        # (url, etag, last_modified) for every 200 this fetcher received, held
+        # until the caller decides the run is worth remembering. Public because
+        # the flush belongs to whoever knows whether the run succeeded, and
+        # that is never the fetcher.
+        self.pending_cache: list[tuple[str, str | None, str | None]] = []
 
     def close(self) -> None:
         self._client.close()
@@ -184,10 +189,19 @@ class Fetcher:
             return FetchResult(source=source, body=None, status=304, from_cache=True)
 
         resp.raise_for_status()
-        store.save_cache_headers(
-            conn,
-            resolved,
-            resp.headers.get("ETag"),
-            resp.headers.get("Last-Modified"),
+        # Buffered, not written. An ETag saved here means "we have already seen
+        # this version", and a run that fetches and then fails has not seen it
+        # in any sense that matters — the next run would be answered 304 with
+        # an empty body and build an issue out of nothing.
+        #
+        # That is not hypothetical: on 2026-09-04 a failed run left 35 fresh
+        # ETags behind, and recovering the week meant restoring the database
+        # from git. It also disarms the catch-up cron, whose whole job is to
+        # retry a few hours later, while those ETags are still current.
+        #
+        # `pending_cache` is flushed by the caller once the run has produced a
+        # page. See cli._remember.
+        self.pending_cache.append(
+            (resolved, resp.headers.get("ETag"), resp.headers.get("Last-Modified"))
         )
         return FetchResult(source=source, body=resp.content, status=resp.status_code)
