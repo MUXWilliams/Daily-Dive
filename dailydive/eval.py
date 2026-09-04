@@ -290,7 +290,11 @@ def spearman(xs: list[float], ys: list[float]) -> float | None:
         return None
     rx, ry = _ranks(xs), _ranks(ys)
     mx, my = sum(rx) / len(rx), sum(ry) / len(ry)
-    num = sum((a - mx) * (b - my) for a, b in zip(rx, ry))
+    # strict=True can never fire here: the lengths are checked equal above and
+    # _ranks preserves length. It is here to say so, and so that a future edit
+    # breaking that invariant raises instead of quietly correlating a prefix
+    # and reporting the result as a coefficient.
+    num = sum((a - mx) * (b - my) for a, b in zip(rx, ry, strict=True))
     dx = sum((a - mx) ** 2 for a in rx)
     dy = sum((b - my) ** 2 for b in ry)
     if dx == 0 or dy == 0:

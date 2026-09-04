@@ -88,7 +88,10 @@ _ABBREVIATIONS = frozenset(
 def _ends_in_abbreviation(head: str) -> bool:
     """True if `head` stops on an abbreviation rather than a real sentence."""
     last = head.rstrip(".").rsplit(" ", 1)[-1] if " " in head else head.rstrip(".")
-    bare = last.strip(".,;:!?\"'()[[]").lower()
+    # A set of characters to strip, not a substring — which is what str.strip
+    # takes, so B005's warning does not apply. (The set had `[` twice; the
+    # duplicate is removed here and changes nothing, since it is a set.)
+    bare = last.strip(".,;:!?\"'()[]").lower()  # noqa: B005
     if not bare:
         return False
     # A dotted initialism ("U.S", "e.g") or a single letter is never a sentence

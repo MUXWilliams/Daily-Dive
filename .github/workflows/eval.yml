@@ -51,6 +51,14 @@ jobs:
       - name: Install
         run: pip install -e ".[dev,ai]"
 
+      # Before the tests, because it is the faster of the two and its failures
+      # are unambiguous. Bug rules only — see [tool.ruff.lint] in pyproject for
+      # why the ruleset is narrow. This is standing cover, not the safety net:
+      # none of this project's real failures would have been caught by a
+      # linter, and the tests are what catch those.
+      - name: Lint
+        run: ruff check .
+
       - name: Tests
         run: pytest -q
 

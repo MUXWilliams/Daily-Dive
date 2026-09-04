@@ -3673,3 +3673,29 @@ def test_the_eval_survives_a_race_with_the_build():
     text = (Path(".github/workflows") / "eval.yml").read_text(encoding="utf-8")
     commit = text.split("Commit the report", 1)[1]
     assert "for attempt in" in commit and "git pull --rebase" in commit
+
+
+def test_the_linter_runs_wherever_the_tests_do():
+    """Standing cover, added after an audit found the package clean but the CI
+    carrying no linter at all.
+
+    Pinned to the workflows that install the dev extra, so the step cannot
+    quietly disappear the way the synthetic guard nearly did. Its value is
+    modest and stated as such in pyproject: none of this project's real
+    failures — an argument the SDK rejects, a write at the wrong point in a
+    run, a label nobody applied — would have been caught by a linter."""
+    import tomllib
+
+    for name in ("daily.yml", "eval.yml"):
+        text = (Path(".github/workflows") / name).read_text(encoding="utf-8")
+        assert "ruff check" in text, f"{name} runs tests but not the linter"
+        # Before the tests: it is faster and its failures are unambiguous.
+        assert text.index("ruff check") < text.index("pytest -q"), name
+
+    cfg = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
+    assert "ruff>=0.6" in cfg["project"]["optional-dependencies"]["dev"], (
+        "CI installs .[dev,ai] — ruff has to be in there or the step cannot run"
+    )
+    # Bugs, not style. A noisy linter is one people learn to skip, and this one
+    # has to stay quiet enough to be believed when it does fire.
+    assert set(cfg["tool"]["ruff"]["lint"]["select"]) == {"F", "E9", "B", "PLE"}
