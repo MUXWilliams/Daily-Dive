@@ -3199,7 +3199,10 @@ def test_every_argument_we_pass_to_the_model_is_one_it_accepts():
     appeared in the source. It passed, and could never have failed for the
     reason that mattered. This one reads the SDK's real signature.
     """
-    anthropic = pytest.importorskip("anthropic")
+    # Skips where the `ai` extra is absent rather than failing. CI installs it,
+    # which is where this needs to run. The return value is unused — the point
+    # is the skip, and Messages is imported directly below.
+    pytest.importorskip("anthropic")
     import ast
     import inspect
 
