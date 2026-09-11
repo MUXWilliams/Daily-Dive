@@ -2,17 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.theloneaquarist.com/</loc>
-    <lastmod>2026-09-04</lastmod>
+    <lastmod>2026-09-11</lastmod>
   </url>
   <url>
     <loc>https://www.theloneaquarist.com/archive.html</loc>
-    <lastmod>2026-09-04</lastmod>
+    <lastmod>2026-09-11</lastmod>
   </url>
   <url>
     <loc>https://www.theloneaquarist.com/about.html</loc>
   </url>
   <url>
     <loc>https://www.theloneaquarist.com/subscribe.html</loc>
+  </url>
+  <url>
+    <loc>https://www.theloneaquarist.com/issues/2026-09-11.html</loc>
+    <lastmod>2026-09-11</lastmod>
   </url>
   <url>
     <loc>https://www.theloneaquarist.com/issues/2026-09-04.html</loc>
