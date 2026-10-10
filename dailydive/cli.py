@@ -372,6 +372,12 @@ def build_parser() -> argparse.ArgumentParser:
                          help="create it as a draft in the service rather than sending")
     sending.add_argument("--fixture", action="store_true",
                          help="render the frozen preview issue instead of a real one")
+    sending.add_argument("--issue", metavar="YYYY-MM-DD",
+                         help="send an already-published issue, from the copy saved beside its "
+                              "page. Refuses a week that already went out.")
+    sending.add_argument("--without", metavar="PHRASE", action="append", default=[],
+                         help="leave out every item whose headline, outlet or gist contains "
+                              "PHRASE (repeatable). For an email the provider refused.")
 
     evaluating = sub.add_parser(
         "eval",
@@ -418,6 +424,61 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _refusal_report(exc: Exception, date: datetime) -> str:
+    """Why this week's email did not go out, and exactly how to send it.
+
+    Becomes the body of a GitHub issue opened by the workflow, so it is written
+    for the editor rather than as a log line. Deliberately not a "### " heading
+    anywhere: label-picks.yml keys on "### Headline", and although it would
+    ignore an issue from the bot anyway, a failure report should not look like
+    a pick to anything.
+    """
+    from . import deliver
+
+    stamp = f"{date:%Y-%m-%d}"
+    lines = [
+        f"**The {stamp} issue published, but its email was not sent.**",
+        "",
+        f"The page is live: {brand.SITE_URL}/issues/{stamp}.html",
+        "",
+    ]
+
+    if isinstance(exc, deliver.ContentRejected):
+        lines += [
+            "The mailing-list provider refused it because it contains a phrase on its blocklist:",
+            "",
+            f"> {exc.keyword}",
+            "",
+        ]
+        if exc.culprits:
+            lines += ["That phrase appears in:", ""]
+            lines += [f"- {title}" for title in exc.culprits]
+            lines += [
+                "",
+                "**To send this week without that story:** Actions → **Resend an issue** →",
+                f"date `{stamp}`, leave out `{exc.keyword}`. Run it once as it is to preview",
+                "what would go out, then again with **send** ticked.",
+                "",
+                "Nothing is dropped automatically. Whether that story should go out is an "
+                "editorial call, not something the pipeline should make on a spam filter's say-so.",
+            ]
+        else:
+            lines += [
+                "It is not in any headline, outlet or gist, so it must be in the email "
+                "template itself. That needs a code change rather than a resend.",
+            ]
+    else:
+        lines += [
+            "The send failed for a reason other than its contents:",
+            "",
+            f"> {exc}",
+            "",
+            "Check the `BUTTONDOWN_API_KEY` secret and the provider's status. Once it is fixed, "
+            f"Actions → **Resend an issue** → date `{stamp}` sends the week as published.",
+        ]
+    return "\n".join(lines) + "\n"
+
+
 def _cmd_send(args) -> int:
     """Email the issue. See dailydive/deliver.py for why this is thin."""
     from . import deliver, preview as preview_mod
@@ -434,15 +495,58 @@ def _cmd_send(args) -> int:
 
     if args.fixture:
         issue = preview_mod.load_issue()
+    elif args.issue:
+        # Loaded from the copy written beside the page, never re-run: sending
+        # must never cost a scoring pass, and must never be able to produce a
+        # different issue from the one already published at its permalink.
+        issue = _load_published(args.out, args.issue)
+        if issue is None:
+            return 2
     else:
-        # Rebuilt from the archive index rather than re-run: sending must never
-        # cost a scoring pass, and must never be able to produce a different
-        # issue than the one already published at its permalink.
         log.error(
-            "sending a real issue is wired into `run --send`; use --fixture to "
-            "exercise the template, or --dry-run from a run."
+            "name a published issue with --issue YYYY-MM-DD, or use --fixture to "
+            "exercise the template. The weekly send itself is wired into `run --send`."
         )
         return 2
+
+    if args.without:
+        # A phrase that matches nothing is almost certainly a typo, and sending
+        # anyway would put the same blocklisted text back in front of the
+        # provider — or, worse, send something nobody meant to. Refuse instead.
+        unmatched = [p for p in args.without if not any(deliver.mentions(i, p) for i in issue.items)]
+        if unmatched:
+            log.error(
+                "--without %s matches nothing in the %s issue; refusing rather than "
+                "sending it unchanged",
+                ", ".join(repr(p) for p in unmatched),
+                f"{issue.date:%Y-%m-%d}",
+            )
+            return 2
+        left_out = [i for i in issue.items if any(deliver.mentions(i, p) for p in args.without)]
+        for item in left_out:
+            print(f"leaving out: {item.title} — {item.source_name}")
+        issue = Issue(
+            date=issue.date,
+            items=[i for i in issue.items if not any(deliver.mentions(i, p) for p in args.without)],
+        )
+        print(f"{len(issue.items)} item(s) remain")
+
+    # The interlock. An email cannot be recalled, and resending a week that
+    # already went out reaches every subscriber twice. A preview or a draft
+    # reaches nobody, so those are allowed and only warned.
+    if args.issue:
+        with store.connect(args.db) as conn:
+            already = store.sent_at(conn, args.issue)
+        if already and not (args.dry_run or args.draft):
+            log.error(
+                "the %s issue was already sent, at %s. Resending would reach every "
+                "subscriber twice; refusing.",
+                args.issue,
+                already,
+            )
+            return 2
+        if already:
+            log.warning("the %s issue was already sent, at %s", args.issue, already)
 
     thumb_url = None
     resource = render.pick_resource(issue)
@@ -454,6 +558,11 @@ def _cmd_send(args) -> int:
     html = render.render_email(issue, thumb_url=thumb_url)
 
     if args.dry_run:
+        if args.issue:
+            # The preview run of "Resend an issue" is how the editor decides
+            # whether to send, so it shows the stories, not just the request.
+            print(render.as_text(issue))
+            print()
         print(deliver.preview(issue, html, draft=args.draft))
         return 0
 
@@ -461,8 +570,37 @@ def _cmd_send(args) -> int:
         print(deliver.send(issue, html, draft=args.draft))
     except deliver.DeliveryError as exc:
         log.error("%s", exc)
+        if isinstance(exc, deliver.ContentRejected):
+            for title in exc.culprits:
+                log.error("  %r appears in: %s", exc.keyword, title)
         return 1
+
+    if args.issue and not args.draft:
+        with store.connect(args.db) as conn:
+            store.record_sent(conn, args.issue, len(issue.items))
     return 0
+
+
+def _load_published(out_dir: Path, stamp: str) -> Issue | None:
+    """The issue published for `stamp`, from the copy saved beside its page."""
+    try:
+        date = datetime.strptime(stamp, "%Y-%m-%d")
+    except ValueError:
+        log.error("%r is not a date — use YYYY-MM-DD", stamp)
+        return None
+    path = render.issue_json(out_dir, date)
+    if not path.is_file():
+        # Issues built before the copy existed have none. Saying so plainly
+        # beats a FileNotFoundError, and beats guessing at the issue from its
+        # HTML.
+        log.error(
+            "no saved copy of the %s issue at %s. Only issues built since resending "
+            "was added carry one.",
+            stamp,
+            path,
+        )
+        return None
+    return Issue.model_validate_json(path.read_text(encoding="utf-8"))
 
 
 def _cmd_eval(args) -> int:
@@ -782,9 +920,19 @@ def main(argv: list[str] | None = None) -> int:
                 # losing the copy must never lose the original.
                 #
                 # The marker is picked up by a workflow step that runs after the
-                # deploy and fails the run there instead.
+                # deploy, fails the run there, and opens a GitHub issue with the
+                # marker as its body — so it is written for the editor to read,
+                # not as a log line. A red run on a Friday afternoon is
+                # invisible; 2026-10-09's was found a day later, by asking.
                 log.error("%s", exc)
-                SEND_FAILED_MARKER.write_text(f"{exc}\n", encoding="utf-8")
+                SEND_FAILED_MARKER.write_text(
+                    _refusal_report(exc, issue.date), encoding="utf-8"
+                )
+            else:
+                # Only after the provider accepted it. This row is what stops
+                # `send --issue` emailing a week that already went out.
+                with store.connect(args.db) as conn:
+                    store.record_sent(conn, f"{issue.date:%Y-%m-%d}", len(issue.items))
     elif args.send:
         log.warning("not sending: a partial run never emails anyone")
     elif bucket_items:

@@ -2703,7 +2703,12 @@ def _strict_yaml(path: Path):
     return yaml.load(path.read_text(encoding="utf-8"), Loader=Strict)
 
 
-@pytest.mark.parametrize("name", ["daily.yml", "deploy.yml", "eval.yml"])
+# Every workflow in the directory, not a list of names. The list was three long
+# when label-picks.yml and resend.yml were added, and neither joined it — a
+# check that has to be remembered is a check that gets forgotten.
+@pytest.mark.parametrize(
+    "name", sorted(p.name for p in Path(".github/workflows").glob("*.yml"))
+)
 def test_workflows_parse_the_way_github_parses_them(name):
     """A workflow that fails to start is only discovered by pushing it."""
     _strict_yaml(Path(".github/workflows") / name)
@@ -3699,3 +3704,217 @@ def test_the_linter_runs_wherever_the_tests_do():
     # Bugs, not style. A noisy linter is one people learn to skip, and this one
     # has to stay quiet enough to be believed when it does fire.
     assert set(cfg["tool"]["ruff"]["lint"]["select"]) == {"F", "E9", "B", "PLE"}
+
+
+# --- a refused email, and sending the week afterwards -----------------------
+#
+# 2026-10-09: the page published and Buttondown refused the email because an
+# OpenAlex paper's journal — credited as its outlet — matched a spam blocklist.
+# The refusal was a red run nobody saw, and there was no way to send that week
+# afterwards. These pin the three things that changed: the refusal names its
+# culprit, it reaches the editor as an issue, and the week can be resent once.
+
+REFUSAL = {
+    "code": "email_invalid",
+    "detail": "Contains prohibited keyword: International Journal of Scientific Research",
+    "metadata": {},
+}
+BLOCKED = "International Journal of Scientific Research"
+
+
+def _refused_week() -> Issue:
+    return Issue(
+        date=datetime(2026, 10, 9, tzinfo=UTC),
+        items=[
+            item(title="Coral larvae settle faster on rough tiles",
+                 url="https://example.invalid/coral",
+                 source_name=BLOCKED),
+            item(title="A new Acropora morph", url="https://example.invalid/acro",
+                 source_name="Reef Builders"),
+        ],
+    )
+
+
+def test_a_blocklist_refusal_names_the_phrase_and_the_story(monkeypatch):
+    """The exact response from 2026-10-09. The editor needs the phrase and the
+    item it is in; the raw JSON in a log gave them neither in usable form."""
+    from dailydive import deliver
+
+    monkeypatch.setenv(deliver.ENV_KEY, "k")
+    client = httpx.Client(transport=httpx.MockTransport(
+        lambda request: httpx.Response(400, json=REFUSAL)))
+
+    with pytest.raises(deliver.ContentRejected) as caught:
+        deliver.send(_refused_week(), "<p>x</p>", client=client)
+
+    assert caught.value.keyword == BLOCKED
+    assert caught.value.culprits == ["Coral larvae settle faster on rough tiles"]
+    # Still a DeliveryError, so every existing handler and the marker still fire.
+    assert isinstance(caught.value, deliver.DeliveryError)
+
+
+def test_any_other_refusal_is_not_misdiagnosed_as_content(monkeypatch):
+    """Only the shape actually observed is parsed. Anything else stays generic
+    and reports the raw response — still loud, just without a guessed cause."""
+    from dailydive import deliver
+
+    monkeypatch.setenv(deliver.ENV_KEY, "k")
+    for status, body in ((400, {"code": "other", "detail": "nope"}), (401, REFUSAL)):
+        client = httpx.Client(transport=httpx.MockTransport(
+            lambda request, s=status, b=body: httpx.Response(s, json=b)))
+        with pytest.raises(deliver.DeliveryError) as caught:
+            deliver.send(_refused_week(), "<p>x</p>", client=client)
+        assert not isinstance(caught.value, deliver.ContentRejected), (status, body)
+
+
+def test_the_refusal_report_tells_the_editor_what_to_do():
+    """It becomes a GitHub issue body, so it is written to be acted on."""
+    from dailydive import deliver
+
+    exc = deliver.ContentRejected("refused", keyword=BLOCKED,
+                                  culprits=["Coral larvae settle faster on rough tiles"])
+    report = cli._refusal_report(exc, datetime(2026, 10, 9, tzinfo=UTC))
+
+    assert BLOCKED in report
+    assert "Coral larvae settle faster on rough tiles" in report
+    assert "Resend an issue" in report and "2026-10-09" in report
+    assert f"{brand.SITE_URL}/issues/2026-10-09.html" in report
+    # Never shaped like a pick: label-picks.yml keys on "### Headline".
+    assert "###" not in report
+
+
+def test_a_refusal_with_no_culprit_says_the_template_is_at_fault():
+    """If the phrase is in masthead or footer copy, no resend can fix it."""
+    from dailydive import deliver
+
+    exc = deliver.ContentRejected("refused", keyword="Lone", culprits=[])
+    report = cli._refusal_report(exc, datetime(2026, 10, 9, tzinfo=UTC))
+    assert "template" in report
+    assert "leave out" not in report
+
+
+def test_every_issue_keeps_a_copy_of_itself_beside_its_page(tmp_path):
+    """What makes a resend send exactly what was published — without parsing
+    our own HTML, which archive.py declines to do for the same reason."""
+    issue = _refused_week()
+    render.write_issue(issue, tmp_path)
+
+    saved = render.issue_json(tmp_path, issue.date)
+    assert saved.name == "2026-10-09.json"
+    assert saved.parent == tmp_path / "issues", "beside the permalink, same lifecycle"
+    assert Issue.model_validate_json(saved.read_text(encoding="utf-8")) == issue
+
+
+def _published(tmp_path, issue: Issue | None = None):
+    """A site dir holding one published issue, and an empty database."""
+    issue = issue or _refused_week()
+    render.write_issue(issue, tmp_path / "site")
+    return tmp_path / "site", tmp_path / "t.sqlite3"
+
+
+def test_a_published_week_can_be_previewed_without_the_blocked_story(tmp_path, capsys):
+    site, db = _published(tmp_path)
+    code = cli.main(["send", "--issue", "2026-10-09", "--without", BLOCKED,
+                     "--dry-run", "--out", str(site), "--db", str(db)])
+    out = capsys.readouterr().out
+
+    assert code == 0
+    assert "leaving out: Coral larvae settle faster on rough tiles" in out
+    assert "1 item(s) remain" in out
+    assert "A new Acropora morph" in out, "the preview shows the stories that would go"
+
+
+def test_a_phrase_that_matches_nothing_is_refused_not_ignored(tmp_path):
+    """Probably a typo. Sending anyway would put the blocked text straight back
+    in front of the provider."""
+    site, db = _published(tmp_path)
+    code = cli.main(["send", "--issue", "2026-10-09", "--without", "Not In This Issue",
+                     "--dry-run", "--out", str(site), "--db", str(db)])
+    assert code == 2
+
+
+def test_a_week_that_already_went_out_cannot_be_sent_again(tmp_path, monkeypatch):
+    """The irreversible failure: every subscriber receiving it twice. Refused
+    before the key is read or the network touched — a preview still works."""
+    from dailydive import deliver
+
+    site, db = _published(tmp_path)
+    with store.connect(db) as conn:
+        store.record_sent(conn, "2026-10-09", 2)
+
+    def no_network(*a, **kw):
+        raise AssertionError("a refused resend must never reach the provider")
+    monkeypatch.setattr(deliver, "send", no_network)
+
+    args = ["send", "--issue", "2026-10-09", "--out", str(site), "--db", str(db)]
+    assert cli.main(args) == 2
+    assert cli.main([*args, "--dry-run"]) == 0
+
+
+def test_a_successful_resend_is_recorded(tmp_path, monkeypatch):
+    """So the interlock holds against a second resend too."""
+    from dailydive import deliver
+
+    site, db = _published(tmp_path)
+    monkeypatch.setattr(deliver, "send", lambda issue, html, draft=False: "sent")
+
+    args = ["send", "--issue", "2026-10-09", "--without", BLOCKED,
+            "--out", str(site), "--db", str(db)]
+    assert cli.main(args) == 0
+    with store.connect(db) as conn:
+        assert store.sent_at(conn, "2026-10-09") is not None
+    assert cli.main(args) == 2, "and now it refuses"
+
+
+def test_a_week_with_no_saved_copy_says_so(tmp_path):
+    """Issues built before the copy existed — 2026-10-09 among them."""
+    code = cli.main(["send", "--issue", "2026-10-02", "--dry-run",
+                     "--out", str(tmp_path), "--db", str(tmp_path / "t.sqlite3")])
+    assert code == 2
+
+
+def test_the_weekly_send_records_only_on_success():
+    """The `sent` row is written in the try's else branch — after the provider
+    accepted it — never alongside the attempt."""
+    src = Path("dailydive/cli.py").read_text(encoding="utf-8")
+    block = src.split("print(deliver.send(issue, render.render_email(", 1)[1][:2200]
+    assert block.index("except deliver.DeliveryError") < block.index("else:") \
+        < block.index("store.record_sent(")
+    assert "_refusal_report(exc, issue.date)" in block
+
+
+def test_a_refused_send_opens_an_issue():
+    """A red scheduled run notifies nobody reliably; 2026-10-09's was found the
+    next day by asking. The report goes in by file, never interpolated."""
+    import yaml
+
+    spec = yaml.safe_load((Path(".github/workflows") / "daily.yml").read_text(encoding="utf-8"))
+    step = next(s for s in spec["jobs"]["build"]["steps"]
+                if s.get("name") == "Fail if the send was refused")
+    assert "gh issue create" in step["run"]
+    assert "--body-file .send-failed" in step["run"]
+    assert "${{" not in step["run"]
+    assert spec["permissions"].get("issues") == "write"
+
+
+def test_the_resend_workflow_previews_unless_told_to_send():
+    """Two deliberate runs for an irreversible action, and no way to deploy."""
+    import yaml
+
+    text = (Path(".github/workflows") / "resend.yml").read_text(encoding="utf-8")
+    spec = yaml.safe_load(text)
+    inputs = spec[True]["workflow_dispatch"]["inputs"]
+
+    assert inputs["send"]["default"] is False
+    assert inputs["date"]["required"] is True
+    assert spec["permissions"] == {"contents": "write"}
+    # Shares the build's group, so the two never race for dailydive.sqlite3.
+    assert spec["concurrency"]["group"] == "pages"
+
+    steps = spec["jobs"]["resend"]["steps"]
+    run = next(s for s in steps if s.get("name") == "Send, or preview the send")["run"]
+    assert '--dry-run' in run and '"$IN_SEND" != "true"' in run
+    record = next(s for s in steps if s.get("name") == "Record the send")
+    assert record["if"] == "inputs.send"
+    for s in steps:
+        assert "${{" not in s.get("run", ""), s.get("name")

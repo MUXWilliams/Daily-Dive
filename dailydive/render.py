@@ -588,4 +588,22 @@ def write_issue(issue: Issue, out_dir: Path) -> Path:
         ),
         encoding="utf-8",
     )
+
+    # The issue itself, beside its page. Same lifecycle as the permalink — a
+    # partial run writes it and never commits it — so whatever this file says
+    # is exactly what the page says.
+    #
+    # It exists so an email can be resent. On 2026-10-09 the page published
+    # and the provider refused the email over one phrase, and there was no way
+    # to send that week afterwards: `send` would not take a real issue, and a
+    # re-run builds nothing because the published run had already recorded
+    # every item as seen. Rebuilding an Issue from our own HTML would be
+    # parsing output to recover what we already knew — archive.py declines to
+    # do that for the same reason. This is the original, kept.
+    issue_json(out_dir, issue.date).write_text(issue.model_dump_json(indent=1), encoding="utf-8")
     return index
+
+
+def issue_json(out_dir: Path, date: datetime) -> Path:
+    """Where an issue's own data lives, beside its dated permalink."""
+    return out_dir / "issues" / f"{date:%Y-%m-%d}.json"

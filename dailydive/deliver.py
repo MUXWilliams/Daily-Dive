@@ -34,11 +34,12 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 from typing import Any
 
 import httpx
 
-from .models import Issue
+from .models import Issue, Item
 
 log = logging.getLogger(__name__)
 
@@ -99,6 +100,74 @@ class DeliveryError(RuntimeError):
     discovered — if at all — by someone eventually noticing the silence. The
     run should go red.
     """
+
+
+class ContentRejected(DeliveryError):
+    """The provider refused the send because of something the issue *says*.
+
+    Not a broken key or a network failure: the email was well-formed and the
+    service declined its contents. On 2026-10-09 Buttondown answered
+
+        HTTP 400 {"code":"email_invalid",
+                  "detail":"Contains prohibited keyword: International Journal of
+                  Scientific Research"}
+
+    — a journal name, credited as the outlet of an OpenAlex paper, matching a
+    spam blocklist. The page had published and the week's email never left.
+
+    Its own class because the remedy is editorial, not technical. Retrying
+    changes nothing; somebody has to decide whether that story goes out. So it
+    carries the phrase and the items containing it, which is everything that
+    decision needs, rather than leaving the editor to dig them out of a log.
+    """
+
+    def __init__(self, message: str, *, keyword: str, culprits: list[str]) -> None:
+        super().__init__(message)
+        self.keyword = keyword
+        # Headlines of the items that contain the keyword — possibly none, if
+        # it matched masthead or footer copy instead.
+        self.culprits = culprits
+
+
+# The one refusal shape actually observed, rather than a guess at the API's
+# error vocabulary. Anything else stays a generic DeliveryError and reports the
+# raw response — still loud, just without the diagnosis.
+_PROHIBITED = re.compile(r"prohibited keyword:\s*(?P<keyword>.+?)\s*$", re.I)
+
+
+def mentions(item: Item, phrase: str) -> bool:
+    """Whether an item's emailed text contains `phrase`, ignoring case.
+
+    Headline, outlet and gist: the three item fields the email prints. Used
+    both to name the culprit of a refusal and to honour `send --without`, so
+    the phrase the provider reports and the phrase the editor passes back
+    select exactly the same items.
+    """
+    text = " ".join((item.title, item.source_name, str(item.extra.get("gist", ""))))
+    return phrase.lower() in text.lower()
+
+
+def _content_rejection(resp: httpx.Response, issue: Issue) -> ContentRejected | None:
+    """A ContentRejected if this response is the provider refusing the text."""
+    if resp.status_code != 400:
+        return None
+    try:
+        body = resp.json()
+    except ValueError:
+        return None
+    if not isinstance(body, dict) or body.get("code") != "email_invalid":
+        return None
+    match = _PROHIBITED.search(str(body.get("detail", "")))
+    if not match:
+        return None
+
+    keyword = match.group("keyword")
+    culprits = [item.title for item in issue.items if mentions(item, keyword)]
+    return ContentRejected(
+        f"the provider refused the email because it contains {keyword!r}",
+        keyword=keyword,
+        culprits=culprits,
+    )
 
 
 def api_key() -> str:
@@ -223,6 +292,8 @@ def send(
             client.close()
 
     if resp.status_code >= 400:
+        if rejected := _content_rejection(resp, issue):
+            raise rejected
         raise DeliveryError(f"the send was refused, HTTP {resp.status_code}: {resp.text[:500]}")
 
     what = "drafted" if draft else "sent"

@@ -140,3 +140,59 @@ is made, and the first real call is a read.
 **Sending is automatic on the Friday schedule**, alongside scoring, since the
 first send was proved end to end by hand. A manual dispatch still has to ask for
 it — a mid-week run is almost always a test, and an inbox cannot be un-sent.
+
+## When the email is refused
+
+**2026-10-09.** The page published, and Buttondown refused the email:
+
+```
+HTTP 400 {"code":"email_invalid",
+          "detail":"Contains prohibited keyword: International Journal of Scientific Research"}
+```
+
+An OpenAlex paper was credited to its journal, as every OpenAlex item is, and
+that journal's name is on the provider's spam blocklist. The design held where
+it was meant to: the refusal turned the run red *after* the deploy, so losing
+the copy did not lose the original. Two things were missing. Nobody found out,
+because a red scheduled run notifies nobody reliably, and it was spotted the
+next day only because someone asked. And there was no way to send that week
+afterwards: `send` would not take a real issue, and a re-run built nothing
+because the published run had already recorded every item as seen.
+
+Now:
+
+- **The refusal names its culprit.** `deliver.ContentRejected` carries the
+  phrase and the headlines containing it. Only the response shape actually
+  observed is parsed; any other refusal stays a generic error with the raw
+  response, so it is never misdiagnosed.
+- **It reaches you as a GitHub issue.** The workflow step that fails the run
+  also opens an issue whose body (`cli._refusal_report`) names the phrase, the
+  story, and the resend to run.
+- **Every issue keeps a copy of itself** at `site/issues/YYYY-MM-DD.json`,
+  beside its permalink and with the same lifecycle. A resend sends exactly what
+  was published. Nothing re-runs and nothing gets rebuilt from our own HTML.
+- **Actions → Resend an issue.** Give it the date and, optionally, a phrase to
+  leave out. Run it once unticked to preview, then again with **send** ticked.
+
+### Nothing is dropped automatically
+
+A blocklist match is a spam filter's opinion, not an editorial one. The
+pipeline could strip the offending story and send the rest without asking. It
+deliberately does not. Whether a story goes out is the editor's call. The
+pipeline's job is to make that call quick to act on.
+
+### It cannot send a week twice
+
+`dailydive.sqlite3` has a `sent` table, written only after the provider accepts
+a send, by the weekly run and by a resend alike. `send --issue` refuses any week
+in it. A preview or a draft reaches nobody, so those are allowed with a warning.
+An email cannot be recalled, and mistyping a date must not reach every
+subscriber twice.
+
+### Limits
+
+- **Issues built before this existed carry no saved copy**, so they cannot be
+  resent this way. That includes 2026-10-09 itself.
+- If a resend succeeds but recording it fails, the workflow says so in red:
+  *do not resend this week*. That needs the push to lose a race three times
+  running against a run in the same concurrency group, which should not happen.

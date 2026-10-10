@@ -479,12 +479,28 @@ jobs:
       # After the deploy, deliberately. The page is the canonical artifact and
       # the email is a copy of it; a refused send has to turn the run red
       # without ever costing the issue its publication.
+      #
+      # And it opens an issue. A red scheduled run notifies nobody reliably:
+      # on 2026-10-09 the page published, Buttondown refused the email over a
+      # blocklisted journal name, and it was found the next day only because
+      # someone asked whether the newsletter had gone out. An issue reaches the
+      # editor's inbox, and its body — written by cli._refusal_report — names
+      # the phrase, the story it is in, and the resend to run.
       - name: Fail if the send was refused
         if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
           if [ -f .send-failed ]; then
             echo "The issue published, but the email was refused:" >&2
             cat .send-failed >&2
+            # The report is a file and the title a date, so nothing from the
+            # issue content is ever pasted into this script.
+            gh issue create --repo "$REPO" \
+              --title "This week's email was not sent ($(date -u +%Y-%m-%d))" \
+              --body-file .send-failed \
+              || echo "Could not open an issue about it — the run still fails." >&2
             exit 1
           fi
 

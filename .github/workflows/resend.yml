@@ -1,0 +1,118 @@
+name: Resend an issue
+
+# Send the email for a week that has already been published, from the copy of
+# the issue saved beside its page.
+#
+# Written after 2026-10-09: the page published, Buttondown refused the email
+# because an OpenAlex paper's journal name was on its spam blocklist, and there
+# was no way to send that week afterwards. `send` would not take a real issue,
+# and a re-run built nothing, because the published run had already recorded
+# every item as seen.
+#
+# Two deliberate steps by design. Run it first with `send` unticked: it prints
+# what would go out — which items are left out, how many remain, the subject —
+# and sends nothing. Then run it again with `send` ticked. An email cannot be
+# recalled, so the irreversible version is never the default.
+#
+# It refuses a week that has already gone out (dailydive.sqlite3's `sent`
+# table), so mistyping a date cannot email every subscriber twice.
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "The issue to send, YYYY-MM-DD (it must already be published)"
+        required: true
+      without:
+        description: "Leave out every story whose headline, outlet or gist contains this phrase (blank = send as published)"
+        required: false
+        default: ""
+      send:
+        description: "Actually send it. Leave unticked to preview what would go out."
+        type: boolean
+        required: false
+        default: false
+
+# contents: write only to commit the record of a successful send, which is what
+# makes the duplicate-send refusal work on the next attempt. No Pages, no
+# issues: this workflow publishes nothing.
+permissions:
+  contents: write
+
+# The same group as the weekly build, so a resend can never race it for
+# dailydive.sqlite3. Both commit that file; whichever starts second waits.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  resend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      # The same gate the build uses. A broken send path should fail here, not
+      # half-way through talking to the mailing list.
+      - name: Lint
+        run: ruff check .
+
+      - name: Tests
+        run: pytest -q
+
+      # Inputs reach the shell through env, never ${{ }} interpolation — the
+      # house rule after a workflow input containing & was read as a
+      # background operator. An array keeps a phrase with spaces in one piece.
+      - name: Send, or preview the send
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          IN_DATE: ${{ inputs.date }}
+          IN_WITHOUT: ${{ inputs.without }}
+          IN_SEND: ${{ inputs.send }}
+        run: |
+          set -eu
+          args=(--issue "$IN_DATE")
+          if [ -n "$IN_WITHOUT" ]; then args+=(--without "$IN_WITHOUT"); fi
+          if [ "$IN_SEND" != "true" ]; then
+            args+=(--dry-run)
+            echo "Preview only — nothing will be sent. Tick 'send' to send it."
+          fi
+          daily-dive send "${args[@]}" | tee send.log
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ -f send.log ]; then
+            { echo '```'; cat send.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # Only after a real send that succeeded — this step is skipped if the one
+      # above failed. Without the record, nothing would stop the same week
+      # being sent again.
+      - name: Record the send
+        if: inputs.send
+        env:
+          IN_DATE: ${{ inputs.date }}
+        run: |
+          set -eu
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dailydive.sqlite3
+          if git diff --cached --quiet; then
+            echo "Nothing to record."
+            exit 0
+          fi
+          git commit -m "Record the resend of the $IN_DATE issue [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then exit 0; fi
+            echo "Push failed, rebasing and retrying ($attempt/3)..."
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            sleep $((attempt * 4))
+          done
+          echo "The email went out, but recording it failed. Do not resend this week." >&2
+          exit 1

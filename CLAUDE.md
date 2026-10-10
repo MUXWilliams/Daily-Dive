@@ -121,6 +121,7 @@ picks → collapse → resource → render → commit → deploy → send`
 | Editorial rules | `prompts/score.system.md`, `docs/industry-brief.md` |
 | Submitting a pick | `docs/picks.md` |
 | Delivery | `docs/delivery.md`, `dailydive/deliver.py` — Buttondown, off by default |
+| Resend a week | Actions → **Resend an issue**, from the `.json` each issue keeps beside its page in `site/issues/`; see `docs/delivery.md` |
 | Scoring eval | `dailydive/eval.py`, `tests/fixtures/labels.json`, `docs/eval/` |
 | Archive index | `site/issues/index.json` |
 | Search indexing | `docs/indexing.md`, `dailydive/seo.py` — robots.txt + sitemap.xml |
@@ -183,6 +184,13 @@ about the week.
   issues, when a rolling median against `site/issues/index.json` becomes the
   better instrument — it is the wrong one today because the archive still holds
   three daily-era issues, and comparing a week against a day says nothing.
+- **OpenAlex surfaces predatory journals.** 2026-10-09's email was refused
+  because a paper's journal, "International Journal of Scientific Research",
+  is on Buttondown's spam blocklist — and that name is a well-known predatory
+  publisher. The provider's filter caught something the editorial pipeline did
+  not. A journal denylist beside `REPOSITORY_VENUES` in `normalize.py` would
+  keep such papers out of the issue entirely; it is an editorial decision, not
+  yet made.
 - **Seen vs published for the crawler** — still open, and narrower now. A
   failed or partial run no longer burns the week (`cli._remember`), but a
   *published* run still records everything it fetched, so an item the scorer

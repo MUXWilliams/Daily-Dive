@@ -83,6 +83,20 @@ CREATE TABLE IF NOT EXISTS http_cache (
     last_modified TEXT,
     fetched_at    TEXT NOT NULL
 );
+
+-- Which weeks actually reached inboxes. Written only after the provider
+-- accepted a send, never on an attempt.
+--
+-- The interlock for `send --issue`: an email cannot be taken back, and a
+-- resend of a week that already went out reaches every subscriber twice. A
+-- week whose send was refused — 2026-10-09, over a blocklisted phrase — has no
+-- row, so it can be resent, and a week that went out normally cannot be resent
+-- by mistyping a date.
+CREATE TABLE IF NOT EXISTS sent (
+    issue_date TEXT PRIMARY KEY,
+    sent_at    TEXT NOT NULL,
+    items      INTEGER NOT NULL
+);
 """
 
 
@@ -179,6 +193,20 @@ def record_published(conn: sqlite3.Connection, items: Iterable[Item], issue_date
 def published_uids(conn: sqlite3.Connection) -> set[str]:
     """Everything that has ever appeared in an issue."""
     return {row[0] for row in conn.execute("SELECT uid FROM published")}
+
+
+def record_sent(conn: sqlite3.Connection, issue_date: str, items: int) -> None:
+    """Note that the issue for `issue_date` (YYYY-MM-DD) reached the list."""
+    conn.execute(
+        "INSERT OR REPLACE INTO sent (issue_date, sent_at, items) VALUES (?, ?, ?)",
+        (issue_date, datetime.now(UTC).isoformat(), items),
+    )
+
+
+def sent_at(conn: sqlite3.Connection, issue_date: str) -> str | None:
+    """When the issue for `issue_date` was sent, or None if it never was."""
+    row = conn.execute("SELECT sent_at FROM sent WHERE issue_date = ?", (issue_date,)).fetchone()
+    return row[0] if row else None
 
 
 def record_scores(
