@@ -1,0 +1,442 @@
+{
+ "date": "2026-10-09T17:02:54Z",
+ "items": [
+  {
+   "source_id": "pick",
+   "source_name": "YouTube.com",
+   "title": "Could Machine Learning Transform Deep-Sea Conservation?",
+   "url": "https://youtu.be/MqHhpJLAg4g?is=9R3muaj6zhcBvAla",
+   "published_at": "2026-10-05T00:00:00Z",
+   "author": null,
+   "raw_text": null,
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "pick": "1",
+    "pick_issue": "11",
+    "gist": "The expedition explored the Nola seamount complex, where deep-sea corals and sponges torm vulnerable marine ecosystems that provide important habitat for a wide range of marine life."
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Marine Science",
+   "title": "Spatial and temporal variability of Honduran benthic communities and reef functionality throughout the fourth global coral bleaching event",
+   "url": "https://doi.org/10.3389/fmars.2026.1923395",
+   "published_at": "2026-10-07T00:00:00Z",
+   "author": "Gianna Paden et al.",
+   "raw_text": "Mass coral bleaching events are intensifying under climate change, yet their ecological consequences remain highly context dependent. We quantified shifts in benthic community structure, coral diversity and reef functionality during the 2023–2025 Fourth Global Mass Coral Bleaching Event (GCBE) in Tela Bay and Roatán, Honduras, two traditionally high-cover reef systems within the Mesoamerican Reef (MAR). Following three years of elevated heat stress (maximum DHW of 18 °C-weeks and 12 °C-weeks) both locations exhibited marked declines up to 60% in live coral cover, accompanied by increases of up to 58% in fleshy macroalgae cover, indicating shifts toward more algal-dominated benthic states. These shifts were accompanied by declines in coral diversity and reef functional index (RFI), suggesting reduced contribution of structurally important coral assemblages to key ecological processes. However, benthic community responses to bleaching were not uniform across sites. Increased multivariate dispersion following the event revealed substantial site-level heterogeneity, particularly in Tela Bay, where some sites retained greater coral cover and higher post-disturbance diversity indices, suggesting localized differences in resistance or early recovery potential. Coral community shifts were also strongly associated with declines in historically abundant taxa such as Agaricia tenuifolia , indicating that prolonged thermal stress can reduce the functional contribution of common and previously persistent coral taxa, not only structurally complex reef-building species. Our results show that even reef locations with high coral cover remain vulnerable to bleaching-driven reorganization of benthic communities and associated functional declines. Nevertheless, strong spatial variability among sites suggests that local environmental conditions and early-bleaching assemblage structure may mediate severity and recovery potential. These findings highlight the need to prioritize site-speci",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "similar": "1",
+    "relevance": "0.90"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Agaricia spp. recruitment failure and subsequent recovery in the wake of mass bleaching and disease outbreak on reefs of St. Thomas, US Virgin Islands",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1923352",
+   "published_at": "2026-10-09T00:00:00Z",
+   "author": "Marilyn E. Brandt",
+   "raw_text": "Caribbean coral reefs have declined severely under cumulative stressors including hurricanes, thermal anomalies, disease outbreaks, and local anthropogenic impacts. In early 2019, stony coral tissue loss disease (SCTLD) emerged in the northern U.S. Virgin Islands (USVI), followed later that year by anomalously high temperatures and mass bleaching across the territory, providing an opportunity to assess the resilience of recruitment to acute disturbance. This study quantified recruitment at three shallow reef sites (7–14 m) in St. Thomas from 2019–2022 and compared results with pre-disturbance data (2015–2017). Recruitment tiles (15 × 15 cm) were deployed across eight time periods and photographed to determine recruit density and taxonomic identity. Bleaching and disease prevalence were calculated from coral health assessments along six 10-m transects as part of the Territorial Coral Reef Monitoring Program. All recruits observed were Agaricia spp. Recruitment rates in 2019 and 2020, following these disturbances, declined by an order of magnitude relative to pre-disturbance surveys. Because the six environmental predictors vary to differing degrees among versus within sites, their correlations with recruitment were decomposed into between-site and within-site components. Coral cover and Agaricia spp. abundance varied predominantly among sites (86.9% and 51.9% of variance between sites, respectively); their apparent positive associations with recruitment reflected differences among three site means rather than temporal variation within sites, and neither persisted once site means were removed. In contrast, Degree Heating Weeks (DHW) and combined bleaching and paling prevalence varied almost entirely within sites (8.7% and 1.3% between-site variance), and both showed marginal negative within-site relationships with recruitment (DHW: r = -0.43, p = 0.054; bleaching/paling: r = -0.41, p = 0.064). Thermal stress was therefore the only environmental variable with a detecta",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Agaricia coral recruitment failed after 2019 bleaching and stony coral tissue loss disease in the USVI, with partial recovery by 2022. This directly measures reef resilience to the dual stressors reef keepers track in wild populations.",
+    "relevance": "0.85"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Communications Biology",
+   "title": "In situ enhancement of coral larval settlement using acoustic enrichment, engineered habitats and living materials",
+   "url": "https://doi.org/10.1038/s42003-026-10932-3",
+   "published_at": "2026-10-08T00:00:00Z",
+   "author": "Aaron A. Thode et al.",
+   "raw_text": "Abstract Worldwide reef ecosystem degradation is inspiring efforts to enhance in-situ coral larvae settlement onto degraded or artificial reefs. Here we simultaneously test three approaches for enhancing settlement over two weeks in Kāne’ohe Bay, O’ahu, Hawai’i. Nineteen artificial structures, mimicking natural reef mesoscale roughness, were deployed along two transect lines at distances between 1 and 42 m from an “acoustic enrichment” underwater speaker broadcasting healthy reef sound. Twelve additional cinder blocks supporting micro-habitat structures designed to attenuate flow were also deployed at various distances. Some micro-habitats were coated with a living bacteria reef ink (Brink) to further induce larval settlement. Statistical regressions identify Brink presence, structure type, and speaker distance to 20 m as significant factors in predicting coral larval settlement density, but conclusions about acoustic enrichment efficacy are tentative. The cumulative effects of acoustic enrichment, living microbial materials, and custom-designed habitats on enhancing in-situ larval settlement justify further scaled-up reef restoration trials.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Field trial combining acoustic cues, engineered habitat, and living materials to enhance coral larval settlement in Hawaiʻi. Demonstrates conservation restoration techniques relevant to understanding coral recruitment and settlement biology.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Royal Society Open Science",
+   "title": "Remobilized volcanogenic sediments boost photophysiological activity in three symbiotic reef-building coral species",
+   "url": "https://doi.org/10.1098/rsos.252217",
+   "published_at": "2026-10-07T00:00:00Z",
+   "author": "Frank Förster et al.",
+   "raw_text": "Abstract Coral reefs that surround volcanic islands are continually influenced by run-off carrying remobilized volcanogenic sediments. Although unaltered volcanic ash is known to supply trace metals that enhance coral holobiont productivity, the impacts of long-term exposure to weathered tephra, a far more likely scenario in island settings, are less understood. To assess possible effects of tephra exposure on coral physiology, we conducted controlled culture experiments with three scleractinian corals (Stylophora pistillata, Turbinaria reniformis and Pocillopora damicornis) exposed to weekly additions of 50 g of untreated tephra, collected from the volcanic island of St. Vincent, and its leachate over a six-week period. All exposed colonies experienced optimized photosynthetic light-harvesting processes, while most other physiological parameters were not affected. Remobilized tephra supplies hormetic concentrations of water soluble trace metals, with high-resolution inductively coupled plasma mass spectrometer (HR-ICP-MS) analyses showing significant increases in seawater trace metal (V, Mn, Fe, Co, Ni, Cu, Cd and Pb) concentrations. This highlights tephra's previously underrecognized contribution to the island mass effect affecting corals.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "similar": "1",
+    "gist": "Controlled experiment shows weathered volcanic sediment enhances photophysiology in three aquarium coral species. Demonstrates how mineral supplementation and environmental chemistry affect coral health and productivity.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Applied and Environmental Microbiology",
+   "title": "The gut within: reframing the coral gastrovascular cavity as a discrete anaerobic microbial ecosystem",
+   "url": "https://doi.org/10.1128/aem.01430-26",
+   "published_at": "2026-10-05T00:00:00Z",
+   "author": "Claudia Pogoreutz",
+   "raw_text": "Coral holobionts are typically studied at colony or fragment scale, erasing the spatial context of the microenvironments which microbial life occupies. Recent microsensor work (Q. Zhang, E. Bollati, and M. Kühl, Appl Environ Microbiol 92:e02441-25, 2026, https://doi.org/10.1128/aem.02441-25) shows the coral gastrovascular cavity (GVC) sustains active anaerobic metabolism, reflecting patterns of symbiotic state and heterotrophic feeding. These findings recast the GVC as a discrete, gut-like ecosystem with its own redox regime, substrate supply, and bacterial community, calling for spatially explicit approaches in coral research to resolve metabolism at microscopic scales.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Research reframes coral gastrovascular cavity as anaerobic gut ecosystem with distinct microbial communities. New understanding of coral internal physiology and heterotrophy mechanisms fundamental to keeping corals alive.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Wellcome Open Research",
+   "title": "The chromosomal genome sequence of the massive starlet coral, Siderastrea siderea (Ellis & Solander, 1768) (Scleractinia: Rhizangiidae)",
+   "url": "https://doi.org/10.12688/wellcomeopenres.27606.1",
+   "published_at": "2026-10-08T00:00:00Z",
+   "author": "Richard F. Karp et al.",
+   "raw_text": "We present a genome assembly from a specimen of Siderastrea siderea (massive starlet coral; Cnidaria; Anthozoa; Scleractinia; Rhizangiidae). The genome sequence has a total length of 831.10 megabases. Most of the assembly (97.77%) is scaffolded into 14 chromosomal pseudomolecules. The mitochondrial genome has also been assembled, with a length of 19.39 kilobases. Gene annotation of this assembly by Ensembl identified 36,569 protein-coding genes.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Genome sequence published for Siderastrea siderea, a common aquarium coral. Genomic data enables deeper understanding of coral physiology, symbiosis, and stress response.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "International Journal of Scientific Research in Science and Technology",
+   "title": "Mangroves as Climate Refugia for Coral Reefs: A Review of Ecological Mechanisms, Opportunities and Trade-offs Under Climate Change",
+   "url": "https://doi.org/10.32628/ijsrst2613523",
+   "published_at": "2026-10-07T00:00:00Z",
+   "author": "Nisha S. Rajbhar et al.",
+   "raw_text": "Coral reefs face unprecedented threats from climate change, particularly ocean warming and acidification. Mangrove-coral interfaces have emerged as critical climate refugia that buffer corals from thermal stress through multiple ecological mechanisms. This review synthesizes current knowledge on how mangrove ecosystems function as refugia through light reduction, temperature modulation, pH buffering, and oxygen dynamics. Additionally, mangrove-reef connectivity supports ecosystem services including fisheries productivity, coastal protection, and biodiversity conservation through ontogenetic habitat connectivity and nutrient provisioning. However, mangrove refugia operate within bounded spatial and temporal domains, with significant metabolic trade-offs including reduced calcification and reproductive rates in refuge associated corals. Accelerating mangrove degradation and climate change threaten refugial efficacy, with model projections indicating refugia lose protective capacity when global warming exceeds 3°C. Mangrove protection and restoration are essential but insufficient components of comprehensive climate adaptation strategies. Future coral reef persistence requires simultaneous progress in emissions reductions, mangrove-reef ecosystem protection, mitigation of non-climatic stressors, and deployment of emerging adaptation technologies.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Review synthesizes how mangrove ecosystems buffer corals from thermal stress through temperature modulation, pH buffering, and oxygen dynamics. Understanding refuge mechanisms informs where wild corals may persist under climate change and which systems merit protection.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Limnology and Oceanography Letters",
+   "title": "Deep learning–assisted coral morphology cover across 742 sites on the Great Barrier Reef (2022–2025): A Great Reef Census citizen science dataset",
+   "url": "https://doi.org/10.1002/lol2.70168",
+   "published_at": "2026-10-05T00:00:00Z",
+   "author": "Christopher L. Lawson et al.",
+   "raw_text": "Abstract Citizen science can expand the spatial extent of coral reef surveys, but its value is often limited by inconsistent data quality and slow manual analysis. Here we combine volunteer‐collected imagery with deep learning to overcome these constraints, delivering validated coral cover data at scale. We present 46,879 benthic seascape images from 742 sites across 267 reefs on the Great Barrier Reef, collected by Great Reef Census volunteers between September 2022 and February 2025. Images were analyzed using a deep learning segmentation model combined with online labelling by citizen scientists, yielding site‐level percent cover for three key coral types: branching Acropora , plating Acropora , and massive‐form corals. Data were validated with 99% accuracy against manual annotation, with 18–80 images per site yielding 95% accuracy. This geolocated dataset complements professional and government reef monitoring and is publicly available for research, conservation planning, and further tool development.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Citizen science combined with deep learning mapped coral cover across 742 Great Barrier Reef sites 2022–2025. Large-scale, validated dataset reveals reef health trends and demonstrates scalable monitoring technology.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Microorganisms",
+   "title": "Transient Disturbance and Community Convergence of Coral-Associated Microbial Communities Under Acidification, Benzo[a]pyrene Pollution, and Combined Stress in Coral Acropora millepora",
+   "url": "https://doi.org/10.3390/microorganisms14102259",
+   "published_at": "2026-10-04T00:00:00Z",
+   "author": "Qi Ming Zhao et al.",
+   "raw_text": "Ocean acidification (OA), driven by global climate change together with pollution from organic contaminants, is increasing the ecological risk faced by coral reef ecosystems. The coral holobiont comprises diverse microbial communities that collectively support the coral host in coping with and adapting to environmental stress. However, the response of the coral holobiont to the combined stress of acidification and benzo[a]pyrene (BaP) remains poorly understood. In this study, Acropora millepora was selected as a model species to investigate the responses of coral-associated microbiomes to acidification (pH 7.8), BaP exposure (10 µg·L−1) and their combined effects. We found that while the cell density of coral-associated Symbiodiniaceae increased significantly with prolonged exposure time in all treatment groups, and there were no temporal differences in chlorophyll-a contents. The Symbiodiniaceae community was stable within all treatments, with Cladocopium as the dominant genus, and subtype C3u had the highest relative abundance (>70%). A rapid and significant increase in rare bacteria taxa was observed in the single-stress treatments (acidification, BaP), whereas prolonged exposure led to an increasing number of unique bacteria taxa in the combined-stress group in two weeks. Surprisingly, the main community structure of core coral-associated bacteria in the combined treatment group was close to that of the control group. Across all treatments, core coral-associated bacteria (including Sphingomonadaceae and Burkholderiaceae) consistently dominated the microbial community, while core coral-associated archaea exhibited more stochastic variations. Collectively, these results highlight the critical role of coral-associated microbiomes in rapidly and flexibly responding to environmental stressors, thereby contributing to the maintenance of holobiont stability under multiple stress conditions.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Research on how Acropora microbiomes respond to combined ocean acidification and organic pollution stress. Understanding coral holobiont stress responses directly informs what parameters matter most in captive systems.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "BMC Microbiology",
+   "title": "Seasonal variations in coral polyps and their skeletal microbiome in the marginal reef area of South China Sea",
+   "url": "https://doi.org/10.1186/s12866-026-05744-8",
+   "published_at": "2026-10-08T00:00:00Z",
+   "author": "Zhenjun Qin et al.",
+   "raw_text": null,
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Seasonal patterns in coral skeletal microbiota from South China Sea marginal reef. Understanding coral holobiont biology informs what stressors and conditions matter in aquarium systems.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Marine Science",
+   "title": "The atoll gap: area, governance, and the under-recognition of a major coral reef system",
+   "url": "https://doi.org/10.3389/fmars.2026.1911248",
+   "published_at": "2026-10-06T00:00:00Z",
+   "author": "Alex S. Wegmann et al.",
+   "raw_text": "Global assessments project widespread coral reef degradation under continued ocean warming and acidification, underscoring the urgent need to identify and account for the full diversity of coral reef systems within conservation planning. Atolls are dynamic reef-ocean-land systems whose persistence depends on coral reef sediment production, land-sea connectivity, and cross-ecosystem nutrient subsidies. Some atoll reef environments may also support coral assemblages with elevated thermal tolerance which could mean atolls are, and will increasingly be, important local-to-regional coral sources as global and local impacts continue to limit corals. Using a curated dataset of 310 Indo-Pacific atolls and high-resolution global coral reefscape mapping from the Allen Coral Atlas, we show that 309 Indo-Pacific atolls contain 27,211 km 2 of mapped shallow reefscape, representing 41.5% of all Indo-Pacific reef area and 7.8 percent of global mapped shallow reefscape area. This spatial accounting places Indo-Pacific atolls among the world’s major coral reefscape networks by area. We interpret this result alongside literature on atoll ecology, geomorphology, and governance to suggest that atoll-associated reefs merit more explicit consideration in Indo-Pacific coral reef conservation planning, while recognizing that additional comparative evidence on conservation finance, monitoring, protection, and governance would be needed to directly quantify under-recognition.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Geophysical Research Letters",
+   "title": "Corals Reveal Atlantic Drivers of Red Sea Surface Variability Through Indian Ocean Inflow",
+   "url": "https://doi.org/10.1029/2026gl124065",
+   "published_at": "2026-10-05T00:00:00Z",
+   "author": "Ian Plummer et al.",
+   "raw_text": "Abstract Sea surface temperature (SST) and salinity (SSS) variability in the Red Sea influences marine ecosystems, hydrologic variability, and circulation within and outside of the Red Sea. However, understanding of multidecadal surface variability in the Red Sea is limited by short and sparse observational records. To extend beyond the limited observational period, we present 346 years of paired records of Sr/Ca and δ 18 O from a central Red Sea Porites sp. coral providing centuries‐long, sub‐annually resolved records of SST and relative SSS (δ 18 O sw ) variability. We synthesize our records with published northern Red Sea coral records to investigate basin‐scale patterns. Both sites exhibit coherent multidecadal SST and δ 18 O sw variability, which are anticorrelated to the Atlantic Multidecadal Variability and document the crucial role of Indian Ocean inflow in modulating Red Sea surface conditions. Our results refine our understanding of multidecadal drivers of Red Sea surface conditions, with implications for regional hydrology, circulation, and ecology.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Coral skeletal records reveal Atlantic influence on Red Sea temperature and salinity over 346 years. Long-term oceanographic patterns in reef regions inform understanding of natural variability underlying coral stress.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Preliminary in vitro antibacterial activity of Globularia trichosantha root extract and associated changes in tet(A) and floR transcript abundance in a single Vibrio anguillarum isolate",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1955146",
+   "published_at": "2026-10-09T00:00:00Z",
+   "author": "Teoman Özgür Sökmen",
+   "raw_text": "Antibiotic resistance among aquaculture pathogens has stimulated interest in plant-derived antibacterial agents. This preliminary in vitro study examined the antibacterial activity of a single-batch methanolic root extract of Globularia trichosantha against a single Vibrio anguillarum isolate from diseased rainbow trout and described the relative transcript abundance of tet(A) and floR after extract exposure. The derivatized extract was profiled by gas chromatography–mass spectrometry (GC-MS); peak assignments are tentative because authentic reference standards were not used. Disk diffusion (three replicate plates per treatment) used extract-loaded blank disks (2 mg extract per disk), florfenicol (30 µg per disk) and enrofloxacin (5 µg per disk); in combined treatments the extract disk and the antibiotic disk were separate disks on the same plate. Mean zone diameters (including the 6 mm disk) were 17.0 mm for the extract and 12.5 mm for enrofloxacin, whereas florfenicol alone and both combined treatments showed no measurable inhibition beyond the 6 mm antibiotic disk. These results are presented descriptively. Minimum inhibitory and bactericidal concentrations (MIC/MBC), checkerboard/fractional inhibitory concentration index (FICI) and time–kill assays were not performed, so the combined-disk observations are not interpreted as evidence of an interaction between the extract and the antibiotics. Reverse-transcription quantitative PCR (RT-qPCR; 2−ΔΔCt method (Ct, threshold cycle), 16S rRNA as the only reference gene, primer efficiencies not determined) was performed on three parallel replicate cultures per group derived from the single isolate. Relative to the vehicle control, tet(A) and floR showed markedly lower relative transcript abundance at ≈1,000 µg mL-¹ extract (0.24 and 0.19), intermediate values at ≈500 µg mL-¹ (0.58 and 0.71) and values close to the control at ≈250 µg mL-¹ (1.11 and 1.06). No inferential test was applied, and because viability was not measu",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Plant extract shows antibacterial activity against Vibrio anguillarum, a trout pathogen. Results could inform disease management in marine farms raising aquaculture corals or ornamentals.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "yt-wwc",
+   "source_name": "World Wide Corals",
+   "title": "This 400-Gallon Reef Is One of Brazil’s Most Impressive | SPS, LPS & Aquascaping",
+   "url": "https://www.youtube.com/watch?v=wgt4nTu7ffY",
+   "published_at": "2026-10-08T20:00:23Z",
+   "author": "World Wide Corals",
+   "raw_text": "What does it take to build and maintain a 400-gallon mixed reef that has been recognized as one of the most beautiful tanks in Brazil? While traveling through São Paulo, Vic visit Kadu’s impressive reef to talk SPS, LPS, aquascaping, water clarity, lighting, flow, fish, and the day-to-day decisions that keep a mature reef like this thriving. With a custom open aquascape designed by Andre Takahashi, built around Marco Rocks, powerful lighting, a calcium reactor, refugium, extensive filtration, and a carefully selected collection of fish and corals, this system has plenty for experienced reef keepers to take away. But one of the biggest lessons comes from watching the reef itself evolve: as the corals grow, the flow patterns change, and the aquascape and circulation have to evolve with them. In this video: - A look at Kadu’s 400-gallon mixed reef in São Paulo, Brazil - How ozone and activated carbon contribute to the tank’s exceptionally clear water - The lighting setup, including approximately 600 PAR near the top, 400 PAR around the torches, and 250 PAR lower in the aquarium - Kadu’s approach to calcium, magnesium, alkalinity, phosphate, and nitrate - The custom open-space aquascape designed by Andre Takahashi to create room for fish to swim and strong water movement - SPS, LPS, soft corals, sea fans, clams, and long-established coral colonies - Why flow becomes increasingly challenging as corals grow and change the shape of the reef - The filtration system, calcium reactor, refugium, bacterial media, carbon, and trace-element dosing - Fish selection, algae feeding, and strategies for managing aggression in a large community of fish - How Kadu feeds corals with powdered food and uses the return pump to keep food suspended in the display World Wide Corals At World Wide Corals, we’re always interested in seeing how experienced reef keepers around the world approach large, mature reef systems. Visiting Kadu’s aquarium in São Paulo gave us a chance to compare different ",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "wgt4nTu7ffY",
+    "duration_s": "1440",
+    "gist": "Tour of an impressive 400-gallon Brazilian reef featuring SPS, LPS, and custom aquascaping. Shows mature system design, husbandry choices, and equipment setup worth learning from.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-reef-fish",
+   "source_name": "Journal of Animal Ecology",
+   "title": "No effect of short‐term exposure to ocean acidification on individual‐level variation in behaviour and susceptibility to predation in a Great Barrier Reef damselfish",
+   "url": "https://doi.org/10.1111/1365-2656.70346",
+   "published_at": "2026-10-08T00:00:00Z",
+   "author": "Dominique G. Roche et al.",
+   "raw_text": "Abstract Ocean acidification, caused by rising carbon dioxide (CO 2 ) in the atmosphere, has been reported to negatively impact a wide variety of behaviours in fishes, including activity, exploration, and predator avoidance. These effects have been documented at the population level, but many animal species naturally show large and repeatable individual‐level differences in behaviour. How environmental stressors, such as ocean acidification, affect behavioural variation at the individual level remains largely unknown but is vital in understanding adaptation given natural selection operates on variation at the individual rather than population level. Using a statistical approach allowing variation in means and variation in variance to be modelled within a single framework, we quantified individual‐level differences across five behaviours in the coral reef Ambon damselfish Pomacentrus amboinensis (emergence time, activity level, time spent sheltering, thigmotaxis and novel object inspection). We measured behaviour in a novel environment assay, twice before (CO 2 ~450 μatm) and twice following 4–6 days of exposure to predicted end‐of‐century ocean acidification conditions (~1100 μatm). Following behavioural assays, we tested individual survival in a live predation experiment. We used predatory rock cod, Cephalopholis microprion , acclimated to the same CO 2 treatments as Ambon damsels and examined predictors of survival probability. All behaviours in damselfish were moderately and significantly repeatable, with no marked differences in repeatability estimates between the ambient CO 2 and elevated CO 2 treatment groups. Exposure to end‐of‐century ocean acidification conditions had no effect on any of the five behaviours measured, both in terms of group means and residual (within‐individual) variance. The probability of survival in the predation trials was similar for damselfish in the ambient and elevated CO 2 treatment groups. Smaller damselfish as well as those that s",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Study found no population-level behavioral change in damselfish from short-term acidification exposure, despite prior reports. Challenges assumptions about CO₂ sensitivity and individual variation in reef fish responses.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Remote Sensing in Ecology and Conservation",
+   "title": "High‐Resolution Satellite Imagery Reveals Landscape‐Scale Benthic Habitat Changes in a Turbid Coral Reef",
+   "url": "https://doi.org/10.1002/rse2.70112",
+   "published_at": "2026-10-07T00:00:00Z",
+   "author": "Thais Andrade Galvão de Medeiros et al.",
+   "raw_text": "ABSTRACT Coral reefs are under increasing threat from local and global stressors, resulting in changes to the composition and spatial structure of benthic habitats. This study uses high‐spatial resolution satellite imagery and landscape metrics to analyse changes to the shallow, turbid reef at Sebastião Gomes on the Abrolhos Bank in the Southwestern Atlantic Ocean between 2010 and 2024. Benthic habitats were classified using a Random Forest model, which was trained using in situ observations and the following predictors: reflectance bands, spectral indices, texture metrics and satellite‐derived bathymetry from WorldView‐2 and WorldView‐3 imagery. This produced an overall classification accuracy of 91.9% (2010) and 88.3% (2024), although these values should be interpreted in the light of the temporal limitations of the dataset. Change detection analyses revealed a 77.1% decline in coral‐dominated habitats over 14 years, accompanied by a 25.4% increase in macroalgae and a 173.4% increase in zoanthids. This suggests a shift away from coral dominance. Landscape metrics revealed a spatial reorganisation of the reef. Coral habitats showed reductions in class area and largest patch size, as well as increased fragmentation and greater spatial isolation. In contrast, algal habitats expanded in a manner consistent with patch coalescence and spatial consolidation. This resulted in increasingly homogeneous benthic landscapes. Zoanthids displayed intermediate behaviour, expanding into newly available substrates without forming extensive, continuous patches. By integrating classification, change detection and landscape metrics, this study provides a comprehensive, spatially explicit assessment of reef structural change. The results highlight not only the loss of coral dominance, but also the reconfiguration of spatial complexity, which are critical for reef resilience and recovery after disturbance. This framework demonstrates the value of combining remote sensing and landscape e",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Satellite analysis of a turbid southwestern Atlantic reef over 14 years reveals shifts in benthic habitat composition and spatial structure. Long-term habitat monitoring at scale reveals stress patterns that single-site surveys cannot detect.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Marine Science",
+   "title": "Spatial attention–driven hybrid Vision Transformers for automated classification of crown-of-thorns starfish in coral reef ecosystems",
+   "url": "https://doi.org/10.3389/fmars.2026.1848601",
+   "published_at": "2026-10-05T00:00:00Z",
+   "author": "Yogasrinithi P. et al.",
+   "raw_text": "Coral reefs play the main role in marine ecology, as home and shelter to many aquatic species, and quite importantly, supporting local economies. The danger to coral reefs from coral bleaching is joined by Acanthaster planci invasions that can extensively harm these sensitive colonies. The normal practice has been the manual identification of these starfish by divers and snorkelers. This study proposes an automatic deep learning-based approach to detecting and classifying such species within their natural underwater environments. In its architectural setup, the system fashions advanced types of Convolutional Neural Networks (CNN) together with Vision Transformer (ViT) models. This study evaluated several pre-trained CNN and transformer models on the marine species dataset, achieving test classification accuracy of 91.80% for MobileNetV3-Small, 94.54% for VGG19, 94.54% for ResNet50, 95.90% for DenseNet121, 97.54% for Swin-Tiny, 97.54% for CrossViT, and 97.81% for FastViT-T8. The proposed Spatial-Attention Swin + FastViT + CrossViT framework achieved an overall test classification accuracy of 99.18%. It will also make the detection process much safer and faster, besides being more dependable in coral reef protection.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Deep learning system for automated crown-of-thorns starfish detection in reef surveys. Addresses a major reef pest through technology that could improve monitoring and management of wild reefs.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-reef-fish",
+   "source_name": "PeerJ",
+   "title": "Reef fish assemblages on Acropora patches in the Colombian Caribbean: resistance to reef degradation",
+   "url": "https://doi.org/10.7717/peerj.21744",
+   "published_at": "2026-10-05T00:00:00Z",
+   "author": "Rocío García‐Urueña et al.",
+   "raw_text": "Coral reefs are crucial habitats for many fish species because they serve as feeding and shelter sites. However, due to their sensitivity to environmental changes, reef degradation has led to a drastic decline in fish and reef assemblages, which has also been reflected in associated economic activities. The loss of branching corals Acropora palmata and A. cervicornis has reached up to 90% in the Colombian Caribbean, resulting in a reduction in the abundance and diversity of associated fish populations. During two time periods (2011–2012 and 2023–2024) across the Colombian Caribbean, fish associated with Acropora formations were evaluated in relation to patch size and health status of these coral species. The best conserved patches of A. palmata were found in the Tayrona National Natural Park (TNNP) and of A. cervicornis in the reefs of the Urabá Gulf. A total of 113 fish species from 34 families were associated with A. palmata , with the most represented families being Labridae, Haemulidae, Pomacentridae, and Serranidae. Acanthurus coeruleus, A. tractus, Chaetodon ocellatus, Haemulon flavolineatum, Scarus iseri , Sparisoma viride , Thalassoma bifasciatum, Abudefduf saxatilis , Microspathodon chrysurus , Stegastes adustus , and Canthigaster rostrata were the species common to all reef locations. In A. cervicornis formations, 78 species belonging to 25 families were recorded, with Labridae and Pomacentridae as the most abundant. Stegastes planifrons , Cephalopholis cruentata, and Hypoplectrus puella were the species common to all locations. The highest number of fish species was found in the TNNP (85 for A. palmata , 55 for A. cervicornis ). Although the status is critical throughout the Caribbean, further aggravated by the 2023–2024 bleaching event which caused A. palmata formations to practically disappear from two localities, this structural loss has not yet been reflected in the associated ichthyofauna. These results suggest that the fish assemblages linked to Acr",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Fish assemblages on remaining Acropora patches in Colombian Caribbean show resilience despite 90% branching coral loss. Documents resistance mechanisms in degraded reefs and coral-fish interdependence.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Projected intensification of summer upwelling along the Southeastern Coast of China",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1964804",
+   "published_at": "2026-10-09T00:00:00Z",
+   "author": "Fanglou Liao",
+   "raw_text": "Coastal upwelling is a key dynamical process along the southeastern coast of China, regulating regional circulation, biogeochemical cycling, and marine ecosystem dynamics. While previous studies have provided valuable insights into the mechanisms and variability of this coastal upwelling, its future evolution and underlying physical drivers under climate change remain unclear. Here, we investigate projected changes in coastal upwelling along the southeastern coast of China during 2006–2100 using a high-resolution (0.1°) coupled-model realization under the Representative Concentration Pathway 8.5 scenario. During 2006–2100, the area-weighted mean oceanic vertical velocity at 30 m increases at 0.755 m day-1 century-1, while the upwelling area increases at 1.822 × 10³ km² century-1. The trend in the total upwelling volume transport is approximately 0.27 Sv century-1. Enhanced Ekman transport makes the largest contribution (0.26 Sv century-1), accompanied by a geostrophic-transport trend of 0.07 Sv century-1. Marine heatwave (MHW) metrics based on local linear detrended SST are generally lower at the selected coastal sites than at offshore sites, with an 18.3% reduction in MHW days, a 33.2% reduction in mean annual duration, and a 2.4% reduction in mean cumulative intensity. These coastal–offshore contrasts are to some extent consistent with a potential moderating influence of upwelling on MHWs, though rigorous attribution and mechanistic analyses of this effect remain open for dedicated future investigations. This study can advance our understanding of ocean dynamics along the southeastern coast of China under future climate change.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Coastal upwelling intensity along southeastern China is projected to increase through 2100 under climate scenarios. Upwelling drives nutrient cycling and regional ecosystem productivity affecting wild reef dynamics.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "gsr-bsky",
+   "source_name": "Great Southern Reef Foundation — Bluesky",
+   "title": "Through the Great Southern Reef Research Partnership, teams have surveyed priority regions across 5 states…",
+   "url": "https://bsky.app/profile/greatsouthernreef.bsky.social/post/3mxfjo3h77c25",
+   "published_at": "2026-10-08T22:39:00Z",
+   "author": null,
+   "raw_text": "Through the Great Southern Reef Research Partnership, teams have surveyed priority regions across 5 states, revisited long-term monitoring sites & understudied reefs. Support from The Ian Potter Foundation helped establish the partnership, connecting researchers & decades of evidence across the GSR.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "The Great Southern Reef Research Partnership surveyed and revisited monitoring sites across five Australian states. Long-term reef surveillance establishes the ecological baseline reef keepers watch in wild populations.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Effects of sea ice model characteristics on Arctic marine primary production",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1844377",
+   "published_at": "2026-10-08T00:00:00Z",
+   "author": "Shuang Gao",
+   "raw_text": "The Arctic environment is rapidly changing and drastic declines in sea ice extent and thickness have been observed over the past decades. The thinning of the ice pack affects its dynamics and makes it more susceptible to form fractal features such as leads and ridges at scales of meters to kilometres, as well as larger openings known as polynyas of tens to tens of thousands of square kilometres. Observations show that their presence influences polar phytoplankton communities and productivity, pointing at the importance of representing such sea ice features in biogeochemical ocean modelling. The following study investigates how Arctic primary production and carbon export simulated with the biogeochemical model HYCOM-ECOSMO are affected by different sea ice models. Three simulations are available; one coupled to the Los Alamos sea ice model (CICE) with an elastic-viscous-plastic rheology. Two other simulations were run with the next generation sea ice model (neXtSIM) with a brittle rheology that better represents features such as leads and ridges. The neXtSIM(NOlight) simulation was run with the standard neXtSIM code and does not allow for light flux through the ice. In the neXtSIM(light) simulation, the light flux was parameterised to go through the young ice class with the objective to investigate the effect of refreezing leads on phytoplankton growth. Sea ice properties and key biogeochemical fields were analysed for the Chukchi Sea. We found that the choice of sea ice model rheology caused differences in the spring-bloom timing via sea ice concentration (SIC) and associated light availability. This further affected the timing of spring carbon export. The light flux through ice in CICE and neXtSIM(light) increased the light availability particularly during late spring and summer, and affected SIC in neXtSIM(light) compared to neXtSIM(NOlight). These findings suggest that the choice of sea ice model affects simulated primary production in HYCOM-ECOSMO, and that a be",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Research on how sea ice features affect Arctic phytoplankton and primary production under climate change. Models coral-reef productivity drivers in cold-water systems with shifting baselines.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "scripps-bsky",
+   "source_name": "Scripps Institution of Oceanography — Bluesky",
+   "title": "🌊 How is the incoming strong #ElNiño shaping up to impact California's coastline, kelp ecosystems and marine…",
+   "url": "https://bsky.app/profile/scrippsocean.bsky.social/post/3mxcnnrky7s2g",
+   "published_at": "2026-10-07T19:13:00Z",
+   "author": null,
+   "raw_text": "🌊 How is the incoming strong #ElNiño shaping up to impact California's coastline, kelp ecosystems and marine life? Scripps Oceanography scientists Clarissa Anderson and Ed Parnell share their expertise with @lilaseidman.bsky.social of @latimes.com. ⤵️ https://www.latimes.com/environment/newsletter/2026-10-01/what-el-nino-means-for-california-sea-life",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Scripps scientists discuss El Niño impact on California kelp and marine ecosystems. Kelp ecosystems are temperate, not tropical reef, but ENSO drives global reef bleaching cycles.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Can a 1 kWh Power Station Keep a Reef Tank Alive During a Blackout? We Tested the Bluetti Elite 100 V2",
+   "url": "https://reefs.com/can-a-1-kwh-power-station-keep-a-reef-tank-alive-during-a-blackout-we-tested-the-bluetti-elite-100-v2/",
+   "published_at": "2026-10-06T14:00:13Z",
+   "author": "danireef",
+   "raw_text": "A power outage lasting a few hours can quickly become a serious problem for a reef aquarium. Circulation stops, oxygen levels begin to fall, filtration is interrupted and, in a heavily stocked system, time can become critical surprisingly quickly.&#8230; The post Can a 1 kWh Power Station Keep a Reef Tank Alive During a Blackout? We Tested the Bluetti Elite 100 V2 appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Test of 1 kWh battery system's ability to sustain a reef tank through blackout, examining circulation, aeration and filtration runtime. Practical assessment of backup power sizing for system-critical periods.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "yt-tidalgardens",
+   "source_name": "Tidal Gardens",
+   "title": "2 Year Update with an MRC Filter Roller",
+   "url": "https://www.youtube.com/watch?v=DWMh4BVO8Ts",
+   "published_at": "2026-10-08T23:30:12Z",
+   "author": "Tidal Gardens",
+   "raw_text": "It has been two years now since I started using MRC filter rollers here at the coral farm. I feel comfortable talking about it having a bit of experience with them. Are they worth it? Join this channel to get access to perks: https://www.youtube.com/channel/UCGdAIpjFq4vygKzXAyDKKtQ/join http://www.tidalgardens.com #tidalgardens #coral #reefaquarium Copyright Information: This video was shot and edited by Tidal Gardens. Tidal Gardens owns all intellectual property rights to this content.",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "DWMh4BVO8Ts",
+    "duration_s": "900",
+    "gist": "A two-year field report on MRC filter-roller performance at a coral farm. Practical data on mechanical filtration will interest keepers choosing equipment.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "yt-saltwateraquarium",
+   "source_name": "SaltwaterAquarium.com",
+   "title": "Inside a Self-Built House with a 2,500L Custom Reef Tank & Paludarium! | Euro Reefing Roadtrip",
+   "url": "https://www.youtube.com/watch?v=e3zYqx1y8pU",
+   "published_at": "2026-10-06T17:00:32Z",
+   "author": "SaltwaterAquarium",
+   "raw_text": "10-06-2026 Join Mark and Jimmy on location in the scenic Bavarian Forest of Germany as they explore a truly one-of-a-kind home built from scratch by its owners, Daniel and Sandra. Featuring a unique double-shell breathing wall architecture, this incredible residence houses a massive 2,500-liter (660-gallon) custom saltwater reef tank topped with a fresh water paludarium and amphibian misters. Step inside to see the incredible variety of livestock—including an anthias, gem tang, and leopard wrasses—and tour the ultra-compact, hyper-organized German filtration room complete with automatic water changes and custom micro-dosing. ______________________________________________ ⚠️ Products In This Video ► Tunze DOC Skimmer 9410 DC (9410.001) - https://www.saltwateraquarium.com/doc-skimmer-9410-dc-9410-001-tunze/ ► Tunze Turbelle Stream 3 Flow Pump (6150.000) - https://www.saltwateraquarium.com/turbelle-stream-3-flow-pump-6150-000-tunze/ ► Tunze Turbelle Ecostream 6255.005 Flow Pump HUB Edition - https://www.saltwateraquarium.com/turbelle-ecostream-6255-005-flow-pump-hub-edition-tunze/ ► Tunze MAR 3181 Macro Algae Chaeto Reactor - https://www.saltwateraquarium.com/mar-3181-macro-algae-chaeto-reactor-tunze/ ► Bubble Magus T12 Four Channel Slave Dosing Pump - https://www.saltwateraquarium.com/t12-four-channel-slave-dosing-pump-bubble-magus/ ► Blonde Naso Tang (Naso elegans) Large - https://www.saltwateraquarium.com/blonde-naso-tang-naso-elegans-large-saq-chicago-fish/ ► Aquacultured Derasa Clam - 4\" - https://www.saltwateraquarium.com/aquacultured-derasa-clam-4-tridacna-derasa-ora-chicago/ ► Aquacultured Ultra Gold Maxima Clam - 1.5\" - https://www.saltwateraquarium.com/aquacultured-ultra-gold-maxima-clam-1-5-tridacna-maxima-ora/ ______________________________________________ Website - https://www.saltwateraquarium.com Follow us on Facebook - https://www.facebook.com/swaqdotcom/ Follow us on Instagram - https://www.instagram.com/saltwateraquariumdotcom/ Follow us on TikTok - h",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "e3zYqx1y8pU",
+    "duration_s": "900",
+    "gist": "Videotour of a custom 2,500-liter reef tank and paludarium built into owner-designed home in Bavaria, featuring anthias, gem tangs, leopard wrasses, and integrated filtration. Documentation of high-end European system design and husbandry practices.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "projectseahorse-bsky",
+   "source_name": "Project Seahorse — Bluesky",
+   "title": "🤝 Join over 4,400 citizen scientists in uploading photos and details of seahorse sightings to iSeahorse on…",
+   "url": "https://bsky.app/profile/projectseahorse.bsky.social/post/3mwweoxt7pr2u",
+   "published_at": "2026-10-02T22:00:00Z",
+   "author": null,
+   "raw_text": "🤝 Join over 4,400 citizen scientists in uploading photos and details of seahorse sightings to iSeahorse on iNaturalist.org. This helps our scientists fill research gaps to better protect these magical fishes and the seas. Learn more here: www.iseahorse.org",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "iSeahorse crowdsources seahorse sighting data on iNaturalist to support research and protection efforts. Seahorses are kept in marine tanks and understanding their wild populations informs captive husbandry practices.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "openalex-reef-fish",
+   "source_name": "Landscape Ecology",
+   "title": "Habitat-shifting predatory and herbivorous reef fishes exhibit spatial partitioning despite shared biophysical drivers of seascape use",
+   "url": "https://doi.org/10.1007/s10980-026-02456-2",
+   "published_at": "2026-10-08T00:00:00Z",
+   "author": "Isla N. Spence et al.",
+   "raw_text": null,
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Study of spatial partitioning in reef fish despite shared environmental drivers. Incremental work on wild reef fish behavior and habitat use.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Marine Pollution Bulletin",
+   "title": "UAV-based super-resolution instance segmentation enables ecological monitoring of sea cucumbers in shallow coral reef habitats",
+   "url": "https://doi.org/10.1016/j.marpolbul.2026.120417",
+   "published_at": "2026-10-07T00:00:00Z",
+   "author": "Fan Zhao et al.",
+   "raw_text": "Accurate monitoring of sea cucumbers from UAV imagery remains challenging because submerged individuals often exhibit low contrast, camouflage against coral-rubble backgrounds, and weak boundary information under water-surface disturbance. In particular, key visual cues such as body contours, surface texture, and papillae-like structures can be severely blurred in aerial images, limiting the reliability of automated recognition. To address these challenges, this study proposes SR-HoloMambaNet, an integrated framework with a direct high-resolution path and a super-resolution-assisted path. Native high-resolution patches can be processed directly by HoloMambaNet, while resolution-limited patches are reconstructed by MambaIR at a 4× magnification factor before entering the same instance-segmentation network. HoloMambaNet incorporates VSSBlock, CSwinTR, and Large Separable Kernel Attention (LSKA) to improve long-range dependency modeling, multi-scale feature representation, and segmentation under camouflage and complex seabed backgrounds. Experimental results showed that SRR substantially improved the downstream segmentation performance of degraded images, increasing the mean average precision (mAP@50) from 63.7% with bicubic interpolation to 82.7% with MambaIR reconstruction. On high-quality UAV images, the proposed HoloMambaNet achieved 93.7% precision, 82.0% recall, and 95.7% mAP@50 with only 4.10 M parameters and an 8.7 MB model size, outperforming mainstream instance-segmentation models such as Mask R-CNN, RT-DETR, and YOLO-series baselines. Under a frozen-source zero-shot protocol on five public external datasets, HoloMambaNet achieved the highest box mAP@50 on each dataset and a macro-average of 41.1%. The expert-verified annotation masks were also used to derive annotation-based reference summaries of patch-scale abundance, image-space apparent cover, morphology-related proxies, and local spatial arrangement. These results indicate that SR-HoloMambaNet provides ",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "New AI framework uses super-resolution imaging to identify sea cucumbers in shallow reef UAV footage, addressing camouflage and blur challenges. Automated monitoring could scale ecological surveys, though application to tank-keeping remains distant.",
+    "relevance": "0.50"
+   }
+  }
+ ]
+}
