@@ -1,8 +1,8 @@
-// Starts the weekly issue on time.
+// Starts the weekly issue on time: Friday, 7 a.m. Pacific.
 //
-// GitHub's own cron is best-effort. Since September the Friday 10:17 schedule
-// in .github/workflows/daily.yml has started between 14:27 and 17:00 UTC —
-// four to seven hours late, and later every week. A workflow_dispatch is an
+// GitHub's own cron is best-effort. Since September its Friday 10:17 UTC
+// schedule had started between 14:27 and 17:00 UTC — four to seven hours late,
+// and later every week. A workflow_dispatch is an
 // ordinary API call, and GitHub starts the run it asks for within seconds. So
 // this Worker owns the timing, and GitHub's schedule is kept only as the
 // fallback if this ever fails.
@@ -63,15 +63,34 @@ export async function dispatch(token, fetchImpl = fetch) {
   throw new Error(`could not start the weekly issue — ${last}`);
 }
 
-// An automatic run on any other day is not harmless: the guard finds no page
-// for that date, so it builds a fresh issue and emails every subscriber.
-// Cloudflare's dashboard can fire a cron on demand, and a test press on a
-// Tuesday must not do that. Manual issues go through GitHub's Run workflow.
+// When the issue goes out, in the editor's own time. Cloudflare's cron is UTC
+// only and knows nothing of daylight saving, and 7 a.m. Pacific is 14:00 UTC in
+// summer but 15:00 in winter. So wrangler.toml fires at both, and this decides
+// which of the two is the real one, by asking what time it is in Los Angeles.
+// The other returns quietly; it is expected every week, not a failure.
+export const TIME_ZONE = "America/Los_Angeles";
+export const LOCAL_HOUR = 7;
+
+export function localTime(when) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TIME_ZONE, weekday: "short", hour: "numeric", hourCycle: "h23",
+  }).formatToParts(new Date(when));
+  const get = (type) => parts.find((p) => p.type === type).value;
+  return { weekday: get("weekday"), hour: Number(get("hour")) };
+}
+
 export async function fire(scheduledTime, token, fetchImpl = fetch) {
-  const day = new Date(scheduledTime).getUTCDay();
-  if (day !== 5) {
+  const { weekday, hour } = localTime(scheduledTime);
+  // An automatic run on any other day is not harmless: the guard finds no page
+  // for that date, so it builds a fresh issue and emails every subscriber.
+  // Cloudflare's dashboard can fire a cron on demand, and a test press on a
+  // Tuesday must not do that. Manual issues go through GitHub's Run workflow.
+  if (weekday !== "Fri") {
     throw new Error(
-      `refusing to start the weekly issue: ${new Date(scheduledTime).toISOString()} is not a Friday (UTC)`);
+      `refusing to start the weekly issue: ${new Date(scheduledTime).toISOString()} is not a Friday in ${TIME_ZONE}`);
+  }
+  if (hour !== LOCAL_HOUR) {
+    return { ok: true, skipped: `it is ${hour}:00 in ${TIME_ZONE}, not ${LOCAL_HOUR}:00` };
   }
   return dispatch(token, fetchImpl);
 }
@@ -81,6 +100,8 @@ export default {
   // failed in Cloudflare's dashboard, which is where a failure is visible.
   async scheduled(controller, env, ctx) {
     const result = await fire(controller.scheduledTime, env.GITHUB_TOKEN);
-    console.log(`weekly issue dispatched (attempt ${result.attempt})`);
+    console.log(result.skipped
+      ? `not this hour: ${result.skipped}`
+      : `weekly issue dispatched (attempt ${result.attempt})`);
   },
 };

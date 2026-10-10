@@ -138,7 +138,7 @@ why `send --dry-run` and `send --check` exist: the request can be read before it
 is made, and the first real call is a read.
 
 **Sending is automatic on the Friday run**, alongside scoring, since the
-first send was proved end to end by hand. The run is started at 10:17 UTC by a
+first send was proved end to end by hand. The run is started at 7 a.m. Pacific by a
 Cloudflare Worker (`trigger/`), because GitHub's own schedule had drifted four
 to seven hours late; that schedule remains as the fallback. A manual dispatch still has to ask for
 it — a mid-week run is almost always a test, and an inbox cannot be un-sent.

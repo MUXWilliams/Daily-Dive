@@ -1,10 +1,10 @@
 # The Friday trigger
 
-A Cloudflare Worker that starts the weekly issue at **Friday 10:17 UTC**, on
-time.
+A Cloudflare Worker that starts the weekly issue at **Friday, 7 a.m. Pacific**,
+on time.
 
-GitHub's own schedule is best-effort, and since September it has started the
-Friday run between 14:27 and 17:00 UTC: four to seven hours late, and later
+GitHub's own schedule is best-effort. From September it started the Friday
+10:17 UTC run between 14:27 and 17:00 UTC: four to seven hours late, and later
 every week. Starting a workflow through GitHub's API takes seconds. So this
 Worker keeps the clock, and once a week it asks GitHub to run
 `.github/workflows/daily.yml` exactly as the schedule would.
@@ -15,11 +15,15 @@ not at all.
 
 ## What it does, and what it cannot do
 
-- Every Friday at 10:17 UTC it sends one request: run `daily.yml` on `main`
-  with `automatic` set. That input makes the run behave like the schedule:
+- Every Friday at 7 a.m. Pacific it sends one request: run `daily.yml` on
+  `main` with `automatic` set. That input makes the run behave like the schedule:
   skip if today's issue is already published, otherwise score, publish and
   email.
-- It refuses to start anything on any day but Friday. Cloudflare can fire a
+- Cloudflare's cron runs on UTC and ignores daylight saving. 7 a.m. Pacific
+  is 14:00 UTC in summer and 15:00 in winter, so it fires at both. Each time,
+  it checks the clock in Los Angeles and goes ahead only at 7. The other fire
+  logs "not this hour" and does nothing; that is expected every week.
+- It refuses to start anything on any day but Friday, Pacific time. Cloudflare can fire a
   cron on demand. An automatic run on a Tuesday would find no Tuesday issue,
   build one and email every subscriber.
 - It has no web address and no HTTP handler, so nobody can call it. It stores
@@ -29,7 +33,9 @@ not at all.
   touch another repository.
 
 **Sending twice is guarded in two places.** Up to three automatic runs now
-arrive each Friday: this one, then GitHub's late 10:17 and its 14:47 catch-up.
+arrive each Friday: this one, then GitHub's 15:17 UTC and its 18:47 UTC
+catch-up, both usually hours late. 15:17 UTC is 7:17 a.m. Pacific at the
+earliest, so even a punctual fallback cannot go out before 7.
 Only one runs at a time. The workflow's guard job skips any automatic run once
 the day's page exists. Behind it, `daily-dive run` will not email a date the
 `sent` table already records.
@@ -77,14 +83,14 @@ npx wrangler secret put GITHUB_TOKEN     # paste the token when asked
 A redeploy keeps the secret, so the secret is set only once.
 
 **Check it took.** The Worker's **Settings** → **Trigger events** should show
-`17 10 * * 5`. Do not use a "trigger now" button to test it. On any day but
+two crons, `0 14 * * 5` and `0 15 * * 5`. Do not use a "trigger now" button to test it. On any day but
 Friday the Worker refuses, by design. On a Friday it would really start the
 week's issue.
 
 ## How to tell it worked
 
 On Friday, open the repository's **Actions** tab. **Build issue** should show a
-run started a minute or two after 10:17 UTC, triggered by `workflow_dispatch`
+run started a minute or two after 7 a.m. Pacific, triggered by `workflow_dispatch`
 under your name. Hours later GitHub's own schedule arrives. Its runs end at the
 guard with *"Nothing to do — another automatic run got here first."*
 
@@ -103,9 +109,12 @@ GitHub's late schedule covers that week either way.
 
 ## Changing it
 
-- **The time.** Change the cron here *and* the first cron in `daily.yml`.
-  `pytest` fails until the two match. Cron is UTC and ignores daylight saving:
-  10:17 UTC is 6:17 am US Eastern in summer, 5:17 am in winter.
+- **The time.** It is set in three places, and `pytest` checks all three:
+  - `LOCAL_HOUR` and `TIME_ZONE` in `worker.js`.
+  - The two UTC crons here: the hour that is `LOCAL_HOUR` under daylight time,
+    and the one that is `LOCAL_HOUR` under standard time.
+  - GitHub's fallback crons in `daily.yml`, which must be no earlier than the
+    later of those two UTC hours.
 - **The code.** `node --test trigger/worker.test.mjs` runs the Worker's tests
   with a stand-in for GitHub. Nothing goes over the network. `pytest` runs them
   too, and checks that the Worker and the workflow agree on the file, the branch

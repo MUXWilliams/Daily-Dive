@@ -3990,8 +3990,9 @@ def test_every_denied_journal_says_why_it_is_there():
 
 # --- the external trigger ---------------------------------------------------
 #
-# GitHub's schedule started the Friday 10:17 run between 14:27 and 17:00 UTC
-# from September on, later every week. trigger/worker.js is a Cloudflare
+# GitHub's schedule started the Friday 10:17 UTC run between 14:27 and 17:00
+# UTC from September on, later every week. The issue now goes out at 7 a.m.
+# Pacific. trigger/worker.js is a Cloudflare
 # Worker that sends a workflow_dispatch with `automatic` set, on its own cron;
 # an API call starts a run within seconds. GitHub's schedule stays as the
 # fallback.
@@ -4040,13 +4041,25 @@ def test_the_worker_and_the_workflow_agree_on_the_dispatch():
 
 
 def test_the_worker_fires_when_the_schedule_says_it_should():
-    """One intended time, written in two places. If the Worker's cron drifted
-    from the schedule's, the fallback would be covering a different hour."""
+    """7 a.m. Pacific is 14:00 UTC under PDT and 15:00 under PST, and cron is
+    UTC on both platforms. The Worker fires at both and picks the right one
+    (its own tests walk a year of Fridays). GitHub's fallback must never come
+    earlier than that in either season, even on a week it is punctual — or it
+    would publish before 7 a.m. and beat the Worker to it."""
     import tomllib
 
     cfg = tomllib.loads((TRIGGER / "wrangler.toml").read_text(encoding="utf-8"))
-    first_cron = re.findall(r'cron:\s*"([^"]+)"', WORKFLOW_TEXT)[0]
-    assert cfg["triggers"]["crons"] == [first_cron]
+    assert cfg["triggers"]["crons"] == ["0 14 * * 5", "0 15 * * 5"]
+    worker = (TRIGGER / "worker.js").read_text(encoding="utf-8")
+    assert 'TIME_ZONE = "America/Los_Angeles"' in worker
+    assert "LOCAL_HOUR = 7;" in worker
+
+    fallback = re.findall(r'cron:\s*"([^"]+)"', WORKFLOW_TEXT)
+    assert fallback, "the GitHub schedule is the fallback; keep it"
+    for cron in fallback:
+        minute, hour, dom, month, dow = cron.split()
+        assert (dom, month, dow) == ("*", "*", "5"), cron
+        assert int(hour) >= 15, f"{cron} could fire before 7 a.m. Pacific"
     # Reachable only by its own cron: no routes, no workers.dev URL.
     assert cfg.get("workers_dev") is False
     assert "routes" not in cfg and "route" not in cfg

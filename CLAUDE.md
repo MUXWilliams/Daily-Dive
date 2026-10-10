@@ -133,7 +133,7 @@ picks → collapse → resource → render → commit → deploy → send`
 |---|---|
 | Live site | <https://www.theloneaquarist.com> |
 | Back issues | `/archive.html`, permalinks at `/issues/YYYY-MM-DD.html` |
-| Build | `.github/workflows/daily.yml` — Friday 10:17 UTC, plus manual |
+| Build | `.github/workflows/daily.yml` — Friday 7 a.m. Pacific, plus manual |
 | Friday trigger | `trigger/` — a Cloudflare Worker that starts the build on time; GitHub's schedule is the late fallback |
 | Redeploy | `.github/workflows/deploy.yml` — publishes committed `site/` as-is |
 | Editorial rules | `prompts/score.system.md`, `docs/industry-brief.md` |

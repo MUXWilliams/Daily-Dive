@@ -32,7 +32,7 @@ may have allowlisted the user-agent string.)*
 - **Takes signups on its own domain** — a Buttondown form embedded in the issue
   footer and on `/subscribe`, rather than an iframe or an off-site bounce.
 - **Emails** the issue to a Buttondown list automatically every Friday at
-  10:17 UTC, started by a small Cloudflare Worker, with GitHub's own schedule
+  7 a.m. Pacific, started by a small Cloudflare Worker, with GitHub's own schedule
   as the fallback. If the provider refuses an email,
   the run opens a GitHub issue saying why, and the week can be resent.
 - **Opens with a greeting** on the page and in the email, which remarks on the
@@ -290,16 +290,20 @@ opt-in until the first send had been proved end to end by hand — an inbox cann
 be un-sent, so that was worth doing once before letting it run unattended.
 
 **The run is started from outside GitHub.** GitHub's schedule is best-effort.
-It dropped two of the first three Friday runs, and since then the 10:17 run has
+It dropped two of the first three Friday runs, and after that its 10:17 UTC run
 started between 14:27 and 17:00 UTC: four to seven hours late, and later each
 week. So a Cloudflare Worker, `trigger/worker.js`, keeps the clock. At Friday
-10:17 UTC it asks GitHub's API to run the workflow with `automatic` set, which
-behaves exactly like the schedule, and GitHub starts it within seconds. Its
+7 a.m. Pacific it asks GitHub's API to run the workflow with `automatic` set,
+which behaves exactly like the schedule, and GitHub starts it within seconds.
+Cloudflare's cron is UTC only, so the Worker fires at 14:00 and 15:00 UTC and
+goes ahead on whichever is 7 a.m. in Los Angeles that week. Its
 token can start a workflow and do nothing else. Setup is in
 [trigger/README.md](trigger/README.md).
 
-GitHub's own schedule stays as the fallback, with two attempts: Friday 10:17
-and a 14:47 catch-up. Both arrive hours late. That makes up to three automatic
+GitHub's own schedule stays as the fallback, with two attempts: Friday 15:17
+UTC and an 18:47 catch-up. 15:17 UTC is 7:17 a.m. Pacific in winter and 8:17 in
+summer, so even a punctual fallback cannot publish before 7 a.m. In practice
+both arrive hours late. That makes up to three automatic
 runs each Friday, and exactly one builds. Runs queue rather than overlap. A
 guard job ends any automatic run once that day's page exists. Behind the guard,
 `daily-dive run` will not email a date the `sent` table already records.
@@ -343,7 +347,7 @@ theirs ships fixed at 220px with scrolling disabled. See
 
 | Workflow | Runs | Does |
 |---|---|---|
-| **Build issue** — `.github/workflows/daily.yml` | Fridays at 10:17 UTC via the Worker, GitHub's schedule as fallback, and on demand | Fetches, scores, publishes and emails the week |
+| **Build issue** — `.github/workflows/daily.yml` | Fridays at 7 a.m. Pacific via the Worker, GitHub's schedule as fallback, and on demand | Fetches, scores, publishes and emails the week |
 | **Redeploy the site** — `.github/workflows/deploy.yml` | on demand | Publishes committed `site/` as it stands, without building |
 | **Score eval** — `.github/workflows/eval.yml` | on demand | Scores the 128 labelled items and commits a report |
 | **Label a pick** — `.github/workflows/label-picks.yml` | when an issue is opened or edited | Labels a pick from an allowlisted author, however it was filed |

@@ -54,10 +54,10 @@ on:
       # decides when the issue goes out.
       #
       # GitHub's own `schedule` below is best-effort and has never been
-      # punctual: since September the 10:17 cron has started between 14:27 and
+      # punctual: from September its 10:17 UTC cron started between 14:27 and
       # 17:00 UTC, later every week. A workflow_dispatch is an API call, and an
       # API call starts a run within seconds. trigger/worker.js is a Cloudflare
-      # Worker that makes that call on its own cron, Fridays at 10:17 UTC,
+      # Worker that makes that call on its own cron, Fridays at 7 a.m. Pacific,
       # passing this input.
       #
       # workflow_dispatch rather than repository_dispatch for the token it
@@ -77,20 +77,21 @@ on:
   # has a bad morning, GitHub's late schedule still produces the week — just
   # hours later. On a normal week the Worker's run has already published, and
   # the guard job skips both of these.
+  #
+  # The issue goes out at 7 a.m. Pacific. These crons are UTC and ignore
+  # daylight saving, so they are set where they can never come early: 15:17
+  # UTC is 7:17 a.m. under PST and 8:17 a.m. under PDT. If GitHub ever turned
+  # punctual, the fallback still could not beat the Worker or the editor's
+  # morning. A test holds every cron here at or after 15:00 UTC.
   schedule:
-    # Friday 10:17 UTC — 6am US Eastern in summer, 5am in winter. Cron has no
-    # notion of daylight saving, so the local hour shifts by one twice a year;
-    # that is the accepted cost of not running a timezone-aware scheduler. The
-    # Worker uses the same expression for the same reason.
-    #
     # :17 rather than :00 because GitHub was thought to drop top-of-the-hour
     # runs. That theory did not hold, and lateness turned out to be the real
     # problem — which no choice of minute fixes. The minute stays because it
     # costs nothing.
-    - cron: "17 10 * * 5"
+    - cron: "17 15 * * 5"
 
     # The catch-up. Whatever drops the first run does not get a second vote.
-    - cron: "47 14 * * 5"
+    - cron: "47 18 * * 5"
 
 # A publishing run needs three grants beyond the default read: contents to
 # commit the issue and the archive DB back, and pages + id-token for the

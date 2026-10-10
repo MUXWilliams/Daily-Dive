@@ -9,8 +9,8 @@ compatibility_date = "2026-08-31"
 workers_dev = false
 
 [triggers]
-# Friday 10:17 UTC — the same expression as the schedule in
-# .github/workflows/daily.yml, so the intended time is written once in each
-# place and a test asserts they agree. 6am US Eastern in summer, 5am in winter;
-# cron is UTC and ignores daylight saving, here as there.
-crons = ["17 10 * * 5"]
+# Friday 7 a.m. Pacific. Cron here is UTC and ignores daylight saving, so this
+# fires at both hours that can be 7 a.m. in Los Angeles — 14:00 UTC under PDT,
+# 15:00 under PST — and worker.js dispatches only on the one that is. A test
+# walks a full year of Fridays and checks exactly one goes ahead each week.
+crons = ["0 14 * * 5", "0 15 * * 5"]
