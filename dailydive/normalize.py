@@ -205,6 +205,30 @@ def _normalize_youtube_api(source: Source, body: bytes) -> list[Item]:
 REPOSITORY_VENUES = frozenset({"repository", "other"})
 
 
+def _venue_key(name: str) -> str:
+    """A journal name, compared without regard to case or spacing."""
+    return " ".join(name.split()).casefold()
+
+
+# Journals this publication does not carry, whatever the paper. An editorial
+# list, not a computed one: every name here is a decision about a real
+# publisher, so each is added by hand, with the date and the reason, and none
+# is typed in from memory or imported from someone else's list.
+#
+# Matched on the whole name, ignoring case and spacing — never as a substring.
+# Questionable journals choose generic names deliberately, so a fragment like
+# "International Journal of Scientific Research" is shared with titles that
+# have nothing to do with them, and a substring rule would quietly drop those
+# too. The full name, exactly as OpenAlex reports it, or nothing.
+DENIED_VENUES = frozenset(_venue_key(name) for name in (
+    # 2026-10-10. Its name tripped Buttondown's spam blocklist ("Contains
+    # prohibited keyword: International Journal of Scientific Research") and
+    # the 2026-10-09 email was refused. The editor chose to keep it out of
+    # issues altogether rather than edit around the filter each time.
+    "International Journal of Scientific Research in Science and Technology",
+))
+
+
 def _inflate_abstract(inverted: dict[str, list[int]] | None) -> str | None:
     """Rebuild an abstract from OpenAlex's inverted index.
 
@@ -308,6 +332,12 @@ def _normalize_openalex(source: Source, body: bytes) -> list[Item]:
             # source about the published literature, so a deposit is out of
             # scope even when it is good work.
             log.info("%s: %r is a %s deposit, dropped", source.id, title, venue_type)
+            continue
+
+        if _venue_key(journal) in DENIED_VENUES:
+            # Before scoring, so a denied journal is never paid for, and never
+            # reaches a page or an email. See DENIED_VENUES for why each is there.
+            log.info("%s: %r is in %r, a denied venue, dropped", source.id, title, journal)
             continue
 
         authorships = work.get("authorships") or []

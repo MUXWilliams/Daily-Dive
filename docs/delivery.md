@@ -196,3 +196,15 @@ subscriber twice.
 - If a resend succeeds but recording it fails, the workflow says so in red:
   *do not resend this week*. That needs the push to lose a race three times
   running against a run in the same concurrency group, which should not happen.
+
+### The journal behind it is now denied
+
+Matching the full journal name, rather than the phrase Buttondown reported,
+was not a style choice. The blocklisted phrase, "International Journal of
+Scientific Research", is only the start of the journal's real name,
+"International Journal of Scientific Research in Science and Technology".
+A rule keyed on the reported phrase would also have caught unrelated journals
+that share those words. The editor chose to keep that journal out of issues
+altogether. It is the first entry in `normalize.DENIED_VENUES`, which drops a
+paper before it is scored, so a denied journal never reaches a page or an
+email. Additions are editorial decisions, each carrying its date and reason.

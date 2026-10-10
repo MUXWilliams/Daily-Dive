@@ -102,6 +102,15 @@ picks → collapse → resource → render → commit → deploy → send`
   before a real browser proved which change actually did it.
 - **Don't pipe pytest through `tail` in a `&&` chain.** It masks the exit code,
   and a failing test gets pushed.
+- **Some journals are denied outright.** `normalize.DENIED_VENUES` drops
+  OpenAlex papers from listed journals before they are scored. It exists
+  because "International Journal of Scientific Research in Science and
+  Technology" tripped Buttondown's spam blocklist on 2026-10-09 and the email
+  was refused. The blocklisted phrase was only the first part of that name, so
+  matching is on the **whole name, never a fragment**, which would also catch
+  unrelated journals. Every entry is an editorial decision about a real
+  publisher: added by hand with a dated reason, never from memory or from
+  someone else's list. A test enforces the comment.
 - **Images are fetched at build time and committed, never hotlinked.** A
   hotlinked thumbnail makes every reader's browser call Google just by opening
   the page, breaks the offline preview, and gets stripped by mail clients later.
@@ -184,13 +193,6 @@ about the week.
   issues, when a rolling median against `site/issues/index.json` becomes the
   better instrument — it is the wrong one today because the archive still holds
   three daily-era issues, and comparing a week against a day says nothing.
-- **OpenAlex surfaces predatory journals.** 2026-10-09's email was refused
-  because a paper's journal, "International Journal of Scientific Research",
-  is on Buttondown's spam blocklist — and that name is a well-known predatory
-  publisher. The provider's filter caught something the editorial pipeline did
-  not. A journal denylist beside `REPOSITORY_VENUES` in `normalize.py` would
-  keep such papers out of the issue entirely; it is an editorial decision, not
-  yet made.
 - **Seen vs published for the crawler** — still open, and narrower now. A
   failed or partial run no longer burns the week (`cli._remember`), but a
   *published* run still records everything it fetched, so an item the scorer

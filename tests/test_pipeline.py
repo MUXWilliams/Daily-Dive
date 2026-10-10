@@ -3918,3 +3918,61 @@ def test_the_resend_workflow_previews_unless_told_to_send():
     assert record["if"] == "inputs.send"
     for s in steps:
         assert "${{" not in s.get("run", ""), s.get("name")
+
+
+# --- journals this publication does not carry -------------------------------
+
+DENIED = "International Journal of Scientific Research in Science and Technology"
+
+
+def _openalex_works(*venues: str) -> bytes:
+    return json.dumps({"results": [
+        {
+            "display_name": f"A paper in {venue}",
+            "publication_date": "2026-10-05",
+            "doi": f"https://doi.org/10.1/{n}",
+            "primary_location": {"source": {"display_name": venue, "type": "journal"}},
+        }
+        for n, venue in enumerate(venues)
+    ]}).encode()
+
+
+def test_a_denied_journal_never_enters_an_issue():
+    """2026-10-09's email was refused because this journal's name tripped the
+    provider's spam blocklist. The editor chose to keep it out entirely —
+    dropped at normalize, before it is scored, published or emailed."""
+    items = normalize.normalize(_openalex_source(), _openalex_works(DENIED, "Coral Reefs"))
+    assert [i.source_name for i in items] == ["Coral Reefs"]
+
+
+def test_the_deny_list_ignores_case_and_spacing():
+    """OpenAlex is not consistent about either, and a list that missed a
+    journal over a double space would be a list that quietly does not work."""
+    odd = "  international journal of SCIENTIFIC research in science  and technology "
+    assert normalize.normalize(_openalex_source(), _openalex_works(odd)) == []
+
+
+def test_the_deny_list_matches_whole_names_never_fragments():
+    """The blocklist phrase Buttondown reported, "International Journal of
+    Scientific Research", is shorter than this journal's real name — and is
+    shared by journals that have nothing to do with it. Whole names only; a
+    substring rule would drop those silently."""
+    near = [
+        "International Journal of Scientific Research",
+        "International Journal of Scientific Research in Science, Engineering and Technology",
+    ]
+    items = normalize.normalize(_openalex_source(), _openalex_works(*near))
+    assert sorted(i.source_name for i in items) == sorted(near)
+
+
+def test_every_denied_journal_says_why_it_is_there():
+    """Each name is a judgement about a real publisher. The list stays
+    reviewable only if every entry carries its date and reason."""
+    src = Path("dailydive/normalize.py").read_text(encoding="utf-8")
+    block = src.split("DENIED_VENUES = frozenset(", 1)[1].split("))", 1)[0]
+    entries = re.findall(r'^\s*"([^"]+)",', block, re.M)
+    assert len(entries) == len(normalize.DENIED_VENUES)
+    for name in entries:
+        preceding = block.split(f'"{name}"', 1)[0].rstrip().splitlines()[-1]
+        assert re.search(r"#\s*\S", preceding), f"{name!r} has no comment above it"
+    assert re.search(r"#\s*\d{4}-\d{2}-\d{2}", block), "entries are dated"
