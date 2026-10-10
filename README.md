@@ -31,14 +31,18 @@ may have allowlisted the user-agent string.)*
   `robots.txt` and `sitemap.xml`.
 - **Takes signups on its own domain** — a Buttondown form embedded in the issue
   footer and on `/subscribe`, rather than an iframe or an off-site bounce.
-- **Emails** the issue to a Buttondown list, off by default and behind the same
-  gate that decides whether a run publishes at all.
-- **Accepts editor's picks** — stories the crawler cannot reach, filed as GitHub
-  issues labelled `pick`.
+- **Emails** the issue to a Buttondown list automatically every Friday, with a
+  catch-up attempt if the first is dropped. If the provider refuses an email,
+  the run opens a GitHub issue saying why, and the week can be resent.
+- **Opens with a greeting** on the page and in the email, which remarks on the
+  week when it was unusually light or heavy and says nothing extra otherwise.
+- **Accepts editor's picks** — stories the crawler cannot reach, filed through
+  an issue form that labels them, with a workflow that labels any filed another
+  way.
 - **Measures its own scoring** against a hand-labelled set of 128 real items.
 
-No server anywhere. Actions runs the pipeline, Pages serves it, and total spend
-to date is under a dollar.
+No server anywhere. Actions runs the pipeline, Pages serves it, and scoring has
+cost about a dollar to date.
 
 ## Quick start
 
@@ -48,12 +52,13 @@ uv venv && uv pip install -e ".[dev]"
 uv run daily-dive sources                  # what's configured
 uv run daily-dive preview                  # render the frozen fixture, no network
 uv run daily-dive run --offline            # build from fixtures
-uv run pytest -q                           # the whole suite, offline and free
+uv run ruff check . && uv run pytest -q    # what CI runs, offline and free
 ```
 
 Output lands in `site/` — `index.html`, a dated permalink under `site/issues/`,
 plus `archive.html`, `about.html`, `subscribe.html`, `robots.txt` and
-`sitemap.xml`.
+`sitemap.xml`. Each issue also saves a copy of itself beside its permalink,
+such as `site/issues/2026-10-09.json`, which is what a resend sends.
 
 Useful while iterating:
 
@@ -61,6 +66,7 @@ Useful while iterating:
 daily-dive run --source reefbuilders --limit 5   # one feed — a partial run never publishes
 daily-dive probe <url>                           # test a candidate feed before adding it
 daily-dive send --fixture --dry-run              # the exact email request, key redacted
+daily-dive send --issue <date> --without <phrase> --dry-run   # preview a resend
 daily-dive eval sheet --out sheet.html           # build the scoring labelling page
 ```
 
@@ -87,11 +93,16 @@ picks → collapse → resource → render → commit → deploy → send
 | `pricing.py` | token accounting, so cost questions have answers |
 | `deliver.py` | one POST to the mailing list — the only provider-specific file |
 | `eval.py` | scoring quality, measured against hand labels |
-| `store.py` | SQLite: seen log, published log, scores, HTTP cache |
+| `store.py` | SQLite: seen log, published log, scores, HTTP cache, sent log |
 
 `dailydive.sqlite3` is committed on purpose and is load-bearing: `items` is a
 *seen* log, `published` is what actually reached a page, `scores` records what
-the model decided **including what it threw away**, and `http_cache` holds ETags.
+the model decided **including what it threw away**, `http_cache` holds ETags,
+and `sent` records which weeks reached inboxes.
+
+The seen log and the HTTP cache are written only when a run publishes. They
+used to be written as feeds were fetched, so a run that failed partway still
+marked the whole week as seen, and re-running it found nothing new.
 
 ## Adding sources
 
@@ -109,6 +120,15 @@ had published nothing in years. A feed that parses is not a feed that publishes.
 
 **Never type an outlet name from memory.** `name` is the credit line on the
 page. Take it from the feed title or the API, or ask.
+
+**Some journals are denied outright.** The OpenAlex sources credit each paper
+to its own journal, so they can surface any journal at all. `DENIED_VENUES` in
+`normalize.py` drops a listed journal's papers before they are scored. A name
+is matched whole, ignoring case and spacing, never as a fragment, because a
+fragment would catch unrelated journals with similar names. Each entry is an
+editorial decision about a real publisher, so it is added by hand with a dated
+reason, and a test fails if one is missing. The first entry is the journal
+whose name got the 9 October email refused.
 
 Full procedure in `.claude/skills/add-source/SKILL.md`.
 
@@ -209,6 +229,15 @@ Notes worth knowing before editing `score.py` or `prompts/score.system.md`:
 - **Invented uids are dropped**, so a hallucinated id cannot attach a score to
   the wrong story.
 - **Unscored items don't publish.** An unscored item is one nothing has judged.
+- **A scoring pass that never reached the model stops the run.** Because
+  unscored items are dropped, a total scoring failure doesn't look like a
+  failure downstream; it looks like a small issue. On 4 September that shipped
+  and emailed an issue of one item: the editor's pick, which is added after
+  scoring. The run now aborts before anything is published or sent.
+- **Every argument passed to the SDK is checked against its real signature.**
+  The scoring call can't be exercised offline, so a test reads the SDK's
+  parameters instead. It exists because a `temperature` argument the method
+  doesn't accept is what broke scoring on 4 September.
 
 **Quality is measured, not asserted.** `daily-dive eval` scores 128 hand-labelled
 real items and reports precision@20, rank agreement, and the two unambiguous
@@ -221,20 +250,34 @@ The file name is a hash of the prompt itself, so it changes exactly when the
 prompt changes and never when it doesn't — nobody has to remember to bump a
 version.
 
-Three versions in, that has already earned its keep in both directions:
+Four versions so far:
 
 | Prompt | Top 20 | ρ | Leads buried |
 |---|---|---|---|
 | `bbd4b48d3628` | 19/20 | +0.38 | 9 |
-| `7a3c49dadcca` | **20/20** | **+0.48** | 8 |
+| `7a3c49dadcca` | **20/20** | +0.48 | 8 |
 | `c2407f69c031` | 19/20 | +0.46 | 9 |
+| `22a65be98aff` | 18/20 | **+0.50** | 8 |
 
-The middle one is the current best. The third was an attempted fix that made
-things worse and was reverted — and the reports are why that is a sentence
-rather than an argument. Two things it caught that no amount of reading the
-prompt would have: quoting an item's *wrong* score as an example anchors the
-model to that number, and inserting a thousand tokens above a working rule can
-break it by displacement alone.
+`7a3c49dadcca` is the one that ships, as the best measured. The two after it
+were attempts to fix the same rule, and both were reverted.
+
+**Most of the differences in that table are within noise.** The fourth run
+showed scoring had never had its temperature pinned. Between two prompts that
+differed by three lines, 87 of the 128 items changed score, six of them by 0.20
+or more. So a difference of one or two items is not evidence, and the lessons
+first drawn from the third run are plausible rather than demonstrated: that
+quoting an item's wrong score anchors the model, and that inserting text above
+a working rule can break it.
+
+What does stand is the first comparison. Under `bbd4b48d3628`, 27 items scored
+exactly 0.00, each with a gist saying the headline alone gave too little to
+judge. Those gists changed when the prompt did. The mechanism was visible in
+the text, not just the scores.
+
+Pinning the temperature is still worth doing. The SDK's structured-output call
+doesn't accept a `temperature` argument, so it would have to go through the
+SDK's `extra_body`, proved first on a run that can't publish.
 
 ## Delivery
 
@@ -245,8 +288,35 @@ Sending runs **automatically on the Friday schedule**, alongside scoring. It was
 opt-in until the first send had been proved end to end by hand — an inbox cannot
 be un-sent, so that was worth doing once before letting it run unattended.
 
+The schedule has two attempts: Friday 10:17 UTC, and a catch-up at 14:47. A
+guard job skips the catch-up once that day's issue is published, so on a normal
+week it does nothing. It exists because GitHub dropped two of the first three
+Friday runs. GitHub has run every Friday since then, but late: the first run
+has started between 14:27 and 17:00 UTC, four to seven hours after its cron,
+and later each week so far. The catch-up has started between 17:53 and 19:47
+and skipped every time, since the first run had already published.
+
 A **manual dispatch still has to tick `send`**, because a mid-week run by hand
 is almost always a test.
+
+The email opens with the same greeting as the page, from the same code, so the
+two can't drift apart. A test compares them.
+
+**When the provider refuses an email**, the page still publishes, and:
+
+- the run fails, and opens a GitHub issue naming the blocked phrase and the
+  story it appears in;
+- **Actions → Resend an issue** sends that week from its saved copy, optionally
+  leaving out the story with a given phrase. A first run only previews; sending
+  takes a second run with **send** ticked;
+- the `sent` table records every week that reached inboxes, and a resend refuses
+  any week already in it, so no week can be sent twice;
+- nothing is dropped automatically. Whether a story goes out is the editor's
+  call, not the spam filter's.
+
+That came out of 9 October, when Buttondown refused the email over a journal's
+name. It was resent the next day without that story. See
+[`docs/delivery.md`](docs/delivery.md).
 
 Signup is the part that genuinely needs a server, which this project does not
 have: a static site cannot accept a form POST, and the repo is public so
@@ -260,6 +330,22 @@ visit from every reader, subscriber or not, which would quietly undo the
 decision to switch open and click tracking off. It also cannot be styled, and
 theirs ships fixed at 220px with scrolling disabled. See
 [`docs/delivery.md`](docs/delivery.md) for the rest of the reasoning.
+
+## Workflows
+
+| Workflow | Runs | Does |
+|---|---|---|
+| **Build issue** — `.github/workflows/daily.yml` | Fridays, twice, and on demand | Fetches, scores, publishes and emails the week |
+| **Redeploy the site** — `.github/workflows/deploy.yml` | on demand | Publishes committed `site/` as it stands, without building |
+| **Score eval** — `.github/workflows/eval.yml` | on demand | Scores the 128 labelled items and commits a report |
+| **Label a pick** — `.github/workflows/label-picks.yml` | when an issue is opened or edited | Labels a pick from an allowlisted author, however it was filed |
+| **Resend an issue** — `.github/workflows/resend.yml` | on demand | Emails an already-published week; previews unless told to send |
+
+Every workflow that runs project code checks it first with `ruff check .`,
+limited to rules that catch bugs, then `pytest`. Both deploy paths refuse to
+publish any page carrying a test-fixture marker. That guard exists because a
+page built from fixtures, with five invented headlines credited to real
+outlets, once reached the live site.
 
 ## Being findable
 
@@ -294,19 +380,22 @@ not on markup.
 |---|---|
 | **v0** ✅ | Pipeline with no AI. Fetch, dedupe, render, full attribution. |
 | **v1** ✅ | Haiku pass scores and categorizes every item. |
-| **v2** ✅ | Picks, archive, Resource section, scoring eval, email delivery, on-site signup, search indexing. |
+| **v2** ✅ | Picks, archive, Resource section, scoring eval, email delivery, on-site signup, search indexing, email recovery and resend. |
 | **v3** | RSS out. `site/issues/index.json` is already the right shape for it. |
 | **later** | A writing pass with a grounding check — the piece that would teach the most about where these models fail, and the one still unbuilt. |
 
 ## Cost
 
-Comfortably under a dollar to date. Actions and Pages are free on a public
-repo, and Buttondown is free under 100 subscribers.
+Actions and Pages are free on a public repo, and Buttondown is free under 100
+subscribers. Scoring is the only line item, at roughly **0.08¢ an item**
+measured, so it scales with the week rather than being a fixed figure. The
+104-item run on 28 August cost about 8¢, and a full 128-item eval pass $0.10.
 
-Scoring is the only line item, at roughly **0.08¢ an item** measured — so it
-scales with the week rather than being a fixed figure. The 104-item run on
-28 August cost about 8¢; a full 128-item eval pass measured $0.10. An earlier
-claim of "3¢ a run" was accurate when issues were 39 items and simply aged.
+To date: the `scores` table holds 1,326 verdicts, which at that rate is about
+**$1.03**. That undercounts, because runs before the table existed in
+mid-August aren't in it. The README used to say "comfortably under a dollar",
+which was true until about late September.
+
 `pricing.py` prints the real number on every run, which is the point of it.
 
 ## Reading further
