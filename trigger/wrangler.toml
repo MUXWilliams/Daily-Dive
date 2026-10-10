@@ -1,0 +1,16 @@
+# The Cloudflare Worker that starts the weekly issue on time.
+# See trigger/README.md for setup, and worker.js for why it exists.
+name = "weekly-dive-trigger"
+main = "worker.js"
+compatibility_date = "2026-08-31"
+
+# No routes and no HTTP handler: this Worker is reachable only by its own cron,
+# so there is nothing on the internet for anyone to call.
+workers_dev = false
+
+[triggers]
+# Friday 10:17 UTC — the same expression as the schedule in
+# .github/workflows/daily.yml, so the intended time is written once in each
+# place and a test asserts they agree. 6am US Eastern in summer, 5am in winter;
+# cron is UTC and ignores daylight saving, here as there.
+crons = ["17 10 * * 5"]

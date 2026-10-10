@@ -902,7 +902,21 @@ def main(argv: list[str] | None = None) -> int:
         # published items does: a --source or --limit run is knowingly partial,
         # and an email is the one output that cannot be taken back. A page can
         # be redeployed; an inbox cannot.
-        if args.send:
+        with store.connect(args.db) as conn:
+            already_sent = store.sent_at(conn, f"{issue.date:%Y-%m-%d}")
+        if args.send and already_sent:
+            # Two independent schedulers now start the Friday run — the
+            # Cloudflare Worker and GitHub's own cron as a fallback — and the
+            # guard job is meant to stop the second one from building at all.
+            # This is the last line behind it. An email cannot be recalled, so
+            # a run that gets this far on a day whose issue already reached the
+            # list publishes its page and does not send.
+            log.warning(
+                "not sending: the %s issue already went out at %s",
+                f"{issue.date:%Y-%m-%d}",
+                already_sent,
+            )
+        elif args.send:
             from . import deliver
 
             thumb_url = None

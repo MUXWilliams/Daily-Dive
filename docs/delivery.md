@@ -137,8 +137,10 @@ that built this cannot reach `docs.buttondown.com`. And the API constants in
 why `send --dry-run` and `send --check` exist: the request can be read before it
 is made, and the first real call is a read.
 
-**Sending is automatic on the Friday schedule**, alongside scoring, since the
-first send was proved end to end by hand. A manual dispatch still has to ask for
+**Sending is automatic on the Friday run**, alongside scoring, since the
+first send was proved end to end by hand. The run is started at 10:17 UTC by a
+Cloudflare Worker (`trigger/`), because GitHub's own schedule had drifted four
+to seven hours late; that schedule remains as the fallback. A manual dispatch still has to ask for
 it — a mid-week run is almost always a test, and an inbox cannot be un-sent.
 
 ## When the email is refused

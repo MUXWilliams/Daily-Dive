@@ -94,6 +94,14 @@ picks → collapse → resource → render → commit → deploy → send`
   new and every feed answered 304. The week came back only by restoring the
   database from git. It also disarmed the catch-up cron, whose entire job is to
   retry a few hours later. Ingest reads the seen log; it does not write it.
+- **"Automatic" is a run, not an event.** A Friday run arrives either as
+  `schedule` or as a `workflow_dispatch` from `trigger/worker.js` with
+  `automatic: true`. Anything that decides scoring, sending or the guard's skip
+  checks `github.event_name == 'schedule' || inputs.automatic`. Testing for
+  `schedule` alone would publish the Worker's run unscored and unsent. The
+  Worker uses `workflow_dispatch` rather than `repository_dispatch` for its
+  token: the first needs only Actions: write, the second Contents: write, which
+  could push code to `main`.
 - **`daily-dive preview`** renders the template against a frozen fixture — free,
   offline, deterministic. Use it for any layout change. `--artifact` emits the
   form used for the hosted staging page.
@@ -125,11 +133,12 @@ picks → collapse → resource → render → commit → deploy → send`
 |---|---|
 | Live site | <https://www.theloneaquarist.com> |
 | Back issues | `/archive.html`, permalinks at `/issues/YYYY-MM-DD.html` |
-| Build | `.github/workflows/daily.yml` — Friday 10:00 UTC, plus manual |
+| Build | `.github/workflows/daily.yml` — Friday 10:17 UTC, plus manual |
+| Friday trigger | `trigger/` — a Cloudflare Worker that starts the build on time; GitHub's schedule is the late fallback |
 | Redeploy | `.github/workflows/deploy.yml` — publishes committed `site/` as-is |
 | Editorial rules | `prompts/score.system.md`, `docs/industry-brief.md` |
 | Submitting a pick | `docs/picks.md` |
-| Delivery | `docs/delivery.md`, `dailydive/deliver.py` — Buttondown, off by default |
+| Delivery | `docs/delivery.md`, `dailydive/deliver.py` — Buttondown, automatic on the Friday run |
 | Resend a week | Actions → **Resend an issue**, from the `.json` each issue keeps beside its page in `site/issues/`; see `docs/delivery.md` |
 | Scoring eval | `dailydive/eval.py`, `tests/fixtures/labels.json`, `docs/eval/` |
 | Archive index | `site/issues/index.json` |

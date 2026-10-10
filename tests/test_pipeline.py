@@ -995,14 +995,24 @@ def test_the_schedule_is_weekly_and_matches_the_recency_window():
     assert normalize.DEFAULT_MAX_AGE_DAYS == 7
 
 
-def test_a_scheduled_run_still_scores():
-    """inputs.* are empty on a schedule event, so a naive `inputs.score` test
-    would leave the weekly issue unscored — raw feed dumps, silently."""
-    assert "inputs.score || github.event_name == 'schedule'" in WORKFLOW_TEXT
-    # And the key check must cover the scheduled path too, or the run dies at
-    # the first model call instead of the first step.
-    guard = WORKFLOW_TEXT.split("Check the API key is present", 1)[1][:200]
-    assert "github.event_name == 'schedule'" in guard
+def test_an_automatic_run_still_scores_and_sends():
+    """inputs.* are empty on a schedule event, and the Cloudflare Worker's
+    dispatch sets only `automatic` — not score or send. A naive `inputs.score`
+    test would leave the weekly issue unscored and unsent: raw feed dumps,
+    silently, or a published page nobody is emailed about.
+
+    Asserted for both automatic starts in all three places that decide it:
+    the key check, scoring and sending."""
+    import yaml
+
+    spec = yaml.safe_load(WORKFLOW_TEXT)
+    steps = {s.get("name"): s for s in spec["jobs"]["build"]["steps"]}
+    build_env = steps["Build issue from live feeds"]["env"]
+
+    for needle in ("github.event_name == 'schedule'", "inputs.automatic"):
+        assert needle in steps["Check the API key is present"]["if"], needle
+        assert needle in build_env["IN_SCORE"], needle
+        assert needle in build_env["IN_SEND"], needle
 
 
 # --------------------------------------------------------------- newsletters
@@ -3976,3 +3986,105 @@ def test_every_denied_journal_says_why_it_is_there():
         preceding = block.split(f'"{name}"', 1)[0].rstrip().splitlines()[-1]
         assert re.search(r"#\s*\S", preceding), f"{name!r} has no comment above it"
     assert re.search(r"#\s*\d{4}-\d{2}-\d{2}", block), "entries are dated"
+
+
+# --- the external trigger ---------------------------------------------------
+#
+# GitHub's schedule started the Friday 10:17 run between 14:27 and 17:00 UTC
+# from September on, later every week. trigger/worker.js is a Cloudflare
+# Worker that sends a workflow_dispatch with `automatic` set, on its own cron;
+# an API call starts a run within seconds. GitHub's schedule stays as the
+# fallback.
+
+TRIGGER = Path("trigger")
+
+
+def test_the_worker_passes_its_own_tests():
+    """The Worker is JavaScript; Node's built-in runner tests it with a stub
+    fetch. Run from here so the one test command covers it. Node ships on
+    GitHub's runners, so this runs in CI; it skips only where node is absent."""
+    import shutil
+    import subprocess
+
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("node is not installed")
+    result = subprocess.run(
+        [node, "--test", str(TRIGGER / "worker.test.mjs")],
+        capture_output=True, text=True, timeout=60,
+    )
+    assert result.returncode == 0, result.stdout[-2000:] + result.stderr[-2000:]
+
+
+def test_the_worker_and_the_workflow_agree_on_the_dispatch():
+    """The Worker names a workflow file, a branch and an input. A wrong file or
+    an undeclared input is refused by GitHub (404, 422) — loud, but only on a
+    Friday morning, in Cloudflare's log. Catch it here instead."""
+    import yaml
+
+    worker = (TRIGGER / "worker.js").read_text(encoding="utf-8")
+    repo = re.search(r'export const REPO = "([^"]+)"', worker).group(1)
+    workflow = re.search(r'export const WORKFLOW = "([^"]+)"', worker).group(1)
+    ref = re.search(r'export const REF = "([^"]+)"', worker).group(1)
+    inputs = re.search(r"export const INPUTS = (\{[^}]*\});", worker).group(1)
+
+    assert repo.lower() == "muxwilliams/daily-dive"
+    assert Path(".github/workflows", workflow).read_text(encoding="utf-8") == WORKFLOW_TEXT
+    assert ref == "main"
+    assert inputs == '{ automatic: "true" }'
+
+    declared = yaml.safe_load(WORKFLOW_TEXT)[True]["workflow_dispatch"]["inputs"]
+    assert declared["automatic"]["type"] == "boolean"
+    # Off by default, so a person pressing Run workflow gets a manual run.
+    assert declared["automatic"]["default"] is False
+
+
+def test_the_worker_fires_when_the_schedule_says_it_should():
+    """One intended time, written in two places. If the Worker's cron drifted
+    from the schedule's, the fallback would be covering a different hour."""
+    import tomllib
+
+    cfg = tomllib.loads((TRIGGER / "wrangler.toml").read_text(encoding="utf-8"))
+    first_cron = re.findall(r'cron:\s*"([^"]+)"', WORKFLOW_TEXT)[0]
+    assert cfg["triggers"]["crons"] == [first_cron]
+    # Reachable only by its own cron: no routes, no workers.dev URL.
+    assert cfg.get("workers_dev") is False
+    assert "routes" not in cfg and "route" not in cfg
+
+
+def test_the_worker_carries_no_credential():
+    """The token is a Worker secret, read from env at run time. This repo is
+    public; a token written into it would be a leaked credential."""
+    worker = (TRIGGER / "worker.js").read_text(encoding="utf-8")
+    assert "env.GITHUB_TOKEN" in worker
+    assert not re.search(r"gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}", worker)
+    assert "GITHUB_TOKEN" not in (TRIGGER / "wrangler.toml").read_text(encoding="utf-8")
+
+
+def test_the_guard_treats_the_dispatch_as_automatic():
+    """Up to three automatic runs can now arrive on one Friday from two
+    schedulers. Exactly one may build: the dispatch must skip a published day
+    the same way the schedule does, or it would publish and email twice."""
+    import yaml
+
+    spec = yaml.safe_load(WORKFLOW_TEXT)
+    steps = spec["jobs"]["guard"]["steps"]
+    script = "".join(s.get("run", "") for s in steps)
+    env = {k: v for s in steps for k, v in (s.get("env") or {}).items()}
+    # Through env, never interpolated into the script.
+    assert env["IN_AUTOMATIC"] == "${{ inputs.automatic }}"
+    assert "${{" not in script
+    # Manual only when neither is automatic: joined with &&, not ||.
+    assert '"$EVENT" != "schedule" ] && [ "$IN_AUTOMATIC" != "true"' in script
+
+
+def test_a_day_already_sent_is_never_sent_again_by_the_weekly_run():
+    """The last line behind the guard. If a second automatic run somehow got
+    past it, the page may republish but the email must not go out twice."""
+    src = Path("dailydive/cli.py").read_text(encoding="utf-8")
+    run = src.split("if _is_publishing_run(args):\n        # The seen log", 1)[1]
+    check = run.index("already_sent = store.sent_at(")
+    refuse = run.index("if args.send and already_sent:")
+    send = run.index("print(deliver.send(issue, render.render_email(")
+    assert check < refuse < send
+    assert "elif args.send:" in run[refuse:send]

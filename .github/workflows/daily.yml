@@ -46,33 +46,50 @@ on:
         required: false
         default: ""
       send:
-        description: "Email the issue to the list. Automatic on the Friday schedule; tick this only for a manual send."
+        description: "Email the issue to the list. Automatic on the Friday run; tick this only for a manual send."
         type: boolean
         required: false
         default: false
+      # The weekly run, started from outside GitHub. This is what actually
+      # decides when the issue goes out.
+      #
+      # GitHub's own `schedule` below is best-effort and has never been
+      # punctual: since September the 10:17 cron has started between 14:27 and
+      # 17:00 UTC, later every week. A workflow_dispatch is an API call, and an
+      # API call starts a run within seconds. trigger/worker.js is a Cloudflare
+      # Worker that makes that call on its own cron, Fridays at 10:17 UTC,
+      # passing this input.
+      #
+      # workflow_dispatch rather than repository_dispatch for the token it
+      # needs. A repository_dispatch requires Contents: write, which can push
+      # code to main — and code on main runs with every secret this workflow
+      # holds. A workflow_dispatch needs only Actions: write, which can start
+      # and cancel runs and change nothing. The Worker's token is the one
+      # credential this project keeps outside GitHub, so it gets the narrower
+      # one.
+      automatic:
+        description: "Run exactly as the Friday schedule does: skip if today's issue is already published, otherwise score, publish and email. This is what the external trigger sends."
+        type: boolean
+        required: false
+        default: false
+
+  # The fallback, kept on purpose. If the Worker's token expires or Cloudflare
+  # has a bad morning, GitHub's late schedule still produces the week — just
+  # hours later. On a normal week the Worker's run has already published, and
+  # the guard job skips both of these.
   schedule:
     # Friday 10:17 UTC — 6am US Eastern in summer, 5am in winter. Cron has no
     # notion of daylight saving, so the local hour shifts by one twice a year;
-    # that is the accepted cost of not running a timezone-aware scheduler.
+    # that is the accepted cost of not running a timezone-aware scheduler. The
+    # Worker uses the same expression for the same reason.
     #
-    # :17 rather than :00 because GitHub runs scheduled workflows best-effort on
-    # shared infrastructure and drops them most often at the top of the hour.
-    # That was a theory and it did not hold: 2026-09-04 was the first Friday on
-    # :17 and it never fired either. Of the three Fridays this publication has
-    # had, exactly one scheduled run has ever started. The minute stays off :00
-    # because it costs nothing, not because it was shown to work.
+    # :17 rather than :00 because GitHub was thought to drop top-of-the-hour
+    # runs. That theory did not hold, and lateness turned out to be the real
+    # problem — which no choice of minute fixes. The minute stays because it
+    # costs nothing.
     - cron: "17 10 * * 5"
 
-    # The catch-up. Four and a half hours later, and the reason the schedule is
-    # now merely late rather than missing: whatever drops the first run does not
-    # get a second vote. The `guard` job below exits this one silently when
-    # today's issue is already committed, so a normal week runs it and does
-    # nothing.
-    #
-    # Mitigation, not a diagnosis. If a Friday ever misses both, the answer is
-    # a trigger that is not GitHub's scheduler at all — an external ping to
-    # repository_dispatch — and this comment is the note to stop theorising and
-    # do that.
+    # The catch-up. Whatever drops the first run does not get a second vote.
     - cron: "47 14 * * 5"
 
 # A publishing run needs three grants beyond the default read: contents to
@@ -94,9 +111,12 @@ concurrency:
 jobs:
   # Has today's issue already been published?
   #
-  # Only a scheduled run asks. A manual dispatch always builds, because someone
-  # running it by hand has a reason — usually that the automatic run produced
-  # something wrong and they want it replaced.
+  # Only an automatic run asks — the Worker's dispatch or GitHub's schedule.
+  # There are now up to three of those on a Friday, from two independent
+  # schedulers, and exactly one may build: whichever arrives first publishes,
+  # and the rest find the permalink and stop. A manual dispatch always builds,
+  # because someone running it by hand has a reason — usually that the
+  # automatic run produced something wrong and they want it replaced.
   #
   # The test is the dated permalink in the repository, not the run history: it
   # is what "published" actually means here, it survives a re-run, and it is
@@ -116,16 +136,17 @@ jobs:
         # operator.
         env:
           EVENT: ${{ github.event_name }}
+          IN_AUTOMATIC: ${{ inputs.automatic }}
         run: |
           set -eu
           today="$(date -u +%F)"
           page="site/issues/${today}.html"
-          if [ "$EVENT" != "schedule" ]; then
+          if [ "$EVENT" != "schedule" ] && [ "$IN_AUTOMATIC" != "true" ]; then
             echo "Manual run — building regardless of what is already published."
             echo "build=true" >> "$GITHUB_OUTPUT"
           elif [ -f "$page" ]; then
             echo "$page is already committed; an earlier run published today's issue."
-            echo "Nothing to do — this is the catch-up doing its job." >> "$GITHUB_STEP_SUMMARY"
+            echo "Nothing to do — another automatic run got here first." >> "$GITHUB_STEP_SUMMARY"
             echo "build=false" >> "$GITHUB_OUTPUT"
           else
             echo "No $page yet — building today's issue."
@@ -165,7 +186,7 @@ jobs:
       # authentication error — and you'd be reading a stack trace instead of a
       # sentence telling you which secret is missing.
       - name: Check the API key is present
-        if: inputs.score || github.event_name == 'schedule'
+        if: inputs.score || (github.event_name == 'schedule' || inputs.automatic)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
@@ -249,7 +270,7 @@ jobs:
           IN_SOURCE: ${{ inputs.source }}
           IN_LIMIT: ${{ inputs.limit }}
           IN_THRESHOLD: ${{ inputs.threshold }}
-          IN_SCORE: ${{ inputs.score || github.event_name == 'schedule' }}
+          IN_SCORE: ${{ inputs.score || (github.event_name == 'schedule' || inputs.automatic) }}
           # The mailing list. Absent unless the secret is set; the CLI only
           # reads it under --send, so an unsent run is unaffected.
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
@@ -258,7 +279,7 @@ jobs:
           # an inbox cannot be un-sent, so that was worth doing once by hand
           # before letting it run unattended. A manual dispatch still has to
           # tick the box, because a mid-week dispatch is usually a test.
-          IN_SEND: ${{ inputs.send || github.event_name == 'schedule' }}
+          IN_SEND: ${{ inputs.send || (github.event_name == 'schedule' || inputs.automatic) }}
         run: |
           ARGS=""
           if [ -n "$IN_SOURCE" ]; then ARGS="$ARGS --source $IN_SOURCE"; fi
