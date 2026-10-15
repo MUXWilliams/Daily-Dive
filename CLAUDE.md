@@ -102,6 +102,10 @@ picks → collapse → resource → render → commit → deploy → send`
   Worker uses `workflow_dispatch` rather than `repository_dispatch` for its
   token: the first needs only Actions: write, the second Contents: write, which
   could push code to `main`.
+- **Cron day numbers differ between Cloudflare and GitHub.** Cloudflare counts
+  1 = Sunday, GitHub 0 = Sunday, so `5` is Thursday on one and Friday on the
+  other. `trigger/wrangler.toml` names the day (`FRI`); a test rejects a number.
+  The first deploy used `5` and the dashboard read Thursday.
 - **`daily-dive preview`** renders the template against a frozen fixture — free,
   offline, deterministic. Use it for any layout change. `--artifact` emits the
   form used for the hosted staging page.

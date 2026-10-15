@@ -4045,11 +4045,18 @@ def test_the_worker_fires_when_the_schedule_says_it_should():
     UTC on both platforms. The Worker fires at both and picks the right one
     (its own tests walk a year of Fridays). GitHub's fallback must never come
     earlier than that in either season, even on a week it is punctual — or it
-    would publish before 7 a.m. and beat the Worker to it."""
+    would publish before 7 a.m. and beat the Worker to it.
+
+    The Worker names its day; GitHub numbers it. The two platforms count days
+    differently — Cloudflare from 1 = Sunday, GitHub from 0 = Sunday — so the
+    same `5` is Thursday on one and Friday on the other. It was first deployed
+    as Thursday."""
     import tomllib
 
     cfg = tomllib.loads((TRIGGER / "wrangler.toml").read_text(encoding="utf-8"))
-    assert cfg["triggers"]["crons"] == ["0 14 * * 5", "0 15 * * 5"]
+    assert cfg["triggers"]["crons"] == ["0 14 * * FRI", "0 15 * * FRI"]
+    for cron in cfg["triggers"]["crons"]:
+        assert not cron.split()[4].isdigit(), f"{cron}: name the day on Cloudflare"
     worker = (TRIGGER / "worker.js").read_text(encoding="utf-8")
     assert 'TIME_ZONE = "America/Los_Angeles"' in worker
     assert "LOCAL_HOUR = 7;" in worker

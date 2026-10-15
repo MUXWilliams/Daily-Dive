@@ -66,7 +66,7 @@ test("a missing token is an error, never a silent no-op", async () => {
 
 // The two cron times, read from wrangler.toml so the test follows the config.
 const CRON_HOURS = [...readFileSync(new URL("./wrangler.toml", import.meta.url), "utf8")
-  .match(/^crons = \[(.*)\]$/m)[1].matchAll(/"0 (\d+) \* \* 5"/g)].map((m) => Number(m[1]));
+  .match(/^crons = \[(.*)\]$/m)[1].matchAll(/"0 (\d+) \* \* FRI"/g)].map((m) => Number(m[1]));
 
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;

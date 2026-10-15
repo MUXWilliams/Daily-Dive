@@ -83,7 +83,9 @@ npx wrangler secret put GITHUB_TOKEN     # paste the token when asked
 A redeploy keeps the secret, so the secret is set only once.
 
 **Check it took.** The Worker's **Settings** → **Trigger events** should show
-two crons, `0 14 * * 5` and `0 15 * * 5`. Do not use a "trigger now" button to test it. On any day but
+two cron triggers, and both must say **Friday**: 14:00 and 15:00 UTC. If either
+says another day, the deployed `wrangler.toml` is not this one. Do not use a
+"trigger now" button to test it. On any day but
 Friday the Worker refuses, by design. On a Friday it would really start the
 week's issue.
 
@@ -115,6 +117,10 @@ GitHub's late schedule covers that week either way.
     and the one that is `LOCAL_HOUR` under standard time.
   - GitHub's fallback crons in `daily.yml`, which must be no earlier than the
     later of those two UTC hours.
+
+  Write the day as `FRI` here, never as a number. Cloudflare counts days from
+  1 = Sunday, so `5` is Thursday on Cloudflare and Friday on GitHub. A test
+  enforces it.
 - **The code.** `node --test trigger/worker.test.mjs` runs the Worker's tests
   with a stand-in for GitHub. Nothing goes over the network. `pytest` runs them
   too, and checks that the Worker and the workflow agree on the file, the branch

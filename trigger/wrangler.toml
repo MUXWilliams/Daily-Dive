@@ -13,4 +13,9 @@ workers_dev = false
 # fires at both hours that can be 7 a.m. in Los Angeles — 14:00 UTC under PDT,
 # 15:00 under PST — and worker.js dispatches only on the one that is. A test
 # walks a full year of Fridays and checks exactly one goes ahead each week.
-crons = ["0 14 * * 5", "0 15 * * 5"]
+#
+# FRI, never a number. Cloudflare counts the days 1-7 from Sunday, so the `5`
+# that means Friday in GitHub's cron means Thursday here. That is how this was
+# first deployed: the dashboard read "Thursday", and only worker.js's Friday
+# check kept it from sending. A name cannot be counted two ways.
+crons = ["0 14 * * FRI", "0 15 * * FRI"]
