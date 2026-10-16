@@ -1,0 +1,456 @@
+{
+ "date": "2026-10-16T14:22:31.180115Z",
+ "items": [
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Science Advances",
+   "title": "Rapid coral bleaching recovery via symbiont transfer from healthy corals",
+   "url": "https://doi.org/10.1126/sciadv.aeh1580",
+   "published_at": "2026-10-14T00:00:00Z",
+   "author": "Daniel S. Collins et al.",
+   "raw_text": "Coral bleaching, the temperature-induced loss of dinoflagellate symbionts, is a major driver of global coral reef decline. Although corals can regain symbionts through repopulation of residual symbionts or via environmental acquisition, these processes are often too slow to prevent coral mortality. Mechanisms that enable rapid and effective symbiont reintroduction leading to full recovery remain largely unknown. Here, we demonstrate coral bleaching recovery through contact-mediated transfer of symbionts from healthy corals using small coral fragments. We show that symbiont transfer is rapid, occurring over days to weeks, and highly efficient, with only brief physical contact with healthy corals required. A single week of contact, and in some cases as few as 3 days, provides sufficient symbionts to initiate sustained and full self-recovery. By 1 week, symbiont population doubling time is approximately 4 days, up to an order of magnitude faster than most recovery times for corals in the field. We identify tissue fusion as the mechanism enabling directional symbiont transfer from healthy to bleached coral tissue. As a result, contact-dependent recovery is restricted to corals of the same genet, whereas heterologous genet pairings trigger antagonistic interactions. However, symbiont transfer via polyp uptake occurs immediately upon contact in both same-genet and mixed-genet pairings, revealing an additional, slower pathway for symbiont transfer that is insufficient on its own to support colony recovery. Collectively, these findings reveal a previously unrecognized natural process for efficiently reintroducing symbionts to bleached corals, providing a foundation for research into potential recovery interventions.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Science Advances",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1126/sciadv.aeh1580",
+    "gist": "Demonstration of rapid coral bleaching recovery via contact-mediated symbiont transfer between coral fragments. A novel mechanism for assisted recovery could inform both restoration and aquarium-based interventions.",
+    "relevance": "0.90"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "The coral settlement-sphere: microenvironments that shape reef restoration in the Anthropocene",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1940282",
+   "published_at": "2026-10-16T00:00:00Z",
+   "author": "Daniel Wangpraseurt",
+   "raw_text": "Accelerating losses of reef-building corals are driving steep declines in coral recruitment, imperiling the biodiversity and long-term resilience of reef ecosystems worldwide. Here, we review the mechanisms underlying coral recruitment success through a critical – yet largely overlooked – microenvironmental lens relevant to the scale of microscopic coral larvae. We introduce the concept of the “settlement-sphere”, which encompasses the physical, biochemical, and microbial microhabitat properties that govern successful coral larval recruitment. We then examine how anthropogenic stressors erode this settlement-sphere by diminishing essential chemical cues, reducing microhabitat complexity, and altering key physico-chemical conditions (e.g., hypoxia), ultimately leading to recruitment failure. Finally, we argue that advancing a collective understanding of the settlement-sphere is essential for developing actionable strategies to restore degraded coral reef systems. Such strategies include augmenting reef microhabitats with chemical cues and advanced materials that promote coral recruitment, thereby supporting genetic diversity, enhancing resilience, and enabling the restocking of coral populations.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Review introduces the 'settlement-sphere' concept—the microenvironmental factors governing coral larval recruitment success. Understanding recruitment mechanics informs both conservation strategy and captive-breeding design.",
+    "relevance": "0.80",
+    "similar": "1"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Geophysical Research Letters",
+   "title": "Coral Reef‐Level Upwelling in an Internal Wave Hotspot Modulated by Mesoscale Dynamics",
+   "url": "https://doi.org/10.1029/2025gl121018",
+   "published_at": "2026-10-15T00:00:00Z",
+   "author": "Alex S. J. Wyatt et al.",
+   "raw_text": "Abstract Coral reefs in the northern South China Sea experience some of the world’s most energetic internal waves (IWs), yet records of how these dynamics influence reef‐level conditions are rare. Using over 6 years of temperature data from Dongsha Atoll, we show that IWs drive diel temperature fluctuations that reduce subsurface heat exposure and entrain cool, nitrate‐rich water onto the reef slope. This internal‐wave‐driven upwelling is strongly modulated by mesoscale circulation: positive sea‐level anomalies associated with Kuroshio intrusion and long‐lived anticyclonic eddies cause a two‐stage suppression of internal‐wave generation and arrival, first near the Luzon Strait and subsequently over the reef. Reduced reef‐slope internal‐wave expression lowered nitrate exposure by >100‐fold at the reef. Typhoons injected near‐inertial energy but were followed by declines in cooling and nitrate supply until restratification. These results demonstrate mesoscale and episodic processes regulating internal‐wave cooling and nutrient upwelling, revealing coupled, multi‐scale physical‐biogeochemical controls on reef resilience under ocean warming.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Geophysical Research Letters",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1029/2025gl121018",
+    "gist": "Internal waves at Dongsha Atoll in the South China Sea drive temperature fluctuations and upwell cool, nutrient-rich water onto reef slopes, modulated by mesoscale circulation. Illuminates how physical oceanography sustains reef environments under natural conditions.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Marine Science",
+   "title": "Reflections on the prospects for western Atlantic coral reefs",
+   "url": "https://doi.org/10.3389/fmars.2026.1946988",
+   "published_at": "2026-10-14T00:00:00Z",
+   "author": "Jeremy B. C. Jackson",
+   "raw_text": "Ever more frequent and severe heat waves and resulting coral bleaching threaten to drive reef corals to extinction unless they can rapidly increase resilience against rising temperatures. This is especially true in the Western Atlantic where the unique geographic features of the region and long history of intense exploitation and pollution have made corals especially vulnerable. Fortunately, there is considerable evidence that thermal resilience is increasing through shuffling of relationships among corals and their symbionts, and by natural selection. Moreover, experiments have shown that assisted reproduction can increase the pace of increasing resilience. However, these promising signs will come to naught unless overexploitation, pollution, and development are rapidly and severely reduced.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Frontiers in Marine Science",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3389/fmars.2026.1946988",
+    "gist": "Analysis of bleaching resilience and recovery prospects in Western Atlantic corals through thermal acclimatization and symbiont shuffling. Direct evidence on whether and how reef corals can survive warming matters to everyone tracking the hobby's foundation.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Diversity",
+   "title": "Depth- and Taxon-Specific Coral Bleaching of High-Latitude Marginal Coral Communities at Jeju Island During the 4th Global Coral Bleaching Event",
+   "url": "https://doi.org/10.3390/d18100618",
+   "published_at": "2026-10-12T00:00:00Z",
+   "author": "Taihun Kim et al.",
+   "raw_text": "At Jeju Island, Republic of Korea, hard coral communities consisting of Alveopora, Montipora, and Psammocora represent some of the northernmost photosymbiotic Scleractinia in the Northwest Pacific. Here, we document taxon-specific, depth-specific bleaching conditions observed during the 2024 marine heatwave associated with the Fourth Global Coral Bleaching Event. Alveopora japonica and Montipora showed pronounced bleaching at shallower depths, whereas Psammocora appeared comparatively less affected. A follow-up survey two months later documented mortality, particularly among A. japonica colonies. These observations highlight heterogeneous bleaching responses among taxa and depths in a high-latitude marginal coral communities near the poleward distributional limit of photosymbiotic scleractinian corals. The depth-related pattern observed in A. japonica raises the hypothesis of possible bathymetric redistribution, although quantitative long-term observations are required to determine whether this represents a persistent shift.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Diversity",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3390/d18100618",
+    "gist": "During the 2024 global bleaching event, high-latitude corals at Jeju Island showed taxon- and depth-specific bleaching patterns, with Alveopora japonica suffering heavy mortality. Range-edge bleaching responses inform predictions for coral survival under warming.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "reefbuilders",
+   "source_name": "Reef Builders",
+   "title": "QM Aquacultures the Peacekeeper Maroon Clownfish",
+   "url": "https://reefbuilders.com/2026/10/16/qm-aquacultures-the-peacekeeper-maroon-clownfish/",
+   "published_at": "2026-10-16T13:00:00Z",
+   "author": "Raj Shingadia",
+   "raw_text": "It seems like it was just the other day when the fish breeding wizards at QM Labs announced the coveted Gem Tang and the homely Black Longnose Tang. The year isn&#8217;t over yet and they&#8217;ve dropped another aquaculture win: the Peackeeper Maroon Clownfish. If you&#8217;ve ever had Maroon Clownfish or encountered them diving, then you&#8230; Source",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "gist": "QM Aquacultures has bred the Peacekeeper Maroon Clownfish, adding to their recent aquaculture wins. Captive-bred maroons offer hobbyists a sustainable alternative to wild-collected specimens.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "The potential for habitat support structures to address habitat deficits in a declining marine ecosystem",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1980513",
+   "published_at": "2026-10-15T00:00:00Z",
+   "author": "John H. Hunt",
+   "raw_text": "Concurrent local and global stressors are rapidly degrading marine ecosystems. Consequences of this degradation include widespread reductions in the availability, quality, and structural complexity of habitats. For example, coral reef habitats across the Western Atlantic/Caribbean are flattening and becoming more structurally homogeneous as warming waters, severe bleaching events, unprecedented disease outbreaks, deteriorating water quality, and hurricanes continue to drive stony coral mass mortality. This is problematic because the physical structure of a habitat profoundly influences its associated biodiversity and ecosystem functioning. Structurally complex habitats support greater species richness and abundance as they have more microhabitats and ecological niches available for life history functions that support survival and reproduction. Conversely, habitat loss and degradation can drive reductions in the abundance and diversity of organisms, which negatively impacts the health of our ecosystems, as well as the goods and services they provide. While active restoration of species that create biogenic structure is underway, efforts may be slow to be effectively upscaled, and sources of environmental decline and mortality continue unabated. Complementary or synergistic management interventions involving the deployment of habitat support structures designed to maximize ecological function, promote biodiversity, and instantaneously increase relief and complexity may ameliorate certain habitat deficits related to fish and invertebrate life histories. Improving habitat availability and quality may in turn improve conditions and resources in an area, thereby strengthening ecosystem resilience and functioning. Considering the configuration of habitat support structures to support species’ ontogenetic movements may provide further ecosystem benefits by promoting persistence across multiple life stages and therefore production. Herein, we provide a perspective on the pot",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Study examines whether artificial habitat structures can restore reef structural complexity lost to bleaching, disease, and hurricanes in the Caribbean. Direct evidence on reef recovery strategies relevant to understanding wild-reef dynamics that inform the hobby.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Environmental Monitoring and Assessment",
+   "title": "Hierarchical physiological sensitivity of the coral, Orbicella faveolata, to suspended sediment and elevated temperature",
+   "url": "https://doi.org/10.1007/s10661-026-15969-9",
+   "published_at": "2026-10-13T00:00:00Z",
+   "author": "Keisha D. Bahr et al.",
+   "raw_text": "Coral reefs are increasingly exposed to multiple environmental stressors, including ocean warming and elevated turbidity from coastal development, dredging, and sediment resuspension. Understanding how these stressors affect coral physiology is essential for improving sediment management and protecting reef ecosystems. We investigated the short-term physiological responses of the Caribbean reef-building coral, Orbicella faveolata, to suspended sediment and elevated temperature during controlled 72-h laboratory experiments. Coral fragments were first exposed in independent chamber-sump systems to a gradient of target turbidity levels consisting of a control with no added sediment and treatments of 15, 29, and 50 NTU, followed by a factorial experiment evaluating suspended sediment (control or 29 NTU) and temperature (27°C or 30°C). Metabolic oxygen flux was quantified using intermittent-flow respirometry; photophysiological performance was assessed using pulse-amplitude-modulated fluorometry, and tissue and skeletal condition were evaluated using biological and calcification endpoints. Elevated temperature produced the most consistent responses, decreasing maximum photochemical efficiency (Fv/Fm), increasing regulated non-photochemical energy dissipation (YNPQ), and altering respiration. Suspended sediment elicited comparatively limited responses, primarily affecting photophysiological metrics, with modest effects on respiration in the highest-turbidity treatment. No suspended sediment × temperature interaction was detected. Net calcification, symbiont density, chlorophyll concentration, and host protein content remained largely unchanged across treatments, while genotype accounted for significant variation in multiple physiological responses. Collectively, these findings support a hierarchy of short-term physiological sensitivity, with photophysiological metrics showing the most consistent responses, metabolic responses being more limited, and biomass-related and sk",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Environmental Monitoring and Assessment",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s10661-026-15969-9",
+    "gist": "Laboratory study of Orbicella faveolata physiology under suspended sediment and elevated temperature. Clarifies stressor interactions critical for understanding coral stress responses in closed systems.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "BMC Genomics",
+   "title": "Cool and warm conditions disrupt development through divergent mechanisms in larvae of the reef-building coral Orbicella faveolata",
+   "url": "https://doi.org/10.1186/s12864-026-13438-8",
+   "published_at": "2026-10-12T00:00:00Z",
+   "author": "Benjamin H. Glass et al.",
+   "raw_text": "Developing animals are sensitive to stressful abiotic environmental conditions, which can induce negative effects including disrupted developmental progression and mortality. Plasticity in physiology and gene expression can protect developing organisms from stressors, yet how this occurs remains unexplored for many taxa. Marine invertebrates are important species in which to investigate these mechanisms because these taxa are experiencing stressful conditions under climate change. For example, marine cold spells and heatwaves may threaten larvae of reef-building corals, yet the effects of such stressors on larvae remain largely uncharacterized. We hypothesized that exposure to cool and warm conditions would lead to decreased larval survival and settlement (i.e., the transition from pelagic larva to benthic settler), and tested this in the Caribbean coral Orbicella faveolata . Given the contrasting effects of cool and warm temperatures on cellular and organismal physiology, we further hypothesized that these conditions would affect O. faveolata larvae through distinct mechanisms, and explored this by characterizing the effects of temperature on larval gene expression profiles. Exposure to cool (20 °C) and warm (30 °C) temperatures led to decreased survival and settlement of O. faveolata larvae compared to larvae under ambient (27 °C) conditions. Further, reduced settlement capacity (i.e., mortality-corrected settlement) of surviving individuals indicated that negative effects on settlement were not solely due to increased mortality. Interestingly, despite similar phenotypic outcomes, cool and warm exposures had contrasting effects on gene expression profiles, suggesting that these conditions disrupt development through distinct mechanisms. Specifically, gene expression patterns suggested that cool conditions suppressed cell division and aerobic metabolism, whereas these processes increased under warm conditions, likely leading to depletion of cellular and metabolic r",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "BMC Genomics",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1186/s12864-026-13438-8",
+    "gist": "Cold and warm stress disrupt coral larval development through different genetic mechanisms in Orbicella faveolata. Understanding how temperature extremes affect early life stages informs reef restoration and aquaculture efforts.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "yt-wwc",
+   "source_name": "World Wide Corals",
+   "title": "This Reef Has Grown for 10 Years! | SPS, Chalices & Reef Keeping in Brazil",
+   "url": "https://www.youtube.com/watch?v=7Spj-dyskUw",
+   "published_at": "2026-10-15T20:00:07Z",
+   "author": "World Wide Corals",
+   "raw_text": "What does it take to grow corals for a decade and maintain a thriving reef without routine water changes? While visiting São Paulo, Brazil, Vic stops at Fishland to meet Ricardo and explore an incredible, mature reef aquarium filled with established coral colonies, colorful chalices, impressive SPS, and a thoughtfully designed flow system. Ricardo has been in the hobby for decades, and his approach offers plenty for reef keepers to think about. From monthly ICP testing and trace-element adjustments to four gyre pumps, carefully positioned returns, and a willingness to trust what the aquarium is telling him, this tank is a great reminder that there’s more than one way to approach successful reef keeping. In this video: - A tour of Fishland in São Paulo, Brazil, and Ricardo’s impressive mature reef aquarium - How years of coral growth have transformed the aquascape, including a remarkable coral colony that has been growing for around 10 years - The aquarium’s lighting setup, photoperiod, and measured PAR levels - Ricardo’s approach to calcium, magnesium, alkalinity, nutrients, and trace elements - Why he uses monthly ICP testing and adjusts his system when something needs attention - How he maintains his reef without routine water changes—and when he decides a water change is necessary - The importance of observing coral growth, health, and behavior instead of relying on numbers alone - How four gyre pumps and strategically positioned return outlets help create circulation throughout the aquarium World Wide Corals At World Wide Corals, we believe there’s a lot to learn from seeing how different reef keepers approach the hobby. Visiting established aquariums like Ricardo’s lets us explore different maintenance routines, equipment choices, and coral-growing techniques while sharing real-world experiences with the reef-keeping community. Whether you’re growing SPS, maintaining colorful LPS, or refining your own reef system, there’s always something new to learn from anot",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "7Spj-dyskUw",
+    "duration_s": "842",
+    "gist": "Tour of a mature 10-year Brazilian reef tank with established corals, monthly ICP testing, and minimal water changes. Ricardo's decade-long system demonstrates long-term husbandry strategy and trace-element management at scale.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "yt-saltwateraquarium",
+   "source_name": "SaltwaterAquarium.com",
+   "title": "Insane 15,000L German Reef Tank System! (13-Meter Drop Off & Multi-Floor Sump) | Reefing Roadtrip",
+   "url": "https://www.youtube.com/watch?v=Gc-FGDSWwjI",
+   "published_at": "2026-10-15T17:00:03Z",
+   "author": "SaltwaterAquarium",
+   "raw_text": "10-15-2026 Tour one of the most insane, self-sustaining reef systems in Germany at GigaZoo! From a massive 5,000-liter living room display powered by Tunze Orca powerheads to a downhill plumbing setup connecting multiple sumps in the basement, this massive 15,000-liter total saltwater system pushes the boundaries of reef keeping. Store owner Franz takes us through his ultra-minimalist philosophy—running a single return pump, one calcium reactor, and one skimmer with zero filter socks, carbon, or GFO to build a self-regulating biotope. Plus, check out the world's longest drop-off frag tank stretching nearly 13 meters across the store! Discover how smart flow control, biotope biology, and German engineering come together in this one-of-a-kind reef tour. ______________________________________________ ⚠️ Products In This Video ► Tunze ORCA 6075.502 BLACK \"Saltwater Exclusive\" Oscillating Aquarium Wave Pump - https://www.saltwateraquarium.com/orca-6075-502-black-saltwater-exclusive-oscillating-aquarium-wave-pump-orca-mk2-6075-pump-tunze/ ► Tunze Turbelle Stream 3 Flow Pump (6150.000) - https://www.saltwateraquarium.com/turbelle-stream-3-flow-pump-6150-000-tunze/ ► Tunze Comline DOC 9004 Protein Skimmer - https://www.saltwateraquarium.com/comline-doc-9004-protein-skimmer-tunze/ ► Tunze DOC Skimmer 9410 - https://www.saltwateraquarium.com/doc-skimmer-9410-tunze/ ► Reef Octopus CR140 DC Calcium Reactor 5.5\" W/Varios 2 Pump - https://www.saltwateraquarium.com/cr140-dc-calcium-reactor-5-5-w-varios-2-pump-reef-octopus/ ► Reef Octopus CR200 DC Calcium Reactor 8\" W/Varios 4 Pump - https://www.saltwateraquarium.com/cr200-dc-calcium-reactor-8-w-varios-4-pump-reef-octopus/ ► Abyzz AFC150 Flow Cannon Pump - https://www.saltwateraquarium.com/afc150-flow-cannon-pump-abyzz/ ► Abyzz Abyzz A1200 IPU (18,000 gph) 3M Cord Controllable DC Pump - https://www.saltwateraquarium.com/abyzz-a1200-ipu-18-000-gph-3m-cord-controllable-dc-pump-abyzz/ ______________________________________________ Web",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "Gc-FGDSWwjI",
+    "duration_s": "839",
+    "relevance": "0.70",
+    "similar": "1"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Microbiology Resource Announcements",
+   "title": "Three Vibrio isolates from the coral Pachyseris speciosa as draft genome resources",
+   "url": "https://doi.org/10.1128/mra.00868-26",
+   "published_at": "2026-10-14T00:00:00Z",
+   "author": "Hau Ching Luk et al.",
+   "raw_text": "ABSTRACT Vibrio coralliilyticus SCP4, Vibrio harveyi SCP5, and Vibrio sp. SCP2 were isolated from the coral Pachyseris speciosa in Singapore, adding to reports of Vibrio in tropical corals. Their draft genomes variably encode types II, III, and VI secretion systems, toxR , and vcpA , genes linked to pathogenic potential in Vibrio species.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Microbiology Resource Announcements",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1128/mra.00868-26",
+    "gist": "Three Vibrio isolates from coral Pachyseris speciosa characterized with draft genomes. Pathogenic Vibrio in tropical corals is directly relevant to coral disease and reef husbandry.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "BMC Zoology",
+   "title": "Integrating active and passive environmental DNA sampling into coral reef assessments: implications for community-based biomonitoring in Hawaiʻi",
+   "url": "https://doi.org/10.1186/s40850-026-00293-z",
+   "published_at": "2026-10-13T00:00:00Z",
+   "author": "Cécile M. Vimond et al.",
+   "raw_text": "Abstract Background Environmental DNA (eDNA) has transformed biodiversity monitoring, but its application for long-term ecological assessment remains limited by uncertainty in the temporal stability and consistency of eDNA signals, as well as by workflows that require specialized equipment and analytical support. Broader use of eDNA in community-based monitoring will depend on approaches that are both logistically practical and scientifically reliable. Here, we conducted two complementary studies of eDNA methods for coral reef monitoring in Hawaiʻi. First, we compared coral-specific genetic markers for tracking benthic community dynamics through time. Second, we compared passive eDNA samplers (PEDS) as a low-effort alternative to active filtration. This research was conducted in collaboration with local stewardship organizations on Oʻahu, Hawaiʻi, to assess how eDNA sampling could complement existing reef-monitoring activities and provide additional information relevant to conservation planning. Results Across five broad taxonomic markers (16S, 18S, 23S, COI, MFU), we detected diverse reef assemblages spanning 17 phyla, with consistent differences in community composition between the two O‘ahu study regions, Ke‘ehi and Maunalua Bay (~ 12 km apart), including clear differentiation in algal assemblages. Passive samplers recovered comparable taxonomic richness to active filtration when sampling effort was standardized, but showed greater variability among replicates, whereas active methods more consistently detected rare and transient taxa. Despite this, passive samplers captured similar broad-scale ecological patterns with reduced logistical effort. For coral monitoring, all three markers (12S, 16S, ITS2) showed strong correlations with visual cover and detected more genera than visual surveys (23 vs. 17 site-genera detections, a 35% increase). Among these, 16S showed the strongest and most consistent performance across temporal replicates, while ITS2 showed greater t",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "BMC Zoology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1186/s40850-026-00293-z",
+    "gist": "Study integrates active and passive eDNA sampling for coral reef biomonitoring in Hawai'i, exploring community-based assessment methods. Demonstrates practical monitoring tools for reef health assessment that hobbyists could eventually adapt.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Geophysical Research Letters",
+   "title": "Symbiont‐Mediated Molybdenum Cycling Shapes Coral Skeletal Mo Isotopes",
+   "url": "https://doi.org/10.1029/2026gl123572",
+   "published_at": "2026-10-12T00:00:00Z",
+   "author": "Xuefei Chen et al.",
+   "raw_text": "Abstract Coral skeletal trace‐metal compositions are commonly assumed to derive from seawater, yet the extent to which biological processes contribute remains poorly constrained. Here we present the first paired Mo isotope measurements of coral tissue, symbiotic zooxanthellae, and skeleton. All three compartments are depleted in δ 98 Mo relative to seawater, with zooxanthellae significantly lighter than host tissue. A strong negative correlation between zooxanthellae and skeletal δ 98 Mo, together with a negative power‐law relationship between skeletal Mo concentration and δ 98 Mo across species and reef environments, indicates a symbiont‐mediated control on Mo partitioning. Fossil corals further show systematic variability in skeletal δ 98 Mo associated with climate variability over the past millennium, suggesting that environmental changes modulate symbiont‐driven biological processes recorded in coral skeletons. These observations suggest that biologically processed Mo contributes substantially to skeletal composition and that coral δ 98 Mo may serve as a novel proxy for symbiont metabolic activity and its response to environmental change.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Geophysical Research Letters",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1029/2026gl123572",
+    "gist": "Coral symbiotic algae drive molybdenum isotope fractionation in coral skeletons, not seawater alone. Tracing how symbionts shape skeletal chemistry deepens understanding of coral physiology and trace-metal uptake.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Metabolomics",
+   "title": "Environmental drivers of metabolomic profiles within and between cryptic lineages of Montastraea cavernosa, the great star coral",
+   "url": "https://doi.org/10.1007/s11306-026-02545-y",
+   "published_at": "2026-10-10T00:00:00Z",
+   "author": "Dominique N. Gallery et al.",
+   "raw_text": "INTRODUCTION: Reef restoration practitioners aim to preserve coral genetic diversity by protecting reefs and cultivating diverse genotypes in coral nurseries. However, cryptic genetic lineages in most corals complicate restoration strategies, as the role of between-lineage genetic divergence remains unclear regarding adaptation. In Montastraea cavernosa, researchers have identified cryptic lineages, some strongly segregated by depth. OBJECTIVES: We aimed to quantify lineage-specific responses to the environment that explain the genetic and ecological divergence between the two lineages. METHODS: We conducted a ten-week reciprocal transplantation experiment using two cryptic lineages restricted to shallow water (< 10 m depth), with one lineage more common on nearshore reefs and the other on offshore reefs. Following transplantation, we analyzed the corals' growth and metabolomic response to transplantation. RESULTS: Surprisingly, the strongest response was not lineage-specific. Instead, both lineages exhibited significant and similar changes in growth and metabolomic profiles, depending on the final habitat they were transplanted to. CONCLUSION: These results suggest that cryptic lineages employ similar mechanisms of adaptation and acclimatization to environmental challenges at the metabolite level, despite their genetic distinction.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Metabolomics",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s11306-026-02545-y",
+    "gist": "Cryptic lineages of Montastraea cavernosa show distinct metabolomic responses to environmental stress, with some segregated by depth. Understanding between-lineage adaptation informs coral-nursery selection and restoration strategy.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "scripps-bsky",
+   "source_name": "Scripps Institution of Oceanography — Bluesky",
+   "title": "🎵 The reefs are alive with the sound of healthy coral reef ecosystems!",
+   "url": "https://bsky.app/profile/scrippsocean.bsky.social/post/3mxhmoxfoe32a",
+   "published_at": "2026-10-09T18:39:00Z",
+   "author": null,
+   "raw_text": "🎵 The reefs are alive with the sound of healthy coral reef ecosystems! 🔊 Two studies led by Scripps Oceanography scientists demonstrate how underwater sound can play a role in restoring degraded coral reefs and rebuilding fish communities. Dive in: https://bit.ly/47c5srC",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Two Scripps studies show that underwater sound can aid coral reef restoration and rebuild fish communities. Understanding reef recovery mechanisms informs broader conservation science that shapes wild-stock availability and reef health trends affecting the hobby.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-reef-fish",
+   "source_name": "Proceedings of the Royal Society B Biological Sciences",
+   "title": "Experimental manipulation of ecological constraints influences conflict but not cooperation in the humbug damselfish Dascyllus aruanus",
+   "url": "https://doi.org/10.1098/rspb.2025.3229",
+   "published_at": "2026-10-14T00:00:00Z",
+   "author": "Rebecca Branconi et al.",
+   "raw_text": "Animal societies vary widely in levels of cooperation and conflict, and understanding the causes of this variation is a central goal in evolutionary biology. As with other features of animal societies, relatedness, competitiveness and ecological constraints (e.g. habitat saturation and risks of dispersal) have been proposed as key factors explaining variation in cooperation and conflict. However, the exact causes remain unclear. We used the humbug damselfish (Dascyllus aruanus)-a small coral reef fish that occupies coral heads-to experimentally test the prediction from Emlen's ecological constraints model that relaxed constraints increase conflict and decrease cooperation within social groups. We manipulated ecological constraints by providing a vacant coral near groups and examined changes in social interactions. We also assessed how variation in social context (e.g. individual size, group size and size ratios) and ecological context (e.g. territory size, habitat availability and local group density) modulated these effects. Relaxing ecological constraints led to increased conflict in groups occupying larger corals, in areas with greater habitat availability and in larger groups, whereas it led to decreased conflict by larger individuals and in areas with higher local group density. No effect on cooperative behaviours was observed. These findings suggest that ecological constraints influence conflict within groups, but that this relationship is context-dependent and modulated by both ecological and social factors.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Proceedings of the Royal Society B Biological Sciences",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1098/rspb.2025.3229",
+    "gist": "Experimental test of how habitat saturation and dispersal risk influence cooperation and conflict in humbug damselfish colonies. Understanding social behavior in obligate coral-dwellers illuminates how to keep them in systems and encourage natural breeding.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "yt-saltwateraquarium",
+   "source_name": "SaltwaterAquarium.com",
+   "title": "Inside Germany’s Most Unique Local Reef Shop! (Tunze Reef 360 & Coral Tour) | Euro Reefing Roadtrip",
+   "url": "https://www.youtube.com/watch?v=dmJxpoZwU4I",
+   "published_at": "2026-10-13T17:00:09Z",
+   "author": "SaltwaterAquarium",
+   "raw_text": "10-12-2026 We’re back for part two of our deep dive into the Tunze Reef 360, taking a full tour of Riffgärtnerei, one of Munich, Germany's most unique saltwater fish stores! Join shop owner Nora as she walks us through her natural, stress-free fish setups, shares why she keeps Aiptasia in her tanks to guarantee pest-eating species, and gives us an inside look at her stunning collection of homegrown SPS and soft corals. Beyond seeing the world's first motorless, rotating reef aquascape in action, you'll get expert advice on dry rock aquascaping, water change strategies, and essential reef-keeping tips for aquarists of all skill levels. ______________________________________________ ⚠️ Products In This Video ► Tunze Reef360 Rotating Reef Rock - https://www.saltwateraquarium.com/reef360-rotating-reef-rock-tunze/ ► Tunze ORCA 6075.502 BLACK \"Saltwater Exclusive\" Oscillating Aquarium Wave Pump - https://www.saltwateraquarium.com/orca-6075-502-black-saltwater-exclusive-oscillating-aquarium-wave-pump-orca-mk2-6075-pump-tunze/ ► Tunze Turbelle Stream 3 Flow Pump (6150.000) - https://www.saltwateraquarium.com/turbelle-stream-3-flow-pump-6150-000-tunze/ ► Tunze Turbelle Nanostream 6075.005 Aquarium Wave Pump HUB Edition - https://www.saltwateraquarium.com/turbelle-nanostream-6075-005-aquarium-wave-pump-hub-edition-tunze/ ► Fauna Marin REEF ICP Water Analysis Test Kit (37 Water Parameters) - https://www.saltwateraquarium.com/reef-icp-water-analysis-test-kit-37-water-parameters-fauna-marin/ ► Fauna Marin Reef ICP Test Total (90 Water Parameters) - https://www.saltwateraquarium.com/reef-icp-test-total-90-water-parameters-fauna-marin/ ► ATI ATI ICP-OES Pro Lab Water Test Kit - https://www.saltwateraquarium.com/ati-icp-oes-pro-lab-water-test-kit-w-prepaid-shipping-label-ati/ ► ATI ICP-OES Standard Water Analysis Test Kit - https://www.saltwateraquarium.com/ati-icp-oes-standard-water-analysis-test-kit-w-prepaid-shipping-label-ati/ ► Tropic Marin ICP Water Analysis - https://www.sal",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "dmJxpoZwU4I",
+    "duration_s": "1137",
+    "gist": "Video tour of a Munich reef shop showcasing Tunze equipment and the owner's SPS and soft coral collection. Practical husbandry insights—dry rock aquascaping, water changes, Aiptasia management—from an experienced setup.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Animal Cognition",
+   "title": "Leaning left: how turn bias and habitat complexity shape spatial cognition in a coral-reef fish",
+   "url": "https://doi.org/10.1007/s10071-026-02116-7",
+   "published_at": "2026-10-11T00:00:00Z",
+   "author": "Helen von Drenkmann et al.",
+   "raw_text": "Abstract In coral reef ecosystems, anthropogenic change is rapidly altering habitat structure, but the consequences for fish cognition remain poorly understood. We tested whether structural habitat complexity influences spatial learning and strategy use in the humbug damselfish ( Dascyllus aruanus ). Juveniles were reared in aquaria containing either high- or low-complexity coral structures and trained in a T-maze task, requiring the use of egocentric (turn-based) and/or allocentric (landmark-based) strategies to locate a reward. Performance was assessed using the number of trials to reach a learning criterion and latency to make correct decisions. Probe trials with conflicting cues assessed navigation strategies. Turn direction was the strongest predictor of performance. Fish trained to turn left reached criterion in fewer trials and consistently relied on egocentric strategies, indicative of a lateralisation bias. In contrast, right-turning fish increasingly relied on landmark cues during probe trials and made faster decisions when doing so, suggesting that allocentric strategies reduced the cost of acting against intrinsic turn biases. Contrary to our expectation, environmental complexity did not affect the number of trials required to reach criterion. However, high-complexity fish located the reward faster during early training and showed longer decision latencies during probe trials, suggesting greater sensitivity to landmark information when cues conflicted. Our results suggest that spatial task performance may be shaped more by turn biases and strategy use than by environmental complexity alone, highlighting the importance of considering intrinsic behavioural constraints when interpreting spatial cognition.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Animal Cognition",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s10071-026-02116-7",
+    "gist": "Humbug damselfish reared in low-complexity coral environments showed altered spatial learning and increased reliance on turn-based strategies. Habitat structure affects fish cognition, relevant to tank design and fish behavior.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "gsr-bsky",
+   "source_name": "Great Southern Reef Foundation — Bluesky",
+   "title": "New report documents at least 8,250 shark and ray deaths in South Australian waters affected by the harmful…",
+   "url": "https://bsky.app/profile/greatsouthernreef.bsky.social/post/3mxwykqi4jc2o",
+   "published_at": "2026-10-15T21:21:00Z",
+   "author": null,
+   "raw_text": "New report documents at least 8,250 shark and ray deaths in South Australian waters affected by the harmful algal bloom. The authors describe the recorded toll as a conservative minimum. Learn more https://greatsouthernreef.com/news#hab-impacts",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Report documents 8,250+ shark and ray deaths from a harmful algal bloom in South Australia. Large-scale wild-reef mortality from environmental stress illustrates ecosystem fragility affecting species collection and trade.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "yt-poloreef",
+   "source_name": "Polo Reef",
+   "title": "THE ULTIMATE MARINE FISH CHALLENGE! RARE FISH FOR HUGE 17K GALLON REEF TANK!",
+   "url": "https://www.youtube.com/watch?v=rihvIMvGWR4",
+   "published_at": "2026-10-16T14:00:17Z",
+   "author": "Polo Reef by Andrew Sandler",
+   "raw_text": "What does it take to successfully quarantine and establish 450 anthias in a massive saltwater aquarium operation? Join the Polo Reef team as they take on one of their most ambitious marine fish quarantine challenges yet! Anthias are among the most beautiful and sought-after saltwater aquarium fish, but they're also notoriously difficult to quarantine, acclimate, and establish successfully. With 450 of these delicate reef fish on the way, the Polo Reef team has their work cut out for them! Before the fish arrive, the team gets busy preparing the quarantine systems, performing critical equipment checks, troubleshooting problems, making repairs, and installing new equipment to ensure everything is ready. Once the anthias arrive, the real challenge begins! Follow the team through the detailed process of receiving, inspecting, testing, treating, and caring for hundreds of marine fish. From disease prevention and water quality management to feeding and acclimation, discover the challenges of keeping these stunning reef fish healthy and thriving. In this episode, you'll see: - Preparing quarantine systems for 450 anthias - Aquarium equipment inspections, repairs, and installations - The challenges of quarantining delicate saltwater fish - Marine fish health assessments, testing, and treatment procedures - Quarantine protocols and disease prevention - The work involved in establishing anthias in captivity Whether you're an experienced reef keeper, saltwater aquarium hobbyist, marine aquarist, or simply fascinated by coral reefs and exotic marine fish, this episode offers a behind-the-scenes look at professional aquarium husbandry on an extraordinary scale. *************************** ☛ SUBSCRIBE for the latest https://www.youtube.com/c/PoloReefbyAndrewSandler?sub_confirmation=1 *************************** ☘ GIVEAWAYS + more! Join our mailing list for updates: https://www.poloreef.com/pages/youtube-subscribe-email-sms *************************** ➜ WEBSITE: https://www.PoloRe",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "rihvIMvGWR4",
+    "duration_s": "1105",
+    "gist": "Polo Reef documents quarantining and establishing 450 anthias in a 17K-gallon system. The detailed protocol for a difficult species at scale offers practical insight into professional acclimation technique.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "ubcoceans-bsky",
+   "source_name": "UBC Oceans — Bluesky",
+   "title": "The Minister of Fisheries, the Honorable Joanne Thompson, announced that the Government of Canada is…",
+   "url": "https://bsky.app/profile/ubcoceans.bsky.social/post/3mxrhk7kq5k2f",
+   "published_at": "2026-10-13T16:33:00Z",
+   "author": null,
+   "raw_text": "The Minister of Fisheries, the Honorable Joanne Thompson, announced that the Government of Canada is proposing to add or reclassify 15 aquatic species populations under the Species at Risk Act (SARA). https://ecomagazine.com/news/policy/canada-proposes-adding-15-aquatic-species-under-species-at-risk-act/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Canada proposes adding or reclassifying 15 aquatic species under the Species at Risk Act. Trade and import regulations for reef fauna could shift; monitor for ornamental species affected.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "yt-reefdudes",
+   "source_name": "ReefDudes",
+   "title": "Cycling and Microbiome - Jump starting your Microdiversity w/ @hightideaquaticsoak",
+   "url": "https://www.youtube.com/watch?v=yR-C3U74CJ8",
+   "published_at": "2026-10-15T14:35:54Z",
+   "author": "ReefDudes",
+   "raw_text": "Join Kenny and I as we dig into Cycling, Microbiome and microdiversity Join the Community https://www.facebook.com/groups/reefdudes Eyecandy https://www.instagram.com/reefdudes/ Ask a question http://reefdudes.com/ask Want to support the channel? Purchase your gear through my Amazon link TG-7 https://amzn.to/4dHqOyi BRS https://bulkreefsupply.sjv.io/avidaqua or become a Patreon https://www.patreon.com/reefdudes",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "yR-C3U74CJ8",
+    "duration_s": "4688",
+    "gist": "A podcast episode explores tank cycling, microbiome, and microdiversity with guest input. Foundational topics for reef keepers, though the format and lack of detail limit specificity.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "‘Miami Coral Club’ @ Gramps Getaway",
+   "url": "https://reefs.com/miami-coral-club-gramps-getaway/",
+   "published_at": "2026-10-13T14:00:37Z",
+   "author": "Colin Foord",
+   "raw_text": "This October marks Coral Morphologic’s 19th year, and we are excited to launch the Miami Coral Club , a new coral-focused monthly event series at Gramps Getaway on Virginia Key. Join us on Thursday, October 22nd, from 6-10 PM for our kickoff meeting, where you can sign up for membership and learn more about Miami’s coral reefs.&#8230; The post ‘Miami Coral Club’ @ Gramps Getaway appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Miami Coral Club launches monthly community meetup series starting October 22. Local reef club event for networking and learning about Miami's wild reefs.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "yt-saltwateraquarium",
+   "source_name": "SaltwaterAquarium.com",
+   "title": "Top Beginner Corals Recommended by Reef-A-Palooza Experts! | Hilary On Location",
+   "url": "https://www.youtube.com/watch?v=Fm_DWAlT9u0",
+   "published_at": "2026-10-10T13:00:26Z",
+   "author": "SaltwaterAquarium",
+   "raw_text": "10-10-2026 Join Hilary as she tours Reef-A-Palooza to ask top coral vendors for their ultimate beginner coral recommendations! Whether you are setting up your very first saltwater tank or looking to step up from easy softies to fast-growing LPS, expert reefers share their top picks—including hardy Duncan corals, colorful Zoanthids (like Rostas and Yellow Submarine), forgiving Hammer corals, Mushrooms, Clove Polyps, and vibrant Acans. Discover which species thrive through early parameter swings, which corals offer fast visual growth, and how to pick the right corals to expand your reef tank with confidence! ______________________________________________ ⚠️ Products In This Video ► Duncan Coral (1\" - 2\") 3 - 4 Heads - https://www.saltwateraquarium.com/duncan-coral-1-2-3-4-heads-saq-coral-farm/ ► Aquacultured Duncanopsammia Coral - https://www.saltwateraquarium.com/aquacultured-duncanopsammia-coral-duncanopsammia-axifuga-ora-chicago/ ► ACI Cultured Rastas Zoanthids - https://www.saltwateraquarium.com/aci-cultured-rastas-zoanthids-saq-coral-farm/ ► Yellow Submarine Zoanthids - https://www.saltwateraquarium.com/yellow-submarine-zoanthids-saq-coral-farm/ ► ORA Aquacultured Marshall Island Hammer Coral (Euphyllia sp.) - https://www.saltwateraquarium.com/aquacultured-marshall-island-hammer-coral-euphyllia-sp-ora/ ► Pulsing Xenia Coral - https://www.saltwateraquarium.com/pulsing-xenia-coral-saq-coral-farm/ ► ORA Aquacultured Kenya Tree Coral - https://www.saltwateraquarium.com/aquacultured-kenya-tree-coral-capnella-sp-ora/ ► One Random Mystery Florida Ricordea Mushroom Coral - https://www.saltwateraquarium.com/one-random-mystery-florida-ricordea-mushroom-coral-3-4-1-saq-coral-farm/ ► Green Tip Frogspawn Coral (3/4\" - 1\") - https://www.saltwateraquarium.com/green-tip-frogspawn-coral-3-4-1-saq-coral-farm/ ► Neon Green Clove Polyps - https://www.saltwateraquarium.com/neon-green-clove-polyps-saq-coral-farm/ ► Neon Green Star Polyp Coral - https://www.saltwateraquarium.com/neon-g",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "Fm_DWAlT9u0",
+    "duration_s": "453",
+    "gist": "Reef-A-Palooza vendors recommend beginner corals including Duncans, Zoanthids, Hammer corals, and Acans for their hardiness and fast growth. Expert consensus on resilient species helps new reefers choose stocking.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "mail-noaa",
+   "source_name": "NOAA National Ocean Service — Newsletter",
+   "title": "First NOAA RESTORE Funded Coral Sampling Mission Complete",
+   "url": "https://links-1.govdelivery.com/CL0/https:%2F%2Frestoreactscienceprogram.noaa.gov%2Fprojects%2Ffgbnms-coral-resilience%3Futm_medium=email%26utm_source=GovDelivery/1/010001a140be2356-ec797cfb-1cd2-4baf-8ef7-9c8c197edfa2-000000/1EENCt1ltHUSL8yTEM0T8acz-9_zxLP9KLuS0kqLHqg=452",
+   "published_at": "2026-10-15T18:06:05Z",
+   "author": null,
+   "raw_text": "NOAA RESTORE Coral Sampling Mission",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "newsletter": "NOAA RESTORE Coral Sampling Mission",
+    "gist": "NOAA completes first RESTORE-funded coral sampling mission in the Gulf. Government-backed wild-coral monitoring and resilience research informs conservation baseline.",
+    "relevance": "0.45"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Descriptive morpho pathological lesions and surveillance baseline of mesenchymal tumors in some commercially important marine fish species from the Arabian Gulf, Saudi Arabia",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1972671",
+   "published_at": "2026-10-15T00:00:00Z",
+   "author": "Mustafa M. Ibrahim",
+   "raw_text": "Mesenchymal neoplasms in marine teleosts provide valuable insights into individual pathological states; however, interpreting them as indicators of environmental integrity requires considerable caution, and documenting such tumors is essential for monitoring ecosystem stressors. This study aimed to describe several types of mesenchymal tumors in four commercially important fish species caught in the Arabian Gulf in the Eastern Province of Saudi Arabia. During routine veterinary inspections at landing stations and markets in Jubail in 2025, 1,850 fish samples were examined. Samples included Lethrinus nebulosus, Carangoides gymnostethus, Lethrinus lentjan, and Siganus canaliculatus. Gross pathological examinations were conducted, followed by histopathological assessment using hematoxylin and eosin (H&amp;E) and Masson’s trichrome (MT) stains. Ten cases of neoplastic growths were identified, representing an overall observed frequency of 0.54%. Lipomas were diagnosed in L. nebulosus and C. gymnostethus, presenting as well-circumscribed, greasy, white subcutaneous masses composed of well-differentiated adipocytes. Rhabdomyoma was observed in L. lentjan and was characterized by solitary, pedunculated overgrowths of pleomorphic but benign skeletal muscle fibers exhibiting loss of normal myotome polarity. Rhabdomyosarcoma was identified in S. canaliculatus, with malignant features including poorly differentiated myocytes, cellular pleomorphism, hemorrhage, and infiltration into the abdominal cavity with displacement of visceral organs. As tumorigenesis in aquatic organisms are indicators for many environmental pollutants and stress, further studies are required to confirm the potential etiologies of such lesions in this region.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Survey of mesenchymal tumors in commercial fish species from the Arabian Gulf reveals disease indicators in wild populations. Provides baseline data on fish health and ecosystem stressors, though focused on food-species rather than aquarium fauna.",
+    "relevance": "0.45"
+   }
+  },
+  {
+   "source_id": "openalex-reef-fish",
+   "source_name": "Environmental Biology of Fishes",
+   "title": "Harem polygyny through resource defense territoriality in the sandperch Parapercis pacifica (Pinguipedidae)",
+   "url": "https://doi.org/10.1007/s10641-026-01920-x",
+   "published_at": "2026-10-12T00:00:00Z",
+   "author": "Natsumi Takayama et al.",
+   "raw_text": "In reef fishes inhabiting sandy rubble habitats, such as sandperches, a mating system with territorial female-type harems has been widely confirmed. However, the mechanisms underlying harem maintenance in species with large territories remain poorly understood. Parapercis pacifica (Pinguipedidae) is a relatively large sandperch with large territorial home ranges. To examine the mating system of the sandperch P. pacifica , we conducted underwater observational surveys on the reefs of Sesoko Island, Okinawa, Japan. Both males and females established intrasexually exclusive home ranges. Females maintained wide foraging areas within their territorial home ranges and occasionally displayed aggressive behaviors towards carnivorous fish species, including female conspecifics and other species, suggesting the importance of food resources. Male territories did not completely encompass female home ranges, which differed from those of other sandperch species. However, male territories primarily covered female shelter nests. During the mating period around sunset, males patrolled their territories and visited female shelter nests, indicating that the nests facilitated sexual encounters. Each male maintained a stable mating relationship with one to four smaller females whose territories overlapped intersexually. Thus, by maintaining a territory that covers resources that facilitate encounters with spatially dispersed females, males of P. pacifica may have an energy-saving tactic for monopolizing polygynous mating.",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "venue": "Environmental Biology of Fishes",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s10641-026-01920-x",
+    "gist": "Parapercis pacifica sandperch use territorial resource defense to maintain harem mating systems on Okinawan reefs. Behavioral ecology of reef fish informs understanding of species kept in captivity.",
+    "relevance": "0.45"
+   }
+  }
+ ]
+}

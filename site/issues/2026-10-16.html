@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly Dive — October 16, 2026 · The Lone Aquarist</title>
+<meta name="description" content="A weekly digest of saltwater and reef aquarium news. Every item links to its source."><link rel="canonical" href="https://www.theloneaquarist.com/issues/2026-10-16.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Lone Aquarist">
+<meta property="og:title" content="Weekly Dive — October 16, 2026">
+<meta property="og:description" content="28 items from 23 outlets, led by “Rapid coral bleaching recovery via symbiont transfer from healthy corals”">
+<meta property="og:url" content="https://www.theloneaquarist.com/issues/2026-10-16.html"><meta property="og:image" content="https://www.theloneaquarist.com/assets/masthead.png"><meta property="og:image:width" content="1908"><meta property="og:image:height" content="404"><meta name="twitter:card" content="summary_large_image"><style>
+  /* Single-theme by choice: white ground, the conventional register for a news
+     aggregator. There is deliberately no dark variant — a digest read at 6am on
+     a phone should look the same as one read at noon on a desktop. Every colour
+     is stated explicitly so the page holds its look on any host background. */
+  :root {
+    --page:      #ffffff;
+    --ground:    #f6f7f8;
+    --ink:       #16191d;
+    --ink-soft:  #545e69;
+    --ink-faint: #8b959f;
+    --rule:      #e4e8eb;
+    --link:      #0b5fbe;
+    --flare:     #b8501f;   /* beat tags only — the one warm note on the page */
+
+    /* One hue per category, matched in weight so the set reads as a system
+       rather than a rainbow. Each clears 4.5:1 on white. */
+    --c-industry:       #0a6360;  --c-industry-tint:   #ecf4f3;
+    --c-husbandry:      #2a6234;  --c-husbandry-tint:  #edf3ee;
+    --c-community:      #364a8f;  --c-community-tint:  #ecEEF7;
+    --c-livestock:      #8a5512;  --c-livestock-tint:  #f6f1e8;
+    --c-wild-reefs:     #1a5182;  --c-wild-reefs-tint: #eaeff5;
+    --c-events:         #4b4a6e;  --c-events-tint:     #eeedf4;
+    --c-elsewhere:      #545e69;  --c-elsewhere-tint:  #f2f3f5;
+    /* Resource is a placement, not a category — but it is a section on the
+       page, so it needs a hue to belong to the set. */
+    --c-resource:       #1f5f6d;  --c-resource-tint:   #eaf2f4;
+  }
+
+  /* Each section sets --hue and --tint once; everything inside reads from them. */
+  .sec-industry   { --hue: var(--c-industry);   --tint: var(--c-industry-tint); }
+  .sec-husbandry  { --hue: var(--c-husbandry);  --tint: var(--c-husbandry-tint); }
+  .sec-community  { --hue: var(--c-community);  --tint: var(--c-community-tint); }
+  .sec-livestock  { --hue: var(--c-livestock);  --tint: var(--c-livestock-tint); }
+  .sec-wild-reefs { --hue: var(--c-wild-reefs); --tint: var(--c-wild-reefs-tint); }
+  .sec-events     { --hue: var(--c-events);     --tint: var(--c-events-tint); }
+  .sec-elsewhere  { --hue: var(--c-elsewhere);  --tint: var(--c-elsewhere-tint); }
+  .sec-resource   { --hue: var(--c-resource);   --tint: var(--c-resource-tint); }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 42rem; margin: 0 auto; padding: 2.25rem 1.15rem 4rem; }
+
+  /* -------------------------------- masthead -------------------------------
+     The banner carries the wordmark and tagline, so the h1 wraps the image and
+     the alt text is the heading — no duplicated text on the page, and screen
+     readers still get a real <h1>. */
+  header.masthead { margin: 0 0 1.1rem; }
+  h1.wordmark { margin: 0; font-size: 0; line-height: 0; }
+  h1.wordmark img { display: block; width: 100%; height: auto; border-radius: 8px; }
+
+  /* Drawn stand-in, used only when no banner file is present. Same palette, so
+     a missing asset degrades rather than breaks. */
+  .banner-fallback {
+    border-radius: 8px; padding: 1.5rem 1.4rem 1.6rem;
+    background: linear-gradient(155deg, #3585b8 0%, #1d5f92 45%, #102a3f 100%);
+    color: #fff;
+  }
+  .banner-fallback .kicker {
+    margin: 0 0 .15rem; font-size: .84rem; font-weight: 700; letter-spacing: -.005em;
+  }
+  .banner-fallback .name {
+    margin: 0; font-size: clamp(2rem, 7vw, 3rem); font-weight: 700;
+    letter-spacing: -.035em; line-height: 1;
+  }
+  .banner-fallback .tagline {
+    margin: .5rem 0 0; font-size: .85rem; font-weight: 700; color: rgba(255,255,255,.9);
+  }
+
+  .dateline {
+    margin: .6rem 0 0; font-size: .79rem; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums; padding-bottom: .7rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* ---------------------------------- intro --------------------------------
+     The one place on the page written to a person rather than assembled from
+     a feed. Slightly larger than the story text, so the voice lands before
+     the density starts. */
+  .intro { margin: 1.3rem 0 1.5rem; font-size: .97rem; line-height: 1.6; }
+  .intro p { margin: 0 0 .85rem; }
+  .intro p:last-child { margin-bottom: 0; }
+  .intro .lead-in { font-weight: 700; color: var(--ink); margin-bottom: .5rem; }
+  /* The week's tempo. Italic and slightly soft so it reads as an aside in the
+     editor's voice rather than another statement of fact — it sits between the
+     fixed greeting and the headline bullets, and should not compete with
+     either. Absent entirely on an ordinary week. */
+  .intro .tempo { font-style: italic; color: var(--ink-soft); }
+  .intro ul {
+    margin: 0 0 .95rem; padding-left: 1.15rem;
+    display: grid; gap: .3rem;
+  }
+  .intro li { color: var(--ink); }
+  .intro li.plus { color: var(--ink-soft); }
+
+  /* -------------------------------- sections ------------------------------- */
+  /* Scannability. The old heading was 11px tracked-out monospace in the
+     category hue — a caption, competing with 15px bold headlines directly
+     beneath it. Thumbing the page, you read headlines and never saw the
+     sections at all.
+     
+     Three changes, in order of how much each does. The header is now a solid
+     bar in the category colour, so a section boundary is a block of colour
+     rather than a line of small text — that is what the eye catches while
+     scrolling. It is set in the body face at readable size instead of tracked
+     monospace. And the gap between cards is wider than the gap inside one, so
+     the grouping is legible before any text is read at all. */
+  .sections { display: grid; gap: 1.6rem; margin-top: 1.6rem; }
+  /* No overflow:hidden here, however tempting for clipping the header bar to
+     the rounded corners. It makes this card the sticky header's scroll
+     container, and a sticky element can only stick inside its container — so
+     the header would sit still in a box it already fills, and the effect dies
+     silently. The h2 rounds its own top corners instead. */
+  section.card { background: var(--tint); border-radius: 10px; }
+  section.card > h2 {
+    display: flex; align-items: baseline; justify-content: space-between; gap: .6rem;
+    margin: 0; padding: .6rem .95rem .62rem;
+    background: var(--hue); color: #fff; border-radius: 10px 10px 0 0;
+    font-size: .95rem; font-weight: 800; letter-spacing: -.008em; line-height: 1.2;
+  }
+  section.card > h2 .count {
+    font-size: .78rem; font-weight: 700; letter-spacing: 0;
+    color: #fff; opacity: .72; font-variant-numeric: tabular-nums;
+  }
+  /* The item list keeps the old inset; only the header runs full width. */
+  section.card > ul.items { padding: .1rem .95rem .95rem; }
+
+  /* The header sticks while its own section scrolls past, so the answer to
+     "what am I looking at" is always on screen. Ends at the card boundary.
+     
+     Deliberately NOT behind prefers-reduced-motion. Sticky positioning is not
+     animation — nothing accelerates or parallaxes, the header simply stays put
+     — and gating it there quietly switched the feature off for everyone with
+     Reduce Motion enabled, which on iOS is a great many people. */
+  section.card > h2 { position: sticky; top: 0; z-index: 1; }
+
+  ul.items { list-style: none; margin: 0; padding: 0; }
+  li.item { padding: .62rem 0; border-bottom: 1px solid color-mix(in srgb, var(--hue) 13%, transparent); }
+  li.item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  a.headline {
+    display: block; font-size: .96rem; font-weight: 700; letter-spacing: -.011em;
+    line-height: 1.32; color: var(--ink); text-decoration: none; text-wrap: balance;
+  }
+  a.headline:hover { color: var(--hue); text-decoration: underline; }
+  .gist { margin: .26rem 0 0; font-size: .89rem; line-height: 1.48; color: var(--ink-soft); }
+  .credit {
+    margin: .3rem 0 0; font-size: .755rem; color: var(--ink-faint);
+    display: flex; flex-wrap: wrap; gap: .3rem; align-items: center;
+  }
+  .credit .source { color: var(--hue); font-weight: 700; }
+  /* Medium, not section: a duration says "this is a video, and how long" in
+     the one place a reader is deciding whether to click. */
+  .runtime {
+    border: 1px solid color-mix(in srgb, var(--hue) 35%, transparent);
+    color: var(--hue); font-size: .6rem; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: .1rem .32rem; border-radius: 2px;
+  }
+  /* How many other posts said the same thing. A crude stand-in for the
+     clustered "More:" line, and a signal that a story is being widely
+     covered rather than mentioned once. */
+  .alsoran { color: var(--ink-faint); font-size: .72rem; }
+  .beat {
+    background: var(--flare); color: #fff; font-size: .6rem; font-weight: 700;
+    letter-spacing: .07em; text-transform: uppercase; padding: .1rem .32rem; border-radius: 2px;
+  }
+
+  /* -------------------------------- resource -------------------------------
+     One video, pulled out of its category and given the foot of the page. The
+     only picture on the page besides the masthead, so it carries the section
+     on its own — no list, no count. */
+  section.resource { margin-top: .85rem; }
+  section.resource > div.body { padding: .8rem .95rem .95rem; }
+  a.thumb { display: block; }
+  a.thumb img {
+    display: block; width: 100%; height: auto;
+    /* The box is reserved by the width/height attributes, but hqdefault is 4:3
+       with letterbox bars baked in and maxresdefault is 16:9. Cropping to 16:9
+       makes both render the same shape — and on the 4:3 fallback the part it
+       trims is the black bar. */
+    aspect-ratio: 16 / 9; object-fit: cover;
+    background: color-mix(in srgb, var(--hue) 12%, #fff);
+  }
+  section.resource a.headline { margin-top: .6rem; font-size: 1.02rem; }
+
+  /* -------------------------------- subscribe ------------------------------
+     Placed after the last section rather than above the items: someone who
+     read to the bottom has just demonstrated they want this, and the page is
+     built to be read in two minutes without an ask in the middle of it. */
+  .subscribe {
+    margin-top: 1.8rem; padding: 1.15rem 1.15rem 1.2rem;
+    background: var(--ground); border: 1px solid var(--rule); border-radius: 10px;
+  }
+  .subscribe h2 {
+    margin: 0; font-size: 1rem; font-weight: 800; letter-spacing: -.015em; color: var(--ink);
+  }
+  .subscribe .pitch { margin: .3rem 0 .8rem; font-size: .88rem; color: var(--ink-soft); }
+  .subscribe .row { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .subscribe input[type="email"] {
+    flex: 1 1 14rem; min-width: 0; font: inherit; font-size: .95rem;
+    padding: .6rem .7rem; color: var(--ink); background: var(--page);
+    border: 1px solid var(--rule); border-radius: 8px;
+    /* 16px on iOS or Safari zooms the page on focus. .95rem of 15px is 14.25,
+       so the min-height carries the tap target instead of the font size. */
+    min-height: 44px;
+  }
+  .subscribe input[type="email"]:focus-visible {
+    outline: 2px solid var(--link); outline-offset: 1px; border-color: var(--link);
+  }
+  .subscribe button {
+    font: inherit; font-size: .95rem; font-weight: 700; min-height: 44px;
+    padding: .6rem 1.1rem; color: #fff; background: var(--link);
+    border: 0; border-radius: 8px; cursor: pointer;
+  }
+  .subscribe button:hover { background: #094a95; }
+  .subscribe .note { margin: .6rem 0 0; font-size: .75rem; color: var(--ink-faint); }
+  .subscribe .note a { color: var(--ink-faint); }
+
+  /* Present for screen readers and keyboard users, absent visually — the
+     heading above already carries the same words. */
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; margin: -1px;
+    padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+
+  /* --------------------------------- footer -------------------------------- */
+  .empty { color: var(--ink-soft); font-style: italic; padding: 2rem 0; }
+  footer {
+    margin-top: 2.25rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+    font-size: .78rem; color: var(--ink-faint); line-height: 1.6;
+  }
+  footer p { margin: 0 0 .6rem; }
+  footer p:last-child { margin-bottom: 0; }
+  footer a { color: var(--link); }
+
+  a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <h1 class="wordmark">
+      <img src="../assets/masthead.png" width="1908" height="404"           alt="Weekly Dive — The Lone Aquarist. Saltwater and reef news for the marine aquarist.">
+    </h1>
+    <p class="dateline">Friday, October 16, 2026 · 28 items · <a href="../archive.html">back issues</a></p>
+  </header>
+
+  <section class="intro">
+    <p>Howdy, it's Isaac again.</p>
+    <p>Happy Friday, reefing family, and welcome back to my Weekly Dive.</p>    <p class="lead-in">Here are the biggest things worth knowing:</p>
+    <ul>
+      <li>Rapid coral bleaching recovery via symbiont transfer from healthy corals</li>
+      <li>The coral settlement-sphere: microenvironments that shape reef restoration in the Anthropocene</li>
+      <li>Coral Reef‐Level Upwelling in an Internal Wave Hotspot Modulated by Mesoscale Dynamics</li>
+      <li>Reflections on the prospects for western Atlantic coral reefs</li>
+      <li class="plus">Plus 24 more across wild reefs, livestock &amp; corals, husbandry &amp; science</li>
+    </ul>
+    <p>Let's <em>dive</em> into the news touching our hobby&hellip;</p>
+  </section>
+
+  <div class="sections">
+    <section class="card sec-community">
+      <h2><span>Community</span><span class="count">6</span></h2>
+      <ul class="items">
+        <li class="item">
+          <a class="headline" href="https://www.youtube.com/watch?v=Gc-FGDSWwjI" rel="noopener nofollow external">Insane 15,000L German Reef Tank System! (13-Meter Drop Off &amp; Multi-Floor Sump) | Reefing Roadtrip</a>
+          <p class="credit">
+<span class="runtime">14 min</span><span class="alsoran">+1 similar</span>            <span class="source">SaltwaterAquarium.com</span>
+<span>· SaltwaterAquarium</span>            <span>· Oct 15</span>
+            <span>· youtube.com</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://www.youtube.com/watch?v=dmJxpoZwU4I" rel="noopener nofollow external">Inside Germany’s Most Unique Local Reef Shop! (Tunze Reef 360 &amp; Coral Tour) | Euro Reefing Roadtrip</a>
+          <p class="gist">Video tour of a Munich reef shop showcasing Tunze equipment and the owner&#39;s SPS and soft coral collection. Practical husbandry insights—dry rock aquascaping, water changes, Aiptasia management—from an experienced setup.</p>
+          <p class="credit">
+<span class="runtime">19 min</span>            <span class="source">SaltwaterAquarium.com</span>
+<span>· SaltwaterAquarium</span>            <span>· Oct 13</span>
+            <span>· youtube.com</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://www.youtube.com/watch?v=rihvIMvGWR4" rel="noopener nofollow external">THE ULTIMATE MARINE FISH CHALLENGE! RARE FISH FOR HUGE 17K GALLON REEF TANK!</a>
+          <p class="gist">Polo Reef documents quarantining and establishing 450 anthias in a 17K-gallon system. The detailed protocol for a difficult species at scale offers practical insight into professional acclimation technique.</p>
+          <p class="credit">
+<span class="runtime">18 min</span>            <span class="source">Polo Reef</span>
+<span>· Polo Reef by Andrew Sandler</span>            <span>· Oct 16</span>
+            <span>· youtube.com</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://www.youtube.com/watch?v=yR-C3U74CJ8" rel="noopener nofollow external">Cycling and Microbiome - Jump starting your Microdiversity w/ @hightideaquaticsoak</a>
+          <p class="gist">A podcast episode explores tank cycling, microbiome, and microdiversity with guest input. Foundational topics for reef keepers, though the format and lack of detail limit specificity.</p>
+          <p class="credit">
+<span class="runtime">1h 18m</span>            <span class="source">ReefDudes</span>
+            <span>· Oct 15</span>
+            <span>· youtube.com</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://reefs.com/miami-coral-club-gramps-getaway/" rel="noopener nofollow external">‘Miami Coral Club’ @ Gramps Getaway</a>
+          <p class="gist">Miami Coral Club launches monthly community meetup series starting October 22. Local reef club event for networking and learning about Miami&#39;s wild reefs.</p>
+          <p class="credit">
+            <span class="source">Reefs.com</span>
+<span>· Colin Foord</span>            <span>· Oct 13</span>
+            <span>· reefs.com</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://www.youtube.com/watch?v=Fm_DWAlT9u0" rel="noopener nofollow external">Top Beginner Corals Recommended by Reef-A-Palooza Experts! | Hilary On Location</a>
+          <p class="gist">Reef-A-Palooza vendors recommend beginner corals including Duncans, Zoanthids, Hammer corals, and Acans for their hardiness and fast growth. Expert consensus on resilient species helps new reefers choose stocking.</p>
+          <p class="credit">
+<span class="runtime">8 min</span>            <span class="source">SaltwaterAquarium.com</span>
+<span>· SaltwaterAquarium</span>            <span>· Oct 10</span>
+            <span>· youtube.com</span>
+          </p>
+        </li>
+      </ul>
+    </section>
+    <section class="card sec-husbandry">
+      <h2><span>Husbandry &amp; Science</span><span class="count">9</span></h2>
+      <ul class="items">
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1126/sciadv.aeh1580" rel="noopener nofollow external">Rapid coral bleaching recovery via symbiont transfer from healthy corals</a>
+          <p class="gist">Demonstration of rapid coral bleaching recovery via contact-mediated symbiont transfer between coral fragments. A novel mechanism for assisted recovery could inform both restoration and aquarium-based interventions.</p>
+          <p class="credit">
+            <span class="source">Science Advances</span>
+<span>· Daniel S. Collins et al.</span>            <span>· Oct 14</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1007/s10661-026-15969-9" rel="noopener nofollow external">Hierarchical physiological sensitivity of the coral, Orbicella faveolata, to suspended sediment and elevated temperature</a>
+          <p class="gist">Laboratory study of Orbicella faveolata physiology under suspended sediment and elevated temperature. Clarifies stressor interactions critical for understanding coral stress responses in closed systems.</p>
+          <p class="credit">
+            <span class="source">Environmental Monitoring and Assessment</span>
+<span>· Keisha D. Bahr et al.</span>            <span>· Oct 13</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1186/s12864-026-13438-8" rel="noopener nofollow external">Cool and warm conditions disrupt development through divergent mechanisms in larvae of the reef-building coral Orbicella faveolata</a>
+          <p class="gist">Cold and warm stress disrupt coral larval development through different genetic mechanisms in Orbicella faveolata. Understanding how temperature extremes affect early life stages informs reef restoration and aquaculture efforts.</p>
+          <p class="credit">
+            <span class="source">BMC Genomics</span>
+<span>· Benjamin H. Glass et al.</span>            <span>· Oct 12</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1128/mra.00868-26" rel="noopener nofollow external">Three Vibrio isolates from the coral Pachyseris speciosa as draft genome resources</a>
+          <p class="gist">Three Vibrio isolates from coral Pachyseris speciosa characterized with draft genomes. Pathogenic Vibrio in tropical corals is directly relevant to coral disease and reef husbandry.</p>
+          <p class="credit">
+            <span class="source">Microbiology Resource Announcements</span>
+<span>· Hau Ching Luk et al.</span>            <span>· Oct 14</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1186/s40850-026-00293-z" rel="noopener nofollow external">Integrating active and passive environmental DNA sampling into coral reef assessments: implications for community-based biomonitoring in Hawaiʻi</a>
+          <p class="gist">Study integrates active and passive eDNA sampling for coral reef biomonitoring in Hawai&#39;i, exploring community-based assessment methods. Demonstrates practical monitoring tools for reef health assessment that hobbyists could eventually adapt.</p>
+          <p class="credit">
+            <span class="source">BMC Zoology</span>
+<span>· Cécile M. Vimond et al.</span>            <span>· Oct 13</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1029/2026gl123572" rel="noopener nofollow external">Symbiont‐Mediated Molybdenum Cycling Shapes Coral Skeletal Mo Isotopes</a>
+          <p class="gist">Coral symbiotic algae drive molybdenum isotope fractionation in coral skeletons, not seawater alone. Tracing how symbionts shape skeletal chemistry deepens understanding of coral physiology and trace-metal uptake.</p>
+          <p class="credit">
+            <span class="source">Geophysical Research Letters</span>
+<span>· Xuefei Chen et al.</span>            <span>· Oct 12</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1007/s11306-026-02545-y" rel="noopener nofollow external">Environmental drivers of metabolomic profiles within and between cryptic lineages of Montastraea cavernosa, the great star coral</a>
+          <p class="gist">Cryptic lineages of Montastraea cavernosa show distinct metabolomic responses to environmental stress, with some segregated by depth. Understanding between-lineage adaptation informs coral-nursery selection and restoration strategy.</p>
+          <p class="credit">
+            <span class="source">Metabolomics</span>
+<span>· Dominique N. Gallery et al.</span>            <span>· Oct 10</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1098/rspb.2025.3229" rel="noopener nofollow external">Experimental manipulation of ecological constraints influences conflict but not cooperation in the humbug damselfish Dascyllus aruanus</a>
+          <p class="gist">Experimental test of how habitat saturation and dispersal risk influence cooperation and conflict in humbug damselfish colonies. Understanding social behavior in obligate coral-dwellers illuminates how to keep them in systems and encourage natural breeding.</p>
+          <p class="credit">
+            <span class="source">Proceedings of the Royal Society B Biological Sciences</span>
+<span>· Rebecca Branconi et al.</span>            <span>· Oct 14</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1007/s10071-026-02116-7" rel="noopener nofollow external">Leaning left: how turn bias and habitat complexity shape spatial cognition in a coral-reef fish</a>
+          <p class="gist">Humbug damselfish reared in low-complexity coral environments showed altered spatial learning and increased reliance on turn-based strategies. Habitat structure affects fish cognition, relevant to tank design and fish behavior.</p>
+          <p class="credit">
+            <span class="source">Animal Cognition</span>
+<span>· Helen von Drenkmann et al.</span>            <span>· Oct 11</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+      </ul>
+    </section>
+    <section class="card sec-livestock">
+      <h2><span>Livestock &amp; Corals</span><span class="count">2</span></h2>
+      <ul class="items">
+        <li class="item">
+          <a class="headline" href="https://reefbuilders.com/2026/10/16/qm-aquacultures-the-peacekeeper-maroon-clownfish/" rel="noopener nofollow external">QM Aquacultures the Peacekeeper Maroon Clownfish</a>
+          <p class="gist">QM Aquacultures has bred the Peacekeeper Maroon Clownfish, adding to their recent aquaculture wins. Captive-bred maroons offer hobbyists a sustainable alternative to wild-collected specimens.</p>
+          <p class="credit">
+            <span class="source">Reef Builders</span>
+<span>· Raj Shingadia</span>            <span>· Oct 16</span>
+            <span>· reefbuilders.com</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1007/s10641-026-01920-x" rel="noopener nofollow external">Harem polygyny through resource defense territoriality in the sandperch Parapercis pacifica (Pinguipedidae)</a>
+          <p class="gist">Parapercis pacifica sandperch use territorial resource defense to maintain harem mating systems on Okinawan reefs. Behavioral ecology of reef fish informs understanding of species kept in captivity.</p>
+          <p class="credit">
+            <span class="source">Environmental Biology of Fishes</span>
+<span>· Natsumi Takayama et al.</span>            <span>· Oct 12</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+      </ul>
+    </section>
+    <section class="card sec-wild-reefs">
+      <h2><span>Wild Reefs</span><span class="count">10</span></h2>
+      <ul class="items">
+        <li class="item">
+          <a class="headline" href="https://www.frontiersin.org/articles/10.3389/fmars.2026.1940282" rel="noopener nofollow external">The coral settlement-sphere: microenvironments that shape reef restoration in the Anthropocene</a>
+          <p class="gist">Review introduces the &#39;settlement-sphere&#39; concept—the microenvironmental factors governing coral larval recruitment success. Understanding recruitment mechanics informs both conservation strategy and captive-breeding design.</p>
+          <p class="credit">
+<span class="alsoran">+1 similar</span>            <span class="source">Frontiers in Marine Science — Journal</span>
+<span>· Daniel Wangpraseurt</span>            <span>· Oct 16</span>
+            <span>· frontiersin.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.1029/2025gl121018" rel="noopener nofollow external">Coral Reef‐Level Upwelling in an Internal Wave Hotspot Modulated by Mesoscale Dynamics</a>
+          <p class="gist">Internal waves at Dongsha Atoll in the South China Sea drive temperature fluctuations and upwell cool, nutrient-rich water onto reef slopes, modulated by mesoscale circulation. Illuminates how physical oceanography sustains reef environments under natural conditions.</p>
+          <p class="credit">
+            <span class="source">Geophysical Research Letters</span>
+<span>· Alex S. J. Wyatt et al.</span>            <span>· Oct 15</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.3389/fmars.2026.1946988" rel="noopener nofollow external">Reflections on the prospects for western Atlantic coral reefs</a>
+          <p class="gist">Analysis of bleaching resilience and recovery prospects in Western Atlantic corals through thermal acclimatization and symbiont shuffling. Direct evidence on whether and how reef corals can survive warming matters to everyone tracking the hobby&#39;s foundation.</p>
+          <p class="credit">
+            <span class="source">Frontiers in Marine Science</span>
+<span>· Jeremy B. C. Jackson</span>            <span>· Oct 14</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://doi.org/10.3390/d18100618" rel="noopener nofollow external">Depth- and Taxon-Specific Coral Bleaching of High-Latitude Marginal Coral Communities at Jeju Island During the 4th Global Coral Bleaching Event</a>
+          <p class="gist">During the 2024 global bleaching event, high-latitude corals at Jeju Island showed taxon- and depth-specific bleaching patterns, with Alveopora japonica suffering heavy mortality. Range-edge bleaching responses inform predictions for coral survival under warming.</p>
+          <p class="credit">
+            <span class="source">Diversity</span>
+<span>· Taihun Kim et al.</span>            <span>· Oct 12</span>
+            <span>· doi.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://www.frontiersin.org/articles/10.3389/fmars.2026.1980513" rel="noopener nofollow external">The potential for habitat support structures to address habitat deficits in a declining marine ecosystem</a>
+          <p class="gist">Study examines whether artificial habitat structures can restore reef structural complexity lost to bleaching, disease, and hurricanes in the Caribbean. Direct evidence on reef recovery strategies relevant to understanding wild-reef dynamics that inform the hobby.</p>
+          <p class="credit">
+            <span class="source">Frontiers in Marine Science — Journal</span>
+<span>· John H. Hunt</span>            <span>· Oct 15</span>
+            <span>· frontiersin.org</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://bsky.app/profile/scrippsocean.bsky.social/post/3mxhmoxfoe32a" rel="noopener nofollow external">🎵 The reefs are alive with the sound of healthy coral reef ecosystems!</a>
+          <p class="gist">Two Scripps studies show that underwater sound can aid coral reef restoration and rebuild fish communities. Understanding reef recovery mechanisms informs broader conservation science that shapes wild-stock availability and reef health trends affecting the hobby.</p>
+          <p class="credit">
+            <span class="source">Scripps Institution of Oceanography — Bluesky</span>
+            <span>· Oct 9</span>
+            <span>· bsky.app</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://bsky.app/profile/greatsouthernreef.bsky.social/post/3mxwykqi4jc2o" rel="noopener nofollow external">New report documents at least 8,250 shark and ray deaths in South Australian waters affected by the harmful…</a>
+          <p class="gist">Report documents 8,250+ shark and ray deaths from a harmful algal bloom in South Australia. Large-scale wild-reef mortality from environmental stress illustrates ecosystem fragility affecting species collection and trade.</p>
+          <p class="credit">
+            <span class="source">Great Southern Reef Foundation — Bluesky</span>
+            <span>· Oct 15</span>
+            <span>· bsky.app</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://bsky.app/profile/ubcoceans.bsky.social/post/3mxrhk7kq5k2f" rel="noopener nofollow external">The Minister of Fisheries, the Honorable Joanne Thompson, announced that the Government of Canada is…</a>
+          <p class="gist">Canada proposes adding or reclassifying 15 aquatic species under the Species at Risk Act. Trade and import regulations for reef fauna could shift; monitor for ornamental species affected.</p>
+          <p class="credit">
+            <span class="source">UBC Oceans — Bluesky</span>
+            <span>· Oct 13</span>
+            <span>· bsky.app</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://links-1.govdelivery.com/CL0/https:%2F%2Frestoreactscienceprogram.noaa.gov%2Fprojects%2Ffgbnms-coral-resilience%3Futm_medium=email%26utm_source=GovDelivery/1/010001a140be2356-ec797cfb-1cd2-4baf-8ef7-9c8c197edfa2-000000/1EENCt1ltHUSL8yTEM0T8acz-9_zxLP9KLuS0kqLHqg=452" rel="noopener nofollow external">First NOAA RESTORE Funded Coral Sampling Mission Complete</a>
+          <p class="gist">NOAA completes first RESTORE-funded coral sampling mission in the Gulf. Government-backed wild-coral monitoring and resilience research informs conservation baseline.</p>
+          <p class="credit">
+            <span class="source">NOAA National Ocean Service — Newsletter</span>
+            <span>· Oct 15</span>
+            <span>· links-1.govdelivery.com</span>
+          </p>
+        </li>
+        <li class="item">
+          <a class="headline" href="https://www.frontiersin.org/articles/10.3389/fmars.2026.1972671" rel="noopener nofollow external">Descriptive morpho pathological lesions and surveillance baseline of mesenchymal tumors in some commercially important marine fish species from the Arabian Gulf, Saudi Arabia</a>
+          <p class="gist">Survey of mesenchymal tumors in commercial fish species from the Arabian Gulf reveals disease indicators in wild populations. Provides baseline data on fish health and ecosystem stressors, though focused on food-species rather than aquarium fauna.</p>
+          <p class="credit">
+            <span class="source">Frontiers in Marine Science — Journal</span>
+<span>· Mustafa M. Ibrahim</span>            <span>· Oct 15</span>
+            <span>· frontiersin.org</span>
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card sec-resource resource">
+      <h2><span>Resource</span></h2>
+      <div class="body">
+        <a class="thumb" href="https://www.youtube.com/watch?v=7Spj-dyskUw" rel="noopener nofollow external">
+          <img src="../assets/thumbs/7Spj-dyskUw.jpg" width="1280" height="720"            alt="This Reef Has Grown for 10 Years! | SPS, Chalices &amp; Reef Keeping in Brazil — World Wide Corals" loading="lazy">
+        </a>
+        <a class="headline" href="https://www.youtube.com/watch?v=7Spj-dyskUw" rel="noopener nofollow external">This Reef Has Grown for 10 Years! | SPS, Chalices &amp; Reef Keeping in Brazil</a>
+        <p class="gist">Tour of a mature 10-year Brazilian reef tank with established corals, monthly ICP testing, and minimal water changes. Ricardo&#39;s decade-long system demonstrates long-term husbandry strategy and trace-element management at scale.</p>
+        <p class="credit">
+<span class="runtime">14 min</span>          <span class="source">World Wide Corals</span>
+          <span>· Oct 15</span>
+          <span>· youtube.com</span>
+        </p>
+      </div>
+    </section>
+  </div>
+
+<section class="subscribe" aria-labelledby="subscribe-heading">
+  <h2 id="subscribe-heading">Get it in your inbox</h2>
+  <p class="pitch">
+    One email a week, free. Every item links to its source.
+  </p>
+  <form action="https://buttondown.com/api/emails/embed-subscribe/the_lone_aquarist" method="post" class="embeddable-buttondown-form"><label for="bd-email" class="visually-hidden">Your email address</label>
+    <div class="row">
+      <input id="bd-email" type="email" name="email" required
+             autocomplete="email" placeholder="you@example.com"
+             aria-describedby="subscribe-note">
+      <button type="submit">Subscribe</button>
+    </div>
+    <p class="note" id="subscribe-note">
+      No spam, and unsubscribe in one click.
+      <a href="https://buttondown.com/refer/the_lone_aquarist" target="_blank" rel="noopener">Powered by Buttondown</a>.
+    </p>
+  </form>
+</section>
+  <footer>
+    <p>
+      Every item above links to its source. This week's reporting comes from
+Animal Cognition, BMC Genomics, BMC Zoology, Diversity, Environmental Biology of Fishes, Environmental Monitoring and Assessment, Frontiers in Marine Science, Frontiers in Marine Science — Journal, Geophysical Research Letters, Great Southern Reef Foundation — Bluesky, Metabolomics, Microbiology Resource Announcements, NOAA National Ocean Service — Newsletter, Polo Reef, Proceedings of the Royal Society B Biological Sciences, Reef Builders, ReefDudes, Reefs.com, SaltwaterAquarium.com, Science Advances, Scripps Institution of Oceanography — Bluesky, UBC Oceans — Bluesky, World Wide Corals.
+      Headlines and links belong to them; go read the originals.
+    </p>
+    <p>
+      <a href="/subscribe.html">Subscribe by email</a> ·
+      <a href="../archive.html">Back issues</a>.
+      <em>Weekly Dive</em> is an automated digest that links to reporting it does not own.
+      See <a href="/about.html">about &amp; sourcing policy</a> for how sources are selected
+      and how to request removal.
+    </p>
+    <p>Generated 2026-10-16 14:22 UTC.</p>
+  </footer>
+
+</div>
+</body>
+</html>
