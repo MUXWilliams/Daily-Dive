@@ -67,8 +67,15 @@ Through the dashboard, the same way the other site deploys:
    the deploy command `npx wrangler deploy` is the default.
 3. Deploy. Cloudflare reads `wrangler.toml` from this directory for the name
    and the cron.
-4. On the new Worker: **Settings** → **Variables and Secrets** → **Add** →
-   type **Secret**, name `GITHUB_TOKEN`, value the token from step 1.
+4. On the new Worker: **Settings** → **Runtime variables and secrets**
+   (tab **Production**) → **Add variable** → type **Secret**, name
+   `GITHUB_TOKEN`, value the token from step 1.
+
+   **Not** the *Variables and secrets* box inside the **Builds** section.
+   That one only exists while Cloudflare builds the Worker; the Worker
+   itself never sees it. That is exactly what happened on 2026-10-16: the
+   token was saved there, the Friday run found no `GITHUB_TOKEN`, and the
+   issue had to be started by hand.
 5. Optional: under **Settings** → **Build**, set the build watch path to
    `trigger/*`. The weekly bot commit will then stop redeploying an unchanged
    Worker.
