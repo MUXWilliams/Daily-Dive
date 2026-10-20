@@ -32,24 +32,29 @@ export const INPUTS = { automatic: "true" };
 // Worker's job: the late schedule is the real fallback.
 const ATTEMPTS = 2;
 
-export async function dispatch(token, fetchImpl = fetch) {
+const HEADERS = (token) => ({
+  Authorization: `Bearer ${token}`,
+  Accept: "application/vnd.github+json",
+  "X-GitHub-Api-Version": "2022-11-28",
+  // GitHub rejects API requests with no User-Agent.
+  "User-Agent": "weekly-dive-trigger",
+});
+
+function requireToken(token) {
   if (!token) {
     // Loud in Cloudflare's cron log. Silence here would look like success.
     throw new Error("GITHUB_TOKEN is not set on this Worker");
   }
+}
+
+export async function dispatch(token, fetchImpl = fetch) {
+  requireToken(token);
   let last;
   for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
     const resp = await fetchImpl(
       `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-        // GitHub rejects API requests with no User-Agent.
-        "User-Agent": "weekly-dive-trigger",
-        "Content-Type": "application/json",
-      },
+      headers: { ...HEADERS(token), "Content-Type": "application/json" },
       body: JSON.stringify({ ref: REF, inputs: INPUTS }),
     });
     // 204 No Content is the only success the dispatches endpoint returns.
@@ -63,6 +68,20 @@ export async function dispatch(token, fetchImpl = fetch) {
   throw new Error(`could not start the weekly issue — ${last}`);
 }
 
+// The safe test. A read of the workflow, with the same token, proves what a
+// Friday dispatch depends on — the secret is set, the token is valid and
+// reaches Daily-Dive, and daily.yml resolves — and starts nothing. Actions:
+// Read and write covers the read; no extra permission.
+export async function check(token, fetchImpl = fetch) {
+  requireToken(token);
+  const resp = await fetchImpl(
+    `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}`,
+    { method: "GET", headers: HEADERS(token) });
+  if (resp.status === 200) return { ok: true };
+  throw new Error(
+    `self-check failed — HTTP ${resp.status}: ${(await resp.text()).slice(0, 300)}`);
+}
+
 // When the issue goes out, in the editor's own time. Cloudflare's cron is UTC
 // only and knows nothing of daylight saving, and 7 a.m. Pacific is 14:00 UTC in
 // summer but 15:00 in winter. So wrangler.toml fires at both, and this decides
@@ -73,35 +92,50 @@ export const LOCAL_HOUR = 7;
 
 export function localTime(when) {
   const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: TIME_ZONE, weekday: "short", hour: "numeric", hourCycle: "h23",
+    timeZone: TIME_ZONE, weekday: "short", hour: "numeric", minute: "2-digit",
+    hourCycle: "h23",
   }).formatToParts(new Date(when));
   const get = (type) => parts.find((p) => p.type === type).value;
-  return { weekday: get("weekday"), hour: Number(get("hour")) };
+  return {
+    weekday: get("weekday"),
+    hour: Number(get("hour")),
+    label: `${get("weekday")} ${get("hour").padStart(2, "0")}:${get("minute")} ${TIME_ZONE}`,
+  };
 }
 
 export async function fire(scheduledTime, token, fetchImpl = fetch) {
-  const { weekday, hour } = localTime(scheduledTime);
+  const { weekday, hour, label } = localTime(scheduledTime);
   // An automatic run on any other day is not harmless: the guard finds no page
   // for that date, so it builds a fresh issue and emails every subscriber.
-  // Cloudflare's dashboard can fire a cron on demand, and a test press on a
-  // Tuesday must not do that. Manual issues go through GitHub's Run workflow.
+  // So any day but Friday only checks the token, read-only, and starts
+  // nothing. That makes Cloudflare's test trigger safe to press midweek, and
+  // its log says whether Friday would work. Manual issues go through GitHub's
+  // Run workflow.
   if (weekday !== "Fri") {
-    throw new Error(
-      `refusing to start the weekly issue: ${new Date(scheduledTime).toISOString()} is not a Friday in ${TIME_ZONE}`);
+    await check(token, fetchImpl);
+    return { ok: true, checked: `${label}: not Friday, so nothing was started; the token reaches ${WORKFLOW}` };
   }
   if (hour !== LOCAL_HOUR) {
-    return { ok: true, skipped: `it is ${hour}:00 in ${TIME_ZONE}, not ${LOCAL_HOUR}:00` };
+    return { ok: true, skipped: `${label}: not ${LOCAL_HOUR}:00, the other cron covers that` };
   }
-  return dispatch(token, fetchImpl);
+  return { ...(await dispatch(token, fetchImpl)), at: label };
 }
 
 export default {
-  // The cron in wrangler.toml calls this. Throwing marks the invocation as
-  // failed in Cloudflare's dashboard, which is where a failure is visible.
+  // The cron in wrangler.toml calls this. Every outcome is logged with the
+  // Pacific time the Worker computed, and a failure is logged before it is
+  // rethrown, so the Observability tab shows what happened and why. Throwing
+  // marks the invocation as failed in Cloudflare's dashboard.
   async scheduled(controller, env, ctx) {
-    const result = await fire(controller.scheduledTime, env.GITHUB_TOKEN);
-    console.log(result.skipped
-      ? `not this hour: ${result.skipped}`
-      : `weekly issue dispatched (attempt ${result.attempt})`);
+    const when = new Date(controller.scheduledTime).toISOString();
+    try {
+      const result = await fire(controller.scheduledTime, env.GITHUB_TOKEN);
+      if (result.checked) console.log(`self-check ok (${when}) — ${result.checked}`);
+      else if (result.skipped) console.log(`not this hour (${when}) — ${result.skipped}`);
+      else console.log(`weekly issue dispatched (${when}, ${result.at}, attempt ${result.attempt})`);
+    } catch (err) {
+      console.error(`weekly-dive-trigger failed (${when}): ${err.message}`);
+      throw err;
+    }
   },
 };

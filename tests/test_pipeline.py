@@ -4069,6 +4069,8 @@ def test_the_worker_fires_when_the_schedule_says_it_should():
         assert int(hour) >= 15, f"{cron} could fire before 7 a.m. Pacific"
     # Reachable only by its own cron: no routes, no workers.dev URL.
     assert cfg.get("workers_dev") is False
+    # Stored logs: 2026-10-16's missed 7 a.m. left no record of why.
+    assert cfg["observability"]["enabled"] is True
     assert "routes" not in cfg and "route" not in cfg
 
 

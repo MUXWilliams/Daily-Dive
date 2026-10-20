@@ -23,11 +23,12 @@ not at all.
   is 14:00 UTC in summer and 15:00 in winter, so it fires at both. Each time,
   it checks the clock in Los Angeles and goes ahead only at 7. The other fire
   logs "not this hour" and does nothing; that is expected every week.
-- It refuses to start anything on any day but Friday, Pacific time. Cloudflare can fire a
-  cron on demand. An automatic run on a Tuesday would find no Tuesday issue,
-  build one and email every subscriber.
+- On any day but Friday, Pacific time, it starts nothing. It only checks, by
+  reading the workflow, that its token still works, and logs the answer. An
+  automatic run on a Tuesday would find no Tuesday issue, build one and email
+  every subscriber, so this is what makes a midweek test safe.
 - It has no web address and no HTTP handler, so nobody can call it. It stores
-  nothing and reads nothing.
+  nothing. Its logs are kept, under the Worker's **Observability** tab.
 - Its only secret is a GitHub token with one permission, **Actions: write**.
   That token can start a workflow. It cannot change code, read other secrets or
   touch another repository.
@@ -84,10 +85,22 @@ A redeploy keeps the secret, so the secret is set only once.
 
 **Check it took.** The Worker's **Settings** → **Trigger events** should show
 two cron triggers, and both must say **Friday**: 14:00 and 15:00 UTC. If either
-says another day, the deployed `wrangler.toml` is not this one. Do not use a
-"trigger now" button to test it. On any day but
-Friday the Worker refuses, by design. On a Friday it would really start the
-week's issue.
+says another day, the deployed `wrangler.toml` is not this one.
+
+## Testing it safely — any day but Friday
+
+Cloudflare can fire the Worker's cron on demand. On a Saturday through
+Thursday that press starts nothing; the Worker reads `daily.yml` with its
+token and logs the result. Open the Worker's **Observability** tab
+afterwards:
+
+- `self-check ok … the token reaches daily.yml`: Friday will work.
+- `self-check failed — HTTP 401` (or 403, 404): fix it from the table below,
+  then test again.
+- `GITHUB_TOKEN is not set`: the secret is missing (step 2.4).
+
+**Never press it on a Friday.** On a Friday at 7 a.m. Pacific it really starts
+the week's issue. At any other Friday hour it does nothing.
 
 ## How to tell it worked
 
@@ -96,8 +109,18 @@ run started a minute or two after 7 a.m. Pacific, triggered by `workflow_dispatc
 under your name. Hours later GitHub's own schedule arrives. Its runs end at the
 guard with *"Nothing to do — another automatic run got here first."*
 
-If the Worker failed, its cron invocation shows as failed in Cloudflare under
-the Worker's **Logs**, with the reason. The cases:
+If no run appeared, open the Worker's **Observability** tab. Every
+invocation is logged with the time the Worker thought it was in Los Angeles,
+and a failure is logged with its reason. Look for one of:
+
+- `weekly issue dispatched`: GitHub accepted it. Look at Actions again.
+- `not this hour`: the other cron's fire, expected every Friday.
+- `weekly-dive-trigger failed`: followed by one of the reasons below.
+
+**No line at all for 14:00 or 15:00 UTC** means the cron never called the
+Worker. That is a Cloudflare trigger problem, not this code.
+
+The failure reasons:
 
 | Reason | Means | Fix |
 |---|---|---|

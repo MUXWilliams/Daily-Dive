@@ -8,6 +8,12 @@ compatibility_date = "2026-08-31"
 # so there is nothing on the internet for anyone to call.
 workers_dev = false
 
+# Store every invocation's log lines and errors, so a Friday that did not go
+# out can be explained afterwards from the Worker's Observability tab. Without
+# it, 2026-10-16's missed 7 a.m. left no record of why.
+[observability]
+enabled = true
+
 [triggers]
 # Friday 7 a.m. Pacific. Cron here is UTC and ignores daylight saving, so this
 # fires at both hours that can be 7 a.m. in Los Angeles — 14:00 UTC under PDT,

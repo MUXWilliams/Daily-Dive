@@ -6,7 +6,7 @@
 // answers with whatever status the test hands it.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { dispatch, fire, INPUTS, REF, REPO, WORKFLOW } from "./worker.js";
+import worker, { check, dispatch, fire, INPUTS, REF, REPO, WORKFLOW } from "./worker.js";
 import { readFileSync } from "node:fs";
 
 function stub(...statuses) {
@@ -74,7 +74,7 @@ const DAY = 24 * HOUR;
 test("summer: 14:00 UTC is 7 a.m. PDT and goes; 15:00 is 8 a.m. and does not", async () => {
   const friday = Date.UTC(2026, 9, 9); // 2026-10-09, a Friday, on daylight time
   const go = stub(204);
-  assert.deepEqual(await fire(friday + 14 * HOUR, "tok", go.impl), { ok: true, attempt: 1 });
+  assert.deepEqual(await fire(friday + 14 * HOUR, "tok", go.impl), { ok: true, attempt: 1, at: "Fri 07:00 America/Los_Angeles" });
   assert.equal(go.calls.length, 1);
 
   const wait = stub(204);
@@ -86,7 +86,7 @@ test("summer: 14:00 UTC is 7 a.m. PDT and goes; 15:00 is 8 a.m. and does not", a
 test("winter: 15:00 UTC is 7 a.m. PST and goes; 14:00 is 6 a.m. and does not", async () => {
   const friday = Date.UTC(2026, 11, 4); // 2026-12-04, a Friday, on standard time
   const go = stub(204);
-  assert.deepEqual(await fire(friday + 15 * HOUR, "tok", go.impl), { ok: true, attempt: 1 });
+  assert.deepEqual(await fire(friday + 15 * HOUR, "tok", go.impl), { ok: true, attempt: 1, at: "Fri 07:00 America/Los_Angeles" });
 
   const wait = stub(204);
   const result = await fire(friday + 14 * HOUR, "tok", wait.impl);
@@ -109,18 +109,65 @@ test("every Friday for a year, through both clock changes, exactly one cron goes
   }
 });
 
-test("any day but Friday, in Pacific time, refuses loudly and sends nothing", async () => {
+const WORKFLOW_URL = `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}`;
+
+test("any day but Friday, in Pacific time, only checks the token — read-only, never a dispatch", async () => {
   const friday = Date.UTC(2026, 9, 9);
   for (let d = 1; d <= 6; d++) {
     for (const h of CRON_HOURS) {
       const when = friday + d * DAY + h * HOUR;
-      const { calls, impl } = stub(204);
-      await assert.rejects(fire(when, "tok", impl), /is not a Friday in America\/Los_Angeles/);
-      assert.equal(calls.length, 0, new Date(when).toISOString());
+      const { calls, impl } = stub(200);
+      const result = await fire(when, "tok", impl);
+      assert.match(result.checked, /nothing was started/);
+      assert.equal(calls.length, 1, new Date(when).toISOString());
+      assert.equal(calls[0].url, WORKFLOW_URL);
+      assert.equal(calls[0].init.method, "GET");
+      assert.equal(calls[0].init.body, undefined);
+      assert.equal(calls[0].init.headers.Authorization, "Bearer tok");
     }
   }
   // 03:00 UTC Saturday is still Friday evening in California: judged locally.
-  const { impl } = stub(204);
+  const { calls, impl } = stub(200);
   const late = await fire(Date.UTC(2026, 9, 10, 3), "tok", impl);
   assert.ok(late.skipped);
+  assert.equal(calls.length, 0);
+});
+
+test("the midweek check fails loudly on a bad token or a wrong workflow", async () => {
+  const tuesday = Date.UTC(2026, 9, 20, 14);
+  for (const status of [401, 403, 404]) {
+    const { calls, impl } = stub(status);
+    await assert.rejects(fire(tuesday, "tok", impl), new RegExp(`self-check failed — HTTP ${status}`));
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0].init.method, "GET");
+  }
+  const { calls, impl } = stub(200);
+  await assert.rejects(check(undefined, impl), /GITHUB_TOKEN is not set/);
+  assert.equal(calls.length, 0);
+});
+
+test("the scheduled handler logs every outcome, and logs a failure before rethrowing it", async () => {
+  const realFetch = globalThis.fetch;
+  const lines = [];
+  const realLog = console.log, realError = console.error;
+  console.log = (m) => lines.push(["log", m]);
+  console.error = (m) => lines.push(["error", m]);
+  try {
+    globalThis.fetch = async () => ({ status: 200, text: async () => "" });
+    await worker.scheduled({ scheduledTime: Date.UTC(2026, 9, 20, 14) }, { GITHUB_TOKEN: "tok" }, {});
+    assert.match(lines.at(-1)[1], /^self-check ok \(2026-10-20T14:00:00.000Z\) — Tue 07:00 America\/Los_Angeles/);
+
+    globalThis.fetch = async () => ({ status: 204, text: async () => "" });
+    await worker.scheduled({ scheduledTime: Date.UTC(2026, 9, 23, 14) }, { GITHUB_TOKEN: "tok" }, {});
+    assert.match(lines.at(-1)[1], /^weekly issue dispatched \(2026-10-23T14:00:00.000Z, Fri 07:00 America\/Los_Angeles, attempt 1\)/);
+
+    await assert.rejects(
+      worker.scheduled({ scheduledTime: Date.UTC(2026, 9, 23, 14) }, {}, {}), /GITHUB_TOKEN is not set/);
+    assert.deepEqual(lines.at(-1)[0], "error");
+    assert.match(lines.at(-1)[1], /^weekly-dive-trigger failed .*GITHUB_TOKEN is not set/);
+  } finally {
+    globalThis.fetch = realFetch;
+    console.log = realLog;
+    console.error = realError;
+  }
 });
