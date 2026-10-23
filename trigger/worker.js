@@ -68,16 +68,32 @@ export async function dispatch(token, fetchImpl = fetch) {
   throw new Error(`could not start the weekly issue — ${last}`);
 }
 
-// The safe test. A read of the workflow, with the same token, proves what a
-// Friday dispatch depends on — the secret is set, the token is valid and
-// reaches Daily-Dive, and daily.yml resolves — and starts nothing. Actions:
-// Read and write covers the read; no extra permission.
+// The safe test. It makes the Friday request itself — same token, same
+// endpoint, same permission — but for a branch that cannot exist: `..` is
+// illegal in a git ref name, so no branch can ever be called this and no run
+// can ever start. GitHub checks the token's permission first and the ref
+// second, so:
+//   422 "No ref found"  the token may dispatch; Friday will work
+//   401 / 403 / 404     the token may not, and Friday would fail the same way
+// An earlier version only read the workflow, which needs Actions: read. It
+// passed while the token could not dispatch, and 2026-10-23's 7 a.m. failed
+// with a 403. This one tests the permission Friday actually uses.
+export const SELF_CHECK_REF = "self-check..never";
+
 export async function check(token, fetchImpl = fetch) {
   requireToken(token);
   const resp = await fetchImpl(
-    `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}`,
-    { method: "GET", headers: HEADERS(token) });
-  if (resp.status === 200) return { ok: true };
+    `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`, {
+    method: "POST",
+    headers: { ...HEADERS(token), "Content-Type": "application/json" },
+    body: JSON.stringify({ ref: SELF_CHECK_REF, inputs: INPUTS }),
+  });
+  if (resp.status === 422) return { ok: true };
+  if (resp.status === 204) {
+    // GitHub accepted a ref that cannot exist. Nothing can have run, but the
+    // assumption this check rests on is broken; say so loudly.
+    throw new Error(`self-check failed — GitHub accepted the impossible ref ${SELF_CHECK_REF}`);
+  }
   throw new Error(
     `self-check failed — HTTP ${resp.status}: ${(await resp.text()).slice(0, 300)}`);
 }
@@ -113,7 +129,7 @@ export async function fire(scheduledTime, token, fetchImpl = fetch) {
   // Run workflow.
   if (weekday !== "Fri") {
     await check(token, fetchImpl);
-    return { ok: true, checked: `${label}: not Friday, so nothing was started; the token reaches ${WORKFLOW}` };
+    return { ok: true, checked: `${label}: not Friday, so nothing was started; dispatch permitted for ${WORKFLOW}` };
   }
   if (hour !== LOCAL_HOUR) {
     return { ok: true, skipped: `${label}: not ${LOCAL_HOUR}:00, the other cron covers that` };

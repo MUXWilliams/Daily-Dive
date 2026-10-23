@@ -6,7 +6,7 @@
 // answers with whatever status the test hands it.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import worker, { check, dispatch, fire, INPUTS, REF, REPO, WORKFLOW } from "./worker.js";
+import worker, { check, dispatch, fire, INPUTS, REF, REPO, SELF_CHECK_REF, WORKFLOW } from "./worker.js";
 import { readFileSync } from "node:fs";
 
 function stub(...statuses) {
@@ -109,39 +109,48 @@ test("every Friday for a year, through both clock changes, exactly one cron goes
   }
 });
 
-const WORKFLOW_URL = `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}`;
+const DISPATCH_URL = `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`;
 
-test("any day but Friday, in Pacific time, only checks the token — read-only, never a dispatch", async () => {
+test("the self-check ref can never name a real branch", () => {
+  // `..` is illegal in a git ref name, so no push can ever create it.
+  assert.ok(SELF_CHECK_REF.includes(".."));
+  assert.notEqual(SELF_CHECK_REF, REF);
+});
+
+test("any day but Friday, in Pacific time, tests dispatch on the impossible ref — never on main", async () => {
   const friday = Date.UTC(2026, 9, 9);
   for (let d = 1; d <= 6; d++) {
     for (const h of CRON_HOURS) {
       const when = friday + d * DAY + h * HOUR;
-      const { calls, impl } = stub(200);
+      const { calls, impl } = stub(422);
       const result = await fire(when, "tok", impl);
-      assert.match(result.checked, /nothing was started/);
+      assert.match(result.checked, /nothing was started; dispatch permitted/);
       assert.equal(calls.length, 1, new Date(when).toISOString());
-      assert.equal(calls[0].url, WORKFLOW_URL);
-      assert.equal(calls[0].init.method, "GET");
-      assert.equal(calls[0].init.body, undefined);
+      assert.equal(calls[0].url, DISPATCH_URL);
+      assert.equal(calls[0].init.method, "POST");
+      assert.equal(JSON.parse(calls[0].init.body).ref, SELF_CHECK_REF);
       assert.equal(calls[0].init.headers.Authorization, "Bearer tok");
     }
   }
   // 03:00 UTC Saturday is still Friday evening in California: judged locally.
-  const { calls, impl } = stub(200);
+  const { calls, impl } = stub(422);
   const late = await fire(Date.UTC(2026, 9, 10, 3), "tok", impl);
   assert.ok(late.skipped);
   assert.equal(calls.length, 0);
 });
 
-test("the midweek check fails loudly on a bad token or a wrong workflow", async () => {
+test("the midweek check fails loudly when the token may not dispatch", async () => {
   const tuesday = Date.UTC(2026, 9, 20, 14);
+  // 403 is what 2026-10-23's 7 a.m. got from GitHub.
   for (const status of [401, 403, 404]) {
     const { calls, impl } = stub(status);
     await assert.rejects(fire(tuesday, "tok", impl), new RegExp(`self-check failed — HTTP ${status}`));
-    assert.equal(calls.length, 1);
-    assert.equal(calls[0].init.method, "GET");
+    assert.equal(calls.length, 1, "one request, no retry");
   }
-  const { calls, impl } = stub(200);
+  // A 204 would mean GitHub took a ref that cannot exist: an alarm, not a pass.
+  const accepted = stub(204);
+  await assert.rejects(fire(tuesday, "tok", accepted.impl), /accepted the impossible ref/);
+  const { calls, impl } = stub(422);
   await assert.rejects(check(undefined, impl), /GITHUB_TOKEN is not set/);
   assert.equal(calls.length, 0);
 });
@@ -153,7 +162,7 @@ test("the scheduled handler logs every outcome, and logs a failure before rethro
   console.log = (m) => lines.push(["log", m]);
   console.error = (m) => lines.push(["error", m]);
   try {
-    globalThis.fetch = async () => ({ status: 200, text: async () => "" });
+    globalThis.fetch = async () => ({ status: 422, text: async () => "" });
     await worker.scheduled({ scheduledTime: Date.UTC(2026, 9, 20, 14) }, { GITHUB_TOKEN: "tok" }, {});
     assert.match(lines.at(-1)[1], /^self-check ok \(2026-10-20T14:00:00.000Z\) — Tue 07:00 America\/Los_Angeles/);
 

@@ -4071,6 +4071,10 @@ def test_the_worker_fires_when_the_schedule_says_it_should():
     assert cfg.get("workers_dev") is False
     # Stored logs: 2026-10-16's missed 7 a.m. left no record of why.
     assert cfg["observability"]["enabled"] is True
+    # The midweek self-check dispatches for a ref no branch can ever have, so
+    # it tests Friday's permission and can never start a run.
+    ref = re.search(r'SELF_CHECK_REF = "([^"]+)"', worker).group(1)
+    assert ".." in ref and ref != "main"
     assert "routes" not in cfg and "route" not in cfg
 
 

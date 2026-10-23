@@ -23,8 +23,9 @@ not at all.
   is 14:00 UTC in summer and 15:00 in winter, so it fires at both. Each time,
   it checks the clock in Los Angeles and goes ahead only at 7. The other fire
   logs "not this hour" and does nothing; that is expected every week.
-- On any day but Friday, Pacific time, it starts nothing. It only checks, by
-  reading the workflow, that its token still works, and logs the answer. An
+- On any day but Friday, Pacific time, it starts nothing. It makes Friday's
+  request for a branch that cannot exist (`self-check..never`), which tests
+  the same permission without any run being possible, and logs the answer. An
   automatic run on a Tuesday would find no Tuesday issue, build one and email
   every subscriber, so this is what makes a midweek test safe.
 - It has no web address and no HTTP handler, so nobody can call it. It stores
@@ -97,11 +98,13 @@ says another day, the deployed `wrangler.toml` is not this one.
 ## Testing it safely — any day but Friday
 
 Cloudflare can fire the Worker's cron on demand. On a Saturday through
-Thursday that press starts nothing; the Worker reads `daily.yml` with its
-token and logs the result. Open the Worker's **Observability** tab
-afterwards:
+Thursday that press starts nothing. The Worker makes Friday's exact request
+for a branch named `self-check..never`, which can never exist because `..`
+is illegal in a branch name. GitHub checks the token's permission first:
+"no such branch" means the token is allowed to start runs. Open the Worker's
+**Observability** tab afterwards:
 
-- `self-check ok … the token reaches daily.yml`: Friday will work.
+- `self-check ok … dispatch permitted`: Friday will work.
 - `self-check failed — HTTP 401` (or 403, 404): fix it from the table below,
   then test again.
 - `GITHUB_TOKEN is not set`: the secret is missing (step 2.4).
@@ -133,7 +136,7 @@ The failure reasons:
 |---|---|---|
 | `GITHUB_TOKEN is not set` | the secret is missing | step 2.4 |
 | `HTTP 401` | the token expired or was revoked | make a new one (step 1) and replace the secret |
-| `HTTP 403` | the token lacks Actions: write, or does not include Daily-Dive | edit the token's permissions |
+| `HTTP 403` | the token may not start runs. This is what 2026-10-23's 7 a.m. hit | edit the token: **Actions: Read and write** on Daily-Dive. If it already is, add **Contents: Read-only** |
 | `HTTP 404` | wrong repository or workflow name | `REPO` / `WORKFLOW` in `worker.js` |
 | `HTTP 422` | `daily.yml` no longer declares the `automatic` input | a test should have caught this first |
 
