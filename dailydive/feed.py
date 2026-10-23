@@ -47,7 +47,11 @@ def _description(entry: dict) -> str:
     lead = str(entry.get("lead", "")).strip()
     items, outlets = entry.get("items"), entry.get("outlets")
     size = f"{items} stories from {outlets} outlets" if items and outlets else ""
-    return ". ".join(part for part in (f"Lead: {lead}" if lead else "", size) if part)
+    # A headline often ends in its own "!" or "?", and a full stop after that
+    # reads as a stutter.
+    if lead and lead[-1] not in ".!?":
+        lead += "."
+    return " ".join(part for part in (f"Lead: {lead}" if lead else "", size) if part)
 
 
 def feed_xml(out_dir: Path) -> str:
