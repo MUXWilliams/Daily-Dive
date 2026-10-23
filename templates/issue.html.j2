@@ -11,6 +11,7 @@
     bare URL they scroll past. The canonical URL also keeps the dated
     permalink and the front page from competing as duplicates. #}
 <link rel="canonical" href="{{ brand.SITE_URL }}/{{ canonical_path }}">
+<link rel="alternate" type="application/rss+xml" title="{{ brand.PUBLICATION }} · {{ brand.SITE_NAME }}" href="{{ brand.SITE_URL }}/feed.xml">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{{ brand.SITE_NAME }}">
 <meta property="og:title" content="{{ brand.PUBLICATION }} — {{ issue.date | datefmt }}">

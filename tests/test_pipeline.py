@@ -4114,3 +4114,49 @@ def test_a_day_already_sent_is_never_sent_again_by_the_weekly_run():
     send = run.index("print(deliver.send(issue, render.render_email(")
     assert check < refuse < send
     assert "elif args.send:" in run[refuse:send]
+
+
+# --- feed.xml ---------------------------------------------------------------
+
+
+def test_the_feed_lists_every_issue_newest_first_and_is_well_formed(tmp_path):
+    """A reader drops a malformed feed without a word, so parse it for real."""
+    from xml.etree import ElementTree
+
+    from dailydive import feed
+
+    root = ElementTree.fromstring(feed.feed_xml(_seeded_archive(tmp_path)))
+    items = root.findall("./channel/item")
+
+    assert [i.findtext("guid") for i in items] == [
+        f"{brand.SITE_URL}/issues/2026-08-28.html",
+        f"{brand.SITE_URL}/issues/2026-08-21.html",
+    ]
+    assert items[0].findtext("pubDate") == "Fri, 28 Aug 2026 00:00:00 GMT"
+    assert "A lead" in items[0].findtext("description")
+    assert root.findtext("./channel/lastBuildDate") == items[0].findtext("pubDate")
+
+
+def test_the_feed_escapes_a_headline_and_survives_an_empty_archive(tmp_path):
+    from xml.etree import ElementTree
+
+    from dailydive import feed
+
+    assert ElementTree.fromstring(feed.feed_xml(tmp_path)).findall("./channel/item") == []
+
+    (tmp_path / "issues").mkdir()
+    (tmp_path / "issues" / "index.json").write_text(
+        json.dumps([{"date": "2026-08-28", "href": "issues/2026-08-28.html",
+                     "items": 3, "outlets": 2, "lead": "Reef <b>&</b> Co"}]),
+        encoding="utf-8",
+    )
+    item = ElementTree.fromstring(feed.feed_xml(tmp_path)).find("./channel/item")
+    assert "Reef <b>&</b> Co" in item.findtext("description")
+
+
+def test_every_page_advertises_the_feed():
+    from pathlib import Path
+
+    for name in ("issue", "about", "archive", "subscribe"):
+        text = (Path("templates") / f"{name}.html.j2").read_text(encoding="utf-8")
+        assert 'type="application/rss+xml"' in text, name
