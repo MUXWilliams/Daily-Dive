@@ -46,4 +46,11 @@
       <a href="{{ referral_url }}" target="_blank" rel="noopener">Powered by Buttondown</a>.
     </p>
   </form>
+  {# Here rather than on one page, so every sign-up box offers the feed in the
+      same words. Absolute, because issue pages live under /issues/, where a
+      relative feed.xml would not resolve. #}
+  <p class="rss">
+    Prefer a feed reader? Follow along by
+    <a href="{{ brand.SITE_URL }}/feed.xml">RSS</a>.
+  </p>
 </section>

@@ -4186,7 +4186,22 @@ def test_feed_description_does_not_double_a_headlines_punctuation(tmp_path):
     ]
 
 
-def test_the_subscribe_page_links_the_feed():
-    from pathlib import Path
+def test_every_signup_box_offers_the_feed_once_and_the_email_links_it(tmp_path):
+    """The line lives in the shared sign-up include, so the subscribe page and
+    every issue page say it in the same words, exactly once. Absolute, because
+    an issue page sits under /issues/ and a relative feed.xml would 404."""
+    from dailydive import brand
 
-    assert 'href="feed.xml"' in Path("templates/subscribe.html.j2").read_text(encoding="utf-8")
+    feed_url = f'href="{brand.SITE_URL}/feed.xml">RSS</a>'
+    pages = {
+        "subscribe": render.write_subscribe(tmp_path).read_text(encoding="utf-8"),
+        "issue": render.render_issue(Issue(date=datetime(2026, 10, 23, tzinfo=UTC), items=[item()])),
+    }
+    for name, html in pages.items():
+        assert html.count("Prefer a feed reader?") == 1, name
+        assert feed_url in html, name
+
+    # Readers of the email are already subscribed: a plain link, no pitch.
+    email = render.render_email(Issue(date=datetime(2026, 10, 23, tzinfo=UTC), items=[item()]))
+    assert f'href="{brand.SITE_URL}/feed.xml"' in email
+    assert "Prefer a feed reader?" not in email

@@ -69,8 +69,8 @@
   .subscribe .note { margin: .6rem 0 0; font-size: .75rem; color: var(--ink-faint); }
   .subscribe .note a { color: var(--ink-faint); }
 
-  .rss { margin: 1rem 0 0; font-size: .9rem; color: var(--ink-faint); }
-  .rss a { color: var(--link); }
+  .subscribe .rss { margin: 1rem 0 0; font-size: .9rem; color: var(--ink-faint); }
+  .subscribe .rss a { color: var(--link); }
 
   .visually-hidden {
     position: absolute; width: 1px; height: 1px; margin: -1px;
@@ -112,11 +112,6 @@
   </ul>
 
   {% include "_subscribe-form.html.j2" %}
-
-  <p class="rss">
-    Prefer a feed reader? Follow along by
-    <a href="feed.xml">RSS</a>.
-  </p>
 
   <footer>
     <p>
