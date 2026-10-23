@@ -4160,3 +4160,33 @@ def test_every_page_advertises_the_feed():
     for name in ("issue", "about", "archive", "subscribe"):
         text = (Path("templates") / f"{name}.html.j2").read_text(encoding="utf-8")
         assert 'type="application/rss+xml"' in text, name
+
+
+def test_feed_description_does_not_double_a_headlines_punctuation(tmp_path):
+    from xml.etree import ElementTree
+
+    from dailydive import feed
+
+    (tmp_path / "issues").mkdir()
+    (tmp_path / "issues" / "index.json").write_text(
+        json.dumps([
+            {"date": "2026-09-04", "href": "issues/2026-09-04.html",
+             "items": 26, "outlets": 19, "lead": "It's Coral Bleaching Awareness Month!"},
+            {"date": "2026-08-28", "href": "issues/2026-08-28.html",
+             "items": 36, "outlets": 22, "lead": "A plain headline"},
+        ]),
+        encoding="utf-8",
+    )
+    found = [i.findtext("description") for i in
+             ElementTree.fromstring(feed.feed_xml(tmp_path)).findall("./channel/item")]
+
+    assert found == [
+        "Lead: It's Coral Bleaching Awareness Month! 26 stories from 19 outlets",
+        "Lead: A plain headline. 36 stories from 22 outlets",
+    ]
+
+
+def test_the_subscribe_page_links_the_feed():
+    from pathlib import Path
+
+    assert 'href="feed.xml"' in Path("templates/subscribe.html.j2").read_text(encoding="utf-8")
