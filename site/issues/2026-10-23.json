@@ -1,0 +1,477 @@
+{
+ "date": "2026-10-23T14:26:14.675637Z",
+ "items": [
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Nature Microbiology",
+   "title": "Steroid hormones produced by coral-associated Endozoicomonas influence coral immune response during thermal stress",
+   "url": "https://doi.org/10.1038/s41564-026-02494-1",
+   "published_at": "2026-10-22T00:00:00Z",
+   "author": "Amin R. Mohamed et al.",
+   "raw_text": "The coral microbiome is believed to play a crucial role in sustaining corals and enabling adaptation to perturbations. A ubiquitous group of coral-associated bacteria, known as Endozoicomonas, are hypothesized to provide essential metabolites to corals, although detailed dynamics of the interactions between host and microbe are poorly understood. Here multi-omics and laboratory validation experiments reveal that Endozoicomonas encodes genes for the metabolism of coral-derived testosterone and converts ubiquitous cholesterol into testosterone and progesterone, both important steroids that accumulate within the coral holobiont during thermal stress. Field sampling along a natural temperature gradient showed general suppression of coral steroid hormones under thermal stress and during white syndrome manifestation. Provision of testosterone or progesterone to corals during laboratory thermal stress induced transcriptional reprogramming of the coral innate immune response, suggesting microbial involvement in host immune modulation. These findings highlight a previously unrecognized potential mechanism of microbial contribution to coral resilience. Multi-omics and laboratory experiments reveal that a coral-associated bacterium can produce testosterone and progesterone; these two hormones alter the coral host’s innate immune responses during thermal stress.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Nature Microbiology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1038/s41564-026-02494-1",
+    "gist": "Coral-associated Endozoicomonas bacteria produce steroid hormones that enhance immune response during thermal stress. Understanding coral holobiont physiology is fundamental to keeping corals alive under adverse conditions.",
+    "relevance": "0.90"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Marine Science",
+   "title": "Changing coral disease dynamics with the emergence of stony coral tissue loss disease on reefs at Carrie Bow Cay, Belize Barrier Reef",
+   "url": "https://doi.org/10.3389/fmars.2026.1948029",
+   "published_at": "2026-10-20T00:00:00Z",
+   "author": "Greta S. Aeby et al.",
+   "raw_text": "Coral reefs in the Caribbean Sea continue to experience unprecedented declines driven by the combined impacts of emerging infectious diseases and increasingly frequent marine heatwaves. This study assessed temporal changes in coral health, disease prevalence, and community composition at nine sites on the Belize Barrier Reef surveyed before and after the emergence of stony coral tissue loss disease (SCTLD) and the 2023 Caribbean mass bleaching event. During our study period (2019-2024), disease became a major driver of mortality, albeit with an epidemiologic transition with shifts in the main diseases driving these patterns. Surveys in 2019 documented relatively healthy reefs with low disease prevalence (avg. 0.5%) characterized by numerous endemic coral diseases. Following the arrival of SCTLD, disease prevalence increased more than tenfold by 2022 (avg. 6.2%), with SCTLD affecting 12 coral species and a previously undescribed chronic tissue loss disease with bleached or purple discoloration (cTLD) emerging in Siderastrea siderea . By 2024, overall average disease prevalence was 4.2% but SCTLD prevalence had declined markedly while S. siderea cTLD became the dominant disease (90% of the diseased colonies), indicating a shift in disease patterns through time. Hard and soft coral cover declined, and sponge cover increased significantly from 1.3% in 2019 to 4.5% in 2024. Coral community structure changed substantially throughout the study, with reductions in colony densities (73.4% decline), and species richness (33% decline). The abundance of SCTLD-susceptible taxa declined following disease emergence, followed by additional losses of thermally sensitive corals after the 2023 bleaching event. Roving diver surveys documented SCTLD to be widespread along the Belize Barrier Reef. Histopathological analyses confirmed that Belizean SCTLD lesions resembled those previously described from the U.S. Virgin Islands and that bleached lesions on Orbicella annularis represented m",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Frontiers in Marine Science",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3389/fmars.2026.1948029",
+    "gist": "Stony coral tissue loss disease now drives mortality on Belize reefs alongside bleaching, causing an epidemiologic shift in coral disease dynamics. This emerging threat is central to understanding wild reef decline and informing captive-care disease management.",
+    "relevance": "0.90"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Microbiology Spectrum",
+   "title": "Functional convergence despite taxonomic turnover across coral-associated microbiomes",
+   "url": "https://doi.org/10.1128/spectrum.02401-26",
+   "published_at": "2026-10-21T00:00:00Z",
+   "author": "Xiaobin Wen et al.",
+   "raw_text": "ABSTRACT Coral-associated microbiomes are fundamental to holobiont health and resilience, yet their community structures often demonstrate high taxonomic variability across host species. Whether such variability results in functional instability or reflects pervasive metabolic redundancy remains unclear. Here, we investigated microbial taxonomic structure, functional potential, and community assembly mechanisms across 15 coral species using 16S rRNA gene sequencing and shotgun metagenomics. These communities exhibited extreme taxonomic heterogeneity, high beta-diversity, and the absence of a universally shared core genus, indicating strong host-specific filtering that dictates microbial membership. In contrast, Kyoto Encyclopedia of Genes and Genomes pathway-based functional profiles exhibited striking convergence across hosts, revealing a conserved metabolic landscape despite extensive taxonomic turnover. Mantel and Procrustes analyses identified a weak but significant correspondence between taxonomic composition and functional potential, a pattern consistent with functional redundancy across coral-associated microbiomes. Null model-based assembly analyses further revealed a decoupling between taxonomic and functional organization. Taxonomic structure was shaped by a host-dependent balance of stochastic and deterministic processes, whereas functional profiles were predominantly assembled through stochastic processes, maintaining consistently high functional redundancy across hosts. Metagenomic profiling uncovered a two-tier functional architecture underlying this stability: a conserved, high-abundance metabolic core enriched in carbon and phosphorus cycling and stress response functions that support microbial persistence in the coral microenvironment, together with lower-abundance host-specific metabolic modules involved in nitrogen and sulfur transformations that enable niche adaptation. Thus, functional requirements primarily govern the coral-associated microbiom",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Microbiology Spectrum",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1128/spectrum.02401-26",
+    "gist": "Study reveals coral microbiomes show high taxonomic variation across species but maintain functional stability through metabolic redundancy. Understanding this resilience mechanism is critical for predicting how corals respond to stress and disease.",
+    "relevance": "0.85"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "A New Way to Rescue Dying Corals",
+   "url": "https://reefs.com/a-new-way-to-rescue-dying-corals/",
+   "published_at": "2026-10-19T19:01:28Z",
+   "author": "xeniaforever",
+   "raw_text": "Scientists at Stanford University have discovered a way to bring corals back from the brink of death by placing them in contact with healthy corals for just a few days. Published in Science Advances, the study presents a promising new approach to restoring coral reefs as rising sea temperatures cause more frequent and severe coral bleaching events.&#8230; The post A New Way to Rescue Dying Corals appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Stanford research shows contact with healthy corals rescues bleached specimens in days, published in Science Advances. Novel coral recovery mechanism applicable to restoration and captive propagation.",
+    "relevance": "0.85"
+   }
+  },
+  {
+   "source_id": "ubcoceans-bsky",
+   "source_name": "UBC Oceans — Bluesky",
+   "title": "Fishers have caught at least 440 invasive lionfish off the coast of Porto Seguro in northeastern Brazil in…",
+   "url": "https://bsky.app/profile/ubcoceans.bsky.social/post/3myi54oavus2z",
+   "published_at": "2026-10-22T16:58:00Z",
+   "author": null,
+   "raw_text": "Fishers have caught at least 440 invasive lionfish off the coast of Porto Seguro in northeastern Brazil in recent weeks. https://news.mongabay.com/short-article/2026/10/invasive-lionfish-reach-brazils-largest-coral-reefs-local-fishers-fight-back/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Invasive lionfish now established off Brazil's largest coral reefs; local fishers actively capturing them. Lionfish invasion is a known threat to reef systems, and this confirms range expansion to a major reef ecosystem.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Scientific Reports",
+   "title": "Field testing the influence of settlement recesses and nighttime feeding lights on coral recruitment",
+   "url": "https://doi.org/10.1038/s41598-026-63624-7",
+   "published_at": "2026-10-22T00:00:00Z",
+   "author": "Hendrikje Jorissen et al.",
+   "raw_text": "Previous studies show that two promising technologies can increase recruitment probability and survival: (i) helix recesses for entraining coral larvae and (ii) night-time feeding lights for improving subsequent survival. We evaluated whether these technologies can be combined to improve coral settlement and survival under in situ reef conditions on concrete restoration modules designed for a large-scale hybrid reef deployment in Hawaiʻi. During a 6-month experiment in Kāneʻohe Bay, recesses dramatically improved initial natural larval entrainment, but specific recess depths and light intensities had little effect on survival of settlers 2 months after settlement. After 6 months, survival was significantly higher in deeper recesses. Higher survival was likely associated with increased protection from algal competition and predation; although increased heterotrophic food availability in shaded microhabitats may contribute to recruit persistence, this mechanism could not be confirmed due to experimental limitations. Integration of these technologies is straightforward and can be incorporated into coastal engineering structures to accelerate coral growth in local, high-value coastal areas.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Scientific Reports",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1038/s41598-026-63624-7",
+    "gist": "Field study shows settlement recesses and nighttime feeding lights improve coral larval recruitment and survival on restoration modules in Kāne'ohe Bay. Direct evidence for practical reef-building techniques that home reef keepers and restoration practitioners can evaluate.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "ISME Communications",
+   "title": "Reef-scale environmental mosaics shape coral physiological and microbial signatures of resilience",
+   "url": "https://doi.org/10.1093/ismeco/ycag303",
+   "published_at": "2026-10-21T00:00:00Z",
+   "author": "Marcelina P. Martynek et al.",
+   "raw_text": "Abstract Environmental variability shapes coral performance, yet its role in structuring host physiology and microbiome composition across reef habitats remains unresolved. We investigated six geomorphologically distinct sites across Heron Island, southern Great Barrier Reef, as a natural laboratory to test how life-long exposure to distinct environmental regimes influences the holobiont of the coral Pocillopora damicornis. We paired one year of high-frequency physiochemical records (including temperature, dissolved oxygen, light, salinity, chlorophyll fluorescence, and turbidity) with measurements of coral physiology, Symbiodiniaceae profiles, and bacterial community composition. Sites differed in their overall environmental regimes, including a nearly threefold range in mean diel temperature variability (1.12–3.39°C day-1), which emerged as the primary driver of physiological differences. Host and symbiont genotyping confirmed all corals matched P. damicornis and Symbiodiniaceae communities were dominated by Cladocopium latusorum. Corals from the intermediately variable site exhibited the highest tissue biomass, chlorophyll-a, and mycosporine-like amino acid content, aligning with the greatest thermal tolerance and resulting in a physiologically distinct phenotype. Colonies from the most variable sites demonstrated higher thermal tolerance than the stable sites, but exhibited energy allocation away from biomass accumulation and reserve storage. Despite a conserved Endozoicomonadaceae-dominated core microbiome, site-specific variation in families such as Cyanobiaceae, Pseudoalteromonadaceae, Microtrichaceae, and Moraxellaceae suggests that environmentally responsive microbes may contribute disproportionately to holobiont physiology across reef habitats. Together, these findings show that reef-scale environmental mosaics generate distinct holobiont phenotypes and suggest that intermediate, rather than extreme, environmental variability may best support coral physiol",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "ISME Communications",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1093/ismeco/ycag303",
+    "gist": "Environmental variability at Heron Island shapes Pocillopora physiological and microbial resilience signatures, linking reef-scale habitat heterogeneity to coral holobiont performance. Understanding how localized conditions drive coral resilience mechanisms informs both conservation and captive-husbandry strategies.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Journal of Applied Microbiology",
+   "title": "Sustained release of beneficial microorganisms for corals from alginate beads under marine conditions",
+   "url": "https://doi.org/10.1093/jambio/lxag262",
+   "published_at": "2026-10-21T00:00:00Z",
+   "author": "Ahmed AlSaggaf et al.",
+   "raw_text": "Abstract Aim Coral reefs support more than one-third of the global marine biodiversity, but global stressors have negatively impacted their health by disrupting fragile microbial partnerships, leading to widespread mass bleaching events. To address this issue, the use of beneficial microorganisms for coral (BMCs) has been shown to enhance coral resilience. In this study, we evaluated the potential of alginate beads as a delivery method for BMCs underwater. Methods and Results BMCs were encapsulated in alginate beads and incubated in artificial seawater at 26°C and 32°C. Microbial viability within the beads and bacterial release were monitored over a three-week period. Cell viability and sustained release rate were maintained throughout the experiment, with viable cell release averaging 106 cells h−1 per 50 mL flask by the third week at both temperatures. Co-encapsulation of multiple BMC strains resulted in changes in bacterial dynamics. Conclusions These findings demonstrate that alginate beads can provide sustained delivery of viable BMCs under marine conditions and represent a promising platform for probiotic-based coral restoration strategies.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Journal of Applied Microbiology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1093/jambio/lxag262",
+    "gist": "Alginate beads successfully deliver beneficial microorganisms to corals under marine conditions, offering a practical method to enhance coral resilience against bleaching. This could enable hobbyists and facilities to actively support coral health.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Restoration Ecology",
+   "title": "Performance of Acropora species on the Great Barrier Reef's first coral tree nursery",
+   "url": "https://doi.org/10.1111/rec.70566",
+   "published_at": "2026-10-20T00:00:00Z",
+   "author": "Hannah Kish et al.",
+   "raw_text": "Abstract Introduction The worldwide decline of coral reefs has led to the proliferation of local‐scale coral restoration projects. Active restoration using in‐water coral tree nurseries and outplanting of coral fragments is relatively new on the Great Barrier Reef (GBR) and complements traditional, passive approaches to reef protection. However, given the infancy of these methods, few studies have measured the effectiveness of coral restoration techniques, including coral nursery systems. Objectives The study aimed to assess the performance of 10 Acropora species commonly used in coral tree nurseries and evaluate the impacts of harvesting wild colonies for small‐scale coral restoration programs at Hastings Reef and Fitzroy Island in the central GBR. Methods Wild reef colonies were selected as donor colonies and harvested to create fragments for coral tree nurseries. Donor and untouched (control) wild colonies were monitored for 6 months for bleaching, predation, disease, mortality, and growth. Fragment health and growth in a nursery were compared with wild and donor colonies. Species performance within nurseries was also compared. Data were analyzed using generalized linear models. Results All species showed increased growth rates after 6 months in a nursery, with lower predation and disease than control colonies on a nearby reef. However, nursery corals exhibited higher bleaching, likely due to higher temperatures at the shallower depths where nurseries were located. Conclusions Harvesting fragments had no negative effect on donor colony health. Multiple Acropora species benefited from the nursery environment and could help maintain local diversity and increase coral abundance. Higher bleaching rates in nursery fragments indicate that thermal stress must be mitigated.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Restoration Ecology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1111/rec.70566",
+    "gist": "Great Barrier Reef coral tree nurseries successfully outplant Acropora species, validating active restoration at scale. Results confirm fragment-based nursery methods work in field conditions.",
+    "relevance": "0.80",
+    "similar": "1"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Dear Sloane: a letter to my granddaughter",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1927928",
+   "published_at": "2026-10-22T00:00:00Z",
+   "author": "Stephen R. Gittings",
+   "raw_text": "Milestones in life invite reflection on the past and consideration of the future. At retirement, I reached a troubling conclusion: I had played a part in a largely unsuccessful effort to protect coral reefs (particularly in the Western Atlantic, where most of my career played out) from decades of stressors driven or intensified by human development and exploitation. Those of us responsible for management did not do enough to control them, and reefs paid the price. An apology to my granddaughter is an admission that my dream career ultimately left her generation with less than it deserves. But is all lost, or can we recover from past mistakes, use what we’ve learned, and help restore biodiversity and ecological function to the world’s reefs? We know the causes of decline, and we have decades of coral reef science and management experience to guide us. We also have powerful new technologies, and an ally in Nature1 itself, which has a remarkable capacity to recover when stressors are reduced. Restoration of Nassau grouper populations in the Cayman Islands provides a compelling example. And a few coral reefs remain in remarkably good condition. By protecting them, we can learn what works, use them as benchmarks for restoration elsewhere, and demonstrate what remains possible under current environmental conditions.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Retiring reef scientist reflects on decades of failed coral reef conservation in the Western Atlantic. A personal account of management shortcomings and reef decline that captures the scope of the conservation challenge reef keepers follow.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Marine Pollution Bulletin",
+   "title": "Land meets sea: How upland clearing threatens coral reef health in Ambon Bay, Maluku Province, Indonesia",
+   "url": "https://doi.org/10.1016/j.marpolbul.2026.120475",
+   "published_at": "2026-10-20T00:00:00Z",
+   "author": "Daniel Deonisius Pelasula et al.",
+   "raw_text": "Land–sea interactions play a crucial role in determining coral reef health. However, comprehensive evaluations connecting terrestrial disturbances, climatic influences, and reef health conditions are limited in small island systems, such as Ambon Island, Indonesia. This study examined the effects of upland clearing (UC) on coral reef deterioration by conducting a multi-temporal analysis that integrated land cover changes with normalized difference vegetation index (NDVI) data, rainfall variations, and field surveys using the line intercept transect (LIT) method and coral reef health index (RHI). The findings revealed a rapid increase in bare soil in upland regions, from 31 ha to 2900 ha, whereas dense vegetation decreased from 12,389 ha to 8655 ha. This alteration in the landscape heightened the erosion risk and sediment transport to coastal waters, with sedimentation rates reaching 0.40 g/cm 2 /day during intense rainfall events, exceeding the coral tolerance threshold (0.015 g/cm 2 /day). The RHI indicated a significant decline in reef health over the study period. These results support a mechanism in which upland clearing driven by growth increases sediment availability, while rainfall variability intensifies transport, contributing to sediment-associated stress on coral reef ecosystems. This interaction underscores nonlinear land–sea connections. This study advances land–sea connectivity by integrating terrestrial and marine data in a ridge-to-reef framework, showing that bare soil expansion was negatively correlated with reef fish biomass (ρ = −0.90) and the reef health index (ρ = −0.80). Ridge-to-reef management considering upstream land-use practices is critical to protect coral reefs during increasing climate variability.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Marine Pollution Bulletin",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1016/j.marpolbul.2026.120475",
+    "gist": "Study links upland land clearing to coral reef deterioration in Indonesia through terrestrial sediment and nutrient runoff. Understanding land-sea interactions is essential for reef conservation and predicting reef system resilience.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Marine Science",
+   "title": "Photogrammetric analysis reveals distinct topographic signatures for stony corals",
+   "url": "https://doi.org/10.3389/fmars.2026.1968325",
+   "published_at": "2026-10-20T00:00:00Z",
+   "author": "Christina M. Mallica et al.",
+   "raw_text": "Structural complexity is well understood to influence the biodiversity, productivity, and ecosystem functionality of coral reefs through niche diversification. Digital surface models (DSMs) created through photogrammetric techniques enable a more accurate reef characterization through DSM-derived metrics such as terrain variability, slope, and curvature. Massive reef-building corals are highly susceptible to stressors and are typically replaced by weedier corals post-disturbance that decelerate calcification rates and result in reef flattening. Therefore, generating topographic footprints of stony corals with these structural metrics is critical to advance our understanding of how disturbances might alter reef function. We utilized structure-from-motion photogrammetry to create orthomosaics and DSMs of five pinnacle reefs in the Dry Tortugas, collected as part of Florida Fish and Wildlife Conservation Commission’s Coral Reef Evaluation and Monitoring Program (CREMP). These data products were employed to investigate fine-scale (1 cm) differences between the most abundant coral genera using six terrain metrics: topographic position index, surface area to planar area ratio, slope, profile curvature, maximum curvature, and minimum curvature. This study found that when divided into functional groups (i.e., massive reef-builders vs. weedy opportunistic species), stony corals were topographically distinct with varying levels of contribution to the reefs’ overall structural complexity. Massive corals such as Orbicella , Colpophyllia , and Montastraea had the highest relative abundance and also provided the highest structural complexity. Specifically, they had the highest topographic position index and slope values, and positive profile curvature, all of which together are indicative of rugose, steep, and convex forms. We also found that within the massive reef-builders, there was a topographic distinction between star corals ( Orbicella , Montastraea ) and brain corals ( Co",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Frontiers in Marine Science",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3389/fmars.2026.1968325",
+    "gist": "Photogrammetry reveals how coral morphology affects reef structure and diversity. Understanding topographic signatures helps assess reef health and guides restoration targets.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Communications Biology",
+   "title": "Standardizing deoxygenation studies in coral biology",
+   "url": "https://doi.org/10.1038/s42003-026-11025-x",
+   "published_at": "2026-10-19T00:00:00Z",
+   "author": "Wyatt C. Million et al.",
+   "raw_text": ") from the world's oceans, presents a pervasive and intensifying threat for reef-building corals that will require coordinated efforts to understand and manage. However, recent expansion of coral deoxygenation experimentation has produced methodological gaps, limiting collective knowledge generation. Here, we show that growing divergence in this field arises primarily from differences in focal phenotypes, deoxygenation exposures, and experimental execution that together prevent biological from technical variation from being disentangled between studies. To address this, we propose a series of recommendations to establish the foundation for a future standardized framework for coral deoxygenation methodology. Such efforts are critical to establish a robust consensus of scientific data to support effective management of reef deoxygenation. Waiting decades for diverging methodologies to prompt a call for standardization may be imprudent given the urgent threat of deoxygenation and the abundant methodological divergence present in coral deoxygenation experimentation.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Communications Biology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1038/s42003-026-11025-x",
+    "gist": "A new study proposes standardized protocols for coral deoxygenation research to resolve methodological divergence across experiments. Consistent methodology enables reliable comparison and faster accumulation of knowledge about hypoxia stress on corals.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Aquatic Ecology",
+   "title": "Multifactorial nutritional ecology of tropical scleractinian corals: integrating nutrient dynamics, trophic plasticity, and environmental drivers",
+   "url": "https://doi.org/10.1007/s10452-026-10368-1",
+   "published_at": "2026-10-17T00:00:00Z",
+   "author": "Guilherme Melgaço Heluy et al.",
+   "raw_text": "Abstract Coral reefs are among the most productive marine ecosystems, sustained by the tight coupling between physiological processes and environmental conditions, in which nutrition plays a central regulatory role. This review synthesizes the multifactorial nutritional ecology of tropical scleractinian corals, emphasizing how autotrophic and heterotrophic pathways are dynamically integrated to support metabolic performance, calcification, and stress resilience. Particular attention is given to the acquisition, assimilation, and functional roles of key—macronutrients (nitrogen-containing compounds and lipids) and micronutrients (essential minerals and trace elements)—in regulating symbiotic stability and holobiont homeostasis, while explicitly distinguishing a coral’s carbon budget—which tracks the sources and sinks of carbon-containing molecules—from its energy budget, which additionally requires conversion of these molecules into caloric equivalents relative to metabolic demand. We further examine trophic plasticity as a central adaptive mechanism, enabling corals to adjust energy acquisition strategies under environmental stressors such as thermal anomalies, ocean acidification, and eutrophication. This includes shifts in feeding rates, prey selectivity, and reliance on dissolved and particulate organic matter, which collectively determine the capacity for metabolic compensation during periods of reduced autotrophic input. In addition, we evaluate emerging approaches in coral nutrition research, including artificial diets, probiotic-based interventions, and biochemical and isotopic markers. By integrating experimental and biogeochemical evidence, we demonstrate that nutrient availability, stoichiometric balance, and environmental drivers jointly regulate coral performance through tightly coupled metabolic feedbacks, positioning a species’ “nutritional niche”—its capacity for compensatory heterotrophy relative to its dependence on symbiont-derived carbon—as a prim",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Aquatic Ecology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s10452-026-10368-1",
+    "gist": "A comprehensive review synthesizes how scleractinian corals integrate autotrophic and heterotrophic nutrition to support calcification, metabolism, and stress resilience. Nutritional dynamics underpin coral survival and reef productivity.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Native calanoid copepods for marine fish larviculture: a systematic review and evidence-maturity assessment",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1989369",
+   "published_at": "2026-10-21T00:00:00Z",
+   "author": "Luis Antonio Espinoza-Ramos",
+   "raw_text": "IntroductionThe choice of live prey remains a persistent constraint in the larviculture of marine finfish. However, the available literature has not been systematically organized to distinguish promising biological traits from the evidence required for reproducible culture, direct larviculture validation, production scaling, and hatchery implementation, particularly for native and locally isolated calanoids.MethodsWe searched the Web of Science Core Collection following the PRISMA 2020 and PRISMA-S guidelines. Four complementary searches yielded 1,499 records; after 342 overlaps were removed, two reviewers independently screened 1,157 unique records. Consensus decisions assigned 199 records to the direct systematic synthesis, 146 to a contextual mapping stratum, and 812 to the predefined exclusion categories. Study-level extraction used downloaded original publications. Evidence was organized across culture, reproduction, environmental tolerance, nutritional characterization, prey suitability, fish larviculture, scale-up, and dormant-stage storage topics. We then applied a two-layer Calanoid Aquaculture Evidence Maturity Index: CAEMI-A describes bibliographic coverage across the mapped taxa, whereas CAEMI-B compares the full-text technological evidence for seven sufficiently documented taxa.ResultsWithin the evidence-maturity framework and under equal weights, Acartia tonsa scored 95.8, followed by Parvocalanus crassirostris and Pseudodiaptomus annandalei (83.3 each). A Monte Carlo analysis using 100,000 Dirichlet weight sets kept A. tonsa in rank 1 in every simulation, whereas the positions of the remaining taxa varied with the priorities assigned to individual dimensions. Following the reference-to-claim audit, the D6 larviculture ratings were reduced from 2 to 1 for Bestiolina similis and from 1 to 0 for Gladioferens imparipes because the supporting studies assessed prey capture or copepod culture rather than direct fish growth and survival.DiscussionThis review ",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Systematic review identifies native calanoid copepods as promising live prey for marine fish larvae, assessing evidence maturity for hatchery scaling. This directly addresses a persistent bottleneck in larviculture that affects availability and sustainability of captive-bred reef fish.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Revista de Biología Tropical",
+   "title": "Surface complexity enhances early invertebrate recruitment on novel substrates for coral reef restoration",
+   "url": "https://doi.org/10.15517/qhtgzx44",
+   "published_at": "2026-10-22T00:00:00Z",
+   "author": "J. Fernando Alvarado Rodríguez et al.",
+   "raw_text": "Introduction: Coral reefs are increasingly threatened by climate change and local anthropogenic stressors, prompting the development of artificial substrates for reef restoration. Although substrate material is often considered a key design variable, the relative influence of surface topography on early benthic colonization remains insufficiently resolved. Objective: To evaluate the effects of experimental substrate material and surface topography on early benthic community assembly at Islote Zacatoso reef, Mexican Pacific. Methods: Eighteen experimental plates (20 × 20 × 2 cm) representing three substrate materials: Net-Zero AragoReef (aragonite-enriched formulation), aragonite-enriched ceramic, and conventional Portland concrete, were manufactured with either flat or relief-added surfaces (n = 3 per material × relief combination) and deployed at 6 m depth from March to September 2023. Invertebrate abundance and morphospecies composition were analyzed using Bayesian hierarchical modeling, permutational multivariate analysis of variance, non-metric multidimensional scaling, diversity indices, and rarefaction analyses. Results: A total of 316 morphospecies were recorded after six months of deployment. Relief-added plates supported 2.7–5.7 times higher invertebrate abundance than flat plates across all materials. Bayesian modeling confirmed a strong positive effect of surface topography on abundance, whereas substrate material showed no consistent influence. Community composition differed significantly by surface topography, with clear separation in multivariate space between flat and relief-added treatments, while material effects were not significant. Diversity indices and rarefaction curves consistently indicated higher morphospecies richness and evenness on relief-added plates. Morphospecies accumulation curve did not reach an asymptote, and Chao1 estimated 629 morphospecies (95% CI: 497–761), suggesting substantial undetected diversity. Conclusions: Surface topog",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Revista de Biología Tropical",
+    "section": "Journal",
+    "doi": "https://doi.org/10.15517/qhtgzx44",
+    "gist": "Surface topography of restoration substrate plates strongly influences early benthic colonization during reef rebuilding. Substrate design directly affects recruitment success, a key parameter for restoration and potentially relevant to captive coral farming.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "reefbuilders",
+   "source_name": "Reef Builders",
+   "title": "Reefstock Returns to Denver",
+   "url": "https://reefbuilders.com/2026/10/19/reefstock-returns-to-denver/",
+   "published_at": "2026-10-19T16:26:14Z",
+   "author": "Rob Mougey",
+   "raw_text": "Get ready, marine aquarium enthusiasts and reef-keeping hobbyists—ReefStock 2027 is officially back, bigger and better than ever! Whether you are a seasoned reefer looking to hunt down rare aquacultured frags, a newcomer eager to set up your first saltwater ecosystem, or a freshwater enthusiast curious about planted aquariums, this is the premier destination event you cannot&#8230; Source",
+   "category_hint": "Events",
+   "extra": {
+    "gist": "ReefStock 2027 conference returns to Denver. Premier hobby event for frags, equipment, and networking among reef and planted-tank enthusiasts.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Humanities and Social Sciences",
+   "title": "Mapping Coral Health Dynamics at Cheeca Rocks (2012–2018)",
+   "url": "https://doi.org/10.54691/hwd81b40",
+   "published_at": "2026-10-19T00:00:00Z",
+   "author": "Shaoxinyi Yan",
+   "raw_text": "High-resolution mosaic images and spatially matched polygon data were taken from Cheeca Rocks transect 1 (2012–2014); these data were used to examine spatial structure, bleaching responses, and short-term death rates at the colony level for four coral taxa: Orbicella annularis (OANN, formerly MANN), Porites astreoides (PAST), Porites porites (PPOR), and Siderastrea siderea (SSID); TagLab annotations, nearest-neighbor distance calculations in ArcGIS Pro, and bleaching and death metrics generated in R Studio were combined, and changes in the coral community at the scale of individual colonies were recorded. The results showed that 2014 had the strongest bleaching during the study period; in September 2014, nearly 100% of OANN and PPOR colonies were bleached, PAST was around 20%, and SSID stayed at 0% in all surveys; the death patterns followed the same trend, OANN and PAST decreased over the whole study period, and PAST had the largest loss (−25%) between 2013 and August 2014, while PPOR had a moderate decline (−11.4%) during the same time and no death was recorded for SSID; for colony spacing, only OANN showed clear differences in the average distance to nearest neighbor, and the other species kept relatively stable spacing patterns from 2012 to 2014. Overall, it was shown by the results that the high temperature event in 2014 was the main reason for the bleaching and population loss at Cheeca Rocks; at the same time, the ability of each species to tolerate heat was a key factor in deciding how the coral community responded; when the 2015–2018 aligned photomosaic layers are added in future work, it will be possible to look more completely at long-term recovery, changes in spatial arrangement, and the effects of repeated disturbances under continued climate stress.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Frontiers in Humanities and Social Sciences",
+    "section": "Journal",
+    "doi": "https://doi.org/10.54691/hwd81b40",
+    "gist": "Long-term colony-level monitoring at Cheeca Rocks tracked bleaching responses and mortality across four coral taxa from 2012–2018. Individual-colony data reveals how reef corals respond heterogeneously to stress, informing resilience predictions.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-reef-fish",
+   "source_name": "Journal of Human and Education (JAHE)",
+   "title": "IMPLEMENTATION OF TECHNICAL GUIDELINES FOR INVESTIGATION IN HANDLING DESTRUCTIVE FISHING CRIMES",
+   "url": "http://jahe.or.id/index.php/jahe/article/view/3119",
+   "published_at": "2026-10-20T00:00:00Z",
+   "author": "Sherly Adam et al.",
+   "raw_text": "Maluku Province is an archipelagic region in Eastern Indonesia with an ocean area covering 92.4% of its total territory. Possessing vast marine resources, Maluku faces severe threats from destructive fishing practices. Fishing activities utilizing explosives, potassium cyanide, electric shocks, compressors, and unapproved gear severely destroy coral reef ecosystems and degrade aquatic biodiversity. This socio-legal research aims to critically analyze the multi-dimensional factors causing destructive fishing across Maluku’s 12 Island Clusters and evaluate the implementation of technical guidelines and Standard Operating Procedures (SOPs) applied by law enforcement agencies (Fisheries PPNS, Ditpolairud Maluku Regional Police, and the Indonesian Navy). The findings indicate that destructive fishing is driven by complex variables: economic vulnerability among traditional fishermen, high market demand for live reef fish and ornamental species, perceived operational efficiency, unrestricted access to chemical explosive raw materials (ANFO fertilizer), lack of ecological awareness, and strong local cultural cohesion that shields offenders. From a procedural law standpoint, criminal investigations adhere to the Criminal Procedure Code (KUHAP), Law No. 45 of 2009 on Fisheries, Police Regulation No. 6 of 2019, and Maluku Governor Regulation No. 22 of 2023. However, procedural enforcement is structurally hampered by the absence of a Forensic Laboratory in Maluku (which delays scientific crime investigation), limited patrol armadas across remote archipelagic zones, budget constraints for civil servant investigators (PPNS), and inter-agency egoism within the Fisheries Crime Coordination Forum. Keywords: Destructive Fishing, Fisheries Investigation, Socio-legal, Maluku, PPNS, Polairud.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Journal of Human and Education (JAHE)",
+    "section": "Journal",
+    "gist": "Indonesia's Maluku region combats destructive fishing with enforcement guidelines. Dynamite and cyanide fishing destroy reef ecosystems; stronger investigation protocols aim to reduce habitat loss.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "gsr-bsky",
+   "source_name": "Great Southern Reef Foundation — Bluesky",
+   "title": "Spring kelp growth averages 6 g per kelp a day at some Great Southern Reef sites (wet weight)",
+   "url": "https://bsky.app/profile/greatsouthernreef.bsky.social/post/3my6z2fqcpc2h",
+   "published_at": "2026-10-19T01:51:00Z",
+   "author": null,
+   "raw_text": "Spring kelp growth averages 6 g per kelp a day at some Great Southern Reef sites (wet weight). GSR Research Partnership teams are measuring seasonal growth in Tasmania, NSW and WA. Full story: https://greatsouthernreef.com/news#kelp-growth Images & report: Hunter Forbes",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Southern Australian kelp forest grows 6 g per plant daily in spring; research tracks seasonal variation across regions. Macroalgal productivity baseline supports understanding of cool-water reef systems.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Advances in Tropical Biodiversity and Environmental Sciences",
+   "title": "Benthic-Pelagic Coupling and Structural Complexity of Coral Reefs in the Northern Bali Strait: Implications for Coastal Ecosystem Resilience",
+   "url": "https://doi.org/10.24843/atbes.2026.v10.i02.p10",
+   "published_at": "2026-10-18T00:00:00Z",
+   "author": "Ayu Dewi Puji Lestari et al.",
+   "raw_text": "This study examines benthic-pelagic associations in neritic environments by evaluating habitat structural heterogeneity, macrobenthic biodiversity, and pelagic community status at Grand Watudodol (GWD) in the northern Bali Strait. Utilizing Line Intercept Transect (LIT) protocols and volumetric filtration methods alongside in situ hydro-oceanographic monitoring, community ecological indexes were quantified across biological zones. The empirical results revealed a live hard coral cover of 41.55%, classifying the ecosystem status as moderate. The benthic matrix showed high architectural diversity, with branching Acropora, massive corals, soft corals, and sponges. Conversely, the pelagic zone demonstrated a community structure imbalance, suggesting potential environmental enrichment indicated by a high abundance of the diatom Skeletonema sp.. Statistical correlation analysis revealed that this pelagic microalgal accumulation was positively associated with vertical water clarity and calm surface current velocities (0.06 m/s), which may prolong the residence time of terrestrial nutrients. While current physicochemical parameters largely meet national environmental standards, chronic pelagic nutrient loading may pose long-term ecological risks of substrate smothering. Ultimately, these findings indicate a potential ecological shift, showing that long-term reef resilience requires expanding beyond localized physical marine protection to a comprehensive ridge-to-reef management framework that can mitigate terrestrial organic inputs.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Advances in Tropical Biodiversity and Environmental Sciences",
+    "section": "Journal",
+    "doi": "https://doi.org/10.24843/atbes.2026.v10.i02.p10",
+    "gist": "Benthic-pelagic coupling and structural diversity at Grand Watudodol in the northern Bali Strait showed 41.55% live coral cover and high habitat complexity. Reef ecosystem health and architectural diversity drive fish and invertebrate productivity.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Sedimentary Geology",
+   "title": "Carbonate sediment sources and characterisation prior to mass coral bleaching in an isolated atoll",
+   "url": "https://doi.org/10.1016/j.sedgeo.2026.107224",
+   "published_at": "2026-10-17T00:00:00Z",
+   "author": "Joshua Louis Bonesso et al.",
+   "raw_text": "In tropical reef settings, biogenic calcium carbonate (CaCO 3 ) is essential for reef accretion and the development of adjacent sedimentary landforms such as beaches and coral reef islands. The coupling between reef ecology and reef geomorphic processes makes these systems increasingly vulnerable to the impacts of climate-driven disturbances, including from acute thermal anomalies (e.g., marine heatwaves). To understand this eco-geomorphic relationship, we examine carbonate sediment characteristics (composition, texture) alongside contemporary benthic community assemblages at Mermaid Reef, a shelf edge atoll in Western Australia's northwest coral reef province, one year prior to the 2024–2025 mass coral bleaching event. Results indicate strong homogeneity between benthic reef surveys and sediment composition, revealing four distinct and spatially organised bio-sedimentary depositional facies. Coral-derived sediments dominate across all bio-sedimentary facies (27–46% of sediments), highlighting corals as a primary carbonate sediment source. Yet, variation amongst facies is controlled by the disproportionate contribution of secondary carbonate producers including molluscs, Halimeda , crustose coralline algae (CCA), and to a lesser extent, foraminifera. Given that these carbonate-producing taxa are highly vulnerable to thermal anomalies, shifts in benthic community structure under future disturbance trajectories are likely to alter sediment composition and the organisation of these bio-sedimentary facies, with potential long-term impacts on reef accretion and the development of sedimentary landforms. These findings provide a critical pre-bleaching benchmark against which future ecological shifts and sedimentary reconfiguration at Mermaid Reef can be assessed over longer timescales.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Sedimentary Geology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1016/j.sedgeo.2026.107224",
+    "gist": "A study examined carbonate sediment composition and benthic community structure at Mermaid Reef before mass bleaching. Reef geomorphology depends on coral productivity; sediment shifts signal ecological collapse.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "yt-wwc",
+   "source_name": "World Wide Corals",
+   "title": "An Acropora Lover’s Dream! | 160-Gallon SPS Reef in Brazil",
+   "url": "https://www.youtube.com/watch?v=y-aGsX8ZIG4",
+   "published_at": "2026-10-22T20:00:32Z",
+   "author": "World Wide Corals",
+   "raw_text": "What does it take to keep an Acropora-dominated reef thriving in a São Paulo apartment? In this episode, Vic visit Daniel’s 160-gallon reef aquarium in Brazil, where colorful SPS corals, carefully selected LPS, powerful lighting, and an impressive filtration setup come together in a system built around coral growth. Daniel and his wife share a passion for coral keeping, and their aquarium reflects that dedication. We discuss lighting intensity and color, coral growth, water chemistry, feeding, ozone, UV sterilization, and the equipment behind the system. One of the most interesting features is Daniel’s battery-backup setup, designed to keep essential circulation running during power outages—a valuable reminder that reef success depends on preparing for the unexpected, too. In this video: - A tour of Daniel’s 160-gallon reef aquarium in São Paulo, Brazil - Lighting choices, natural-looking color, and why more light isn’t always better - Water changes, nutrient management, and maintaining stable reef parameters - A closer look at ozone, UV sterilization, activated carbon, filtration, and protein skimming - Why battery backups are essential in Brazil for maintaining circulation during extended power outages - How the control system manages ozone and delays equipment startup after a power interruption World Wide Corals At World Wide Corals, we work with corals and reef systems at every stage, from growing and maintaining healthy livestock to helping reef keepers build successful aquariums. Visiting Daniel in Brazil gave us an opportunity to discuss real-world SPS husbandry, lighting, filtration, and power-outage preparation while comparing approaches from different reef-keeping communities. Our goal is to share practical experience that helps fellow reef keepers make informed decisions for their own systems. What would you prioritize in an Acropora-focused reef: lighting, flow, nutrient control, or backup power? And have you ever had a power outage that put your aquariu",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "y-aGsX8ZIG4",
+    "duration_s": "1153",
+    "gist": "Tour of a 160-gallon SPS-dominated reef in Brazil with discussion of lighting, water chemistry, and filtration. Build logs with useful husbandry detail on keeping high-demand corals are solidly interesting for the community.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "yt-reefdudes",
+   "source_name": "ReefDudes",
+   "title": "How to Move a Reef Tank Without Crashing It | Aquarium Moving Guide",
+   "url": "https://www.youtube.com/watch?v=vD_JPIwiw9c",
+   "published_at": "2026-10-19T14:00:14Z",
+   "author": "ReefDudes",
+   "raw_text": "Moving a reef tank can be stressful, but with the right preparation you can move your saltwater aquarium, fish, coral, live rock, and equipment without causing a tank crash. Ultra zero https://bulkreefsupply.sjv.io/ultrazeropump Python https://bulkreefsupply.sjv.io/rE3D0B Awesome Saltwater Aquarium Shirts!!! https://reefdudes.com/shop Join the Community https://www.facebook.com/groups/reefdudes Eyecandy https://www.instagram.com/reefdudes/ Ask a question http://reefdudes.com/ask Want to support the channel? Purchase your gear through my Amazon link https://amzn.to/2TQasec or become a Patreon https://www.patreon.com/reefdudes",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "vD_JPIwiw9c",
+    "duration_s": "456",
+    "gist": "Guide covers planning and execution for relocating a reef tank without crashing bioload. Practical protocol for preserving live rock, fish, and coral through transport and setup.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Persistence of sedimentary DNA in burrowing marine benthos: evidence from the decapod Upogebia major",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1964335",
+   "published_at": "2026-10-21T00:00:00Z",
+   "author": "Kenji Okoshi",
+   "raw_text": "Environmental DNA (eDNA) analysis is an increasingly important tool for surveying marine organisms. Requiring only small environmental samples, eDNA analysis enables efficient assessment of the occurrence and distribution of target taxa based on eDNA detection and concentration. This approach is particularly effective for organisms difficult to observe and collect conventionally. However, knowledge of eDNA persistence in the environment remains limited. A better understanding of taxon-specific eDNA persistence is essential for accurate interpretation of eDNA data. Burrowing benthic organisms are suitable targets for eDNA-based surveys because they are difficult to collect and observe directly, making field surveys time-consuming and labor-intensive. However, little is known about the persistence of their eDNA. Because burrowing benthos remain in close contact with sediments, their eDNA is expected to occur predominantly in sediments as sedimentary DNA (sedDNA). Therefore, we evaluated the persistence of sedDNA in a tank experiment with burrowing decapod Upogebia major, a species widely distributed in tidal flats throughout East Asia. The results suggest that, at least under tank conditions, the sedDNA of this species can persist in sediments for at least 30 days and up to 50 days without substantial changes in concentration. Three explanations are possible: (1) the amount of sedDNA produced by U. major may have greatly exceeded its rate of degradation, resulting in very slow degradation; (2) bacterial activity, one of the drivers of sedDNA degradation, may have been lower under tank conditions than under natural field conditions; and (3) the burrows may have functioned as a continuous source of sedDNA, allowing sedDNA to be intermittently released from the burrows even in the absence of animals. Collectively, these factors may have contributed to the long-term persistence of sedDNA without substantial changes in its concentration. However, the detection frequency an",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Environmental DNA persists in burrowing benthic organisms like shrimp, informing eDNA survey interpretation. This refines understanding of eDNA detection in marine organisms but applies primarily to scientific monitoring rather than tank husbandry.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "projectseahorse-bsky",
+   "source_name": "Project Seahorse — Bluesky",
+   "title": "This week’s #ThrowbackThursday spotlight study found that older, larger seahorse dads have more mature…",
+   "url": "https://bsky.app/profile/projectseahorse.bsky.social/post/3myialtnukz2p",
+   "published_at": "2026-10-22T18:00:00Z",
+   "author": null,
+   "raw_text": "This week’s #ThrowbackThursday spotlight study found that older, larger seahorse dads have more mature pouches – as a result, they have twice as many babies, their offspring grow faster, and their survival rate jumps to 90%! Read more: https://ow.ly/SOIE50Z88Mu",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Older seahorse fathers produce more offspring with better survival rates due to mature pouches. Seahorses are kept aquarium fauna, but this is a throwback to older research without new findings.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "yt-saltwateraquarium",
+   "source_name": "SaltwaterAquarium.com",
+   "title": "Can an American Build a German ATO? (Part 2: Soldering & Potting the Tunze Osmolator)",
+   "url": "https://www.youtube.com/watch?v=LIMdiRLJ-lk",
+   "published_at": "2026-10-22T17:00:01Z",
+   "author": "SaltwaterAquarium",
+   "raw_text": "10-22-2026 Can a total beginner pass German quality control standards? In this part-two episode, we step onto the factory floor to assemble the legendary Tunze Osmolator from start to finish! From micro-soldering delicate circuitry and inserting magnets to executing the high-precision 3-step resin potting process, see exactly how these top-tier aquarium Auto Top-Off (ATO) systems are built. Watch as we put our hand-soldered unit through Tunze’s rigorous optical sensor and safety testing—and discover if it actually works or gets sent straight to the trash bin! ______________________________________________ ⚠️ Products In This Video ► Tunze Osmolator 3 Automatic Water Top Off (ATO) 3154 - https://www.saltwateraquarium.com/osmolator-3-automatic-water-top-off-ato-3154-tunze/ ______________________________________________ Website - https://www.saltwateraquarium.com Follow us on Facebook - https://www.facebook.com/swaqdotcom/ Follow us on Instagram - https://www.instagram.com/saltwateraquariumdotcom/ Follow us on TikTok - https://www.tiktok.com/@saltwateraquarium.com ______________________________________________ 📩 If you have a request related to equipment in this video, or this video in general, email - sales@saltwateraquarium.com #saltwateraquarium #swaq",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "LIMdiRLJ-lk",
+    "duration_s": "614",
+    "gist": "Video series following assembly and testing of a Tunze Osmolator ATO system. Behind-the-scenes manufacturing detail is interesting, but the item is more entertainment than technical insight.",
+    "relevance": "0.50",
+    "beat": "Manufacturing"
+   }
+  },
+  {
+   "source_id": "yt-brs",
+   "source_name": "BRStv — Bulk Reef Supply",
+   "title": "Hands Off Mechanical Filtration for your Reef Tank! Nature Dimensions N-Clear M",
+   "url": "https://www.youtube.com/watch?v=6FIOgA_vVVE",
+   "published_at": "2026-10-19T16:00:06Z",
+   "author": "Bulk Reef Supply - Saltwater Aquariums",
+   "raw_text": "The Nature Dimensions N-Clear M takes the compact, adaptable design of the original N-Clear fleece roller and scales it up for standard 4-inch filter sock holders and larger aquarium systems. Today, Thomas breaks down how the N-Clear M works, its optical sensor, interchangeable adapters, controller modes, fleece replacement system, and how you can run up to three rollers from a single controller. If you’re tired of washing filter socks multiple times a week, this gives you a much more hands-off approach to reef tank mechanical filtration. #BRStvSpotlight #brstv Check out EVERYTHING Nature Dimensions at Bulk Reef Supply: ➡ https://brs.li/BRStv_NatureDimensions Are you a Preferred Reefer? Find out here! ➡ https://brs.li/BRStv_PreferredReefers Find Bulk Reef Supply on Facebook, Instagram, TikTok and more! ➡ AskBRStv Facebook Group : https://brs.li/JoinAskBRStv ➡ Bulk Reef Supply Instagram : https://brs.li/BRS_Instagram ➡ BRS on TikTok : http://brs.li/BRS_TikTok *Legal Stuff* The purpose and content of this video is to provide general information regarding the products and their applications as presented in the video. Aperture LLC. And its officers, directors, employees and agents disclaim all express or implied warranties, in any way, related to the products and their application as presented in this video, make no representation or warranty regarding the products and the application as presented in this video and shall not be liable for any direct or indirect losses or damages of any type, including but not limited to punitive damages, or from personal injury or death resulting from or in any manner related to the video, and the products in and contents of the video. The viewer expressly agrees that aquatic sales solutions, inc. And its officers, directors, employees and agents shall not be liable for any damages or losses related to the products in and content of the video and hereby agrees to hold the foregoing harmless from any such losses or damages.",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "6FIOgA_vVVE",
+    "section": "Bulk Reef Supply",
+    "duration_s": "247",
+    "gist": "Nature Dimensions N-Clear M automatic fleece-roller filter scales up to standard holders with optical sensor and remote control. Reduces manual filter-sock maintenance for larger systems.",
+    "relevance": "0.50",
+    "beat": "Product"
+   }
+  },
+  {
+   "source_id": "projectseahorse-bsky",
+   "source_name": "Project Seahorse — Bluesky",
+   "title": "🌊 Meet the West Australian seahorse, or 𝘏𝘪𝘱𝘱𝘰𝘤𝘢𝘮𝘱𝘶𝘴 𝘴𝘶𝘣𝘦𝘭𝘰𝘯𝘨𝘢𝘵𝘶𝘴!",
+   "url": "https://bsky.app/profile/projectseahorse.bsky.social/post/3mxyx42euwr2a",
+   "published_at": "2026-10-16T16:00:00Z",
+   "author": null,
+   "raw_text": "🌊 Meet the West Australian seahorse, or 𝘏𝘪𝘱𝘱𝘰𝘤𝘢𝘮𝘱𝘶𝘴 𝘴𝘶𝘣𝘦𝘭𝘰𝘯𝘨𝘢𝘵𝘶𝘴! Use these identifying features to spot one in the wild, then snap a photo and report your sighting to the iSeahorse project on iNaturalist. Learn more here: www.iseahorse.org",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "A citizen-science project invites observations of West Australian seahorses via iNaturalist. Seahorses are common in ornamental trade; habitat monitoring informs collection sustainability.",
+    "relevance": "0.50"
+   }
+  }
+ ]
+}
