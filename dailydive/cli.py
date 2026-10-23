@@ -892,9 +892,10 @@ def main(argv: list[str] | None = None) -> int:
         # issue this run just built. Inside the publish gate for the same
         # reason the archive is — a partial run has not published anything, and
         # a sitemap is a claim about what is live.
-        from . import seo
+        from . import feed, seo
 
         seo.write_all(args.out)
+        feed.write_feed(args.out)
         if bucket_items:
             _answer_picks(issue)
 

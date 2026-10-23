@@ -17,6 +17,7 @@ the archive index is updated:
 |---|---|
 | `site/robots.txt` | Static. Allows everything, names the sitemap, carries the delisting contact. |
 | `site/sitemap.xml` | Generated from `site/issues/index.json`. |
+| `site/feed.xml` | RSS 2.0, newest 20 issues, from the same index (`dailydive/feed.py`). Advertised by a `<link rel="alternate">` on every page. |
 
 The sitemap matters more than it looks. The dated permalinks at
 `/issues/YYYY-MM-DD.html` are linked from **exactly one page**, `archive.html`.
@@ -115,7 +116,7 @@ The practical levers, in the order they are worth pulling:
    URL exists precisely so there is something ours to share.
 2. **The archive accumulating.** Five issues is a thin site; fifty is a
    reference. Nothing to do here but keep the Friday run green.
-3. **RSS**, still open in `CLAUDE.md`. Feed readers and aggregators are a
+3. **RSS**, shipped as `feed.xml`. Feed readers and aggregators are a
    distribution path that does not depend on ranking at all.
 
 ## What was deliberately not done

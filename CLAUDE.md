@@ -190,9 +190,10 @@ about the week.
   The prompt fix has only faced a six-item run.
 - **JZAR and ENSO** have no working feed. Both are in `probe.DISCOVER_TARGETS`
   for HTML autodiscovery. El Niño was asked for by name and nothing covers it.
-- **RSS is the next thing.** `site/issues/index.json` is already the right
-  shape for it — `seo.py` is a second consumer of it now; email shipped first
-  because signup was the blocking problem.
+- **RSS is built, not yet promoted.** `dailydive/feed.py` writes `site/feed.xml` from
+  `site/issues/index.json` inside the publish gate. Pages built before it existed
+  carry no `<link rel="alternate">` until the next run. Next: list the feed in
+  directories and mention it on the subscribe page.
 - **Indexing is set up, not yet earned.** The Search Console property is
   verified and the sitemap is submitted (`docs/indexing.md`). What is still
   open is whether the pages get *kept*: an aggregator whose unique text is a
