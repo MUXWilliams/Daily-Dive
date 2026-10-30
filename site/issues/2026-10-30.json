@@ -1,0 +1,465 @@
+{
+ "date": "2026-10-30T14:03:25.558930Z",
+ "items": [
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Proceedings of the Royal Society B Biological Sciences",
+   "title": "Cumulative thermal stress predicts functional change in coral reef fish communities",
+   "url": "https://doi.org/10.1098/rspb.2026.1955",
+   "published_at": "2026-10-28T00:00:00Z",
+   "author": "Anthony C. Markey et al.",
+   "raw_text": "Marine heatwaves are altering coral reef fish communities through a combination of direct impacts of thermal stress and indirect impacts that degrade coral habitats. Impacts may vary for species in different functional groups (e.g. herbivore replacement of corallivores), altering the functional composition of fish communities that is critical to reef resilience. However, our understanding of trait-based responses of fish communities to marine heatwaves is inadequate, and mostly inferred from local scales and low numbers of species. Here, we use a Bayesian joint species distribution model based on data for 500 fish species from 286 sites surveyed across northern Australia to evaluate the impacts of marine heatwaves on species probability of occurrence and their interactions with four functional traits. The effects of degree heating weeks and coral loss on individual species probability of occurrence had the highest total and proportionally negative responses, respectively. Thermal affinity's positive response to cumulative heat stress (i.e. degree heating weeks) was the strongest trait effect. Community-level analyses predicted losses in habitat specialists, large-bodied fishes, corallivores and pelagic feeders along a gradient of marine heatwave stress. The loss and restructuring of functional diversity suggest that heatwaves will continue eroding fish-dependent ecological roles and associated ecosystem services.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Proceedings of the Royal Society B Biological Sciences",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1098/rspb.2026.1955",
+    "gist": "Marine heatwaves shift coral reef fish communities toward herbivores at the expense of corallivores, altering functional composition that reef resilience depends on. A Bayesian model across multiple species and locations provides predictive insight into how thermal stress reorganizes fish communities.",
+    "relevance": "0.85"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Nature Communications",
+   "title": "Marine heat waves in vulnerable coral reef regions are skillfully predictable on multi-year timescales",
+   "url": "https://doi.org/10.1038/s41467-026-78279-1",
+   "published_at": "2026-10-27T00:00:00Z",
+   "author": "Alexia Karwat et al.",
+   "raw_text": "Marine heat waves (MHWs) increasingly threaten coral reefs, but their predictability beyond seasonal timescales remains poorly understood. Here we assess the seasonal-to-multi-year predictability of MHW frequency, cumulative intensity, and duration across 12 coral reef regions. Using Community Earth System Model version 2 simulations, ocean-assimilated experiments and five-year hindcasts initialized annually from 1981 to 2020, we show that frequency and cumulative intensity are predictable for several months to multiple years across many ocean basins, with skill varying strongly by region and season. Anthropogenic warming is the dominant source of multi-year skill across most hotspots, while internal variability limits predictability in the equatorial Pacific. El Niño-Southern Oscillation and Atlantic Multidecadal Oscillation further modulate regional forecasts through coupled ocean-atmosphere processes. These findings reveal strong regional contrasts in the sources and limits of forecast skill, identifying where advance warning can support timely, targeted regional preparedness, coral reef conservation and adaptation to escalating thermal stress. The study shows that marine heatwave frequency and cumulative intensity across vulnerable coral reef regions are skillfully predictable from months to years ahead, with long-term anthropogenic warming accounting for most multi-year forecast skill, while internal variability, particularly El Niño, limits predictability in the equatorial Pacific.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Nature Communications",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1038/s41467-026-78279-1",
+    "gist": "Marine heatwave frequency and intensity in coral reef regions are predictable on multi-year timescales using Earth system models, with skill varying by region. Extended forecasting could enable proactive reef management and conservation planning.",
+    "relevance": "0.85"
+   }
+  },
+  {
+   "source_id": "projectseahorse-bsky",
+   "source_name": "Project Seahorse — Bluesky",
+   "title": "Fisheries are becoming increasingly indiscriminate – they catch an estimate of 29 million seahorses a year…",
+   "url": "https://bsky.app/profile/projectseahorse.bsky.social/post/3myzttv2wp62r",
+   "published_at": "2026-10-29T18:00:00Z",
+   "author": null,
+   "raw_text": "Fisheries are becoming increasingly indiscriminate – they catch an estimate of 29 million seahorses a year and a lack of precautionary measures for the data-poor species leaves them vulnerable. Learn more in this week’s #ThrowbackThursday study: https://ow.ly/JY8c50Z2XJQ",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Fisheries catch an estimated 29 million seahorses annually with minimal protection for this data-poor species. Seahorses are stocked in marine aquarium trade; understanding wild-population pressure informs sourcing and conservation.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Why might corals settle on Lithophyllum prototypum? A hypothesis linking non-geniculate coralline algal architecture to coral recruitment",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1996042",
+   "published_at": "2026-10-27T00:00:00Z",
+   "author": "Renato C. Pereira",
+   "raw_text": "Coral recruitment depends on the ability of larvae to identify suitable benthic substrates, and non-geniculate coralline algae are among the most important natural facilitators of this process. Within this group, members of the Lithophyllum prototypum complex are repeatedly associated with high coral settlement responses, but the mechanisms underlying this effect remain incompletely understood. Most explanations have emphasized chemical and microbial cues, whereas the distinctive surface architecture of this morphotype has received little ecological attention. Here, we characterize the applanate surface architecture of the Lithophyllum prototypum complex using scanning electron microscopy and quantitative morphometry. Repeated thallus superimposition generates applanate branches, characterized by overlapping lamellae, elevated margins, narrow crevices and interstitial spaces distributed across the algal surface. The mean spacing between adjacent applanate branches was 533 ± 213 µm, while overhanging lamellar margins formed shallow cavities averaging 29.1 ± 5.6 µm in height. These dimensions suggest that the surface of this morphotype produces larval-scale microhabitats rather than deep cryptic shelters. We hypothesize that this architecture may enhance coral settlement by increasing contact opportunities, promoting larval retention and modulating the local expression of chemical and microbial cues. This physical–chemical–microbial microhabitat hypothesis provides a testable framework for re-evaluating how NGCA morphology contributes to coral recruitment.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Non-geniculate coralline algae in the Lithophyllum prototypum complex consistently trigger high coral larval settlement, but the mechanism remains unclear. Surface architecture may play an underappreciated role alongside chemical and microbial settlement cues.",
+    "relevance": "0.80",
+    "similar": "1"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Microbiome",
+   "title": "Decoding the metagenome of the precious red coral: discovery of a new spirochete lineage and carotenoid-producing bacteria",
+   "url": "https://doi.org/10.1186/s40168-026-02569-5",
+   "published_at": "2026-10-26T00:00:00Z",
+   "author": "R. Tignat-Perrier et al.",
+   "raw_text": "Abstract The precious red coral Corallium rubrum is an ecologically and economically iconic Mediterranean octocoral, yet the diversity and functions of its microbiome remain a “blackbox” at the genomic scale. Here, we present a genome-resolved metagenomic analysis of C. rubrum , reconstructing 25 high-quality metagenome-assembled genomes (MAGs), including 16 from wild colonies and 9 additional ones from a laboratory colony, to gain insight into the functional potential of its microbiome. Our phylogenomic analysis of the two dominant Spirochaetota symbionts reveals that one of the two symbionts represents a potential novel, previously undescribed lineage, which appears to be exclusively associated with octocoral species. Functional profiling indicates that these Spirochaetota exhibit different metabolic pathways, and are adapted to the symbiotic life, probably representing mutualistic partners for C. rubrum . Their genomes encode biosynthetic pathways of a wide range of essential amino acids and vitamins, and the capacity to ferment sugars to acetate, potentially supplementing host dietary deficiencies. We also identified an interesting symbiont, affiliated with the Qipengyuania genus, that possesses the genomic potential for the biosynthesis of the carotenoid canthaxanthin, one of the main pigments involved in the red color of C. rubrum . The other MAGs encode a wide range of metabolic pathways, especially those linked to nitrogen and sulfur transformations. Our findings suggest potential metabolic interactions between the red coral host and its microbiome. This study offers detailed taxonomic and functional characterization of newly identified octocoral symbionts, establishing a foundation for future investigations into octocoral symbiotic relationships.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Microbiome",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1186/s40168-026-02569-5",
+    "gist": "Metagenomic analysis of precious red coral reveals 25 bacterial genomes including a new spirochete lineage and carotenoid-producing symbionts. Understanding coral microbiota function deepens knowledge of what keeps corals alive.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Implications of hardbottom sponge community decline for ecosystem function in the Florida Keys, Florida (USA)",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1891588",
+   "published_at": "2026-10-30T00:00:00Z",
+   "author": "Mark J. Butler",
+   "raw_text": "Human damage to the marine ecosystem of the Florida Keys may have begun in pre-Columbian times but expanded with European colonization about 400 years ago, particularly through overfishing of large species such as seals, turtles, and groupers. Around the turn of the 20th century, draining of the Everglades and construction of the overseas railway altered forever the flow of fresh and saltwater in the ecosystem. But by and large, the resilience of the ecosystem remained intact until the late 1970’s-early 1980’s when it began to collapse, exemplified by phytoplankton blooms, seagrass and sponge die-offs, mass urchin mortalities, and coral disease. Today, seagrass meadows are relatively healthy but coral reefs harbor few corals and inshore hardbottom habitats have been stripped of sponges and octocorals among other taxa. Changes to hardbottom sponge communities between 2002 and 2018 throughout the Florida Keys are documented here, as are the ramifications of sponge loss on local benthic scouring, underwater soundscapes, and the effect on waterborne microbial communities and water chemistry by sponge filtration. From 2002-2018, sponge abundance and diversity declined by 66% and 34% (respectively), even in regions that did not experience sponge-killing cyanobacteria blooms. Without the presence of large sponges, benthic scouring is reduced, which promotes sedimentation and may hasten the transition of hardbottom habitat to seagrass. Loud, acoustically complex hardbottom soundscapes become acoustic dead-zones without soniferous species associated with large sponges, dampening the sonic signatures that larvae and other animal life stages use to navigate to hardbottom. The decline in sponges and the effects of their lost filtration is estimated to have reduced ecosystem-level removal of DOC by 30 – 56% and NH4 by 40% along with an approximate 30% reduction in the release by sponges into the water of PO4 and NO2-NO3. Like that on the region’s coral reefs, the ecological phas",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Florida Keys hardbottom sponge communities have declined, threatening reef ecosystem function. Understanding reef-system collapse informs conservation priorities and baseline knowledge for coral-reef biology.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Scientific Reports",
+   "title": "Seasonality and the effect of a marine heatwave on the metabolism of Red Sea coral reefs",
+   "url": "https://doi.org/10.1038/s41598-026-66842-1",
+   "published_at": "2026-10-28T00:00:00Z",
+   "author": "Vincent Saderne et al.",
+   "raw_text": null,
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Scientific Reports",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1038/s41598-026-66842-1",
+    "gist": "A new study examines how Red Sea coral metabolism responds to seasonal cycles and marine heatwaves. Understanding metabolic rates under thermal stress is essential for predicting how corals will fare in warming oceans.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Microbial Ecology",
+   "title": "Culture and Isolation of Bacteria Associated with Mediterranean Corals",
+   "url": "https://doi.org/10.1007/s00248-026-02919-8",
+   "published_at": "2026-10-26T00:00:00Z",
+   "author": "Rocio Mozo et al.",
+   "raw_text": "Abstract Corals harbor a diverse bacterial community that facilitates adaptation and sustains their health. In coral holobiont research, culture-independent approaches have transformed the existing paradigm. Molecular techniques, such as metabarcoding, revealed a high diversity of previously unrecognized bacterial symbionts. Coral microbiota characterization has relied on these techniques over the last decade, but relying solely on them does not provide a detailed understanding of the dynamics of the coral holobiont complex. Returning to classic microbiological methods and in vitro experimentation can yield novel insights into symbiont roles, physiology, and interactions within the holobiont. Under this premise, we aimed to isolate and culture bacteria from four Mediterranean coral species: Eunicella singularis , Cladocora caespitosa , Leptogorgia sarmentosa , and Paramuricea clavata . The recovery of 84 pure bacterial isolates and their initial classification based on the 16S rRNA gene revealed a diverse community of culturable coral-associated bacteria spanning four classes and 20 genera. Among these, six isolates may represent novel taxa (< 97% 16S rRNA identity to their closest described species) within Vibrio , Pseudoalteromonas , Alteromonas , Shewanella and Tritonibacter , underscoring the value of culture-based studies. The cultured bacterial diversity included taxa exhibiting traits potentially involved in host association, biofilm formation, surface colonization, and degradation of complex polysaccharides, suggesting functional roles in coral colonization and holobiont maintenance. Establishing this bacterial culture collection provides a foundation for investigating bacterial roles within the coral holobiont through detailed morphological and physiological characterization and experimental ecology studies.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Microbial Ecology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s00248-026-02919-8",
+    "gist": "A review argues culturable bacterial methods are essential alongside molecular techniques to understand coral holobiont dynamics. Classical microbiology reveals coral symbiont behavior that sequencing alone cannot.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Reviews in Fish Biology and Fisheries",
+   "title": "Quantifying surgeonfish functions in coral reef sediment dynamics: an ecological and evolutionary perspective",
+   "url": "https://doi.org/10.1007/s11160-026-10097-6",
+   "published_at": "2026-10-24T00:00:00Z",
+   "author": "Isabelle Ng et al.",
+   "raw_text": "Fish-driven ecosystem functions directly contribute to sediment dynamics on coral reefs, shaping how reefs operate in the present-day and potentially through evolutionary time. However, our understanding of these biologically-mediated sediment processes and their underlying evolutionary history remains poorly resolved for surgeonfishes (Acanthuridae), despite their known role in reef sediment dynamics. To fill this knowledge gap, we combined detailed field sampling and phylogenetic comparative methods to quantify the functional role of surgeonfishes in the past and present. Phylogenetic generalised linear mixed models revealed a positive association between body size and the mass of sediment ingested across all surgeonfish functional groups. At an assemblage-level and individual body-mass-standardised scale, brushers and sediment suckers – united by their possession of gizzard-like stomachs – ingested the most sediment relative to other functional groups. However, the larger overall body size of sediment-sucking surgeonfishes means that they ingest the highest sediment masses, individually and relative to all other functional groups across reef habitats at Lizard Island. Surprisingly, grain-size composition did not differ substantially between the gizzard-like stomachs and the intestines of brushers and sediment suckers, suggesting that grain-size modification is not a major function performed by surgeonfishes. Finally, we detected a shift towards greater sediment ingestion in the Miocene (~15–17 million years ago) that temporally aligns with the evolution of gizzard-like stomachs in detritivorous surgeonfishes (i.e. sediment suckers and brushers) and the early formation of modern reefs. These findings showcase the extent to which surgeonfishes may have been, and continue to be, key contributors to reef sediment dynamics.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Reviews in Fish Biology and Fisheries",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s11160-026-10097-6",
+    "gist": "Phylogenetic study quantifying surgeonfish roles in coral reef sediment dynamics across evolutionary time. Advances understanding of how a key reef-fish family shapes reef structure and function.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "yt-tidalgardens",
+   "source_name": "Tidal Gardens",
+   "title": "Everything You Should Know About ICP Testing",
+   "url": "https://www.youtube.com/watch?v=fsSjPmNy0K4",
+   "published_at": "2026-10-29T21:30:49Z",
+   "author": "Tidal Gardens",
+   "raw_text": "Don’t add anything you aren’t actively testing for. That’s the rule I follow when it comes to reef additives. ICP testing is a game changer in that department but it is important to understand what it can and can't do. In this video we will talk about all things ICP and how we go about using it to dose trace elements to our reef systems. Join this channel to get access to perks: https://www.youtube.com/channel/UCGdAIpjFq4vygKzXAyDKKtQ/join http://www.tidalgardens.com #tidalgardens #coral #reefaquarium Copyright Information: This video was shot and edited by Tidal Gardens. Tidal Gardens owns all intellectual property rights to this content.",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "fsSjPmNy0K4",
+    "duration_s": "1124",
+    "gist": "Tidal Gardens explains ICP testing for trace-element dosing in reef tanks. ICP measurement directly determines which additives reef keepers actually need, avoiding unnecessary supplementation.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Generating blue carbon credits through conservation of Posidonia oceanica: experience from the LIFE SeaForest project",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1910928",
+   "published_at": "2026-10-29T00:00:00Z",
+   "author": "Marco Marcelli",
+   "raw_text": "IntroductionPosidonia oceanica meadows are key blue carbon ecosystems in the Mediterranean Sea, storing substantial carbon within biomass and underlying sediments. Unregulated recreational anchoring contributes to meadow degradation and may compromise the retention of previously stored carbon. The LIFE SeaForest project (LIFE17 CCM/IT/000121) aimed to reduce carbon losses associated with P. oceanica degradation through integrated management, monitoring, conservation, and restoration actions across three Mediterranean protected coastal areas.MethodsA comprehensive ex-ante accounting framework was developed to estimate anchoring-related potential carbon-stock losses, expressed in CO2-equivalent units, under baseline (business-as-usual) and project scenarios. The methodology considered vessel-size classes and substrate categories associated with P. oceanica (rocky, sandy, and degraded dead matte substrates). Project actions included environmentally friendly mooring systems, sustainable anchoring management plans, and regulation of recreational boating through a dedicated digital user platform.ResultsOver the ten-year accounting period, cumulative Net Emission Reductions (NERs) exceeded 5,000 tCO2eq across the three project areas. This value represents net avoided potential carbon-stock loss, rather than directly quantified atmospheric CO2 emissions, and identifies a potential SeaForest credit volume subject to monitoring, verification, and certification.DiscussionThe proposed framework represents one of the first structured ex-ante approaches for estimating potential blue carbon credits from conservation measures that reduce anchoring impacts in Mediterranean P. oceanica meadows. Although further validation and long-term monitoring are needed, the SeaForest approach provides a potentially replicable framework for blue carbon initiatives, sustainable coastal management, and climate-mitigation policies in the Mediterranean region.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "LIFE SeaForest project develops accounting frameworks for blue-carbon credits through Posidonia oceanica conservation in the Mediterranean. Seagrass meadow carbon storage and degradation dynamics inform reef-adjacent ecosystem management and conservation valuation.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Journal of Marine Science and Engineering",
+   "title": "Microbial Community Structure and Predicted Functional Potential Across Environmental Gradients Influenced by Submarine Groundwater Discharge in Tropical Coral Reef Intertidal Sediments",
+   "url": "https://doi.org/10.3390/jmse14212015",
+   "published_at": "2026-10-27T00:00:00Z",
+   "author": "Feng‐Yu Wang et al.",
+   "raw_text": "Submarine groundwater discharge (SGD) delivers land-derived nutrients to coastal waters, but its effects on benthic microbial communities in tropical coral reef intertidal sediments are largely unknown. We studied the Duzaiping Marine Protected Area on Liuqiu Island, Taiwan, where groundwater seeps through a coral reef limestone platform. Surface sediments and bottom water from 19 sites were analyzed for dissolved nutrients, 16S rRNA amplicon diversity, and predicted functional potential (FAPROTAX). Groundwater discharge points had salinities of 2–3 and NO2− + NO3−, PO43−, and SiO2 concentrations up to 623.94, 7.07, and 245.83 µM, respectively. Principal component analysis resolved three geochemically distinct groups: Groundwater (GW), Mixed, and Seawater (SW). Microbial communities were significantly differentiated between GW and SW groups. Nitrospiraceae, Nitrosomonadaceae, Burkholderiaceae, and Pseudomonadaceae were enriched at the discharge points, consistent with nitrification and putative denitrification. Halieaceae and Xenococcaceae were most abundant in the marine-dominated zone. Predicted aerobic ammonia and nitrite oxidation were enriched in GW sediments, whereas predicted fermentation was enriched in SW sediments. Woeseiaceae abundance correlated positively with phosphate and predicted nitrification. SGD thus alters nutrient stoichiometry and sorts benthic microbial communities, with predicted functional profiles shifting from nitrogen transformation near discharge points to heterotrophic decomposition in marine-dominated sediments.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Journal of Marine Science and Engineering",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3390/jmse14212015",
+    "gist": "Submarine groundwater discharge through coral reef sediments introduces nutrient gradients that reshape benthic microbial communities and their metabolic function. Understanding these geochemical influences on reef microbiota is relevant to nutrient cycling in reef systems.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "PeerJ",
+   "title": "Density patterns and age structure of the queen conch ( Aliger gigas ) in a coral reef lagoon in the Mexican Caribbean",
+   "url": "https://doi.org/10.7717/peerj.21836",
+   "published_at": "2026-10-27T00:00:00Z",
+   "author": "Isvi Areli Benítez-Castillo et al.",
+   "raw_text": "The queen conch ( Aliger gigas ) is one of the most important fishery resources in the Caribbean; however, its populations have declined markedly as a result of overexploitation. This study evaluated the population density and size structure of the species within the Banco Chinchorro Biosphere Reserve, Mexico, during 2015, 2016, and 2018, encompassing the final phase of a 5-year total fishing closure and the period immediately following its termination. A total of 35 sampling stations were distributed across six zones of the reef lagoon. At each station, five circular surveys with an 8 m radius were conducted during each sampling campaign. The highest densities were observed in the Central and Southern Leeward zones, whereas the lowest occurred in the Southern Windward zone. Population density increased during the fishing closure and reached its maximum in 2016, suggesting a partial recovery associated with reduced fishing pressure. Despite this increase, the population was dominated by juveniles and subadults, while sexually mature individuals represented only a small proportion of the stock. Spatial variation in size distribution revealed distinct areas functioning as recruitment, growth, and potentially reproductive habitats within the reserve. Conversely, the scarcity of large individuals suggests the long-term effects of selective harvesting on the adult component of the population. Comparison between siphonal length and lip thickness indicated that only 6.2% of individuals simultaneously met the legal minimum harvest size and a morphological criterion associated with sexual maturity, whereas 10.03% attained the minimum legal size without having reached reproductive maturity. These findings indicate that siphonal length alone may not adequately protect the reproductive stock of A. gigas . Accordingly, size-based management regulations should be complemented by biological indicators of maturity, such as lip thickness, to enhance conservation measures and promote",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "PeerJ",
+    "section": "Journal",
+    "doi": "https://doi.org/10.7717/peerj.21836",
+    "gist": "Queen conch populations in a Mexican Caribbean lagoon show recovery during and after a 5-year fishing closure, with density and age structure tracked across reefs. Population response to protection measures informs management of this overexploited Caribbean resource.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "ubcoceans-bsky",
+   "source_name": "UBC Oceans — Bluesky",
+   "title": "“Our findings show why fisheries managers need to consider more than temperature alone,” William Cheung…",
+   "url": "https://bsky.app/profile/ubcoceans.bsky.social/post/3mz2epk4ot22v",
+   "published_at": "2026-10-29T23:02:00Z",
+   "author": null,
+   "raw_text": "“Our findings show why fisheries managers need to consider more than temperature alone,” William Cheung said.“Understanding how different extremes interact will be essential for anticipating risks to fisheries & communities that depend on them.” @ubccoru.bsky.social https://news.mongabay.com/2026/10/fishers-in-eastern-indonesia-struggle-as-rough-seas-keep-them-ashore/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "UBC researcher William Cheung finds fisheries must consider multiple environmental extremes beyond temperature alone. Knowledge of how environmental stressors interact helps predict reef-ecosystem responses and fisheries impacts on reef communities.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "yt-wwc",
+   "source_name": "World Wide Corals",
+   "title": "Building a 650-Gallon Peninsula Reef | WWC Custom Aquarium Install",
+   "url": "https://www.youtube.com/watch?v=daNZhkaYsyE",
+   "published_at": "2026-10-29T20:00:00Z",
+   "author": "World Wide Corals",
+   "raw_text": "Join Matt Simpson as World Wide Corals takes you behind the scenes of a massive 650-gallon custom aquarium build! From maneuvering this 10-foot beast into place with a forklift to engineering a 150-foot remote garage water mixing station, we break down every piece of gear and plumbing decision that brought this dream system to life. Plus, watch how we solve common long-tank circulation dead zones and add the very first batch of quarantined livestock! In this video: • Moving and leveling a 10-foot, 650-gallon peninsula aquarium into a private office. • Remote garage water station: Dual 210-gallon tanks, automated RO/DI, in-line chiller, and semi-automated water changes. • Dual return pump strategy: Why we paired an Abyzz A400 with a Reef Octopus VarioS-10. • Mastering flow on long aquariums: How we eliminated surface slicks using MP60s and corner returns. • First livestock introduction: Drip-acclimating quarantined tangs, wrasses, anthias, and clean-up crew. At World Wide Corals, our custom installation team designs high-end aquarium systems engineered for long-term reef-keeping success and effortless maintenance. By combining commercial-grade filtration, intelligent automation, and rock-solid plumbing layouts, we take the stress out of managing large-scale saltwater aquariums. What was your favorite feature on this 650-gallon build—the remote garage water mixing station, the external Reef Octopus skimmer, or the return plumbing setup? Drop your thoughts in the comments below! If you enjoyed the video, like, subscribe, and turn on notifications so you don't miss our next reef tank tour, coral spotlight, aquarium walkthrough, or behind-the-scenes look at World Wide Corals. Thanks for watching, and we'll see you in the next one! About This Reef: Explore this comprehensive 650-gallon custom reef aquarium installation by World Wide Corals. Learn about peninsula tank circulation, HYDROS aquarium automation, Reef Octopus protein skimmers, Abyzz return pumps, and custom wat",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "daNZhkaYsyE",
+    "duration_s": "887",
+    "gist": "World Wide Corals documents a 650-gallon custom aquarium build with large-tank circulation solutions and remote water mixing. The video covers practical engineering for long tanks, dead-zone mitigation, and equipment selection.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-reef-fish",
+   "source_name": "Revista de Biología Tropical",
+   "title": "Contribución de la ictiofauna arrecifal a los servicios ecosistémicos del Sistema Arrecifal Mesoamericano",
+   "url": "https://doi.org/10.15517/v16ecb23",
+   "published_at": "2026-10-27T00:00:00Z",
+   "author": "Bárbara Velázquez-Rivera et al.",
+   "raw_text": "Introduction: Ecosystem services (ES) are benefits derived from ecological processes that contribute to human well-being. Coral reefs and their fish communities provide multiple ES, but they face growing threats in the Mesoamerican Reef System (MRS), where reef degradation affects biodiversity and associated benefits. Although assigning ES at the species level remains a challenge, their assessment is key to conservation and management. Objective: To characterize the contribution of reef fish species included in the Reef Health Index (RHI) to the ES of the Mexican MRS. Materials and Methods: Based on scientific literature, databases, identification guides, and consultations with experts, twelve ecosystem services in the categories of provisioning, regulation, support, and cultural were assigned to 28 species of Epinephelidae, Lutjanidae, and Labridae included in the RHI. Differences in the average number of ES among families and categories were evaluated using ANOVA; hierarchical clustering analyses were performed; and the contribution of fish to ES was calculated using an index at six sites within the Cozumel Reefs National Park (CRNP), relating it to environmental factors and the RHI. Results: All species contributed to multiple ecosystem services, with Epinephelus striatus standing out with seven ecosystem services. Groupers and snappers dominated provisioning services, while parrotfish were primarily responsible for regulatory functions such as herbivory and bioerosion. Statistical analysis revealed significant differences between service categories but not between families. Cluster analyses identified functional groupings related to ecological processes and social benefits. At six sites in the CRNP, the relationships between ecosystem service diversity, environmental variables, and the RHI were weak and not significant. However, the Ecosystem Service Index showed marked spatial heterogeneity, with Chankanaab standing out as the site with the highest value. Concl",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Revista de Biología Tropical",
+    "section": "Journal",
+    "doi": "https://doi.org/10.15517/v16ecb23",
+    "gist": "A study quantifies how reef fish species in the Mesoamerican Reef contribute to ecosystem services including fisheries, coastal protection, and nutrient cycling. Assigning ecological value species-by-species helps prioritize conservation in a degraded reef system.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "AFERIY P180 Review: 31+ Hours of Reef Tank Backup Power From a 1 kWh Power Station",
+   "url": "https://reefs.com/aferiy-p180-review-reef-tank-backup-power/",
+   "published_at": "2026-10-26T15:27:52Z",
+   "author": "danireef",
+   "raw_text": "Can a portable power station really keep a reef tank running for more than 31 hours during a power outage? That&#8217;s what we set out to find out with the AFERIY Nomad1800 P180 , a 1,024 Wh LiFePO4 power station that, in our real-world test, ran a return pump and a powerhead for 31 hours and 32 minutes .&#8230; The post AFERIY P180 Review: 31+ Hours of Reef Tank Backup Power From a 1 kWh Power Station appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "A 1 kWh LiFePO4 power station kept a reef tank running 31+ hours during a power outage in real-world testing. This is actionable data for emergency backup planning in system design.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "yt-saltwateraquarium",
+   "source_name": "SaltwaterAquarium.com",
+   "title": "How to Get Rid of Aiptasia FAST: Berghia Nudibranch Guide & Review | Hilary Jaffe",
+   "url": "https://www.youtube.com/watch?v=uQcX27CrTxw",
+   "published_at": "2026-10-24T13:00:00Z",
+   "author": "SaltwaterAquarium",
+   "raw_text": "10-24-2026 Are you struggling with a stubborn Aiptasia pest infestation in your saltwater reef tank? In this video, Hilary shares everything you need to know about using Berghia nudibranchs as a natural biological control to safely eliminate Aiptasia without harming your corals. Learn about Berghia pricing, how many to order based on your tank size and infestation level, essential acclimation tips, and best practices for introducing these sea slugs to your reef safely. Discover whether Berghia nudibranchs are truly worth the investment and what to expect as they eradicate pest anemones overnight! ______________________________________________ ⚠️ Products In This Video ► Small Captive-Bred Aiptasia Eating Filefish - https://www.saltwateraquarium.com/small-captive-bred-aiptasia-eating-filefish-acreichthys-tomentosus-ora/ ► Peppermint Shrimp - Small Tank Raised - https://www.saltwateraquarium.com/peppermint-shrimp-small-tank-raised-lysmata-boggessi-ora-chicago/ ► Franks Tanks F-Aiptasia Killer (2 oz) - https://www.saltwateraquarium.com/f-aiptasia-killer-2-oz-franks-tanks/ ► Maxspect Aiptasia Control (100mL) - https://www.saltwateraquarium.com/aiptasia-control-100ml-maxspect/ ► 25.5\" Majano Wand Majano and Aiptasia Remover - https://www.saltwateraquarium.com/25-5-majano-wand-majano-and-aiptasia-remover-majano-wand/ ► ITC Reefculture V1.02 (NEW Version) Reef Delete UV Pest Eradication Tool - https://www.saltwateraquarium.com/v1-02-new-version-reef-delete-uv-pest-eradication-tool-itc-reefculture/ ______________________________________________ Website - https://www.saltwateraquarium.com Follow us on Facebook - https://www.facebook.com/swaqdotcom/ Follow us on Instagram - https://www.instagram.com/saltwateraquariumdotcom/ Follow us on TikTok - https://www.tiktok.com/@saltwateraquarium.com ______________________________________________ 📩 If you have a request related to equipment in this video, or this video in general, email - sales@saltwateraquarium.com #saltwateraquarium ",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "uQcX27CrTxw",
+    "duration_s": "562",
+    "gist": "Video guide to using Berghia nudibranchs for biological Aiptasia control, covering sourcing, acclimation, and tank-size dosing. Practical husbandry for a common reef problem.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Reassessing carbon sink fisheries: biogeochemical constraints and ecological-economic-social coupling and governance",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1895629",
+   "published_at": "2026-10-30T00:00:00Z",
+   "author": "Xi Hu",
+   "raw_text": "Fisheries and aquaculture influence marine carbon cycling, but biological carbon-retention does not necessarily constitute atmospheric carbon dioxide removal. This critical narrative review reassesses carbon sink fisheries, a concept developed in Chinese fisheries research, through an ecological-economic-social framework. Seaweed cultivation, bivalve aquaculture, integrated multi-trophic aquaculture, and fisheries management are distinguished by carbon pathways and evidentiary requirements. Calcification, respiration, atmospheric replenishment, counterfactual production, postharvest fate, and storage durability constrain carbon claims. Recent observations support enhanced carbon burial in some depositional farming environments, whereas carbonate chemistry and system-level analyses do not justify classifying conventional bivalve production as verified marine carbon dioxide removal. These findings are reconciled by distinguishing measured transfers and stocks from additional atmospheric removal that persists over a specified horizon. A practical governance sequence is proposed: define the intervention and baseline, evaluate claim-specific evidence, report removal and avoided emissions separately, and assess economic performance alongside enforceable social and ecological safeguards. Shared monitoring, tenure protection, transparent benefit allocation, and a zero-carbon-credit financing scenario make the framework relevant to small producers. System dynamics is retained as a prospective tool for testing feedback and policy trade-offs; no calibrated simulation is presented. Climate claims should follow demonstrated carbon outcomes, while food production, nutrient removal, habitat protection, and livelihoods can justify distinct policy instruments.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Review reassesses carbon-sink fisheries and aquaculture through ecological and carbon-cycling frameworks. Understanding how seaweed and bivalve farming affect marine carbon pathways informs reef conservation and ecosystem dynamics.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Hypersalinity and environmentally relevant perfluorohexanesulfonic acid independently and interactively impair survival and development in early life stage red drum (Sciaenops ocellatus)",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1881663",
+   "published_at": "2026-10-27T00:00:00Z",
+   "author": "Kristin Nielsen",
+   "raw_text": "Estuaries serve as critical nursery habitat for many economically and ecologically important marine species, yet they are increasingly subject to salinity extremes driven by drought, reduced freshwater inflow, and coastal urbanization, as well as to contamination by per- and polyfluoroalkyl substances (PFAS) originating in developed watersheds. Despite this convergence of stressors, the effects of PFAS on estuarine fishes remain understudied, particularly in combination with the natural fluctuations that characterize these systems. The present study investigated the interactive effects of osmotic stress and an environmentally informed concentration of an understudied replacement PFAS, perfluorohexanesulfonic acid (PFHxS), on early life stage (ELS) red drum (Sciaenops ocellatus). Embryos from four independent spawns were exposed to 0 or 1 µg/L PFHxS at four salinities (30, 35, 39 and 43 ppt) in a fully crossed factorial design, using dish as the experimental unit (96 dishes; 1, 920 embryos). PFHxS reduced the odds of hatching by approximately 60%, which carried through to an approximately 36% reduction in the odds of cumulative survival to 48 h that was most pronounced at intermediate salinities. PFHxS did not affect post-hatch survival of larvae that successfully hatched, whereas hypersalinity independently reduced both hatching and post-hatch survival. Among surviving larvae, PFHxS reduced relative yolk sac area and relative brain area and increased the odds of unpigmented eyes approximately five-fold. Results reported herein demonstrate that an environmentally informed concentration of PFHxS is sufficient to adversely affect both the survival and the development of an estuarine-dependent sportfish and address several important data gaps pertaining to the biological risks of replacement PFAS, including multi-stressor interactions and effects on the early development of a large-bodied marine species.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Hypersalinity and perfluorohexanesulfonic acid (a PFAS contaminant) individually and together impair survival and development in red drum larvae. Estuarine fish nurseries face converging stressors from drought and industrial contamination that interact unpredictably.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "gsr-bsky",
+   "source_name": "Great Southern Reef Foundation — Bluesky",
+   "title": "Traditional Owner knowledge is helping shape the next chapter of marine research on WA’s south coast",
+   "url": "https://bsky.app/profile/greatsouthernreef.bsky.social/post/3mysu5snqnk2w",
+   "published_at": "2026-10-26T23:17:00Z",
+   "author": null,
+   "raw_text": "Traditional Owner knowledge is helping shape the next chapter of marine research on WA’s south coast. In Mamang Maambakoort Marine Park, surveys are investigating culturally important species alongside kelp forests, seagrass habitats and marine mammals. https://greatsouthernreef.com/mamang-maambakoort-marine-park",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Indigenous knowledge is informing marine surveys in Western Australian protected areas alongside kelp forests, seagrass, and marine mammals. Integration of Traditional Owner expertise with scientific research strengthens reef and coastal ecosystem assessment.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Journal of Marine Science and Engineering",
+   "title": "Observed Spectral-Reflectance Zoning for Model Selection in Satellite-Derived Bathymetry of Heterogeneous Coral Reef Waters Using ICESat-2 and Sentinel-2",
+   "url": "https://doi.org/10.3390/jmse14212008",
+   "published_at": "2026-10-26T00:00:00Z",
+   "author": "Yuan Le et al.",
+   "raw_text": "Accurate and spatially continuous shallow water bathymetry supports coral reef geomorphological investigation, ecosystem assessment, and marine resource management. However, spectral heterogeneity arising from substrate properties, water depth, and water-column conditions complicates model selection. This study evaluates whether bathymetric model performance differs among observed spectral-reflectance zones and whether zonal model selection improves overall retrieval. ICESat-2 bathymetric points, Sentinel-2 imagery, and Allen Coral Atlas data were analyzed at Lingyang Reef, Huaguang Reef, and East Cay Reef. Representative substrate classes identified using Allen Coral Atlas data were used to derive Sentinel-2 green-band reflectance thresholds. Water pixels were then classified into high-, medium-, and low-reflectance zones. The band-ratio, multiple linear regression (MLR), random forest (RF), and extreme gradient boosting (XGBoost) models were constructed and validated within each zone. When averaged across the three study areas, MLR achieved the best performance in the high reflectance zones, with mean R2 and RMSE values of 0.71 and 0.49 m, respectively. RF achieved the best mean performance in the medium reflectance zones, with mean R2 and RMSE values of 0.89 and 0.62 m. In the low reflectance zones, RF and XGBoost outperformed Stumpf and MLR, with XGBoost yielding mean R2 and RMSE values of 0.85 and 1.20 m, respectively. The optimal outputs from the different reflectance zones were integrated and smoothed to generate continuous bathymetric maps. The integrated zonal method achieved RMSE values of 0.76, 0.61, and 0.84 m at the three reefs, respectively, representing numerical reductions of approximately 3.8%, 4.7%, and 12.5% relative to the best unified model. These findings demonstrate that observed spectral-reflectance zoning provides a practical basis for matching bathymetric models to different reflectance conditions, supporting bathymetric mapping in heteroge",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Journal of Marine Science and Engineering",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3390/jmse14212008",
+    "gist": "Satellite bathymetry using ICESat-2 and Sentinel-2 improves mapping of shallow coral reef topography by accounting for spectral heterogeneity. Better reef surveying tools support conservation and ecosystem assessment.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "yt-saltwateraquarium",
+   "source_name": "SaltwaterAquarium.com",
+   "title": "Inside a German Saltwater LFS! Low-Maintenance Reefing & Simple Coral Care with Mr. Saltwater Tank",
+   "url": "https://www.youtube.com/watch?v=OPqBfQpClZE",
+   "published_at": "2026-10-27T17:00:02Z",
+   "author": "SaltwaterAquarium",
+   "raw_text": "10-27-2026 Join Mr. Saltwater Tank on location at Korallen Garten Store in Penzberg, Germany, for an exclusive tour with shop owner Brigitte! In this episode, we explore how this second-generation local fish store (LFS) keeps reef keeping simple, low-maintenance, and fun. Brigitte shares her unique approach to saltwater aquariums—from running low-tech soft coral setups without heavy testing to aquascaping with generous live rock for natural fish behavior. We cover the differences between US and European fish stores, freshwater vs. saltwater setups, how to catch elusive tank mates, and timeless advice for beginners setting up their very first marine aquarium. ______________________________________________ ⚠️ Products In This Video ► Real Reef Rock Large 8-16\" (by the pound) - https://www.saltwateraquarium.com/real-reef-rock-large-8-16-by-the-pound-real-reef/ ► AI Nero 5 Wave Pump (3000 GPH) w/Fish Guard - https://www.saltwateraquarium.com/ai-nero-5-wave-pump-3000-gph-w-fish-guard-aquaillumination/ ► Tunze Osmolator 3 Automatic Water Top Off (ATO) 3154 - https://www.saltwateraquarium.com/osmolator-3-automatic-water-top-off-ato-3154-tunze/ ► Hanna Instruments HI97115UC Bluetooth Marine Master Multiparameter Checker - https://www.saltwateraquarium.com/hi97115uc-bluetooth-marine-master-multiparameter-checker-hanna-instruments/ ► AI Hydra 32 HD Aquarium LED, Black - https://www.saltwateraquarium.com/ai-hydra-32-hd-aquarium-led-black-aquaillumination/ ► Kessil A360XE Tuna Blue Saltwater Aquarium LED Light - https://www.saltwateraquarium.com/a360xe-tuna-blue-saltwater-aquarium-led-light-kessil/ ► Bubble Magus Curve 5 Elite Protein Skimmer Sicce SK-200 - https://www.saltwateraquarium.com/curve-5-elite-protein-skimmer-sicce-sk-200-bubble-magus/ ► Red Sea Reefer RSK-300 Protein Skimmer - https://www.saltwateraquarium.com/reefer-rsk-300-protein-skimmer-red-sea/ ______________________________________________ Website - https://www.saltwateraquarium.com Follow us on Facebook - htt",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "OPqBfQpClZE",
+    "duration_s": "530",
+    "gist": "A tour of a German reef shop showcases low-tech soft-coral husbandry without heavy testing, emphasizing natural aquascaping and regional differences in LFS practice. European and North American approaches offer comparative perspective on tank setup philosophy.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "oarc-bsky",
+   "source_name": "Ocean Acidification Research Center — Bluesky",
+   "title": "The #Arctic workshop at #PICES2026 was today",
+   "url": "https://bsky.app/profile/uaf-oarc-alaska.bsky.social/post/3myqv3u4uak2i",
+   "published_at": "2026-10-26T04:28:00Z",
+   "author": null,
+   "raw_text": "The #Arctic workshop at #PICES2026 was today. 🧪🌊🦑🙌 @icesmarine.bsky.social @picesmarinesci.bsky.social Climate change impacts in the Arctic include decreasing sea ice and #OceanAcidification, which impact fisheries and Indigenous People.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "A PICES workshop examined Arctic climate impacts including sea ice loss and ocean acidification affecting fisheries and Indigenous communities. Ocean acidification is reef-relevant, though the Arctic context is distant from tropical reefs.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "ubcoceans-bsky",
+   "source_name": "UBC Oceans — Bluesky",
+   "title": "An innovative approach to tackling the marine conservation problem of \"ghost gear\" is gaining acceptance in…",
+   "url": "https://bsky.app/profile/ubcoceans.bsky.social/post/3myzoyoyw3c2t",
+   "published_at": "2026-10-29T16:33:00Z",
+   "author": null,
+   "raw_text": "An innovative approach to tackling the marine conservation problem of \"ghost gear\" is gaining acceptance in Canada, creating new permitting pathways for coastal developments while helping to restore marine habitats. https://ecomagazine.com/news/fisheries-aquaculture/ghost-gear-removal-gains-ground-as-marine-habitat-offset-in-canada/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Canada develops new permitting pathways for ghost-gear removal as marine-habitat offset. Ghost fishing impacts reef ecosystems; understanding removal as conservation credit advances reef restoration frameworks.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Chainlink Moray Eel Care & More | Echidna catenata",
+   "url": "https://reefs.com/chainlink-moray-eel-care-more-echidna-catenata/",
+   "published_at": "2026-10-28T14:00:15Z",
+   "author": "Marijke Puts",
+   "raw_text": "Meet the handsome Chainlink Moray Eel, a moderately sized moray with beautiful yellow and brown markings. Perfect for experienced aquarists looking for a centerpiece fish for a larger tank, this “crushing” species is one of the easier aquarium eels to care for.&#8230; The post Chainlink Moray Eel Care &#038; More | Echidna catenata appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "The Chainlink Moray Eel is a moderately sized, banded moray suitable for experienced aquarists in larger tanks. Moray husbandry details help keepers choose and care for this striking centerpiece fish.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "BULLETIN OF THE GEOLOGICAL SURVEY OF JAPAN",
+   "title": "Diversity of azooxanthellate scleractinian corals collected off western Kyushu during cruise GB24",
+   "url": "https://doi.org/10.9795/bullgsj.77.3-4_189",
+   "published_at": "2026-10-27T00:00:00Z",
+   "author": "Yuki Tokuda et al.",
+   "raw_text": null,
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "venue": "BULLETIN OF THE GEOLOGICAL SURVEY OF JAPAN",
+    "section": "Journal",
+    "doi": "https://doi.org/10.9795/bullgsj.77.3-4_189",
+    "gist": "A survey off western Kyushu documents azooxanthellate scleractinian coral diversity collected during a research cruise. Deep-water and non-symbiotic corals expand understanding of coral distribution and physiology.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "ubcoceans-bsky",
+   "source_name": "UBC Oceans — Bluesky",
+   "title": "Subsidies that fuel overfishing and damage coral reefs and mangroves are costing governments and societies…",
+   "url": "https://bsky.app/profile/ubcoceans.bsky.social/post/3mys7lcua5c2g",
+   "published_at": "2026-10-26T17:08:00Z",
+   "author": null,
+   "raw_text": "Subsidies that fuel overfishing and damage coral reefs and mangroves are costing governments and societies far more than what is being spent on them, with the total damage across all sectors put at up to $24.7 trillion a year. https://oceanographicmagazine.com/news/subsidies-draining-the-sea-cost-governments-more-than-they-spend/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Fishing subsidies cost governments far more in environmental damage than they spend, harming coral reefs and mangroves. The economics are dense, but the scale of subsidy-driven reef destruction is worth tracking.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "coralcitycam-bsky",
+   "source_name": "Coral City Camera — Bluesky",
+   "title": "The dolphins greeted us at 7am sharp yesterday morning to help us launch the first Miami Coral Club meeting…",
+   "url": "https://bsky.app/profile/coralcitycamera.bsky.social/post/3mykxgkobgs24",
+   "published_at": "2026-10-23T19:54:00Z",
+   "author": null,
+   "raw_text": "The dolphins greeted us at 7am sharp yesterday morning to help us launch the first Miami Coral Club meeting at Gramps Getaway. Thanks to all that came out and joined up, it was a wild success! We look forward to our next meeting Nov 19th 🫡🔮🐬🐠🪸🌇✨ #miamidolphins #bottlenosedolphin #coralcitycamera",
+   "category_hint": "Events",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "First Miami Coral Club meeting held successfully with next meeting scheduled for November 19. Local reef hobby meetup announcement.",
+    "relevance": "0.50"
+   }
+  }
+ ]
+}
