@@ -1,0 +1,391 @@
+{
+ "date": "2026-11-06T15:05:06.884653Z",
+ "items": [
+  {
+   "source_id": "pick",
+   "source_name": "SoCaliReefs",
+   "title": "OC Coral Show Winter 2026 (November 8)",
+   "url": "https://www.socalireefs.com/index.php?threads/oc-coral-show-winter.118637/",
+   "published_at": "2026-10-08T00:00:00Z",
+   "author": null,
+   "raw_text": null,
+   "category_hint": "Community",
+   "extra": {
+    "pick": "1",
+    "pick_issue": "16",
+    "gist": "The OC Coral Show returns on November 8th in Placentia, CA. Reefkeepers should care because it offers free admission and parking, making it an accessible opportunity to connect with the community and find new livestock.",
+    "similar": "2"
+   }
+  },
+  {
+   "source_id": "pick",
+   "source_name": "YouTube",
+   "title": "5 Saltwater Cleaners That You NEED to Stop Buying (And 4 You Should Buy Instead)",
+   "url": "https://youtu.be/LUJLMx7TPD4?si=DxUfMa9EuflZsdJ1",
+   "published_at": "2026-10-24T00:00:00Z",
+   "author": null,
+   "raw_text": null,
+   "category_hint": "Community",
+   "extra": {
+    "pick": "1",
+    "pick_issue": "15",
+    "gist": "Unique video teaching reef aquarists how to avoid wasting money on generic cleanup crews that starve. Instead, it teaches how to select specific species tailored to their tank's unique waste, ensuring a healthy, balanced aquarium."
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Ecology and Evolution",
+   "title": "Marine Heatwave and Extreme Hypoxia Coincide With Rapid Coral Bleaching and Mortality on a Central Red Sea Coral Reef",
+   "url": "https://doi.org/10.1002/ece3.74606",
+   "published_at": "2026-11-01T00:00:00Z",
+   "author": "Shannon Grace Klein et al.",
+   "raw_text": "ABSTRACT Coral bleaching and mortality are commonly associated with heat stress during marine heatwaves (MHWs), yet attributing these responses solely to heat stress may overlook the complexity of contemporary MHWs. Here, we document a severe MHW affecting a central Red Sea reef in mid‐2024 that coincided with repeated nighttime low‐oxygen events. By integrating satellite and in situ records of temperature, dissolved oxygen and wind, alongside repeated surveys of in situ nursery‐reared coral fragments, we document the temporal coincidence of these conditions with rapid coral bleaching and mortality. As temperatures approached and exceeded 33°C during the MHW peak, nighttime oxygen minima were extreme (down to 15.2–57.8 μmol O 2 kg −1 ) and diel temperature variability diminished (down to 0.31°C–0.67°C), indicating a loss of nighttime thermal reprieves. Coincident responses of nursery corals were atypical, with transitions from healthy or bleached states to mortality occurring within 7–8 days. Bleaching and mortality also occurred across diverse coral species in nearby habitats after the MHW peak, with < 1% live coral cover documented eight months later. Sustained high temperatures, reduced vertical mixing and increased nighttime respiratory demand likely constrained oxygen availability, resulting in low‐oxygen extremes. We posit that similar compound MHW extreme events may have gone undetected in the Red Sea and elsewhere, potentially obscuring the contribution of co‐occurring low‐oxygen extremes to coral responses attributed to heat stress.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Ecology and Evolution",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1002/ece3.74606",
+    "gist": "Red Sea reef experiences severe bleaching and mortality during marine heatwave coinciding with extreme hypoxia events in mid-2024. Combined thermal and oxygen stress demonstrates complex stressors beyond heat alone driving contemporary coral collapse.",
+    "relevance": "0.88"
+   }
+  },
+  {
+   "source_id": "mail-noaa",
+   "source_name": "NOAA National Ocean Service — Newsletter",
+   "title": "Coral Reef Long-Term Monitoring at East and West Flower Garden Banks: 2025 Annual Report",
+   "url": "https://links-1.govdelivery.com/CL0/https:%2F%2Fsanctuaries.noaa.gov%2Fscience%2Fconservation%2F2026%2Fcoral-reef-long-term-monitoring-east-and-west-flower-garden-banks-2025-annual-report.html%3Futm_medium=email%26utm_source=GovDelivery/1/010001a1ad71aa80-cd60a72e-c7ac-428b-aeae-8c09f81b8e26-000000/OJj2dFK3O49TwjzlAXAipgnGiQIJMyPzAovDnuGhPxM=452",
+   "published_at": "2026-11-05T20:41:10Z",
+   "author": null,
+   "raw_text": "2025 East and West Flower Garden Banks Long-term Monitoring Report Now Available",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "newsletter": "2025 East and West Flower Garden Banks Long-term Monitoring Report Now Available",
+    "gist": "NOAA releases 2025 monitoring report for East and West Flower Garden Banks, two protected reef systems off the Texas coast. Long-term monitoring data directly informs understanding of healthy reef dynamics and bleaching resilience in a working marine sanctuary.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Royal Society Open Science",
+   "title": "Influence of soft coral density and depth on benthic communities on Fiji's Rainbow Reef",
+   "url": "https://doi.org/10.1098/rsos.260513",
+   "published_at": "2026-11-04T00:00:00Z",
+   "author": "Nile P. Stephenson et al.",
+   "raw_text": "Abstract Some soft corals have the potential to increase in prevalence on tropical coral reefs as the severity of anthropogenic climate change increases. While soft corals are therefore an increasingly important component of reef ecosystems, little is known about their ecological role on coral reefs and their influence on community dynamics and diversity. We used Bayesian network inference (BNI) to identify the associations among benthic taxa across sites with varying degrees of soft coral dominance on Fiji's Rainbow Reef, and then employed spatial point process analysis (SPPA) to reveal the ecological processes behind these associations. We found that depth was a dominant driver of community dynamics, and that white Nephtheidae soft corals were negatively associated with scleractinian corals and positively associated with algal proliferation—possibly owing to soft corals reducing grazing pressure. Our results show distinctions in reef benthos and ecological dynamics between scleractinian and soft coral-dominated components of the Rainbow Reef. We found that diversity levels were significantly lower on soft coral-dominated quadrats relative to scleractinian-dominated quadrats, potentially highlighting the reduction in benthic diversity when Nephtheidae soft corals dominate reef walls.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Royal Society Open Science",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1098/rsos.260513",
+    "gist": "Soft coral density and depth shape benthic-community structure on Fiji's Rainbow Reef via spatial association and niche partitioning. Understanding how soft corals reorganize reef communities informs predictions as they expand under climate change.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Revista de Biología Tropical",
+   "title": "Physiological response of corals of the genus Pocillopora (Scleractinia: Pocilloporidae) during the 2023–2024 heat wave in La Paz, Baja California Sur",
+   "url": "https://doi.org/10.15517/r2vvp319",
+   "published_at": "2026-11-02T00:00:00Z",
+   "author": "Alexa Karime Rojo-Acosta et al.",
+   "raw_text": "Introduction: Coral reefs are essential ecosystems for the functioning of the planet and human well-being, providing three-dimensional habitats for a great diversity of marine life and multiple ecological, economic, and cultural services. Coral reefs are constructed by hermatypic corals, which maintain a symbiotic relationship with dinoflagellates of the Symbiodiniaceae family, which provide them with up to 90-95% of their energy in exchange for shelter and nutrients. However, this relationship has been compromised by stressors associated with climate change, human activities, and natural phenomena such as El Niño-Southern Oscillation (ENSO), which can cause the expulsion of symbionts and the loss of their energy source, thereby endangering their survival. Objective: To evaluate physiological indicators (i.e., symbiont density, chlorophyll, lipids, and proteins) as tools for assessing coral health at the Isla Gaviota and Punta Galeras sites during the 2023-2024 marine heat wave period. Methods: A total of 44 colony fragments, 3 to 5 cm in length, were collected from the Pocillopora verrucosa and Pocillopora damicornis morphotypes during two sampling campaigns, one in July 2023 and the other one in July 2024 at the two sampling sites. The samples were processed to determine symbiont density, chlorophyll a, lipids, and proteins. Results: We found evidence that P. verrucosa and P. damicornis exhibit different adaptive strategies. On one hand, P. verrucosa showed variable responses, with temporary loss of symbionts, and compensatory energetic mechanisms that maintained photosynthetic functionality, demonstrating a gradual recovery by 2024. Pocillopora damicornis, on the other hand, showed greater physiological stability, maintaining active symbiosis and stable photosynthetic pigments, as well as protein and lipid reserves usage. Although both morphotypes have developed effective survival strategies, the observed metabolic and energetic costs highlight their long-term vu",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Revista de Biología Tropical",
+    "section": "Journal",
+    "doi": "https://doi.org/10.15517/r2vvp319",
+    "gist": "Study documents Pocillopora physiological response to 2023–2024 heat wave in the field. Understanding heat-stress thresholds in wild corals directly informs how to manage temperature in captive systems.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Ecology and Evolution",
+   "title": "Formal Description of Cladocopium proximale sp. nov., a Coral Photosymbiont From the C1 Radiation",
+   "url": "https://doi.org/10.1002/ece3.74569",
+   "published_at": "2026-11-01T00:00:00Z",
+   "author": "Giorgio Terzi et al.",
+   "raw_text": "ABSTRACT Coral reefs are among the most biodiverse ecosystems on Earth and rely on endosymbiosis with Symbiodiniaceae, a diverse family of dinoflagellates essential for coral nutrition and which also play an important role in thermal tolerance. Despite their ecological importance, resolving species boundaries within Symbiodiniaceae remains challenging, partly due to limited phylogenetic signal in commonly used genetic markers and the absence of broadly accepted criteria for species delimitation. Refining taxonomic resolution is therefore critical for understanding symbiont diversity, distributions, and evolutionary relationships. In this study, we delimit two closely related Cladocopium species using a meta‐haplotype framework applied to two hypervariable loci—the ITS2 region and the psbA non‐coding region (psbA ncr ). Slowly evolving markers failed to differentiate Cladocopium proximale (SCF049; described here) from its sister species C. proliferum . In contrast, consistent genetic differences between the two taxa were detected across both hypervariable regions. Together with morphological differences, these results support the recognition of C. proximale and C. proliferum as distinct species. Our results highlight the value of combining multiple hypervariable markers to improve taxonomic accuracy in Symbiodiniaceae, providing a stronger basis for understanding how symbiont diversity and ecological differentiation may influence coral resilience and responses to environmental change. More broadly, closely related Symbiodiniaceae such as these provide important systems for examining speciation processes, including potential ecological differentiation and reproductive compatibility.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Ecology and Evolution",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1002/ece3.74569",
+    "gist": "New Symbiodiniaceae species formally described, advancing taxonomic resolution of coral photosymbionts essential for nutrition and thermal tolerance. Clearer symbiont classification supports research on coral health and heat resilience.",
+    "relevance": "0.78"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Journal of Marine Science and Engineering",
+   "title": "Automated Coral Detection and Instance Segmentation in Underwater Imagery: Evaluating YOLO Model Performance and Transferability to Mesophotic Coral Ecosystems",
+   "url": "https://doi.org/10.3390/jmse14212096",
+   "published_at": "2026-11-05T00:00:00Z",
+   "author": "Elvin Cordero et al.",
+   "raw_text": "Automated coral image analysis remains challenging because methods must resolve individual colonies while preserving taxonomic information. We present a YOLO-based in-stance-segmentation framework trained on more than 9,500 hand-annotated images of Caribbean scleractinian corals representing 57 species and 24 genera. Four architectures, YOLOv8x, YOLOv9e, YOLOv11x, and YOLOv12x, were evaluated under consistent training conditions at both species and genus levels. On the held-out test set, species-level mask mAP₅₀ reached 0.789 and genus-level mask mAP₅₀ reached 0.870 (both YOLOv9e), with inference times of 4.1–5.5 ms per image. YOLOv8x, YOLOv9e, and YOLOv11x performed similarly (mask mAP₅₀ within 0.01 of one another), with YOLOv8x and YOLOv11x the fastest, while YOLOv12x showed no improve-ment despite added architectural complexity. Segmentation performance varied among taxa and growth forms, with compact or visually distinct colonies generally producing stronger masks than branching, encrusting, low-contrast, or substrate-integrated forms. External model transfer was evaluated on independent mesophotic coral ecosystem imagery using published results and expert review. Expert-confirmed precision was higher at genus level than species level and in-creased with confidence filtering, reaching 82.8% for genus-level and 71.1% for species-level pre-dictions at confidence >0.90. These results indicate that YOLO-based instance segmentation can produce rapid, taxonomically resolved coral observations, but external applications require con-fidence-based filtering and expert review, particularly for species-level inference in visually com-plex reef imagery.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Journal of Marine Science and Engineering",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3390/jmse14212096",
+    "gist": "Researchers trained deep-learning models to automatically detect and identify 57 Caribbean coral species in underwater images with 79% accuracy at the species level. Automated identification tools improve monitoring capability for both researchers and aquarists tracking live corals.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "reefbuilders",
+   "source_name": "Reef Builders",
+   "title": "Caring for High-End Bounce and Jawbreaker Mushroom Corals",
+   "url": "https://reefbuilders.com/2026/11/04/caring-for-high-end-bounce-and-jawbreaker-mushroom-corals/",
+   "published_at": "2026-11-04T14:55:00Z",
+   "author": "Scott Shiles",
+   "raw_text": "The premium mushroom corals that attract collectors are still forgiving corals, but they reward a more careful approach to light, placement, quarantine, and propagation. Mushroom corals have always been among my favorite animals to keep. They bring movement, color, and personality to a reef aquarium without demanding the same level of calcium, alkalinity, or lighting&#8230; Source",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "gist": "High-end mushroom corals reward careful attention to light, placement, and quarantine despite their forgiving nature. Guidance on keeping premium morphs alive improves husbandry outcomes for collectors.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Revista de Biología Tropical",
+   "title": "Dynamics of algal overgrowth and predation related tissue loss in corals from the Southern Gulf of California, México (2019–2025)",
+   "url": "https://doi.org/10.15517/r7122x52",
+   "published_at": "2026-11-02T00:00:00Z",
+   "author": "Paola M. Espinosa-Torres et al.",
+   "raw_text": "Introduction: Coral reef ecosystems are undergoing increasing degradation associated with oceanographic changes, higher predation, bioerosion, and anthropogenic pressures, all of which affect their structural complexity, resilience, and functioning. Visible lesions, such as algal overgrowth and tissue loss, serve as practical indicators of colony health. Objective: To characterize the spatial and temporal dynamics of the prevalence of algal overgrowth and predation–related tissue loss lesions, and their relationship with live coral cover, in coral communities of Parque Nacional Zona Marina del Archipiélago de Espíritu Santo (PNZMAES), Gulf of California, between 2019 and 2025. Methods: Annual surveys were conducted by SCUBA diving. At each site, 20 m belt transects were used to quantify benthic composition and record visible lesions on scleractinian coral colonies, classified as algal overgrowth or predation–related tissue loss. Lesion prevalence was calculated at the transect level. Spatial and temporal differences in benthic cover and lesion prevalence were evaluated using PERMANOVA, generalized linear models with quasibinomial distributions, and linear mixed-effects models. Results: Mean benthic composition across all sites was dominated by coral cover (41.7 ± 29.1 %), followed by algal turf (21.2 ± 20.4 %). Coral cover varied significantly among sites, years, and their interaction (p < 0.001). Algal overgrowth was the dominant lesion type, affecting 24.8 % of all colonies, and increased markedly after 2023. Predation-related tissue loss affected 10.3 % of colonies and showed strong spatial heterogeneity. Lesion prevalence differed significantly among coral species (p < 0.001), indicating species-specific susceptibility. Coral cover showed contrasting relationships with lesion types, being negatively associated with predation-related tissue loss and positively associated with algal overgrowth. Conclusions: The marked spatial and temporal heterogeneity in the prev",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Revista de Biología Tropical",
+    "section": "Journal",
+    "doi": "https://doi.org/10.15517/r7122x52",
+    "gist": "Study tracks algal overgrowth and predation-related tissue loss in Gulf of California corals over six years, quantifying visible health indicators. Direct measurement of stressors affecting reef resilience informs understanding of coral decline mechanisms.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Oikos",
+   "title": "From co‐occurrence to temporal coupling in a coral defender guild",
+   "url": "https://doi.org/10.1002/oik.12675",
+   "published_at": "2026-11-01T00:00:00Z",
+   "author": "Amalia Murgueitio et al.",
+   "raw_text": "Coral‐dwelling decapods can improve host fitness by defending corals against corallivores and sediment accumulation, yet the temporal dynamics linking co‐resident defenders remain poorly understood. Guard crabs Trapezia and snapping shrimp Alpheus provide complementary benefits to pocilloporid corals, and previous, largely cross‐sectional work has reported behavioral accommodation, non‐random co‐occurrence, and effects on host‐associated community assembly, patterns that suggest their association reflects facilitation instead of independent use of shared habitat. Whether this association persists as coupled dynamics through time, however, remains untested. Using repeated observations of tracked colonies spanning up to six years and three months in the northern Red Sea, we tested whether these taxa exhibit non‐random co‐occurrence and linked population dynamics within pocilloporid hosts. Across two coral species, Trapezia was more common than Alpheus , and the presence of shrimp was strongly associated with that of crabs. In colonies of Pocillopora favosa (n = 35, 733 observations), Alpheus abundance increased with Trapezia abundance, and mean abundances per colony of the two taxa were positively correlated, indicating persistent demographic coupling over time. While larger colonies held more symbionts, this abundance coupling was not fully explained by colony size. Temporal peaks in abundance were often synchronized, producing temporary assemblages that exceeded the typical pair occupancy expected for these symbionts. In colonies of Stylophora pistillata (n = 40, 710 observations), shrimp were rare, but when present, they occurred only in colonies inhabited by crabs. Our results reveal that the within‐host dynamics of co‐resident decapod mutualists are more tightly linked than previously recognized, consistent with facilitative interactions mediated through a shared host. Because such defenders can enhance host condition, their sustained co‐residence may have broade",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Oikos",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1002/oik.12675",
+    "gist": "Research reveals temporal dynamics of coral-defending crustaceans—guard crabs and snapping shrimp—showing complementary roles in host fitness. Understanding these symbiotic relationships clarifies how corals maintain health against predators and sediment.",
+    "relevance": "0.73"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Anais do Encontro Nacional de Pós Graduação",
+   "title": "Avaliação dos efeitos da oxibenzona e estresse térmico sobre o branqueamento do coral formador de recife Seriatopora Caliendrum",
+   "url": "https://doi.org/10.66221/9qzecy36",
+   "published_at": "2026-11-04T00:00:00Z",
+   "author": "Ana Beatriz Santos et al.",
+   "raw_text": "Coral reefs are ecosystems of major ecological importance; however, they are threatened by ocean warming and anthropogenic contaminants. This study evaluated the combined effects of oxybenzone (BP-3) and thermal stress on bleaching in the coral Seriatopora caliendrum. Coral fragments were exposed for 96 h to a BP-3 concentration equivalent to 10% of its 96-h EC₅₀ at 26 and 30 °C, alongside control and solvent control (DMSO) groups. Bleaching was assessed through digital analysis of the red (R), green (G), and blue (B) channels. Over 24 h, BP-3 concentrations decreased by 49% at 26 °C and 59% at 30 °C. Exposure to BP-3 at 30 °C caused a significant change in coral coloration, indicating greater bleaching and a possible intensification of this response due to the interaction between chemical and thermal stressors.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Anais do Encontro Nacional de Pós Graduação",
+    "section": "Journal",
+    "doi": "https://doi.org/10.66221/9qzecy36",
+    "gist": "Research shows oxybenzone (BP-3) and thermal stress together trigger bleaching in Seriatopora caliendrum. Sunscreen contamination is a tangible stressor affecting reef systems even in tanks exposed to outdoor light.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Revista de Biología Tropical",
+   "title": "Spatio-temporal variation of the pocilloporid coral-associated symbiotic crustaceans (Decapoda) of the central Mexican Pacific",
+   "url": "https://doi.org/10.15517/2qhtvm55",
+   "published_at": "2026-11-02T00:00:00Z",
+   "author": "Armando González-Salazar et al.",
+   "raw_text": "Introduction: Coral symbiotic crustaceans maintain close associations with their hosts, which may be obligate or facultative. In addition to their dependence on corals for survival, these organisms play an important role in the health and persistence of their hosts. However, there is still limited information regarding the spatio-temporal variation in their biomass and the factors regulating it. Objective: This study analyzed the spatio-temporal variation in the taxonomic diversity and biomass of symbionts associated with pocilloporid corals in the Mexican Central Pacific, as well as their relationship with environmental variables and benthic structure. Methods: A total of 48 samples were collected from four coral ecosystems over two years during the rainy and dry seasons. Results: A total of 29 species were identified. Alpha and Beta diversities showed significant seasonal differences, with higher biomass values recorded during the dry season. Conclusion: Temporal variation was the main component influencing assemblage structure and biomass increase, which was associated with greater resource availability. This was likely driven by an increase in recruitment and food availability.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Revista de Biología Tropical",
+    "section": "Journal",
+    "doi": "https://doi.org/10.15517/2qhtvm55",
+    "gist": "Research characterizes symbiotic crustaceans associated with pocilloporid corals in the Mexican Pacific, examining their biomass and ecological roles. Understanding these defender-host relationships clarifies how coral colonies maintain health.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "openalex-reef-fish",
+   "source_name": "Theoretical Ecology",
+   "title": "Reef fish functional groups show variable declines due to deforestation-driven sedimentation, while flexible harvesting mitigates this damage",
+   "url": "https://doi.org/10.21203/rs.3.rs-7596571/v1",
+   "published_at": "2026-10-31T00:00:00Z",
+   "author": "Russell Milne et al.",
+   "raw_text": "Abstract Sedimentation is a major coral reef stressor, with effects including suppressing algae consumption by herbivorous fish. This puts pressure on reef fish populations and the fisheries that harvest them. Deforestation causes much sedimentation on reefs, and is an ongoing concern in many tropical island states. Although ecosystem processes like deforestation and fish population dynamics are usually far from equilibrium, explicitly time-dependent analyses of reef fish vulnerability to deforestation are rare. Additionally, optimization methods for fisheries on heavily sedimented reefs are generally unexplored. Here, we construct a model coupling four reef fish functional groups with seabed dynamics and deforestation, parametrized to represent a wide variety of tropical coastal forests. We show that with predicted human population increases, highland deforestation could cause omnivorous fish abundances to halve within 15-30 years, and piscivorous fish and top predators to do so around 20 years later. In contrast, piscivorous fish and top predators are resilient to lowland deforestation, and herbivorous fish populations often recover after initial declines during sedimentation pressure. We demonstrate that flexible fishing approaches could lead to high and temporally stable populations of most functional groups, offsetting sedimentation-related stress. We show that the combination of deforestation and increased fishing demand due to human population growth may cause medium-term local reef fish extirpation. Our results provide sustainability guidelines for reef fisheries, and demonstrate nonlinear interactions between overfishing and deforestation.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Theoretical Ecology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s12080-026-00647-w",
+    "gist": "Model shows deforestation-driven sedimentation reduces herbivorous fish populations and ecosystem function on reefs; flexible harvest policies can mitigate damage. Quantifies how terrestrial land use degrades reef fisheries through indirect sediment pathways.",
+    "relevance": "0.71"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Biodiversity and Conservation",
+   "title": "Beta diversity analysis reveals high turnover in benthic assemblages between tropical coral and subtropical rocky reefs",
+   "url": "https://doi.org/10.1007/s10531-026-03515-5",
+   "published_at": "2026-11-01T00:00:00Z",
+   "author": "Herick Simas dos Santos et al.",
+   "raw_text": "Abstract Understanding species distribution and biodiversity patterns is an old challenge in ecology and biogeography. Nowadays, this approach is especially important due to current increase of anthropogenic pressure on coastal ecosystems. Brazilian coastline is a mosaic of complex marine habitats, including extensive rocky shores on south-southeast and the largest coral reef formation of Atlantic in southeast-northeast. Here, we investigated how benthic community are structured and species composition changes along transitional zone between rocky and coral reefs. Assessing spatial components of alpha diversity, we also analyze how species richness varies between neighboring habitats. By decomposing beta diversity into nestedness and turnover components we investigate similarities between communities and understand how beta diversity varies along this area. Our findings show differences between southern communities, associated with suspension feeders and northern communities dominated by stony corals, in a north-south diversity gradient. Redundancy Analysis indicates that temperature was the most important environmental factor shaping communities. Pairwise comparison of beta diversity shows highest turnover rates between southern and northern communities, suggesting differentiation between two bioprovinces. Based on these analyses, we recognize different patterns of diversity among communities and detect different levels of vulnerability should a stochastic event occur. Considering that human interference tends to become more intense and frequent in this area, use of beta diversity partition can be a useful analytical tool to recognize communities with different levels of priorities for monitoring and establishing conservation efforts.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Biodiversity and Conservation",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s10531-026-03515-5",
+    "gist": "Study analyzes benthic community structure and species turnover in transitional zones between rocky and coral reefs along the Brazilian coast. Biogeographic patterns inform understanding of reef ecosystem organization under anthropogenic pressure.",
+    "relevance": "0.68"
+   }
+  },
+  {
+   "source_id": "oarc-bsky",
+   "source_name": "Ocean Acidification Research Center — Bluesky",
+   "title": "Nice blog post from Canada's 🇨🇦 group working on #OceanAcidification",
+   "url": "https://bsky.app/profile/uaf-oarc-alaska.bsky.social/post/3mzgdturbwc2z",
+   "published_at": "2026-11-03T17:18:00Z",
+   "author": null,
+   "raw_text": "Nice blog post from Canada's 🇨🇦 group working on #OceanAcidification. @meopar-oacop.bsky.social 🙌 Bonus points to those who attended Ocean in a High CO2 World 🇳🇿 and #PICES2026! 🧪🌊🦑 @picesmarinesci.bsky.social https://www.oceanacidification.ca/post/the-oa-cop-at-the-oceans-in-a-high-co2-world-symposium",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Canadian ocean acidification research group published on OA impacts. Direct relevance to reef chemistry and what drives carbonate saturation in tanks.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Aquatic Conservation Marine and Freshwater Ecosystems",
+   "title": "Fine‐Scale Variability of Cold‐Water Coral and Sponge Communities on Protected Northeast Pacific Seamounts",
+   "url": "https://doi.org/10.1002/aqc.70501",
+   "published_at": "2026-11-01T00:00:00Z",
+   "author": "Megan A. Davies et al.",
+   "raw_text": "ABSTRACT Cold‐water corals and sponges (CWCS) on Northeast Pacific seamounts form important biogenic habitat that is intersected by a broad oxygen minimum zone (OMZ) and exposed to ongoing deoxygenation. Many seamounts in this region lie within marine protected areas (MPAs), making an understanding of fine‐scale community structure particularly relevant for conservation and management. Using visual survey data from five seamounts, we modelled depth–occupancy patterns for CWCS functional groups and evaluated how these patterns vary among features, among transects and in relation to the core of the 800‐ to 1200‐m OMZ. Depth emerged as the dominant organizing gradient, with many groups concentrated in or near the OMZ core. However, the depth, shape, and magnitude of these occupancy peaks differed strongly across seamounts. At Union Seamount, depth–occupancy patterns also varied among sampled flank transects, revealing substantial horizontal heterogeneity over comparable depth ranges. Even when functional groups occupied similar vertical zones across seamounts, the dominant taxa within those peaks often displayed feature‐specific patterns. Community distinctiveness was highest at transitions around the OMZ core and in middepth zones above it, suggesting these boundary layers are key locations for detecting ecological reorganization. Functional groups also differed in their alignment with the OMZ core, indicating that shoaling or deepening of low‐oxygen waters would alter the estimated overlap between CWCS depth distributions and the OMZ core differently across seamounts. Together, these results reveal substantial habitat heterogeneity within and among seamounts, forming a depth‐structured mosaic that is consistent with regional oxygen gradients and local seamount context. This habitat heterogeneity highlights the need for multitransect, multidepth‐band monitoring and supports consideration of whole‐feature protection under continued global ocean deoxygenation.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Aquatic Conservation Marine and Freshwater Ecosystems",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1002/aqc.70501",
+    "gist": "Study maps cold-water coral and sponge communities on Northeast Pacific seamounts within marine protected areas, examining depth-occupancy patterns in low-oxygen zones. Data on structured biodiversity inform conservation strategy for deep-reef ecosystems.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "oarc-bsky",
+   "source_name": "Ocean Acidification Research Center — Bluesky",
+   "title": "NOAA has a new video highlighting the surface buoys monitoring seawater CO₂",
+   "url": "https://bsky.app/profile/uaf-oarc-alaska.bsky.social/post/3mz4i4lx4522u",
+   "published_at": "2026-10-30T19:08:00Z",
+   "author": null,
+   "raw_text": "NOAA has a new video highlighting the surface buoys monitoring seawater CO₂. 🧪🌊🦑🛟 #OceanAcidification https://youtu.be/GzaqHtaO-vg?si=jOhfrgblwdt5yH4e",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "NOAA's ocean acidification buoys now have public video documentation of monitoring methods. Reef keepers benefit from understanding how pCO₂ and carbonate chemistry are tracked in real seawater systems.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "yt-saltwateraquarium",
+   "source_name": "SaltwaterAquarium.com",
+   "title": "Halloween Underwater! Festive Fish Enrichment at Newport Aquarium | Hilary On Location",
+   "url": "https://www.youtube.com/watch?v=8TDSpkozSqU",
+   "published_at": "2026-10-31T13:00:11Z",
+   "author": "SaltwaterAquarium",
+   "raw_text": "10-31-2026 Join Hilary as she explores the Newport Aquarium near Cincinnati to check out their impressive Halloween-themed animal enrichment displays! From fish swimming through real pumpkin patches and boxfish snuggling in tiny pumpkin hideouts to massive glowing octopus and shark pumpkin sculptures, discover how seasonal decorations double as engaging environmental enrichment for the marine life. Plus, enjoy an up-close look at the aquarium's stunning residents and a rare, peaceful view through the main underwater tunnel. ______________________________________________ ⚠️ Products In This Video ► Dwarf Zebra Lionfish - https://www.saltwateraquarium.com/dwarf-zebra-lionfish-dendrochirus-zebra-saq-chicago-fish/ ► Cowfish Spiny Box Puffer - https://www.saltwateraquarium.com/cowfish-spiny-box-puffer-lactoria-diaphana-saq-chicago-fish/ ► ORA Captive-Bred Brazilian Longsnout Reidi Seahorse - Female - https://www.saltwateraquarium.com/captive-bred-brazilian-longsnout-reidi-seahorse-female-ora/ ► ORA Captive-Bred Tigertail Seahorse - Unsexed - https://www.saltwateraquarium.com/captive-bred-tigertail-seahorse-unsexed-ora/ ► Two Little Fishies \"VeggieMag\" Magnetic Veggie Clip - https://www.saltwateraquarium.com/veggiemag-magnetic-veggie-clip-two-little-fishies/ ► IceCap Magnetic Seaweed Clip - https://www.saltwateraquarium.com/magnetic-seaweed-clip-icecap/ ► FishScooper TargetFlow The Ultimate 4-in-1 Precision Reef Tool - https://www.saltwateraquarium.com/targetflow-the-ultimate-4-in-1-precision-reef-tool-fishscooper/ ► IceCap 19\" Coral Target Feeder - https://www.saltwateraquarium.com/19-coral-target-feeder-icecap/ ______________________________________________ Website - https://www.saltwateraquarium.com Follow us on Facebook - https://www.facebook.com/swaqdotcom/ Follow us on Instagram - https://www.instagram.com/saltwateraquariumdotcom/ Follow us on TikTok - https://www.tiktok.com/@saltwateraquarium.com ______________________________________________ 📩 If you have a reques",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "8TDSpkozSqU",
+    "duration_s": "443",
+    "gist": "Newport Aquarium uses seasonal décor as environmental enrichment for marine animals, including pumpkin structures for fish and invertebrates. Public-aquarium enrichment strategy demonstrates institutional approach to animal welfare and keeper practice.",
+    "relevance": "0.58"
+   }
+  },
+  {
+   "source_id": "yt-wwc",
+   "source_name": "World Wide Corals",
+   "title": "A 9-Foot SPS Masterpiece on the 23rd Floor! | Brazil Reef Tour",
+   "url": "https://www.youtube.com/watch?v=UXfXSwqWMmQ",
+   "published_at": "2026-11-05T21:00:21Z",
+   "author": "World Wide Corals",
+   "raw_text": "Perched 23 floors above São Paulo, Brazil, sits one of the most mature, breathtaking SPS peninsula aquariums we’ve ever encountered! At over 9 feet long and holding 430 gallons of water, Nivaldo’s system was carried up an elevator piece by piece and built directly inside his high-rise apartment. From 34 years of aquarium wisdom and dialed-in Orphek lighting to rock-solid calcium reactor stability and high-frequency feeding, this 7-year-old reef is a true masterpiece of Acropora keeping! In this video: • Inside a 430-gallon, 9-foot peninsula SPS reef built entirely inside a 23rd-floor high-rise apartment. • Orphek LED blanket lighting and circulation flow strategies on a massive peninsula layout. • Why heavy feeding (4–5+ times daily) produces electric coloration and rapid Acropora growth. • Equipment and filtration tour: Calcium reactor stability, Triton Method supplementation, ozone, and custom skimmer plumbing. • High-rise aquarium engineering, monthly ICP testing protocols, and building backup power systems. At World Wide Corals, exploring international aquariums allows us to share proven husbandry insights and highlight how top reefers achieve long-term SPS success. Whether it’s dialing in stability through calcium reactors and automated testing or engineering massive displays high above a city skyline, we are dedicated to bringing you the best reef-keeping stories from around the world. What impressed you most about Nivaldo’s high-rise reef - his massive Acropora growth, the structural engineering on the 23rd floor, or his pristine sump setup? Let us know in the comments below! If you enjoyed the video, like, subscribe, and turn on notifications so you don't miss our next reef tank tour, coral spotlight, aquarium walkthrough, or behind-the-scenes look at World Wide Corals. Thanks for watching, and we'll see you in the next one! About This Reef: Discover this 430-gallon Acropora-dominated peninsula reef tank tour in São Paulo, Brazil. Learn how veteran reefer Ni",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "UXfXSwqWMmQ",
+    "duration_s": "948",
+    "gist": "Tour of a mature 430-gallon peninsula SPS system in a São Paulo high-rise, highlighting 7 years of Acropora cultivation under Orphek lighting and precise calcium management. Demonstrates advanced husbandry techniques and system longevity for experienced keepers considering large display builds.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "yt-reefdudes",
+   "source_name": "ReefDudes",
+   "title": "New Fish Day! How I Add Fish to My Reef Tank Safely",
+   "url": "https://www.youtube.com/watch?v=6a-SsgTjTkU",
+   "published_at": "2026-11-02T16:58:04Z",
+   "author": "ReefDudes",
+   "raw_text": "Awesome Saltwater Aquarium Shirts!!! https://reefdudes.com/shop Join the Community https://www.facebook.com/groups/reefdudes Eyecandy https://www.instagram.com/reefdudes/ Ask a question http://reefdudes.com/ask Want to support the channel? Purchase your gear through my Amazon link https://amzn.to/2TQasec or become a Patreon https://www.patreon.com/reefdudes",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "6a-SsgTjTkU",
+    "duration_s": "424",
+    "gist": "Guide to quarantine and acclimation procedures for reef fish. Standard practice explanation with limited new information for experienced aquarists.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "asfb-bsky",
+   "source_name": "Australian Society for Fish Biology — Bluesky",
+   "title": "📣 The full program for ASFB & AFSS 26 is here!",
+   "url": "https://bsky.app/profile/austsocfishbiol.bsky.social/post/3mzjcfve6vn2d",
+   "published_at": "2026-11-04T21:30:00Z",
+   "author": null,
+   "raw_text": "📣 The full program for ASFB & AFSS 26 is here! 🐟🦈🎣 👀 View the program: www.asfb-afss26.org/program-2026 🔗 Register: www.asfb-afss26.org/registration",
+   "category_hint": "Events",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Australian Society for Fish Biology announces the full conference program for ASFB & AFSS 26. Relevant to marine-science professionals and may include reef-related sessions, but context is minimal.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Reefs.com Tour of New England Aquarium",
+   "url": "https://reefs.com/reefs-com-tour-of-new-england-aquarium/",
+   "published_at": "2026-11-04T01:05:57Z",
+   "author": "Afishionado",
+   "raw_text": "A few months ago, we had the chance to attend Reef Retreat, and one of the biggest highlights was an unforgettable experience that happened after the show. We were invited behind the scenes at the New England Aquarium for an exclusive private tour, and let’s just say, it was an experience we won&#8217;t forget anytime soon.&#8230; The post Reefs.com Tour of New England Aquarium appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Reefs.com visited the New England Aquarium's behind-the-scenes operations. Public-aquarium tour documentation offers institutional husbandry perspective.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "projectseahorse-bsky",
+   "source_name": "Project Seahorse — Bluesky",
+   "title": "📸 Say hello to the magical Bigbelly seahorse, or 𝘏𝘪𝘱𝘱𝘰𝘤𝘢𝘮𝘱𝘶𝘴 𝘢𝘣𝘥𝘰𝘮𝘪𝘯𝘢𝘭𝘪𝘴, logged onto iSeahorse by citizen…",
+   "url": "https://bsky.app/profile/projectseahorse.bsky.social/post/3mz45mkqr532s",
+   "published_at": "2026-10-30T16:00:00Z",
+   "author": null,
+   "raw_text": "📸 Say hello to the magical Bigbelly seahorse, or 𝘏𝘪𝘱𝘱𝘰𝘤𝘢𝘮𝘱𝘶𝘴 𝘢𝘣𝘥𝘰𝘮𝘪𝘯𝘢𝘭𝘪𝘴, logged onto iSeahorse by citizen scientist dtawse. Upload your seahorse sightings onto iSeahorse too! Learn more here: www.iseahorse.org",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "iSeahorse logged a Bigbelly seahorse sighting through citizen science. Seahorses are kept in reef tanks and citizen monitoring expands aquaculture and wild-collection data.",
+    "relevance": "0.50"
+   }
+  }
+ ]
+}
