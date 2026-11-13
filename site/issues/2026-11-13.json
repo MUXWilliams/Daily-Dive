@@ -1,0 +1,492 @@
+{
+ "date": "2026-11-13T15:02:58.211414Z",
+ "items": [
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Geophysical Research Letters",
+   "title": "Vertical Characteristics of Marine Heatwaves in Global Coral Reef Regions",
+   "url": "https://doi.org/10.1029/2026gl123865",
+   "published_at": "2026-11-10T00:00:00Z",
+   "author": "Yulong Yao et al.",
+   "raw_text": "Abstract Marine heatwaves (MHWs) threaten coral reef ecosystems worldwide, yet their subsurface characteristics remain poorly understood. Using two high‐resolution ocean reanalysis products spanning 1993–2023, we reveal the global spatiotemporal patterns of subsurface MHWs across coral reef regions. MHW annual days decrease with depth, while their cumulative intensity increase, indicating that deep events are stronger but less frequent. Vertical profiles show that severe MHWs frequently extend to 150 m during major climate anomalies, including strong El Niño episodes and the 2020–2023 triple‐dip La Niña. During these periods, cumulative intensities reached up to 160°C‐days at 90–150 m, affecting more than half of all reef regions in the upper 70 m. Intensified subsurface MHWs threaten to undermine the role of mesophotic coral ecosystems as thermal refugia. This reality underscores the critical need to anticipate the intensification of extreme El Niño and multi‐year La Niña events in a warming ocean.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Geophysical Research Letters",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1029/2026gl123865",
+    "gist": "Marine heatwave subsurface characteristics across coral reef regions reveal deep events are stronger but less frequent than surface events. Vertical MHW structure changes understanding of bleaching mechanics and reef thermal stress.",
+    "relevance": "0.85"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Advanced Science",
+   "title": "Steps Toward Vitrification and Banking of Coral Larvae Using Field‐Friendly Cryomesh Technology",
+   "url": "https://doi.org/10.1002/advs.78550",
+   "published_at": "2026-11-10T00:00:00Z",
+   "author": "E. Michael Henley et al.",
+   "raw_text": "Coral reefs are declining globally, and novel solutions, such as cryopreservation, can help secure coral biodiversity and genetic diversity. Factors that affect successful cryopreservation of coral larvae include cryoprotectant type and concentration, membrane permeability, larval developmental stage, lipid content, volume, and freezing and warming rates. This study examined conduction-dominated \"cryomesh\" technology across a range of coral species, distinguishing vitrification on cryomesh, 24 h swimming survival, and settlement competence as separate measures of success. Using a previously successful cryoprotectant solution, the exposure time, volume, and developmental stage most amenable to cryomesh cryopreservation were examined, and biophysical attributes were modeled to determine cooling and rewarming rates. Most species vitrified on the cryomesh and showed short-term motility, but robust 24 h swimming survival was limited to Lobactis scutaria and Fungia fungites, the smallest species; other small-volume species did not survive. To improve heat transfer, subsets of embryos were sheared during early development, yielding sub-size larvae that did not swim post-thaw, but the sheared, untreated controls settled and matured normally. These findings show that volume alone does not ensure survival. Additional next steps must include toxicity and permeation studies of other cryoprotectants and long-term restoration potential evaluated by examining post-thaw settlement success.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Advanced Science",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1002/advs.78550",
+    "gist": "Study advances cryopreservation of coral larvae using cryomesh technology across multiple species. Successful coral larval banking secures genetic diversity and enables future restoration and research.",
+    "relevance": "0.85"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Marine Pollution Bulletin",
+   "title": "Reproductive-state and life-stage variation in oxyregulation of reef-building corals",
+   "url": "https://doi.org/10.1016/j.marpolbul.2026.120533",
+   "published_at": "2026-11-07T00:00:00Z",
+   "author": "Alexandra Skeer et al.",
+   "raw_text": "Accelerating ocean deoxygenation driven by ocean warming, eutrophication, and water column stratification poses a global threat to coral reef ecosystems. Several large-scale coral mortality events have been documented on reefs in response to periods of severe hypoxia, wherein environmental dissolved oxygen (DO) levels are insufficient for maintaining physiological homeostasis and supporting coral health. Although adult corals have the capacity for oxyregulation, the extent to which such capacity is affected by reproduction or during coral larval life stages remains poorly understood. Here, we examined oxygen consumption patterns of eight coral species and the offspring of four of these species using closed system respirometry to characterise oxyregulatory performance before and after spawning. Adult corals exhibited a significant increase in oxyregulatory capacity, exerting their maximum regulation capacity (P cmax ) at a lower DO partial pressure ( p O 2 ) one week following spawning relative to the 1–2 days preceding gamete release, indicating heightened vulnerability of gravid colonies to hypoxia. Coral larvae also exhibited capacity for oxyregulation, albeit at a lowered capacity (i.e., less regulation possible above oxyconformity based on total positive regulation, T pos ) compared to adults, and larval performance did not correlate with conspecific adult responses. These results highlight ontogenetic and reproductive-state oxyregulation variability, suggesting critical variation in metabolic responses to DO availability across life stages. Characterising coral life stage-specific responses to altered DO availability provides important physiological context for understanding how coral reef organisms may respond to ongoing and future ocean deoxygenation.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Marine Pollution Bulletin",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1016/j.marpolbul.2026.120533",
+    "gist": "Research shows that oxygen regulation capacity in reef corals varies by reproductive state and life stage, with larvae especially vulnerable during ocean deoxygenation. Understanding hypoxia tolerance across coral life stages is critical as dead zones expand on warming reefs.",
+    "relevance": "0.82"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Occurrence of five non-native and invasive taxa on natural and artificial reefs within the Florida Keys National Marine Sanctuary",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1984571",
+   "published_at": "2026-11-13T00:00:00Z",
+   "author": "Chris Langdon",
+   "raw_text": null,
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Five non-native and invasive taxa documented on natural and artificial reefs in the Florida Keys National Marine Sanctuary. Invasion biology directly threatens reef health and management in a critical US sanctuary.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Marine Science",
+   "title": "Temporal dynamics of coral bleaching and live coral cover at the Cayman Crown Reef, Gulf of Honduras (2016–2025)",
+   "url": "https://doi.org/10.3389/fmars.2026.1924894",
+   "published_at": "2026-11-10T00:00:00Z",
+   "author": "Ana Giró et al.",
+   "raw_text": "Located in the Gulf of Honduras between Guatemala and southern Belize, Cayman Crown (Corona Caimán) is a recently documented offshore coral reef system of high geomorphological complexity lying at the terminus of the deep Cayman Trench. The reef is characterized by extensive spur-and-groove formations and steep vertical walls descending from 10–30 m to depths exceeding 300 m. Despite its offshore location, Cayman Crown has historically supported among the highest live coral cover recorded across the Mesoamerican Reef (24-50%), consistently corresponding to good (≥20%) to very good (≥40%) live coral cover, under the Reef Health Index. However, the reef has been exposed to intensifying thermal stress across three successive bleaching events. It remains unknown whether this offshore reef can retain its capacity to recover under repeated thermal stress, as multi-event, site-level records of bleaching and recovery are lacking for this reef system. Here, we assess bleaching severity, mortality, and recovery across four sites spanning three bleaching events from 2016 to 2025. The highest Bleaching Severity Index (BSI) values were recorded during the 3.5 Regional Coral Bleaching Event (RCBE), 2019–2021; with a BSI of 54–59% and peak DHW ~10 °C-weeks, followed by the Fourth Global Coral Bleaching Event (GCBE), 2023–2025; with a BSI: 25–41% and peak DHW ~19 °C-weeks, and moderate values during the Third GCBE, 2014–2017; with a BSI: 25–30% and peak DHW ~8 °C-weeks. Following the 2019 bleaching, corals recovered nearly completely, demonstrating strong short-term post-disturbance resilience. In contrast, consecutive bleaching during the Fourth GCBE resulted in approximately 29% overall coral mortality and persistent residual bleaching extending into the February 2025 post-disturbance survey (BSI: 4–10%). The 2023–24 bleaching caused pronounced live coral cover losses, particularly at Corona Caimán Valle de Aga CC01 (50.3% to 34.1%) and Corona Caimán Bajón GT008 (35.7% to 22.5%),",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Frontiers in Marine Science",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3389/fmars.2026.1924894",
+    "gist": "Nine-year survey tracks bleaching and coral recovery at Cayman Crown Reef in Honduras, showing resilience despite offshore depth. Documented recovery patterns inform understanding of reef trajectory under climate stress.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Restoration Ecology",
+   "title": "Rubble stabilization alone cannot overcome the deleterious effects of soft coral dominance",
+   "url": "https://doi.org/10.1111/rec.70557",
+   "published_at": "2026-11-09T00:00:00Z",
+   "author": "Tania M. Kenyon et al.",
+   "raw_text": "Abstract Introduction Without intervention, the material legacies of smashed coral—loose rubble—can persist on reefs for decades and impede coral recruitment. Stabilizing interventions that accelerate rubble binding processes and foster coral growth and survival are commonly tested across narrow methodological, spatial, and temporal scales. Objectives This study determines the efficacy of three approaches to rubble stabilization under identical environmental conditions. Methods We trialed three steel rebar structure designs—flat grid, open pyramid, closed pyramid—that pinned and/or trapped rubble and were either flat or had vertical relief. A total of 36 structures and 33 control plots were installed on the central Great Barrier Reef and monitored over 3 years. Results Structures that pinned rubble (flat grids and closed pyramids) restricted rubble transport and aided stability, compared to control plots. However, this stabilizing effect did not translate to significant increases in rubble binding or scleractinian coral recruitment. Binding increased across the site for all designs and controls, mostly owing to soft coral binds ( Xenia spp.). Soft coral cover reached 87% in the deeper end of the site, and scleractinian recruits here dropped from 3 per 0.25 m 2 to 1 after 3 years. Soft corals also proliferated slightly more on structures than in control plots, suggesting rebar may facilitate their growth. Conclusion Flat grids and closed pyramid designs effectively stabilized rubble, but soft coral overgrowth represented a more important impediment to recovery than rubble transport at this site, particularly in the deeper end.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Restoration Ecology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1111/rec.70557",
+    "gist": "Research shows rubble stabilization structures alone cannot overcome soft coral dominance on damaged reefs. Reef restoration ecology directly informs conservation strategy and reef resilience science.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "scripps-bsky",
+   "source_name": "Scripps Institution of Oceanography — Bluesky",
+   "title": "🔊 Two Scripps-led studies examined how underwater sounds could help rebuild damaged coral reefs and fish…",
+   "url": "https://bsky.app/profile/scrippsocean.bsky.social/post/3mzqmrqg4u32f",
+   "published_at": "2026-11-07T19:25:00Z",
+   "author": null,
+   "raw_text": "🔊 Two Scripps-led studies examined how underwater sounds could help rebuild damaged coral reefs and fish communities. 🐟Researchers determined that playing back underwater audio from a healthy reef environment attracted more fish and coral larvae. Read more from La Jolla Light: https://bit.ly/4iB50IS",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Two Scripps studies found that playing healthy reef soundscapes attracted more fish larvae and adult settlement to damaged reefs. Acoustic cues are an emerging restoration tool for reef recovery.",
+    "relevance": "0.78"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Impacts of the Boreal Summer Intraseasonal Oscillation on marine heatwaves in the Taiwan Strait",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1982214",
+   "published_at": "2026-11-13T00:00:00Z",
+   "author": "Ying Zhang",
+   "raw_text": "The Taiwan Strait is a hotspot for frequent and intense marine heatwaves (MHWs) in summer, with severe impacts on local marine ecosystems, yet their underlying mechanisms remain elusive. Recent studies have documented the drivers of MHWs from interannual timescales to long-term changes, while the role of intraseasonal variability is still underexplored. The Boreal Summer Intraseasonal Oscillation (BSISO) is a prominent component of the atmospheric intraseasonal oscillation (ISO) over the tropical Indo-Pacific Ocean. Here, we examine the modulation of BSISO on MHW features over the Taiwan Strait in June–August during 1993–2024, and explore the BSISO-associated local physical processes responsible for each regional MHW. Sea surface temperature and probability of MHW occurrence in the Taiwan Strait fluctuate as the BSISO convection propagates, with the most pronounced increase during phases 4 + 5. Statistical analysis reveals that 52% of regional MHWs coincide with these specific phases, with longer duration and greater cumulative intensity than other events. These regional MHWs are primarily induced by enhanced solar radiation under clear-sky conditions during BSISO phases 4 + 5. Composite heat budget results indicate that intraseasonal shortwave radiation changes contribute approximately 58% of the mixed layer warming tendency and facilitate the genesis and intensification of MHWs. The findings on the physical processes linking the BSISO to MHWs may provide insights into the mechanisms of MHWs from an intraseasonal perspective.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Boreal Summer Intraseasonal Oscillation drives marine heatwaves in the Taiwan Strait, a hotspot for intense summer MHWs. Understanding the atmospheric drivers of regional heatwaves matters for predicting bleaching pressure on wild reefs.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "projectseahorse-bsky",
+   "source_name": "Project Seahorse — Bluesky",
+   "title": "A two-year fishing ban in Portugal led to the recovery of seafloor vegetation and overall habitat – one…",
+   "url": "https://bsky.app/profile/projectseahorse.bsky.social/post/3n255q2pd7v2w",
+   "published_at": "2026-11-12T19:00:00Z",
+   "author": null,
+   "raw_text": "A two-year fishing ban in Portugal led to the recovery of seafloor vegetation and overall habitat – one seahorse specie thrived in comparison to the other. Learn more: https://ow.ly/8uje50ZbVnX",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "A two-year Portuguese fishing ban recovered seafloor seagrass habitat, with one seahorse species thriving relative to another. Fishery regulation and recovery outcomes inform understanding of wild seahorse ecology and conservation success.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Updated occurrence, habitat associations, and genomic resources of syngnathids in the Sembilan Archipelago, Malaysia",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1892884",
+   "published_at": "2026-11-11T00:00:00Z",
+   "author": "Peng Zhan",
+   "raw_text": "Syngnathid fishes, including seahorses and pipefishes, are ecologically and economically important but remain vulnerable to overfishing, habitat degradation, and trade-driven exploitation. This study documents syngnathid occurrence, habitat associations, body-size observations, and genomic resources in the Sembilan Archipelago, Malaysia, using SCUBA-based visual surveys and high-resolution photographic analysis. Across 32 dives at seven reef sites, we recorded 54 occurrence records belonging to four species: Hippocampus kuda, H. comes, Doryrhamphus janssi, and Trachyrhamphus bicoarctatus. Species differed in their observed habitat associations, while size–depth relationships varied among species. A brooding male and two juvenile seahorses provided evidence of local reproductive activity during the survey period. To establish baseline genomic resources for Malaysian syngnathids, we generated high-quality PacBio HiFi genome assemblies for six individuals from three species, with genome sizes ranging from 0.45–0.61 Gbp and BUSCO completeness scores of 92.3–98.8%. The assemblies were characterized through repeat annotation, protein-coding gene prediction, orthology analysis, and phylogenomics. Complete mitochondrial genomes were generated for all six individuals. These genomic resources provide a foundation for future comparative and population genomic studies of genetic diversity, connectivity, and evolutionary relationships. Together, the ecological observations and genomic resources provide a baseline for future standardized monitoring and conservation research on Malaysian syngnathids.",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "section": "Journal",
+    "gist": "Survey documents seahorse and pipefish occurrence, habitat use, and genomic resources in Malaysian reefs. Syngnathids are traded marine livestock; their conservation status and ecology directly affects aquarium availability and husbandry understanding.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Climanosco Research Manuscripts",
+   "title": "Microplastics in the oceans: the many ways they can harm coral life",
+   "url": "https://doi.org/10.37207/crm.4.1r",
+   "published_at": "2026-11-10T00:00:00Z",
+   "author": "Cinzia Corinaldesi et al.",
+   "raw_text": "Microplastics are one of the main threats to marine ecosystems, but the mechanisms determining their impact on marine life are still largely unknown. We investigated the impact of microplastics on the red coral, an emblematic and threatened species belonging to the Corallium genus, which is distributed at almost all latitudes and depths. We report here that microplastics are ingested and accumulated by corals (primarily polypropylene and polystyrene), either directly (as microplastics are confounded with the coral’s prey, plankton) or through the ingestion of zooplankton containing microplastic particles. Once ingested, microplastics cause multiple biological effects, spanning from feeding impairment and mucus release. Microplastics also cause DNA damage and a shift in the coral microbiome that together with their tissue abrasions, favour the proliferation of opportunistic/pathogenic bacteria. Since microplastic contamination is expected to double in all oceans from 2030-2060, we anticipate that their impact will likely increase in the future, with the potential of causing coral death. The effects reported on the red coral could be similar on many other habitat-forming species (species that transform the environment creating a new habitat) and may act in synergy with other stressors, potentially exacerbating the impacts of heat waves and other climate-driven events.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Climanosco Research Manuscripts",
+    "section": "Journal",
+    "doi": "https://doi.org/10.37207/crm.4.1r",
+    "gist": "Microplastics ingested by red coral (Corallium genus) accumulate and harm the animals. Plastic ingestion is a documented stressor affecting coral physiology and ecosystem health; a direct concern for both wild reefs and captive systems.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "ubcoceans-bsky",
+   "source_name": "UBC Oceans — Bluesky",
+   "title": "Known as seamounts, these geological structures can become biodiversity hotspots, supporting corals, sponges…",
+   "url": "https://bsky.app/profile/ubcoceans.bsky.social/post/3mzvenqsx722i",
+   "published_at": "2026-11-09T16:42:00Z",
+   "author": null,
+   "raw_text": "Known as seamounts, these geological structures can become biodiversity hotspots, supporting corals, sponges, fish and visiting migratory species. The problem is that many are also vulnerable to industrial fishing. https://www.digitaljournal.com/article/high-seas-deadline-scientists-push-for-end-to-bottom-trawling-on-seamounts/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Seamounts host coral, sponge, and fish biodiversity but face industrial bottom trawling. Conservation of wild reef structure protects the genetic and ecological sources reef keeping depends on.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "yt-tidalgardens",
+   "source_name": "Tidal Gardens",
+   "title": "Behind the Scenes of Shedd Aquarium's Massive Renovation with Noel Heinsohn",
+   "url": "https://www.youtube.com/watch?v=v8m7rpvA86w",
+   "published_at": "2026-11-06T16:26:51Z",
+   "author": "Tidal Gardens",
+   "raw_text": "Noel Heinsohn of Shedd Aquarium joins us at Tidal Gardens to take us behind the scenes of Shedd’s massive renovation. At Shedd, Noel has managed the Wild Reef exhibit and now serves as manager of saltwater habitats. He played a key role in Wonder of Water, which replaced the 53-year-old Caribbean Reef in the rotunda with two 28,000-gallon habitats, including a live coral reef. Join this channel to get access to perks: https://www.youtube.com/channel/UCGdAIpjFq4vygKzXAyDKKtQ/join http://www.tidalgardens.com #tidalgardens #coral #reefaquarium Copyright Information: This video was shot and edited by Tidal Gardens. Tidal Gardens owns all intellectual property rights to this content. 0:00 Background of Shedd Aquarium 2:38 De-construction of Caribbean Reef Exhibit 3:26 Early Reef Exhibit Construction 5:07 Reef Exhibit Lighting 7:49 Reef Exhibit Water Flow 8:34 Reef Exhibit Filtration 11:34 Temperature Control 12:01 Fractionator Protein Skimmers 13:56 Wonder of River Construction 16:44 Freshwater Filtration 17:15 Freshwater Lighting 17:50 Periscope Cameras 18:33 Aquascaping the Reef 22:45 Freshwater Plant Aquascaping 24:08 Freshwater Fish Selection 25:12 Coral Selection 26:47 Reef Chemistry Issues 30:35 Adding Corals 33:23 Target Chemical Parameters 39:00 Reef Fish 40:33 Freshwater Fish List 41:47 Plant Species List 42:33 Freshwater Feeding 43:59 Reef Fish List 44:12 Coral Stock List 44:50 Reef Feeding 48:08 Future Growth 53:37 Q&A",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "v8m7rpvA86w",
+    "duration_s": "4486",
+    "gist": "Shedd Aquarium's renovation replaced a 53-year-old Caribbean reef exhibit with two 28,000-gallon habitats including live coral. Large-scale institutional reef husbandry and design provides valuable examples for advanced hobbyists managing complex systems.",
+    "relevance": "0.74",
+    "similar": "1"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Ecology and Evolution",
+   "title": "eDNA metabarcoding and random forest identify super-connector fish species across mangrove–seagrass–coral reef continuums in the South China Sea",
+   "url": "https://doi.org/10.3389/fevo.2026.1960019",
+   "published_at": "2026-11-09T00:00:00Z",
+   "author": "Chunchun Liu et al.",
+   "raw_text": "Background Tropical coastal seascapes rely on ecological connectivity between mangrove, seagrass, and coral reef habitats to sustain fish biodiversity and fisheries productivity. However, identifying key fish species that facilitate cross-habitat energy flows remains challenging due to limitations of traditional survey methods in turbid, structurally complex environments. Methods We integrated environmental DNA (eDNA) metabarcoding with Random Forest (RF) machine learning to map fish assemblages across a mangrove-seagrass-coral reef continuum in Hainan Island, South China Sea. Results We detected 234 fish species across 78 families - a 4.03-fold increase over conventional gillnet surveys (58 species, paired t-test, t = 11.34, p < 0.001). Using RF classification, we identified 23 \"connector species\" with high cross-habitat fidelity, of which three super-connectors - Lutjanus russellii , Siganus fuscescens , and Gerres oyena - accounted for 47% of cross-habitat network flow. Simulated removal of these three species reduced overall network connectivity by 68%. The RF model achieved 90.7% accuracy (Kappa = 0.86) in predicting habitat occurrence from eDNA data. Variable importance analysis revealed a salinity threshold at 28 PSU and a distance-to-reef threshold at 2.5 km as primary drivers of community turnover. Our bipartite network analysis showed significant nestedness (NODF = 47.3, p < 0.001), indicating that generalist species disproportionately maintain seascape connectivity. Discussion These findings demonstrate that integrating eDNA with machine learning provides a scalable, high-resolution toolkit for defining functional connectivity and prioritizing species for ecosystem-based fisheries management in the Anthropocene.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Frontiers in Ecology and Evolution",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3389/fevo.2026.1960019",
+    "gist": "eDNA metabarcoding and machine learning mapped fish species across mangrove-seagrass-coral reef habitats in the South China Sea. Understanding connectivity and key species that move between these ecosystems informs conservation priorities and reef resilience.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "A 1951–1998 Lutao coral Pb isotope record reveals site-specific, marine-integrated anthropogenic Pb pollution signals in the Northwest Pacific",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1950637",
+   "published_at": "2026-11-13T00:00:00Z",
+   "author": "Chen-Feng You",
+   "raw_text": "Coral lead (Pb) isotope records provide multi-decadal perspectives on marine Pb histories, but how individual records represent regional isotope histories remains an important interpretive question. We present a 1951–1998 Pb isotope record from a Porites coral at Lutao, southeast of Taiwan, and compare it with published records from Dongsha and Ogasawara in the Northwest Pacific. The three coral records exhibited substantial inter-site isotopic differences during 1953–1963, smaller differences in interval-mean 208Pb/207Pb during 1964–1984, and persistent site-specific characteristics. In 1985–1998, Lutao had a statistically distinguishable lower 208Pb/207Pb composition than Dongsha, whereas the middle-to-late change within Lutao itself was not statistically resolved. This contrast shows that inter-site isotopic differences need not imply an equivalent temporal shift at an individual site. Published Pb isotope reference fields are compatible with multiple possible source combinations but do not uniquely identify historical sources or marine transport mechanisms. Together, these results reveal spatial heterogeneity in coral Pb isotope histories, with smaller inter-site differences during 1964–1984, and highlight the need to evaluate the spatial representativeness of individual coral Pb isotope records before extrapolating site-specific signatures to regional historical interpretations.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "A 48-year coral Pb isotope record from Taiwan reveals site-specific anthropogenic lead pollution patterns in the Northwest Pacific. Coral archives document marine pollution exposure that affects reef ecosystems across the region.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "reefbuilders",
+   "source_name": "Reef Builders",
+   "title": "Kessil Releases AP9XE",
+   "url": "https://reefbuilders.com/2026/11/12/kessil-releases-ap9xe/",
+   "published_at": "2026-11-12T19:19:57Z",
+   "author": "Rob Mougey",
+   "raw_text": "The Kessil AP9XE refines Kessil’s flagship reef lighting formula by boosting overall light output by 10% and overhauling wireless control, all while preserving the sleek, low-profile chassis and 185W power draw of the original AP9X. Priced around $959.00 MSRP (currently on sale at SaltwaterAquarium.com and other retailers), it sits squarely in the high-end aquarium lighting tier—and largely justifies its price tag through optical&#8230; Source",
+   "category_hint": "Industry & Products",
+   "extra": {
+    "gist": "Kessil releases the AP9XE reef light, raising output 10% over the AP9X while maintaining low profile and power draw. A meaningful iteration of a flagship product helps aquarists evaluate if the upgrade justifies the cost.",
+    "relevance": "0.70",
+    "beat": "Product"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "An autonomous imaging system for reef fish monitoring in the southern Gulf of Mexico",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1969343",
+   "published_at": "2026-11-12T00:00:00Z",
+   "author": "Nuno Simoes",
+   "raw_text": "IntroductionReef fish assemblages are widely used as indicators of coral reef condition. Yet, diver-based surveys provide limited temporal resolution and are constrained by logistical demands. We evaluated an autonomous underwater imaging system based on cameras programmed for unattended image acquisition to monitor reef fish assemblages in the southern Gulf of Mexico.MethodsFive terrestrial trail cameras adapted for underwater deployment were operated at Bajo de Diez reef during two seasonal deployments in 2024 and 2025, yielding 191,758 valid underwater images at a nominal 3-min interval. Image quality, camera view, species diversity, and daily assemblage dynamics were evaluated using expert annotations of 27,471 images, iNEXT-4steps, multivariate analyses, and an RF-DETR Medium object-detection model applied to the complete valid underwater record.ResultsAcross the expert-sampled record, the mean daily proportion of images containing at least one fish was 17%, and 65 species were recorded. Laplacian variance distinguished lower- from higher-quality images. Assemblage composition differed clearly between the two deployment contexts and showed smaller but statistically detectable heterogeneity among fixed camera views within each deployment, while daily observations revealed structured temporal variation. On the held-out image-level test set, RF-DETR Medium achieved mAP@50 = 0.741, mAP@50:95 = 0.545, precision = 0.794, and recall = 0.650. Across 68 dates shared by the expert and CV analyses, expert- and CV-derived Bray–Curtis temporal structure was positively correlated (ρ = 0.63; Mantel permutation test, p ≤ 0.0001), with similar concordance for daily richness and the image-based relative abundance index. Applied to nearly seven times the number of manually annotated images, RF-DETR expanded temporal support from 68 to 110 dates.DiscussionAutonomous imaging can extend reef fish monitoring beyond discrete surveys through repeated acquisition, while computer vision ",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Autonomous cameras deployed at a Gulf of Mexico reef provided 191,000+ images for fish assemblage monitoring, replacing diver surveys. This method scales reef fish observation and could inform aquarium-holding practices for difficult species.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Properly Acclimating New Fish Arrivals – Lance Ichinotsubo Series Part 1",
+   "url": "https://reefs.com/properly-acclimating-new-fish-arrivals-lance-ichinotsubo-series-part-1/",
+   "published_at": "2026-11-11T19:00:00Z",
+   "author": "Afishionado",
+   "raw_text": "Some friendships leave a lasting impression, not just because of the people themselves, but because of everything they teach us along the way. For me, Lance Ichinotsubo was one of those people.&#8230; The post Properly Acclimating New Fish Arrivals &#8211; Lance Ichinotsubo Series Part 1 appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Properly acclimating new fish arrivals, part one of a Lance Ichinotsubo series. Fish acclimation is fundamental husbandry practice every reef keeper must master.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "From the sky to the deep sea: ecosystem structure and ecological integrity across the National Marine Sanctuaries of Bikar and Bokak, Marshall Islands",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1957660",
+   "published_at": "2026-11-11T00:00:00Z",
+   "author": "Enric Sala",
+   "raw_text": "Remote oceanic atolls provide increasingly rare opportunities to examine relatively intact tropical marine ecosystems in the Anthropocene. However, most ecological studies remain focused on individual habitats, limiting understanding of cross-habitat linkages across terrestrial, pelagic, mesophotic, and deep-sea systems. We investigated ecosystem structure across the remote atolls of Bikar and Bokak in the northern Republic of the Marshall Islands to characterize biodiversity patterns, ecosystem structure and condition, across terrestrial-to-deep-sea gradients within the recently established National Marine Sanctuaries of Bikar and Bokak. Integrated ecological surveys conducted in 2023 included terrestrial habitats, seabird communities, coral reefs, pelagic ecosystems, mesophotic reefs, and deep-sea environments. Surveys incorporated benthic and reef fish assessments, baited remote underwater video systems, mesophotic submersible observations, deep-sea camera deployments, vegetation surveys, and seabird and sea turtle assessments. Multivariate analyses, generalized linear mixed models, and constrained ordination approaches were used to evaluate ecosystem structure and differences between atolls. Both atolls supported ecosystem characteristics consistent with relatively intact oceanic systems, including extensive seabird colonies, mature native vegetation, predator-rich reef fish assemblages, structurally complex mesophotic habitats, and diverse deep-sea communities. Reef fish assemblages were dominated by herbivores, sharks, and other upper trophic-level predators, while mesophotic and deep-sea surveys documented multiple apparent new regional records and several provisionally identified taxa, highlighting the limited exploration of deeper habitats in the northern Marshall Islands. Despite their proximity, the atolls differed in several ecosystem components. Bokak supported higher reef-fish biomass and more coral-dominated benthic communities, whereas Bikar exhibite",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Biodiversity survey across terrestrial-to-deep-sea gradients at remote Marshall Islands atolls characterizes ecosystem structure and condition. Understanding intact tropical reef ecology informs conservation priorities and baseline conditions for comparison.",
+    "relevance": "0.70",
+    "similar": "1"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "CIPS 2026: What to Expect at the World’s Biggest Aquarium Trade Show",
+   "url": "https://reefs.com/cips-2026-what-to-expect-worlds-biggest-aquarium-trade-show/",
+   "published_at": "2026-11-09T16:45:42Z",
+   "author": "danireef",
+   "raw_text": "From November 12 to 15, 2026, Guangzhou will once again become the world capital of the aquarium hobby, hosting the 30th edition of the China International Pet Show, better known as CIPS. DaniReef will be there again as Official Media Partner, but this year with two extra roles: we will sit on the international jury of the CIPS Innovation Awards and we will be a speaker at the 3rd Aquatic Industry Convention .&#8230; The post CIPS 2026: What to Expect at the World’s Biggest Aquarium Trade Show appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "CIPS 2026 trade show runs November 12–15 in Guangzhou with aquarium industry announcements and awards. Major sourcing event for equipment and livestock.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "asfb-bsky",
+   "source_name": "Australian Society for Fish Biology — Bluesky",
+   "title": "📑 #NewStudy by Jalali et al. consider attempts to bring back kelp forests by curbing the urchins that have…",
+   "url": "https://bsky.app/profile/austsocfishbiol.bsky.social/post/3mztebd5vsc2w",
+   "published_at": "2026-11-08T21:30:00Z",
+   "author": null,
+   "raw_text": "📑 #NewStudy by Jalali et al. consider attempts to bring back kelp forests by curbing the urchins that have proliferated to destroy them. 👀 https://doi.org/10.1016/j.marenvres.2026.108451",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "A new study examines urchin culling as a method to restore kelp forests. Urchin population dynamics and kelp forest collapse illustrate reef ecosystem tipping points and the mechanics of regime shifts.",
+    "relevance": "0.68"
+   }
+  },
+  {
+   "source_id": "yt-wwc",
+   "source_name": "World Wide Corals",
+   "title": "A Diver’s 1,000-Gallon Reef Oasis Built on Natural Ocean Water | Rio de Janeiro, Brazil",
+   "url": "https://www.youtube.com/watch?v=0bYQSrOYv1k",
+   "published_at": "2026-11-12T21:00:26Z",
+   "author": "World Wide Corals",
+   "raw_text": "About an hour and a half outside Rio de Janeiro in Maricá, Brazil, veterinarian and former dive instructor Thiago has built one of the most natural, thriving reef systems we’ve ever seen! Spanning nearly 1,000 gallons of total water volume - including a 400-gallon primary SPS display, a massive interconnected refugium, and a dedicated 200-gallon soft coral and torch system - this aquarium runs exclusively on natural sea water hauled straight from local beaches. Watch how Thiago balances calcium reactors loaded with crushed coral media, Balling Method trace dosing, and an enormous pod breeding sanctuary to grow massive Acropora colonies! Behind the scenes, Thiago’s setup pairs four 220-watt fixtures over the primary display with an intentional nutrient approach that keeps nitrates and phosphates virtually undetectable. His dive-instructor background directly inspired the layout - letting large primary colonies like his centerpiece green slimer take over the aquascape while tucking intricate corals and sponges into the negative spaces. You'll also notice unique regional differences, such as Brazilian biodiversity import restrictions that limit common aquarium crustaceans like pistol shrimp to protect domestic fisheries. Special thanks to Christian from Rio’s Eco Top for translating and sharing this incredible slice of Brazilian reef-keeping culture! In this video: • Tour Thiago’s 1,000-gallon connected system in Maricá, Brazil featuring a 400-gallon SPS display. • Running a large-scale reef on natural sea water: Sourcing, storing, and doing 15–20% monthly water changes. • Unconventional calcium reactor media: Why crushed natural coral out-performed artificial media in this tank. • How a dive instructor’s natural aquascaping philosophy shaped gigantic green slimer and tort colonies. • Mega-refugium breakdown: Culturing pods for finicky marine fish and natural nutrient export. At World Wide Corals, we travel the globe to highlight passionate reef hobbyists who push the ",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "0bYQSrOYv1k",
+    "duration_s": "1453",
+    "gist": "Feature on a 1,000-gallon Brazilian reef system running exclusively on natural seawater with calcium reactor and Balling Method dosing. An interesting system build showcasing unconventional husbandry decisions and natural water chemistry management.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "yt-tidalgardens",
+   "source_name": "Tidal Gardens",
+   "title": "We Built a Copepod Factory at the Coral Farm",
+   "url": "https://www.youtube.com/watch?v=g3O4Diym184",
+   "published_at": "2026-11-12T18:18:51Z",
+   "author": "Tidal Gardens",
+   "raw_text": "We just set up a dedicated copepod culture station at Tidal Gardens. In this video we walk through the setup and the two species we’re starting with. Join this channel to get access to perks: https://www.youtube.com/channel/UCGdAIpjFq4vygKzXAyDKKtQ/join http://www.tidalgardens.com #tidalgardens #coral #reefaquarium Copyright Information: This video was shot and edited by Tidal Gardens. Tidal Gardens owns all intellectual property rights to this content.",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "g3O4Diym184",
+    "duration_s": "613",
+    "gist": "Tidal Gardens built a dedicated copepod culture station at their coral farm using two species. Copepod husbandry and culturing techniques directly apply to food production in captive reef systems.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "gsr-bsky",
+   "source_name": "Great Southern Reef Foundation — Bluesky",
+   "title": "IMAS and UWA researchers leave Esperance today to re-survey reefs in the Recherche Archipelago",
+   "url": "https://bsky.app/profile/greatsouthernreef.bsky.social/post/3mzvuljyoj22h",
+   "published_at": "2026-11-09T21:28:00Z",
+   "author": null,
+   "raw_text": "IMAS and UWA researchers leave Esperance today to re-survey reefs in the Recherche Archipelago. They'll look at what's changing and what's holding steady as part of a national Great Southern Reef study. greatsouthernreef.com/news",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Researchers are re-surveying reefs in Australia's Recherche Archipelago to track changes in the Great Southern Reef. Long-term monitoring of wild reef health informs understanding of what healthy reefs maintain.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-reef-fish",
+   "source_name": "Journal of Marine Science and Engineering",
+   "title": "Behavioural Responses of Angelfish (Centropyge tibicen and C. nox) to Exogenous Food Around Peak Abundance (MaxN) Using Baited Remote Underwater Videos",
+   "url": "https://doi.org/10.3390/jmse14212120",
+   "published_at": "2026-11-08T00:00:00Z",
+   "author": "Heidi Kelsall et al.",
+   "raw_text": "Baited Remote Underwater Video systems (BRUVs) are widely used to quantify reef fish abundance, but the behaviour of fish during aggregation events is poorly understood. We examined how the behaviour of two detritivorous angelfish, Centropyge tibicen and C. nox, changed around peak abundance (MaxN) on the coral reefs of Pemba Island, Tanzania, using archived BRUV footage. Seven behaviours were scored from 11 deployments, selected from 79 screened, in the five minutes before and after MaxN. Binomial generalised linear models tested effects of time window, species and habitat structure (the first principal component (PC1) from a principal component analysis of benthic cover). Co-feeding tolerance, rapid escape and passing through increased after MaxN, including after adjustment for multiple comparisons. Feeding bites increased (p = 0.014) but not after adjustment (Holm-adjusted p = 0.056); substrate grazing, chasing and hovering did not change. There was no significant species effect, but with few videos per species this is not evidence that the species behave alike. Behaviour was recorded less often at coral-rich sites in keyhole angelfish (odds ratio: 0.98 per PC1 unit, p = 0.001) and in the pooled model, but not in midnight angelfish. Files from the same deployment are not independent and the counts were overdispersed, so p-values are likely to be too small. These exploratory results suggest that behavioural coding of archived BRUV footage could add information to abundance-based surveys, pending validation with larger, independently replicated samples.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Journal of Marine Science and Engineering",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3390/jmse14212120",
+    "gist": "Baited video footage revealed behavioral changes in two angelfish species around peak feeding. Detailed behavior data on reef fish aggregation dynamics adds to understanding of fish ecology in wild systems.",
+    "relevance": "0.64"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Submarine groundwater discharge and nutrient enrichment in Kingston Harbour, Jamaica: geochemical evidence and spatial and seasonal dynamics",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1951281",
+   "published_at": "2026-11-12T00:00:00Z",
+   "author": "Debbie-Ann D. S. Gordon-Smith",
+   "raw_text": "Submarine groundwater discharge (SGD) constitutes a critical but systematically underquantified pathway for nutrient delivery to coastal waters, particularly in Small Island Developing States (SIDS) where coastal aquifers may be contaminated by wastewater and urban runoff. This study evaluated spatial and temporal variability in nutrients, chlorophyll a and physicochemical conditions in Kingston Harbour, Jamaica, a coastal water body that has experienced decades of eutrophication and declining biodiversity. This investigation targeted subsurface, low-salinity anomalies consistent with potential fresh SGD (FSGD) which had been identified as a source of land-based pollution in previous studies. Between May 2022 and August 2023, conductivity-temperature-depth (CTD) profiling was conducted to examine potential FSGD sites, along with surface water and targeted-depth water sampling at five northern shore sites which showed recurrent subsurface salinity anomalies. Station blocked permutation tests showed significant temporal variability in all measured surface and targeted depth parameters after Holm adjustment, while date-blocked analyses indicated significant spatial variability in surface waters but not at depth. Paired site-date comparisons did not show systematic enrichment of total oxidized nitrogen (TOxN), total dissolved nitrogen (TDN), soluble reactive phosphorus (SRP), total dissolved phosphorus (TDP), soluble reactive silicate (SRSi), chlorophyll a or salinity at targeted depths relative to corresponding surface waters, but depth waters differed significantly from paired surface waters in pH and temperature. Antecedent rainfall was analyzed at the sampling-event level at 1, 3, 5, 7 and 14-day intervals to assess rainfall impacts with the strongest associations observed for 3-day antecedent rainfall with salinity and SRSi. Surface salinity was also significantly associated with multiple nutrient and chlorophyll a variables, including an inverse SRSi-salinity rela",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Submarine groundwater discharge identified as a major nutrient pathway in Kingston Harbour, Jamaica, driving coastal eutrophication. Understanding nutrient pathways informs why reef systems decline and what water chemistry management requires.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Sicce Syncra Silent 2.0 Retested After 14 Years: Real Flow, Head and Power Draw",
+   "url": "https://reefs.com/sicce-syncra-silent-2-0-retested-after-14-years/",
+   "published_at": "2026-11-11T15:00:17Z",
+   "author": "danireef",
+   "raw_text": "The Sicce Syncra Silent 2.0 is back in the DaniReef LAB, fourteen years after our first test. Back in 2012 we measured its flow, head and power draw, first with a home-made rig and then with Sicce laboratory instruments.&#8230; The post Sicce Syncra Silent 2.0 Retested After 14 Years: Real Flow, Head and Power Draw appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Sicce Syncra Silent 2.0 pump retested after 14 years, measuring real flow, head, and power consumption. Actual performance data on a widely-used circulation pump is rare and directly useful for tank selection.",
+    "relevance": "0.60",
+    "beat": "Product"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Applied and Computational Engineering",
+   "title": "PFAS Occurrence and Bioaccumulation in Marine Organisms and Implications for Coral Reef-Associated Food Webs and Biomonitoring",
+   "url": "https://doi.org/10.54254/2755-2721/2027.ma38741",
+   "published_at": "2026-11-10T00:00:00Z",
+   "author": "Hangchen Liu",
+   "raw_text": "Per- and polyfluoroalkyl substances (PFAS) have been measured in diverse marine organisms, but differences among compounds, sample matrices, food webs, and analytical methods complicate interpretation of their environmental significance. This targeted, literature-based comparative review organized evidence from 29 distinct peer-reviewed primary studies published from 2011 to 2026 for which full-text articles were available. The studies covered marine and marine-associated coastal organisms; three directly investigated coral reef fishes or reef-building corals. Study characteristics and reported endpoints were coded separately for occurrence, bioaccumulation, trophic transfer, physiological associations, risk assessment, and biomonitoring relevance. All 29 studies reported measured biological PFAS, whereas 10 provided explicit accumulation-factor evidence and 11 investigated trophic transfer or predator–prey magnification. PFOS was prominent in numerous vertebrate and food-web investigations, but analyte profiles differed substantially: PFHxS accounted for 43% of measured PFAS in one reef-coral study, whereas trifluoroacetic acid was detected in all 54 coral samples in another. Compound-specific trophic patterns also differed among food webs; for example, reported PFOS trophic magnification factors included 1.75 in the Beibu Gulf and 0.78 in a Bohai Sea investigation. Differences in tissue, wet- versus dry-weight reporting, analyte coverage, and ecological context precluded quantitative pooling. Biological-effect evidence was more limited and should not be inferred from concentrations or dietary-risk estimates. The reviewed studies support taxon- and matrix-specific biomonitoring but do not yet establish how PFAS move through complete coral reef food webs. Standardized, co-located sampling of reef organisms, surrounding media, and biological endpoints would strengthen future interpretations.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Applied and Computational Engineering",
+    "section": "Journal",
+    "doi": "https://doi.org/10.54254/2755-2721/2027.ma38741",
+    "gist": "Review examines PFAS bioaccumulation in marine organisms including three studies of reef fish and corals. PFAS contamination threatens reef systems and animals kept in tanks; understanding pathways matters for water quality.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "yt-reefdudes",
+   "source_name": "ReefDudes",
+   "title": "How to Culture Phytoplankton at Home | AK Culturi-S Reef Tank Reactor",
+   "url": "https://www.youtube.com/watch?v=9TSaiv86I48",
+   "published_at": "2026-11-09T14:00:37Z",
+   "author": "ReefDudes",
+   "raw_text": "Today we’re kicking off a fresh batch of phytoplankton using the Aquaculture Kings AK Culturi-S reactor. Aquaculture Kings sent me this early prototype earlier this year, and I’ve been testing and playing around with it ever since. I figured it was finally time to share the setup as I ramp my phyto cultures back up to help feed and support the copepod population for my new mandarins. In this video, I’ll walk through the reactor, show how I start a fresh phyto culture, and share my experience with the system so far. Check them out at https://aquaculturekings.com Awesome Saltwater Aquarium Shirts!!! https://reefdudes.com/shop Join the Community https://www.facebook.com/groups/reefdudes Eyecandy https://www.instagram.com/reefdudes/ Ask a question http://reefdudes.com/ask Want to support the channel? Purchase your gear through my Amazon link https://amzn.to/2TQasec or become a Patreon https://www.patreon.com/reefdudes",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "9TSaiv86I48",
+    "duration_s": "289",
+    "gist": "Video demonstrates phytoplankton culturing with AK Culturi-S reactor to feed copepods for mandarins. Live food culture is core husbandry for sustaining obligate microphagous fish.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "asfb-bsky",
+   "source_name": "Australian Society for Fish Biology — Bluesky",
+   "title": "📑 #NewStudy by Forsman et al. look at the role of habitat and seascape on fish communities on sea Country in…",
+   "url": "https://bsky.app/profile/austsocfishbiol.bsky.social/post/3n25g4wtarj2w",
+   "published_at": "2026-11-12T21:30:00Z",
+   "author": null,
+   "raw_text": "📑 #NewStudy by Forsman et al. look at the role of habitat and seascape on fish communities on sea Country in northern Australia. 👀 https://doi.org/10.1016/j.ecss.2026.110330",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "New study examines how habitat and seascape affect fish communities on northern Australian sea country. Research on reef fish assemblies and habitat architecture is relevant, though the link is minimal.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Assessing anthropogenic thermodynamic influences on marine heatwaves near the Korean Peninsula using a coupled regional climate model",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1932600",
+   "published_at": "2026-11-12T00:00:00Z",
+   "author": "Seung-Ki Min",
+   "raw_text": "Marine heatwaves (MHWs), particularly high-water temperature events during summer, are becoming more frequent, intense, and widespread due to global warming. Rapid ocean warming around the Korean Peninsula (KP), exceeding rates in the East Asian marginal seas and the global average, highlights the need to better understand anthropogenic thermodynamic influences on regional MHWs. This study evaluates the deterministic thermodynamic sensitivity of selected MHW cases near the KP to a CMIP6-derived climatological anthropogenic thermodynamic perturbation using a regional coupled modeling framework with the Weather Research and Forecasting (WRF) and Regional Ocean Modeling System (ROMS). Two experiments were conducted for the four selected MHWs: the CTL experiment, representing the factual world, and the NAT experiment, representing a counterfactual world in which the imposed climatological anthropogenic thermodynamic signal was removed. The anthropogenic thermodynamic perturbation is estimated as the difference between the historical-nat (natural forcings only) and historical-all (natural + anthropogenic forcings) simulations from the Coupled Model Intercomparison Project Phase 6 (CMIP6) over 1985–2014. During the 12–25 August analysis period, the CTL–NAT differences in regional median daily sea surface temperature (SST) range from 0.30 to 0.83 °C in the Yellow Sea, South Sea, East Sea (Sea of Japan), and Jeju coastal waters. Averaged over the four cases, the number of MHW days, MHW intensity, and spatial extent were larger in CTL than in NAT by 1.17–2.10 days, 0.15–0.18 °C, and 6.58–25.78 percentage points, respectively. Within-window duration was also generally longer in CTL than in NAT. These results indicate that the selected MHW cases are sensitive to the imposed anthropogenic thermodynamic perturbation, although the magnitude of the response varies by region and event.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Study models anthropogenic influences on marine heatwaves near the Korean Peninsula using regional climate simulation. Rising temperatures drive wild-reef bleaching and shape collection logistics, making this regionally relevant.",
+    "relevance": "0.55"
+   }
+  }
+ ]
+}
