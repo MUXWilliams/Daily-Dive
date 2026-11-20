@@ -1,0 +1,493 @@
+{
+ "date": "2026-11-20T15:03:35.446062Z",
+ "items": [
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Scientific Reports",
+   "title": "Nutrients and consumer pressure influence coral and microbiome recovery following sequential marine heatwaves",
+   "url": "https://doi.org/10.1038/s41598-026-70845-3",
+   "published_at": "2026-11-16T00:00:00Z",
+   "author": "Alex D. Vompe et al.",
+   "raw_text": "Abstract Current and projected ocean conditions under climate change necessitate an understanding of coral holobiont resilience, factors contributing to host survival during marine heatwaves (MHWs), and how corals can recover after MHWs subside. It is especially important to understand how MHWs may interact with local stressors such as nutrient pollution and overfishing. Here, we used a five-year field experiment to investigate the effects of nutrient enrichment and consumer exclusion on host mortality (percent dead tissue) and microbiome stochasticity (beta dispersion) of three coral species, Acropora retusa , Porites lobata , and Pocillopora spp., following MHWs in Moorea, French Polynesia. Our experiment tracked resident coral colonies and their microbiomes through time and captured two MHWs. The interaction of nutrient enrichment with consumer pressure played a significant, yet coral-specific role in host and microbiome recovery from sequential MHWs. Specifically, after the MHWs and under reduced consumer pressure, A. retusa and P. lobata experienced lower host mortality when subjected to ambient nutrient levels. Under high consumer pressure, A. retusa had lower host mortality when nutrient levels were elevated. However, under low consumer pressure, corals with a history of elevated nutrient exposure experienced higher mortality and microbiome stochasticity. On the other hand, Pocillopora spp. microbiomes were more homogenous under elevated nutrients and consumer pressure. Additionally, a reduction in a dominant P. lobata bacterial symbiont, Parendozoicomonas haliclonae , was strongly associated with increased host mortality during and after the MHWs. Overall, these results suggest that local nutrient inputs and fishing pressure can significantly alter reef recovery from MHWs, despite heat stress masking the impacts of these local-scale factors during MHWs.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Scientific Reports",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1038/s41598-026-70845-3",
+    "gist": "Five-year field experiment shows nutrient enrichment and consumer exclusion both influence coral survival and microbiome stability during and after marine heatwaves. Local stressor management directly affects reef resilience in aquarium-relevant ways.",
+    "relevance": "0.84"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Lance Ichinotsubo Series | Part 2: Understanding Marine Ich (Cryptocaryon irritans)",
+   "url": "https://reefs.com/lance-ichinotsubo-series-part-2-understanding-marine-ich-cryptocaryon-irritans/",
+   "published_at": "2026-11-18T13:39:34Z",
+   "author": "Afishionado",
+   "raw_text": "Today, we&#8217;re diving into the world of Cryptocaryon irritans , better known as Marine Ich, with Lance Ichinotsubo. This video holds a special place for me because it was the very first video I filmed with Lance, and looking back at the date, it was recorded 10 years ago.&#8230; The post Lance Ichinotsubo Series | Part 2: Understanding Marine Ich (Cryptocaryon irritans) appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Lance Ichinotsubo explains marine ich (Cryptocaryon irritans) biology and behavior. Essential disease pathology for anyone maintaining saltwater fish.",
+    "relevance": "0.82"
+   }
+  },
+  {
+   "source_id": "scripps-bsky",
+   "source_name": "Scripps Institution of Oceanography — Bluesky",
+   "title": "📈 Since the start of the year, scientists with Scripps Oceanography's Shore Stations Program and Coastal…",
+   "url": "https://bsky.app/profile/scrippsocean.bsky.social/post/3n27kqa37ps2i",
+   "published_at": "2026-11-13T17:58:00Z",
+   "author": null,
+   "raw_text": "📈 Since the start of the year, scientists with Scripps Oceanography's Shore Stations Program and Coastal Ocean Observing Lab have recorded 73 days (and counting) of record-high water temperatures off Scripps Pier. 🧵 ⤵️ https://shorestations.ucsd.edu/about/scripps-pier/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Scripps Pier has recorded 73 record-high water-temperature days since January 2026. Sustained marine heatwave conditions signal ecological stress relevant to understanding reef bleaching drivers.",
+    "relevance": "0.82"
+   }
+  },
+  {
+   "source_id": "coralcitycam-bsky",
+   "source_name": "Coral City Camera — Bluesky",
+   "title": "ACER Ventura is booming and blooming!",
+   "url": "https://bsky.app/profile/coralcitycamera.bsky.social/post/3n2m34imi322u",
+   "published_at": "2026-11-18T17:23:00Z",
+   "author": null,
+   "raw_text": "ACER Ventura is booming and blooming! Here’s 360 days of growth starting Nov 19 2025 and ending Nov 14 2026. We believe this is the most resilient wild strain of staghorn coral in the State of Florida. Our goal is to spawn it in 2027!",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "ACER Ventura staghorn coral strain shows strong growth over one year in captive restoration. Florida's most resilient wild strain, intended for spawn in 2027.",
+    "relevance": "0.78"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "BMC Biology",
+   "title": "Non-zooxanthellate coral skeletal phenotype persists under end-of-century ocean acidification at a carbon dioxide vent",
+   "url": "https://doi.org/10.1186/s12915-026-02780-8",
+   "published_at": "2026-11-18T00:00:00Z",
+   "author": "Arianna Mancuso et al.",
+   "raw_text": "Ocean acidification, driven by rising atmospheric CO 2 , lowers seawater pH and carbonate saturation states (Ω), posing a critical threat to calcifying organisms, including scleractinian corals. Here, we used a unique CO 2 vent system to explore the long-term effects of chronic low pH on skeletal structure and composition in the non-zooxanthellate solitary scleractinian coral Caryophyllia inornata inhabiting a naturally acidified submarine cave off Panarea Island (Aeolian Archipelago, Italy). Macro-scale skeletal properties (micro-density, bulk density, apparent porosity) were unchanged under acidified conditions, whereas micro-scale structural and compositional features revealed larger crystallite sizes and, in preliminary analyses, higher aspartic and glutamic acid concentrations within the soluble organic matrix (SOM). These results suggest that C. inornata tolerates chronic acidification by maintaining bulk skeletal integrity while adjusting crystalline and organic matrix (OM) features, indicating skeletal plasticity that may sustain biomineralization under projected high-emission ocean acidification scenarios.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "BMC Biology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1186/s12915-026-02780-8",
+    "gist": "Non-zooxanthellate coral (Caryophyllia inornata) maintains normal skeletal structure under acidified conditions at a natural CO2 vent. Some corals show resilience to acidification, shifting expectations for end-of-century survival.",
+    "relevance": "0.78",
+    "similar": "1"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Journal of Climate",
+   "title": "Indo-Pacific Interactions in the Industrial Era: Insights from Coral Records",
+   "url": "https://doi.org/10.1175/jcli-d-25-0679.1",
+   "published_at": "2026-11-16T00:00:00Z",
+   "author": "Yunfan Chen et al.",
+   "raw_text": "Abstract The rapid warming of the tropical Indian Ocean and its complex interactions with the Pacific Ocean pose critically important uncertainties as climate warms. However, limited instrumental records challenge investigating decadal and longer-term variations. Here we present four new coral records from Tanzania and combine these with seven published coral timeseries from the western Indian Ocean (WIO) to reconstruct 160-year WIO sea surface temperature (SST). We compare WIO reconstructions with instrumental and coral-based Pacific climate indices to assess Indo-Pacific interactions. Our reconstructions indicate that the WIO cooled slightly in the late 19th century, then warmed by nearly 1°C throughout the 20 th century. This long-term warming correlates closely with increasing El Niño-Southern Oscillation (ENSO) asymmetry, characterized by intensified El Niño in the eastern Pacific, transmitting heat to the WIO through ocean-atmosphere interactions. Indo-Pacific interactions also experience decadal modulation, with breakpoints marked by declining WIO-ENSO correlation and reduced ENSO amplitude. After the mid-1970s, El Niño events generate warm anomalies in the WIO associated with a wind anomaly response that transmits the warming into the northwestern Indian Ocean, where it persists into summer. This response was short-lived during the 1960s, with suggestions of alterations in the early 20th century. Comparing our coral reconstructions with Last Millennium CESM1.1 simulations reveals that this model fails to capture key elements of Indo-Pacific interactions — EP SST skewness and decadal modulations in WIO’s response to El Niño. These results suggest that Indo-Pacific interaction mechanisms have changed over the industrial era, but coupled models may not accurately simulate these dynamics.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Journal of Climate",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1175/jcli-d-25-0679.1",
+    "gist": "Four new coral records from Tanzania combined with published WIO data reconstruct 160 years of Indian Ocean temperature, revealing Indo-Pacific climate interactions. Understanding wild reef oceanography illuminates the conditions that shape coral resilience.",
+    "relevance": "0.78"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Marine Life Science & Technology",
+   "title": "Genome of the precious red coral Hemicorallium imperiale provides insights into the molecular basis of axial skeleton formation in octocorals",
+   "url": "https://doi.org/10.1007/s42995-026-00428-8",
+   "published_at": "2026-11-15T00:00:00Z",
+   "author": "Yanshuo Liang et al.",
+   "raw_text": "Diverse biomineralization strategies of octocorals make these species an important model for understanding the evolution of biomineralization. However, molecular mechanisms underlying biomineralization in octocorals are poorly studied. Precious red corals, which are characterized by their fully calcified axial skeletons and striking red coloration, are ideal for the investigation of the molecular mechanisms underpinning the calcification and pigmentation processes in octocorals. In this study, we generated a high-quality chromosome-level genome of the precious red coral Hemicorallium imperiale. Genomic innovations, including proliferation of long terminal repeats, expansion of metal ion-binding gene families, and rapid evolution of calcification-related genes, are proposed to have played key roles in shaping axial skeleton formation in H. imperiale . Frequent domain shuffling and gene duplications in highly expressed fibrillar collagens may be a common evolutionary strategy supporting the structural diversity of axial skeletons across octocorals. Additional evidence reported in this study, including high expression of chitin-related genes and proteomic data from axial skeleton tissues, suggests that the organic matrix framework containing chitin and fibrillar collagens has deep evolutionary roots and may be a conserved component of ancient biomineralizing systems. Our findings have expanded the current model of the skeletal matrix framework and offer a new perspective into the evolution and diversity of biomineralization.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Marine Life Science & Technology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s42995-026-00428-8",
+    "gist": "Chromosome-level genome of precious red coral reveals molecular mechanisms of calcification and pigmentation in octocorals. Genomic insight into octocoral biomineralization advances understanding of soft-coral physiology.",
+    "relevance": "0.76"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Divergent temporal variability in calcification and primary production of central Red Sea calcifying macroalgae",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1907711",
+   "published_at": "2026-11-20T00:00:00Z",
+   "author": "Maggie D. Johnson",
+   "raw_text": "Calcifying macroalgae play critical roles in coral reef ecosystem functioning and carbonate dynamics. However, the metabolic responses underpinning several of their ecological functions remain poorly characterized, particularly in the Red Sea. To evaluate how macroalgal metabolism varies over time under naturally fluctuating conditions, we conducted in situ metabolic assays in the spring and fall over three years (2022-2024) using two ecologically important calcifying reef taxa: the green macroalga Halimeda opuntia and the crustose coralline alga Lithophyllum sp. We quantified rates of light and dark calcification, net photosynthesis, and respiration under natural light and temperature regimes in shallow nearshore habitats of the central Red Sea. Halimeda opuntia metabolism varied significantly across time points in both lagoonal and reef habitats, whereas Lithophyllum sp. showed more stable light calcification rates, though its dark calcification, respiration, and net photosynthesis varied. This variation did not follow a consistent seasonal pattern. Notably, light calcification rates in H. opuntia were more than twice those of Lithophyllum sp., consistent with their roles as fast-growing sediment producers versus slower-growing reef framework stabilizers, respectively. These results provide essential species-resolved in situ metabolic baselines for dominant calcifying macroalgae in the central Red Sea and highlight how divergent macroalgal functional groups contribute to carbonate production and reef stability in a region that regularly experiences environmental extremes.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Study quantifies metabolic rates of two key calcifying reef macroalgae—Halimeda and Lithophyllum—over seasonal cycles in the Red Sea. Understanding their calcification and production underpins nutrient dynamics in reef systems.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Linking benthic dynamics and herbivore assemblages across a chronically disturbed Caribbean reef",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1854986",
+   "published_at": "2026-11-18T00:00:00Z",
+   "author": "David Arturo Ortega-Vargas",
+   "raw_text": "Mass coral bleaching events increasingly interact with chronic and acute stressors to reshape tropical reef ecosystems. Caribbean reefs are particularly vulnerable to these cumulative effects, as recurrent thermal stress acts on ecosystems already transformed by disease, coral mortality, and local and regional stressors. Here, we evaluated spatial and seasonal variation in benthic communities and their associations with herbivore assemblages across eight back- and fore-reef sites in Parque Nacional Arrecife de Puerto Morelos (PNAPM), Mexican Caribbean, during the dry, rainy, and cold-front seasons of 2024. Benthic communities differed substantially among sites, with turf algae–sediment matrix and fleshy macroalgae dominating much of the reef system and hard-coral cover remaining generally low. Benthic composition varied significantly among seasons, with a reef zone × season interaction indicating contrasting seasonal trajectories between back- and fore-reef environments, despite the absence of an overall difference between reef zones. Herbivore assemblages also differed markedly among sites but showed no consistent spatial or seasonal pattern at the community level. Associations between herbivores and benthic composition were restricted to particular functional groups and benthic components, revealing selective and context-dependent herbivore–benthos relationships. Overall, decades of cumulative disturbance have not resulted in a uniform contemporary benthic state in Puerto Morelos. Instead, contrasting benthic configurations persist and reorganize seasonally, while their relationships with herbivore assemblages remain context dependent. These findings show that understanding the trajectories of chronically disturbed Caribbean reefs requires recognizing the spatial and seasonal complexity of benthic communities and the context-dependent nature of their relationships with herbivores",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Study of benthic community and herbivore interactions across Caribbean reef sites under thermal and chronic stress. Field data on coral-algae-grazer dynamics informs tank management.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Outplanting laboratory-cultivated Ericaria amentacea germlings at Gyaros Island (Eastern Mediterranean): a 22-month field trial",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1953179",
+   "published_at": "2026-11-18T00:00:00Z",
+   "author": "Drosos Koutsoubas",
+   "raw_text": "Marine forests formed by the Cystoseira sensu lato complex are declining across the Mediterranean and active restoration is increasingly promoted where natural recovery is constrained by propagule limitation and persistent degraded states. However, restoration outcomes are often reported simply as overall success or failure, failing to distinguish performance during cultivation, transport and outplanting from biological establishment in the recipient site. Here we assess the field performance of active Ericaria amentacea restoration over 22 months at a site located in the Eastern Mediterranean, a region poorly represented by restoration studies. Laboratory-cultivated germlings were outplanted at Gyaros Island, a recently established Marine Protected Area in the central Aegean Sea. Germlings were monitored over 22 months under warm, oligotrophic and potentially grazing-exposed conditions. The cultivation phase produced viable germlings for outplanting. At deployment, mean cover was 61.8%. Percentage cover declined sharply during the first three months and then reached a plateau, apart from a significant dip in the first winter. After 22 months, 47% of the tiles remained attached and 131 tiles (25% of the initially deployed) still bore E. amentacea thalli. Mean thallus length increased during the first year and followed a seasonal pattern consistent with existing ecophysiological data and the seasonal growth of Cystoseira s.l. Mediterranean forests. Critically, no reproductive structures were observed within the study period, indicating that the restored population had not yet reached reproductive maturity. These findings indicate that the restoration protocol was operationally feasible at this single central Aegean site, but biological establishment, particularly the attainment of reproductive maturity, remained incomplete. Long-term assessments of persistence, growth and fertility are essential before restoration success can be claimed in environmentally constrainin",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Laboratory-grown Mediterranean seagrass (Ericaria amentacea) was outplanted and monitored for 22 months, tracking survival from cultivation through field establishment. Restoration outcomes for foundation macroalgae inform what works in active reef recovery.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Environmental Microbiome",
+   "title": "Integrative metagenomics and cultivation reveal host- and environment-driven structuring of coral microbiomes in the Andaman Sea",
+   "url": "https://doi.org/10.1186/s40793-026-00958-9",
+   "published_at": "2026-11-17T00:00:00Z",
+   "author": "Vijaya Raghavan Rangamaran et al.",
+   "raw_text": null,
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Environmental Microbiome",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1186/s40793-026-00958-9",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "BMC Marine Science",
+   "title": "Assessing the potential distribution of the endangered coral Polycyathus chaishanensis in Taiwan using environmental DNA metabarcoding",
+   "url": "https://doi.org/10.1186/s44479-026-00012-1",
+   "published_at": "2026-11-16T00:00:00Z",
+   "author": "Yi‐Ling Chiu et al.",
+   "raw_text": "The scleractinian coral, Polycyathus chaishanensis , first discovered in the Chaishan region of southern Taiwan, is an endangered species covered by the Taiwan Wildlife Protection Act (2017). At present, its population continues to decline due to environmental pressures. To develop and implement effective conservation strategies, better understanding of the distribution of this species is essential. However, because of its low population density, P. chaishanensis has been difficult to locate using conventional field surveys. In this study, we conducted an environmental DNA (eDNA) metabarcoding survey for scleractinian corals to assess the possible distribution of P. chaishanensis in Taiwan. Surface seawater was collected at 35 coastal sites along the main island of Taiwan and surrounding offshore islands. Coral eDNA were detected by PCR amplification of mitochondrial 12 S rDNA fragments followed by amplicon sequencing. An eDNA-based dataset of scleractinian corals at 35 coastal sites in Taiwan was developed and putative P. chaishanensis -derived eDNA signals were detected at 13 sites, including several locations with previous records of this species. Notably, putative P. chaishanensis -derived eDNA signals were also detected at multiple sites where the species had not been previously reported, suggesting that its distribution may be broader than currently recognized. Although direct field verification at these suggested sites will be required in the future, this study provides new insights into the potential distribution of P. chaishanensis in Taiwan based on eDNA metabarcoding. The information obtained through our eDNA-based surveys will enable more targeted ecological surveys and provide a valuable foundation for the future monitoring, conservation, and restoration of this endangered coral.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "BMC Marine Science",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1186/s44479-026-00012-1",
+    "gist": "Environmental DNA metabarcoding maps the distribution of an endangered Taiwanese scleractinian coral difficult to locate by conventional survey. The technique enables conservation strategies and applies broadly to locating cryptic reef species in the field.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Reefs App 7.5: Free Reef Guides, Coral ID, Events and a Rebuilt Forum",
+   "url": "https://reefs.com/reefs-app-7-5-free-reef-guides-coral-id-events-and-a-rebuilt-forum/",
+   "published_at": "2026-11-18T22:12:16Z",
+   "author": "Josh Saul",
+   "raw_text": "Version 7.5 of the free Reefs app is out now on the App Store and Google Play . It&#8217;s our biggest update in years. The app now carries a full shelf of free reef guides, a coral ID tool, a calendar of frag swaps near you and a rebuilt forum, and it&#8217;s designed from the ground up for iPad and the new iPhone Duo.&#8230; The post Reefs App 7.5: Free Reef Guides, Coral ID, Events and a Rebuilt Forum appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Reefs app updated to v7.5 with guides, coral ID, event calendar, and forum rebuild. Community infrastructure for hobbyists looking for local swaps and information.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Climate of the past",
+   "title": "The Northwest Pacific corals unravel the NPGO- and Victoria Mode-related temperature variability back to the 19th century",
+   "url": "https://doi.org/10.5194/cp-22-2067-2026",
+   "published_at": "2026-11-18T00:00:00Z",
+   "author": "Saori Ito et al.",
+   "raw_text": "Atmospheric and oceanic phenomena in the Pacific Ocean, such as the North Pacific Gyre Oscillation (NPGO) and the Victoria Mode (VM), have significant implications for global climate variability through their linkage with temperature variability in the Central Pacific (CP). The NPGO and VM are defined based on sea surface height and basin-wide sea surface temperature anomaly patterns in the North Pacific, respectively, but their variability is often closely coupled. Although recent studies have drawn attention to their connection with temperature variability in the CP, the historical variability of this connection remains poorly understood due to limited instrumental observations. Because coral Sr/Ca records are primarily sensitive to temperature variability, they can capture signals of the temperature expression of the NPGO, the VM, or their covariability (i.e., NPGO–VM-related temperature variability). Here, we present a long-term reconstruction of NPGO–VM-related temperature variability based on a coral Sr/Ca temperature proxy from the Northwest Pacific (NWP), covering the period from 1799 to 2014 Common Era (CE). The coral-inferred temperature record closely aligns with temperature variability in the CP, indicating an extra-tropical linkage between temperature variability in the CP and NPGO–VM-related temperature variability in the NWP via an ocean–atmosphere bridge. The reconstructed NPGO–VM-related variability shows a pronounced negative phase (cool conditions in the NWP) during the 1860s–1900s, and a positive phase (warm-temperature in the NWP) during the 2000s–2010s. We also find a significant correlation between temperature variability in the CP and reconstructed NPGO–VM-related variability from the early 20th century to 2014, except during the 1970s–1980s. This relationship re-emerged in the 1990s, strengthened thereafter, and remained significant from the 2000s onward. Given the strong linkage between NPGO–VM-related variability and temperature anomalies ",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Climate of the past",
+    "section": "Journal",
+    "doi": "https://doi.org/10.5194/cp-22-2067-2026",
+    "gist": "Coral skeletal records from the Northwest Pacific reveal temperature variability driven by NPGO and Victoria Mode back to the 1800s. Coral paleoclimate records extend understanding of Pacific climate patterns affecting reef systems.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Revista de Biología Tropical",
+   "title": "Coral health and environmental associations in the Espíritu Santo Archipelago, Mexico: A 2023 Assessment",
+   "url": "https://doi.org/10.15517/8bjh0r34",
+   "published_at": "2026-11-17T00:00:00Z",
+   "author": "José Carlos Fernando San Esteban-Belmar et al.",
+   "raw_text": "Introduction: Coral reefs in the Eastern Tropical Pacific are increasingly affected by environmental stressors that may compromise coral health and promote disease. However, the health status of coral communities across the Gulf of California remains poorly understood, particularly within the Parque Nacional Zona Marina del Archipiélago Espíritu Santo, where information on coral health and its association with local environmental conditions is limited. Objective: To characterize the health status of coral communities within the Parque Nacional Zona Marina del Archipiélago Espíritu Santo during 2023 and evaluate its association with environmental variables and ecosystem characteristics across the region. Methods: Surveys were conducted at nine sites within the Parque Nacional Zona Marina del Archipiélago Espíritu Santo using belt transects during SCUBA dives to assess scleractinian coral composition, coral health based on the occurrence of morphological lesions, and benthic composition. Historical environmental data (2004–2024) obtained from satellite imagery included seawater temperature, pH, salinity, dissolved oxygen, chlorophyll a, nitrate, and phosphate concentrations. Associations between environmental and ecosystem characteristics and coral health were evaluated using multivariate analyses and generalized linear models. Results: A total of 3 373 colonies were recorded, dominated by the genera Pocillopora (72.7 %) and Porites (24.2 %). Overall lesion prevalence was 66.1 %, with overgrowth (54.75 %) and skeletal deformities (18.01 %) being the most common categories. Significant spatial differences were found in the occurrence of disease-associated lesions (χ² = 116.44, df = 8, p < 0.001) and non-disease-associated lesions (χ² = 65.26, df = 8, p < 0.001). Disease was mainly associated to tissue color change with bleaching and discoloration as the most frequent lesions, and tissue loss represented by the white syndrome. Disease prevalence was positively associate",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Revista de Biología Tropical",
+    "section": "Journal",
+    "doi": "https://doi.org/10.15517/8bjh0r34",
+    "gist": "Coral health survey in the Gulf of California's Espíritu Santo Archipelago documents disease and environmental stress in an Eastern Tropical Pacific marine park. Local coral-health assessment informs regional reef status and conservation priorities.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "yt-wwc",
+   "source_name": "World Wide Corals",
+   "title": "35 Years in the Hobby: Inside Brazil's Ultimate Mixed Reef Display | São Paulo, Brazil",
+   "url": "https://www.youtube.com/watch?v=sPXBjozaL9A",
+   "published_at": "2026-11-19T21:00:12Z",
+   "author": "World Wide Corals",
+   "raw_text": "Vic is back in São Paulo visiting Edson at Sea Life, a local aquarium institution that has been operating in the exact same location for 35 years! Inside sits a stunning 400-gallon mixed reef display that breaks almost every rule in the book - bringing Acropora, soft leathers, gorgonians, anemones, torches, and clams together in absolute harmony. Edson shares his old-school philosophy, a simple approach to reef keeping, and vintage photos from Julian Sprung's visit back in 1997! In this video: • Inside Sea Life's 400-gallon, 10-foot mixed reef display operating in São Paulo, Brazil. • The art of the ultimate mixed reef: Balancing lighting and flow for Acropora alongside softies, torches, and leathers. • 35 years of reef-keeping wisdom: Why keeping equipment simple prevents tank-crashing mistakes. • Maintenance and parameters: Monthly 10% water changes, HW salt, calcium reactors, and homemade fish food blends. • Emergency resilience: How local battery backup panels protect vital circulation during citywide blackouts. At World Wide Corals, we have immense respect for the pioneers of our hobby who have kept marine aquariums thriving for decades. Seeing how international reef keepers like Edson strike a balance across every coral family reminds us that patience, observation, and simplicity are often the most powerful tools in reef keeping. What impressed you most about Edson’s 400-gallon mixed reef - his ability to balance demanding SPS with soft corals, the 35-year store legacy, or his straightforward approach to filtration? Share your thoughts in the comments below! If you enjoyed the video, like, subscribe, and turn on notifications so you don't miss our next reef tank tour, coral spotlight, aquarium walkthrough, or behind-the-scenes look at World Wide Corals. Thanks for watching, and we'll see you in the next one! About This Reef: Explore this 400-gallon mixed reef aquarium tour at Sea Life in São Paulo, Brazil. Learn expert mixed reef strategies for balancing coral",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "sPXBjozaL9A",
+    "duration_s": "769",
+    "gist": "Profile of a 400-gallon mixed-reef display in Brazil operating 35 years with Acropora, soft corals, and anemones together, showing old-school success contrary to modern dogma. Demonstrates that rigid taxonomic separation may not be essential for stability.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Revista de Biología Tropical",
+   "title": "Monitoreo comunitario en arrecifes coralinos: trayectoria de una brigada en el Parque Nacional Arrecife de Puerto Morelos",
+   "url": "https://doi.org/10.15517/x00jkk34",
+   "published_at": "2026-11-17T00:00:00Z",
+   "author": "Ana Molina‐Hernández et al.",
+   "raw_text": "Introduction: Community participation provides a mechanism to directly involve local populations in the monitoring, conservation, and management of protected natural areas linked to their territory. In reef ecosystems, where maintaining continuous monitoring programs poses a significant logistical challenge, community monitoring teams can help generate ecological data and strengthen their connection to environmental management. In Mexico, this type of participation has been promoted by CONANP through subsidy programs. Objective: This study documents and analyzes the trajectory of a community monitoring team dedicated to reef monitoring in the Puerto Morelos Reef National Park, examining its organizational evolution, capacity development, and generated ecological data, as well as its contribution to the monitoring and management of the protected natural area. Methods: The study describes the path of formation, growth, and consolidation of the collective, its organizational practices, cooperation with authorities and other organizations, and the biological monitoring strategies sustained over a six-year period. Results: Between 2019 and 2025, the team evolved from an emergent response to Stony Coral Tissue Loss Disease into a platform for continuous observation and rapid environmental response. The monitoring efforts generated reliable data across 13 monitored sites, including eight historical priority sites. The team incorporated new indicators and post-disturbance assessment strategies for hurricanes, bleaching, and diseases, strengthening its technical capacity and networks with authorities, academia, and civil society organizations. The data generated directly influenced management decisions, including the temporary closure of subzones due to bleaching and the activation of post-hurricane restoration actions. Conclusions: This case study illustrates how a community brigade progressively became a space for participatory governance and knowledge co-production. Its t",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Revista de Biología Tropical",
+    "section": "Journal",
+    "doi": "https://doi.org/10.15517/x00jkk34",
+    "gist": "Mexican researchers document a community-led reef monitoring program in Puerto Morelos, strengthening local stewardship and generating ecological data. Community participation bridges conservation knowledge and local reef protection.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "ubcoceans-bsky",
+   "source_name": "UBC Oceans — Bluesky",
+   "title": "A proposal to phase out bottom trawling on high-seas seamounts was withdrawn at the UN General Assembly after…",
+   "url": "https://bsky.app/profile/ubcoceans.bsky.social/post/3n2lxf3am3k2n",
+   "published_at": "2026-11-18T16:16:00Z",
+   "author": null,
+   "raw_text": "A proposal to phase out bottom trawling on high-seas seamounts was withdrawn at the UN General Assembly after being opposed by a bloc of countries led by Japan, which included the EU, Russia, the USA and Australia joining forces. https://oceanographicmagazine.com/news/proposal-to-ban-bottom-trawling-on-high-seas-seamounts-dropped-at-un/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "UN proposal to ban deep-sea bottom trawling on seamounts withdrawn after opposition led by Japan. Policy failure threatens deep-reef ecosystems that inform reef science.",
+    "relevance": "0.68"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Big Win for IMARCS and Stichodactyla haddoni",
+   "url": "https://reefs.com/big-win-for-imarcs-and-stichodactyla-haddoni/",
+   "published_at": "2026-11-17T15:00:37Z",
+   "author": "xeniaforever",
+   "raw_text": "The International Marine Science and Carbon Sequestration Organization (IMARCS) has just announced that right now in Japan, they&#8217;ve spawned the carpet anemone Stichodactyla haddoni in captivity.&#8230; The post Big Win for IMARCS and Stichodactyla haddoni appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "IMARCS has achieved captive spawning of the carpet anemone Stichodactyla haddoni in Japan. Anemone reproduction in captivity opens pathways for sustainable supply and study of a key reef symbiont.",
+    "relevance": "0.68"
+   }
+  },
+  {
+   "source_id": "yt-reefbeef",
+   "source_name": "Reef Beef",
+   "title": "Don't Promote Difficult to Keep Animals - Reef Beef Chunks",
+   "url": "https://www.youtube.com/watch?v=bbBCGcpoDco",
+   "published_at": "2026-11-15T12:26:32Z",
+   "author": "Reef Beef Podcast",
+   "raw_text": "This is a chunk of the Reef Beef Podcast episode 171 where Rich and Ben are live and Tidal Gardens talking about how stores sell animals that are impossible to keep. Watch the full episode here: https://youtu.be/lglIuN86kq0 Links: Merch is now available! https://reefbeefpodcast.com/merch/ Join our Discord: https://discord.gg/reefbeef Get notified of new episodes by receiving an email from Reef Beef! https://reefbeefpodcast.com/notify/ Get our help / advice: https://reefbeefpodcast.com/consult/ Buy Reef Beef a Beer! https://reefbeefpodcast.com Become a Member: https://reefbeefpodcast.com/membership",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "bbBCGcpoDco",
+    "duration_s": "300",
+    "gist": "Reef Beef podcast episode discusses retail practice of selling difficult-to-keep livestock. Direct critique of hobbyist experience and industry ethics relevant to informed aquarium stocking.",
+    "relevance": "0.68"
+   }
+  },
+  {
+   "source_id": "yt-poloreef",
+   "source_name": "Polo Reef",
+   "title": "450 FISH IN TROUBLE! WHAT WENT WRONG!",
+   "url": "https://www.youtube.com/watch?v=RvzGsxnKY50",
+   "published_at": "2026-11-20T15:00:10Z",
+   "author": "Polo Reef by Andrew Sandler",
+   "raw_text": "Things are getting intense at Polo Reef! After 450 stunning Anthias arrived, unexpected challenges put the Polo Reef team to the test. Meanwhile, Michelle dives into the massive 17,000-gallon reef aquarium to make room for new coral colonies, but a surprising discovery raises more questions. From fish quarantine challenges and mysterious coral pests to rare marine life and new developments, this episode is full of unexpected twists. Join Andrew and the Polo Reef team as they tackle the challenges of maintaining one of the world's most extraordinary private reef aquariums. Subscribe to Polo Reef for more behind-the-scenes reefkeeping, coral aquaculture, marine fish, and saltwater aquarium adventures! *************************** ☛ SUBSCRIBE for the latest https://www.youtube.com/c/PoloReefbyAndrewSandler?sub_confirmation=1 *************************** ☘ GIVEAWAYS + more! Join our mailing list for updates: https://www.poloreef.com/pages/youtube-subscribe-email-sms *************************** ➜ WEBSITE: https://www.PoloReef.com *************************** ♕ MERCHANDISE Official Gear for charity: https://www.poloreef.com/collections/all ************************** ❤ Get SOCIAL! Facebook: https://www.facebook.com/Poloreef1966 Instagram: https://www.instagram.com/polo_reef/ ************************** ✨ POLO UNIVERSITY SERIES Follow this educational series here: https://www.youtube.com/playlist?list=PLXXipQ6zX0ZsYqmOW9v78SVlIMyquUsiK *************************** Thank you for being part of the Polo Reef journey! - Andrew Sandler -----------------------------------",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "RvzGsxnKY50",
+    "duration_s": "891",
+    "gist": "Polo Reef documents challenges with 450 arriving Anthias, quarantine issues, and coral pests in their 17,000-gallon display. Real-world husbandry problems at scale offer practical lessons for managing large mixed systems.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Australian Journal of Forensic Sciences",
+   "title": "Attenuated total reflectance infrared spectroscopy as a potential tool for the identification of illegally traded black corals",
+   "url": "https://doi.org/10.1080/00450618.2026.2764120",
+   "published_at": "2026-11-17T00:00:00Z",
+   "author": "Barbara H. Stuart et al.",
+   "raw_text": "Black corals have long been used to produce decorative objects and in traditional medicine. To mitigate the impact of international trade on these corals, all species in the order Antipatharia are listed in Appendix II of the Convention on International Trade in Endangered Species of Wild Fauna and Flora. To control the illegal trade of black corals, there is a need for a presumptive method of identifying genuine black corals as it can be difficult to carry out taxonomic identification by visual observation alone. An investigation of the application of attenuated total reflectance infrared spectroscopy to black coral identification has been carried out. Processed coral objects show consistent recognizable protein spectra. Unprocessed black corals produce more variable spectra, but characteristic protein- or chitin-dominant spectra can be used to identify raw black coral specimens. This non-destructive infrared technique can also be used to quickly distinguish genuine black coral from naturally occurring and man-made black materials that may be used to simulate coral.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Australian Journal of Forensic Sciences",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1080/00450618.2026.2764120",
+    "gist": "Infrared spectroscopy offers a presumptive method to identify illegal black coral trade and distinguish genuine specimens. This tool supports enforcement of CITES protections on threatened Antipatharia species.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "We Built a Copepod Factory at the Coral Farm",
+   "url": "https://reefs.com/we-built-a-copepod-factory-at-the-coral-farm/",
+   "published_at": "2026-11-19T15:00:51Z",
+   "author": "Tidal Gardens",
+   "raw_text": "&#8230; The post We Built a Copepod Factory at the Coral Farm appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Coral farm implements copepod cultivation system for live food production. Scaling live-feed propagation directly improves nutrition and husbandry protocols in captive coral systems.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "ubcoceans-bsky",
+   "source_name": "UBC Oceans — Bluesky",
+   "title": "Centuries of bottom trawling and human impact have stripped the North Sea of its oysters",
+   "url": "https://bsky.app/profile/ubcoceans.bsky.social/post/3n2lxdi7ffc2n",
+   "published_at": "2026-11-18T16:15:00Z",
+   "author": null,
+   "raw_text": "Centuries of bottom trawling and human impact have stripped the North Sea of its oysters. Oysters capable of filtering water could well restore water cleanliness and the marine ecosystem. https://www.rte.ie/news/a-european-perspective/2026/1116/1599413-oyster-releases-in-the-north-sea/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "North Sea oyster populations depleted by trawling; restoration underway using filter feeders. Historical ecosystem collapse and recovery relevant to reef resilience principles.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "coralcitycam-bsky",
+   "source_name": "Coral City Camera — Bluesky",
+   "title": "Have you ever seen coral grow like this before?",
+   "url": "https://bsky.app/profile/coralcitycamera.bsky.social/post/3n2jojmls4s24",
+   "published_at": "2026-11-17T18:32:00Z",
+   "author": null,
+   "raw_text": "Have you ever seen coral grow like this before? Witness now 317 days of growth of ACER ‘Ventura’, our urban staghorn coral superstar defying convention & thriving against all odds 🪸💪🪸 ACER Ventura gives us hope that with the right genetics we can produce offspring that can restore Miami’s reefs!",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Laboratory-reared Acropora cervicornis 'Ventura' staghorn coral shows exceptional growth over 317 days in Miami. Captive-bred resilient genotypes offer hope for reef restoration if the strain can be scaled and outplanted.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "International Journal of Digital Earth",
+   "title": "ReefFM-SCS: physics-guided foundation-model-assisted weakly supervised framework for fine and stable coral reef extent mapping in the South China Sea",
+   "url": "https://doi.org/10.1080/17538947.2026.2750721",
+   "published_at": "2026-11-17T00:00:00Z",
+   "author": "Xue Liu et al.",
+   "raw_text": "Coral reef extent mapping remains difficult in shallow, optically complex environments affected by water depth, optical attenuation, benthic mixing, and tidal disturbance. This challenge is acute in the South China Sea, where reefs are highly heterogeneous, manual annotation is costly, and existing global boundary products often lack local precision. We developed ReefFM-SCS, a physics-guided, foundation-model-assisted weakly supervised framework for fine and stable coral reef extent mapping. The framework integrates Allen Coral Atlas priors, bathymetry, the diffuse attenuation coefficient (Kd), spectral indices, and a dual-branch optical/physical-prior segmentation network. Rather than serving as the final segmenter, SAM2 is used only for candidate generation; reef-scale adaptive physical constraints guide pseudo-label construction, while quality-weighted multi-temporal fusion integrates annual predictions from 2016 to 2025. The resulting product represents the multi-year stable geomorphic reef-flat extent across major islands and reefs in the South China Sea with high spatial continuity. Compared with the Allen Coral Atlas baseline, precision, recall, F1 score, and IoU improved from 0.84, 0.86, 0.84, and 0.74 to 0.93, 0.95, 0.93, and 0.88, while the boundary metric increased from 0.22 to 0.53. The resulting product provides a consistent spatial baseline for reef habitat mapping, environmental assessment, and related regional applications.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "International Journal of Digital Earth",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1080/17538947.2026.2750721",
+    "gist": "A new AI-assisted framework maps coral reef extent in the South China Sea with improved precision over global datasets. Better reef mapping supports conservation planning and monitoring in optically complex tropical waters.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "ubcoceans-bsky",
+   "source_name": "UBC Oceans — Bluesky",
+   "title": "After falling short the first time, the Trump administration is again trying to roll back protections on…",
+   "url": "https://bsky.app/profile/ubcoceans.bsky.social/post/3n2gxdhrzis2l",
+   "published_at": "2026-11-16T16:32:00Z",
+   "author": null,
+   "raw_text": "After falling short the first time, the Trump administration is again trying to roll back protections on culturally significant and ecologically vital Pacific waters. https://insideclimatenews.org/news/13112026/trump-commercial-fishing-plan-in-protected-pacific-waters/",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "The Trump administration is pursuing rollback of Pacific marine protections for culturally significant and ecologically vital waters. Changes to protected-area status directly affect wild-reef conservation.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "asfb-bsky",
+   "source_name": "Australian Society for Fish Biology — Bluesky",
+   "title": "📑 NEW SHORT COMMUNICATION: Cortelezzi et al. spot an unusual relationship between a young fish and protective…",
+   "url": "https://bsky.app/profile/austsocfishbiol.bsky.social/post/3n2miwlgzdn2g",
+   "published_at": "2026-11-18T21:30:00Z",
+   "author": null,
+   "raw_text": "📑 NEW SHORT COMMUNICATION: Cortelezzi et al. spot an unusual relationship between a young fish and protective crustacean. 👀 https://doi.org/10.1007/s12526-026-01719-0",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Research on symbiotic relationship between young fish and protective crustacean. Headline alone provides insufficient detail to assess reef relevance or novelty.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "The European Zoological Journal",
+   "title": "The return of red coral: zoology, fisheries and resource management in French colonial Algeria and post-Unification Italy",
+   "url": "https://doi.org/10.1080/24750263.2026.2761793",
+   "published_at": "2026-11-18T00:00:00Z",
+   "author": "Giorgio Bavestrello",
+   "raw_text": "Red coral (Corallium rubrum) was a major subject of eighteenth-century natural history, but during the first half of the nineteenth century it largely ceased to be an autonomous focus of biological investigation. From the 1860s onwards, however, red coral again attracted considerable scientific attention in France and, particularly, in post-Unification Italy. This study examines the reasons for this resurgence by reconstructing the interaction between zoological research, red coral fishing and public administration. Lacaze-Duthiers transformed a problem arising from the regulation of the Algerian fishery into a comprehensive investigation of red coral biology, which remained the principal biological reference for subsequent Italian authors. Italian research generally developed in a different direction. Ministerial enquiries and commissions increasingly focused on the location and productivity of fishing grounds, the incorporation of fishermen’s knowledge into administrative surveys, the biological and environmental interpretation of the exceptional Sciacca deposits, and the cartographic representation of Sardinian red coral grounds. Responses to declining yields followed three complementary strategies: prospecting displaced exploitation towards newly discovered grounds, rotational harvesting sought to regulate it in time, and coralliculture explored the possibility of actively renewing or establishing productive populations. Recognition of local depletion therefore coexisted with continuing confidence in the wider availability of the resource. In the economic and social context of post-Unification Italy, the recurrent involvement of the State in red coral research illustrates how zoological expertise could be mobilized to investigate and develop an economically important marine resource. The history of red coral thus shows that the problems generated by exploitation did not merely determine how existing biological knowledge was applied but also helped determine whic",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "The European Zoological Journal",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1080/24750263.2026.2761793",
+    "gist": "Historical study of red coral (Corallium rubrum) research, fishing, and regulation in Algeria and Italy from the 1800s onward. Red coral's role in Mediterranean reefs and its trade history matters, though the focus is historiography rather than current biology.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "gsr-bsky",
+   "source_name": "Great Southern Reef Foundation — Bluesky",
+   "title": "Port Phillip Bay has much less drifting seaweed than in the 1990s",
+   "url": "https://bsky.app/profile/greatsouthernreef.bsky.social/post/3n2eycq2wfk2c",
+   "published_at": "2026-11-15T21:44:00Z",
+   "author": null,
+   "raw_text": "Port Phillip Bay has much less drifting seaweed than in the 1990s. Researchers suggest reduced nitrogen inputs likely contributed, but the study did not establish the cause. Drifting seaweed is part of coastal food webs and can also accumulate excessively. https://greatsouthernreef.com/news#drifting-seaweed",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Port Phillip Bay drifting seaweed biomass declined from the 1990s; reduced nitrogen inputs suspected but unconfirmed. Nutrient cycling in coastal ecosystems informs reef systems, though causation remains uncertain.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "coralcitycam-bsky",
+   "source_name": "Coral City Camera — Bluesky",
+   "title": "Adapt or die, only the strong survive",
+   "url": "https://bsky.app/profile/coralcitycamera.bsky.social/post/3n2oiis5bec23",
+   "published_at": "2026-11-19T16:28:00Z",
+   "author": null,
+   "raw_text": "Adapt or die, only the strong survive. Welcome to Coral City where the rocks are alive. 325 days of ACER Ventura, the toughest staghorn coral in Florida, flexing in the Rubble Zone 💪🪸🪸🪸📈🌇 #givemiamiday #staghorncoral #acerventura #supercoral #coralcitycamera",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Coral City Camera tracks 325 days of a monitored staghorn coral (Acerventura) in the Rubble Zone. Long-term visual documentation of a threatened species under Florida's restoration efforts provides useful recovery data.",
+    "relevance": "0.50"
+   }
+  }
+ ]
+}
