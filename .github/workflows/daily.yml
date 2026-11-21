@@ -138,19 +138,33 @@ jobs:
         env:
           EVENT: ${{ github.event_name }}
           IN_AUTOMATIC: ${{ inputs.automatic }}
+        #
+        # "Already published" means this WEEK's issue, not today's date. On
+        # 2026-11-20 the 18:47 UTC catch-up started 5½ hours late, at 00:19
+        # UTC — still Friday afternoon in California, already Saturday by
+        # `date -u`. It looked for a 2026-11-21 page, found none, and built and
+        # emailed a second, 2-item issue. So an automatic run now skips if any
+        # issue was published in the last WEEK_WINDOW days, whatever side of
+        # midnight UTC it lands on. GUARD_TODAY exists only so a test can pin
+        # the date; nothing in this workflow sets it.
         run: |
           set -eu
-          today="$(date -u +%F)"
-          page="site/issues/${today}.html"
+          WEEK_WINDOW=6
+          today="${GUARD_TODAY:-$(date -u +%F)}"
+          recent=""
+          for back in $(seq 0 "$WEEK_WINDOW"); do
+            day="$(date -u -d "$today - $back days" +%F)"
+            if [ -f "site/issues/${day}.html" ]; then recent="site/issues/${day}.html"; break; fi
+          done
           if [ "$EVENT" != "schedule" ] && [ "$IN_AUTOMATIC" != "true" ]; then
             echo "Manual run — building regardless of what is already published."
             echo "build=true" >> "$GITHUB_OUTPUT"
-          elif [ -f "$page" ]; then
-            echo "$page is already committed; an earlier run published today's issue."
+          elif [ -n "$recent" ]; then
+            echo "$recent is already committed; this week's issue is out."
             echo "Nothing to do — another automatic run got here first." >> "$GITHUB_STEP_SUMMARY"
             echo "build=false" >> "$GITHUB_OUTPUT"
           else
-            echo "No $page yet — building today's issue."
+            echo "No issue in the last $WEEK_WINDOW days — building this week's."
             echo "build=true" >> "$GITHUB_OUTPUT"
           fi
 
@@ -281,6 +295,10 @@ jobs:
           # before letting it run unattended. A manual dispatch still has to
           # tick the box, because a mid-week dispatch is usually a test.
           IN_SEND: ${{ inputs.send || (github.event_name == 'schedule' || inputs.automatic) }}
+          # The automatic Friday run, by either scheduler. The CLI then refuses
+          # to send if any issue reached the list in the last week — the last
+          # line behind the guard's same rule.
+          IN_WEEKLY: ${{ github.event_name == 'schedule' || inputs.automatic }}
         run: |
           ARGS=""
           if [ -n "$IN_SOURCE" ]; then ARGS="$ARGS --source $IN_SOURCE"; fi
@@ -292,6 +310,7 @@ jobs:
           fi
           if [ -n "$IN_THRESHOLD" ]; then ARGS="$ARGS --threshold $IN_THRESHOLD"; fi
           if [ "$IN_SEND" = "true" ]; then ARGS="$ARGS --send"; fi
+          if [ "$IN_WEEKLY" = "true" ]; then ARGS="$ARGS --weekly"; fi
           # --print puts the issue in the log as text. The page ships as an
           # artifact, but reviewing the editorial judgment shouldn't require
           # downloading and unzipping anything.

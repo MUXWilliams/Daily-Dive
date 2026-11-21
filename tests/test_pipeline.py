@@ -3384,10 +3384,12 @@ def test_the_catch_up_run_cannot_publish_a_second_issue():
     assert guard["outputs"]["build"] == "${{ steps.check.outputs.build }}"
 
     script = "".join(step.get("run", "") for step in guard["steps"])
-    # Published means the dated permalink exists, which is what the archive
+    # Published means a dated permalink exists, which is what the archive
     # actually consists of — not a run-history lookup, which a re-run breaks.
-    assert "site/issues/${today}.html" in script
-    assert "date -u +%F" in script, "UTC, matching cli.py's datetime.now(UTC)"
+    # Any permalink in the last week, not only today's: see
+    # test_a_late_fallback_after_midnight_utc_does_not_send_a_second_issue.
+    assert 'site/issues/${day}.html' in script
+    assert "date -u" in script, "UTC, matching cli.py's datetime.now(UTC)"
     # A manual dispatch is never skipped: someone running it by hand usually
     # wants to replace what the automatic run produced.
     assert '"$EVENT" != "schedule"' in script
@@ -4205,3 +4207,87 @@ def test_every_signup_box_offers_the_feed_once_and_the_email_links_it(tmp_path):
     email = render.render_email(Issue(date=datetime(2026, 10, 23, tzinfo=UTC), items=[item()]))
     assert f'href="{brand.SITE_URL}/feed.xml"' in email
     assert "Prefer a feed reader?" not in email
+
+
+# --- one issue a week -------------------------------------------------------
+#
+# 2026-11-20: the Worker sent the week's issue at 07:00 PST. GitHub's 18:47 UTC
+# catch-up then started at 00:19 UTC on the 21st — still Friday afternoon in
+# California — so a guard that compared against `date -u +%F` looked for a
+# 2026-11-21 page, found none, and built and emailed a second, 2-item issue.
+
+
+def _guard_script() -> str:
+    import yaml
+
+    steps = yaml.safe_load(WORKFLOW_TEXT)["jobs"]["guard"]["steps"]
+    return "".join(step.get("run", "") for step in steps)
+
+
+def _run_guard(tmp_path, *, today, event="schedule", automatic=""):
+    import os
+    import subprocess
+
+    out, summary = tmp_path / "out", tmp_path / "summary"
+    out.write_text("")
+    summary.write_text("")
+    env = {**os.environ, "EVENT": event, "IN_AUTOMATIC": automatic, "GUARD_TODAY": today,
+           "GITHUB_OUTPUT": str(out), "GITHUB_STEP_SUMMARY": str(summary)}
+    subprocess.run(["bash", "-c", _guard_script()], cwd=tmp_path, env=env, check=True,
+                   capture_output=True, text=True)
+    return out.read_text().strip()
+
+
+def test_a_late_fallback_after_midnight_utc_does_not_send_a_second_issue(tmp_path):
+    """Runs the guard's own script against the 2026-11-20 week."""
+    import subprocess
+
+    if subprocess.run(["date", "-u", "-d", "2026-11-21 - 1 days", "+%F"],
+                      capture_output=True).returncode != 0:
+        pytest.skip("needs GNU date, as on GitHub's ubuntu runners")
+    (tmp_path / "site" / "issues").mkdir(parents=True)
+    (tmp_path / "site" / "issues" / "2026-11-20.html").write_text("published")
+
+    # The incident: same Friday, already Saturday by UTC.
+    assert _run_guard(tmp_path, today="2026-11-21") == "build=false"
+    # The morning's own fallbacks, and any lateness short of a week.
+    for today in ("2026-11-20", "2026-11-22", "2026-11-26"):
+        assert _run_guard(tmp_path, today=today) == "build=false", today
+    # The Worker's dispatch is automatic too, and skips the same way.
+    assert _run_guard(tmp_path, today="2026-11-21", event="workflow_dispatch",
+                      automatic="true") == "build=false"
+    # Next Friday builds.
+    assert _run_guard(tmp_path, today="2026-11-27") == "build=true"
+    # A manual run always builds.
+    assert _run_guard(tmp_path, today="2026-11-21", event="workflow_dispatch",
+                      automatic="false") == "build=true"
+
+
+def test_the_guard_and_the_send_check_look_back_the_same_week():
+    window = re.search(r"WEEK_WINDOW=(\d+)", _guard_script()).group(1)
+    assert int(window) == cli.WEEK_WINDOW_DAYS == 6
+
+
+def test_a_weekly_run_will_not_send_if_any_issue_went_out_this_week(tmp_path):
+    """The last line behind the guard, at the store: a send on the 20th is
+    found from the 21st, and a send a week earlier is not."""
+    db = tmp_path / "db.sqlite3"
+    with store.connect(db) as conn:
+        store.record_sent(conn, "2026-11-20", 31)
+        assert store.last_sent_since(conn, "2026-11-15")[0] == "2026-11-20"
+        assert store.last_sent_since(conn, "2026-11-21") is None
+
+    src = Path("dailydive/cli.py").read_text(encoding="utf-8")
+    run = src.split("if _is_publishing_run(args):\n        # The seen log", 1)[1]
+    check = run.index("if args.weekly and not already_sent:")
+    send = run.index("print(deliver.send(issue, render.render_email(")
+    assert check < run.index("if args.send and already_sent:") < send
+
+
+def test_only_the_automatic_run_passes_weekly():
+    import yaml
+
+    steps = {s.get("name"): s for s in yaml.safe_load(WORKFLOW_TEXT)["jobs"]["build"]["steps"]}
+    build = steps["Build issue from live feeds"]
+    assert build["env"]["IN_WEEKLY"] == "${{ github.event_name == 'schedule' || inputs.automatic }}"
+    assert 'if [ "$IN_WEEKLY" = "true" ]; then ARGS="$ARGS --weekly"; fi' in build["run"]

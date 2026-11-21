@@ -13,7 +13,7 @@ import imaplib
 import logging
 import os
 import sys
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import httpx
@@ -33,6 +33,11 @@ FIXTURE_DIR = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
 # run built from one already committed, nor a failed send from a failed issue.
 BUILT_MARKER = Path(".run-built")
 SEND_FAILED_MARKER = Path(".send-failed")
+
+# One issue a week. The automatic run's guard (in daily.yml) and its last-line
+# send check both look back this many days, so a late run on either side of
+# midnight UTC still finds the week's issue. A test holds the two equal.
+WEEK_WINDOW_DAYS = 6
 
 
 def _collect_mail(source: Source, days: int, client: httpx.Client) -> list[Item]:
@@ -303,6 +308,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--send",
         action="store_true",
         help="email the issue to the list after publishing (needs BUTTONDOWN_API_KEY)",
+    )
+    run.add_argument(
+        "--weekly",
+        action="store_true",
+        help="this is the automatic Friday run: never send if an issue went out in the last "
+        f"{WEEK_WINDOW_DAYS} days",
     )
     run.add_argument(
         "--threshold",
@@ -905,6 +916,14 @@ def main(argv: list[str] | None = None) -> int:
         # be redeployed; an inbox cannot.
         with store.connect(args.db) as conn:
             already_sent = store.sent_at(conn, f"{issue.date:%Y-%m-%d}")
+            if args.weekly and not already_sent:
+                # A week, not a date. On 2026-11-20 a fallback run started
+                # after midnight UTC, dated its issue the 21st, and so passed a
+                # same-date check and emailed a second issue the same evening.
+                since = issue.date - timedelta(days=WEEK_WINDOW_DAYS)
+                recent = store.last_sent_since(conn, f"{since:%Y-%m-%d}")
+                if recent:
+                    already_sent = f"{recent[1]} (the {recent[0]} issue — one a week)"
         if args.send and already_sent:
             # Two independent schedulers now start the Friday run — the
             # Cloudflare Worker and GitHub's own cron as a fallback — and the

@@ -209,6 +209,15 @@ def sent_at(conn: sqlite3.Connection, issue_date: str) -> str | None:
     return row[0] if row else None
 
 
+def last_sent_since(conn: sqlite3.Connection, since: str) -> tuple[str, str] | None:
+    """The latest (issue_date, sent_at) sent on or after `since` (YYYY-MM-DD), if any."""
+    row = conn.execute(
+        "SELECT issue_date, sent_at FROM sent WHERE issue_date >= ? ORDER BY issue_date DESC LIMIT 1",
+        (since,),
+    ).fetchone()
+    return (row[0], row[1]) if row else None
+
+
 def record_scores(
     conn: sqlite3.Connection,
     scores: dict[str, object],
