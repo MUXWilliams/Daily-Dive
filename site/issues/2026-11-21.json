@@ -1,0 +1,39 @@
+{
+ "date": "2026-11-21T00:21:07.568196Z",
+ "items": [
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Nucleic Acids Research",
+   "title": "CoralDB: a comprehensive functional and evolutionary multi-omics database for stony corals",
+   "url": "https://doi.org/10.1093/nar/gkag1210",
+   "published_at": "2026-11-19T00:00:00Z",
+   "author": "Caiyin Tang et al.",
+   "raw_text": "Stony corals are foundation species of coral reef ecosystems, yet their biology remains insufficiently explored from an integrative multi-omics perspective. Although the rapid accumulation of genomic and other omics resources offers opportunities to understand coral evolution, development, adaptation, and symbiosis, accessing and utilizing these resources remain challenging. Here, we present CoralDB (http://www.coraldb.net), a comprehensive, genome-centered multi-omics resource that systematically consolidates multi-omics, evolutionary, ecological, and phenotypic data for stony corals and their holobionts. CoralDB covers 414 species and integrates approximately 19 421 datasets, including 12 data dimensions. Moreover, CoralDB offers valuable customized datasets and analytical resources, including standardized functional annotations, gene-family and pan-genome profiles, macro- and microsynteny analyses, spatiotemporal expression patterns, cell-type markers, phylogenetic resources, and symbiont-associated data. An integrated genome browser and interactive modules support flexible data querying, filtering, analysis, visualization, and links to public databases. CoralDB provides an accessible and extensible platform that will help the coral research community manage expanding multi-omics resources, accelerate discoveries in coral biology, evolution, symbiosis, and conservation, and facilitate deeper understanding of reef resilience under accelerating global environmental change.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Nucleic Acids Research",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1093/nar/gkag1210",
+    "gist": "CoralDB consolidates genomic, transcriptomic, and phenotypic data for stony corals across evolution, development, and symbiosis. This resource enables research into coral biology and stress responses directly applicable to understanding what corals need to thrive.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Marine Pollution Bulletin",
+   "title": "Integrating transcriptomics into environmental risk assessment: gene sensitivity distributions for coral exposed to 1-methylnaphthalene",
+   "url": "https://doi.org/10.1016/j.marpolbul.2026.120580",
+   "published_at": "2026-11-19T00:00:00Z",
+   "author": "Heidi M. Luter et al.",
+   "raw_text": "Transcriptomic approaches have the potential to complement traditional toxicity endpoints by providing sensitive, mechanistically informative measures of contaminant exposure. However, their application in environmental risk assessment remains limited due to the lack of robust, scientifically defensible thresholds. Here, we developed a novel framework for deriving gene-specific toxicity thresholds and a Gene Sensitivity Distribution (GSD) for Acropora millepora coral larvae following a 48-h exposure to the reference petroleum hydrocarbon 1-methylnaphthalene (1-MN) and compared these thresholds against a traditional apical endpoint. Using a multivariate Bayesian modelling approach, robust no-significant-effect-concentrations (NSECs) were derived for selected 78 responsive genes to 1-MN exposure. These thresholds were combined into a GSD from which gene hazard concentrations were estimated at 1.3, 6.7, 15.2 and 281 μg L −1 1-MN for 1, 5, 10 and 50% of responsive genes affected, respectively. Larval metamorphosis was highly sensitive to 1-MN exposure, confirming its value as a robust endpoint for hydrocarbon toxicity assessment. However, several gene-level thresholds occurred at concentrations below those affecting metamorphosis, demonstrating that molecular responses can be more sensitive than whole-organism endpoints. While the ecological relevance of some responsive genes remains uncertain, reduced expression of genes associated with signalling pathways and extracellular matrix processes may have contributed to impaired metamorphosis at higher 1-MN concentrations. This study is the first to derive a GSD for coral larvae and demonstrates how gene-specific thresholds can be integrated into a risk assessment framework, providing a pathway for incorporating omics-derived sensitivity metrics into environmental decision-making.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Marine Pollution Bulletin",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1016/j.marpolbul.2026.120580",
+    "gist": "Researchers developed toxicity thresholds for coral larvae exposed to petroleum hydrocarbons using gene expression. Understanding contaminant sensitivity at the molecular level informs what water quality and bioload matter for keeping corals healthy.",
+    "relevance": "0.70"
+   }
+  }
+ ]
+}
