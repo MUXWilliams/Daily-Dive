@@ -1,0 +1,402 @@
+{
+ "date": "2026-11-28T01:44:05.973258Z",
+ "items": [
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Scientific Reports",
+   "title": "Escalating marine heatwaves drive taxonomic and functional trait loss in the world’s warmest coral reefs",
+   "url": "https://doi.org/10.1038/s41598-026-81704-6",
+   "published_at": "2026-11-26T00:00:00Z",
+   "author": "Samara Zinman et al.",
+   "raw_text": "The Persian/Arabian Gulf (‘the Gulf’) is an extreme, high-temperature ecosystem already experiencing thermal regimes projected for reefs elsewhere by 2100, making it a natural laboratory for anticipating future coral community trajectories under climate change. Extreme temperatures have driven well-documented declines in Gulf coral communities; however, their consequences for coral traits remain largely unexplored. Here, we applied a response-effect trait-based framework to 16 years of Gulf coral survey data to show that recurrent marine heatwaves and associated taxonomic losses drove an approximately 50% decline in functional richness, leaving coral communities increasingly reliant on fewer taxa. Trait composition shifted toward more disturbance-tolerant but less structurally complex growth forms, indicating functional simplification and homogenization. Our findings highlight that climate-driven declines in functional richness may reduce the capacity of coral communities to maintain key ecosystem processes under projected warming, underscoring the importance of conserving functional richness and the taxa that sustain it.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Scientific Reports",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1038/s41598-026-81704-6",
+    "relevance": "0.90"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Science Advances",
+   "title": "Signals of rapid genetic change in reef coral over time and following mass mortality",
+   "url": "https://doi.org/10.1126/sciadv.aeh7301",
+   "published_at": "2026-11-25T00:00:00Z",
+   "author": "Kate M. Quigley et al.",
+   "raw_text": "Future coral reef persistence amidst accelerating climate change depends on rapid adaptive capacity. Sixteen years (2003 to 2019) of genetic data (N = 903) spanning mass mortality events uncovered polygenic signals of evolution and population structure in one Great Barrier Reef coral species (Acropora tenuis) and a similar but nonsignificant trend in another (Acropora millepora). Random forest revealed larger genetic shifts postbleaching compared to other time points, which was further supported by critical transitions in 34 years of remotely sensed thermal data (1985 to 2018). Concordant signals across multiple genomic ordinations confirmed significant shifts postbleaching. Specifically, three genetic variants contributed significantly to key random forest splits over time in A. tenuis. Significant genome-wide covariance in allele frequencies suggests shifts due to selection, not drift. This suggests that coral gene pools are changing, and measurable evolution can happen over subdecadal timescales, giving hope for coral resilience amid the ongoing climate crisis. However, we caution against overoptimism, and stress emissions must be urgently reduced.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Science Advances",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1126/sciadv.aeh7301",
+    "relevance": "0.88"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Coral Reefs",
+   "title": "Depth-dependent transcriptomic responses to thermal stress, including transcriptional frontloading, provide preliminary insights into the deep refugia hypothesis in a Mediterranean coral",
+   "url": "https://doi.org/10.1007/s00338-026-02972-2",
+   "published_at": "2026-11-23T00:00:00Z",
+   "author": "Sandra Ramirez‐Calero et al.",
+   "raw_text": "Marine heatwaves (MHWs) pose significant threats to marine biodiversity, including Mediterranean octocorals. The deep refugia hypothesis considers mesophotic populations as sources for recolonization and restoration of shallow coral populations threatened by MHWs. Using a common-garden experiment, we tested whether transcriptomic responses to thermal stress differ between shallow and mesophotic populations of Corallium rubrum and looked for underlying processes, including transcriptional frontloading. Six individuals from one shallow (15 m) and one mesophotic (48 m) population were exposed to thermal stress in aquaria, with samples collected at day 0, 5, and 10 for RNA sequencing. We revealed 2670 differentially expressed genes (DEGs) in response to heat stress. Mild transcriptomic responses were observed in the shallow population (692 DEGs), characterized by heat shock proteins (HSPs) and developmental regulation, whereas stronger responses were observed in the mesophotic population with more than twice as many DEGs (1645), associated with stress and wound healing mechanisms. Temporal transcriptional shifts were larger in the mesophotic compared to the shallow population. Among the upregulated DEGs found in the mesophotic population under thermal stress, 314, including HSPs, showed high expression in the shallow compared to the mesophotic population under control conditions, suggesting transcriptional frontloading. These results suggest that the mesophotic population examined here may have limited potential to serve as a source for the restoration of the shallow population, providing preliminary insights into the deep refugia hypothesis in C. rubrum. Our findings underscore the importance of incorporating population-specific thermal responses into coral restoration strategies.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Coral Reefs",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s00338-026-02972-2",
+    "gist": "Research on Corallium rubrum shows mesophotic populations exhibit transcriptional adaptations to thermal stress, suggesting deep refugia may aid shallow-population restoration. Directly relevant to understanding coral heat tolerance and restoration potential.",
+    "relevance": "0.80"
+   }
+  },
+  {
+   "source_id": "asfb-bsky",
+   "source_name": "Australian Society for Fish Biology — Bluesky",
+   "title": "📑 #NewStudy by Rose et al. test the balance between different herbivores – fishes and urchins – in tropical…",
+   "url": "https://bsky.app/profile/austsocfishbiol.bsky.social/post/3n3amoargax26",
+   "published_at": "2026-11-26T21:30:00Z",
+   "author": null,
+   "raw_text": "📑 #NewStudy by Rose et al. test the balance between different herbivores – fishes and urchins – in tropical and temperate habitats, thereby exploring the consequences of reefs tropicalising in a warming climate. 👀 https://doi.org/10.1007/s00442-026-05997-0",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Study compares herbivory by fish and urchins across tropical and temperate reefs, examining shifts as reefs warm. Understanding which herbivores control algae under warming has direct implications for reef stability.",
+    "relevance": "0.78"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Environmental Microbiology",
+   "title": "Distance‐ and Direction‐Dependent Effects of Macroalgae on Early Epilithic Bacterial Assemblages and Coral Settlement Processes",
+   "url": "https://doi.org/10.1111/1462-2920.70476",
+   "published_at": "2026-11-25T00:00:00Z",
+   "author": "Chloé Pozas‐Schacre et al.",
+   "raw_text": "While the expansion of macroalgae on coral reefs is a global concern, the spatial scales and mechanisms through which macroalgae inhibit coral recruitment processes and the role of epilithic bacteria in coral settlement remain inadequately understood. Using tiles preconditioned at three distances of two algal species in both up and down-current directions, we show that macroalgae shape early epilithic bacterial assemblages, with strong effects 1 cm downstream of both algae. When exposing the tiles to larvae of two coral species in ex situ settlement experiments, the coral Acropora pulchra showed reduced larval settlement on cryptic surfaces of tiles conditioned 1 cm up and downstream of the alga Dictyota bartayresiana, whereas the coral Pocillopora acuta showed the opposite pattern. Specific bacterial taxa within the families Bdellovibrionaceae, Pirellulaceae, Flavobacteriaceae and Rhodobacteraceae were associated with P. acuta settlement with differences across algal species. When tiles with coral spat were returned to their initial positions on the reef, spat survival was consistently reduced closer to, and particularly 1 cm downstream of, D. bartayresiana. These results demonstrate that macroalgae influence coral settlement and post-settlement survival at centimetre scales through distance- and flow-dependent effects and indicate that these effects may be mediated by epilithic bacterial assemblages.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Environmental Microbiology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1111/1462-2920.70476",
+    "gist": "Research shows macroalgae inhibit coral recruitment by altering epilithic bacteria at specific distances and directions. This directly explains a critical mechanism of reef decline and coral settlement suppression that keepers managing algae-prone tanks should understand.",
+    "relevance": "0.78"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Coral Reefs",
+   "title": "From coral reefs to gorgonian forests: shared cues and hierarchical settlement in a temperate octocoral (Paramuricea sp.)",
+   "url": "https://doi.org/10.1007/s00338-026-02956-2",
+   "published_at": "2026-11-26T00:00:00Z",
+   "author": "Christina Egger et al.",
+   "raw_text": "Larval settlement represents one of the most critical stages in the life cycle of many marine organisms. However, the underlying mechanisms remain poorly understood, particularly in ecologically important, habitat-forming temperate and cold-water octocorals. In tropical shallow-water corals, settlement is frequently associated with crustose coralline algae (CCA) and their associated microbial communities, as well as with the fine-scale topography of the substrate surface. Whether comparable processes also operate in temperate coral forests remains largely unknown. In this study, we used complementary behavioural observations, experimental approaches, and spatial analyses to investigate the biological and physical factors associated with larval settlement in the mesophotic gorgonian Paramuricea sp. Larvae settled exclusively on natural substrates originating from different depths and with different geological compositions that were colonized by CCA associated with the family Lithophyllaceae, whereas no settlement occurred on artificial substrates, substrates colonized by other CCA, or bare CCA fragments. Experimental exposure to the CCA-associated bacterial metabolite cycloprodigiosin, previously identified as a settlement cue in tropical corals, also induced uptake of the compound and, to some extent, subsequent larval settlement under laboratory conditions. This suggests that comparable bacterial metabolites might also be involved in the regulation of settlement processes in temperate octocorals. Spatial analyses of settlement patterns, however, showed that larvae rarely settled directly on CCA surfaces. Instead, they first explored the substrate and subsequently attached permanently, predominantly within millimetre-scale crevices and depressions. Although the underlying mechanisms, the relative importance of the different factors, and their temporal sequence remain to be verified through targeted experimental studies, our observations are consistent with a hierarc",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Coral Reefs",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1007/s00338-026-02956-2",
+    "gist": "Larval settlement in temperate octocorals follows cues from coralline algae and substrate topology, mirroring tropical coral patterns. Understanding settlement mechanisms applies directly to propagating both soft corals and stony species in captivity.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "PeerJ",
+   "title": "Effects of marine reserves on macroinvertebrate communities in harvested coral reefs in Madagascar",
+   "url": "https://doi.org/10.7717/peerj.21895",
+   "published_at": "2026-11-24T00:00:00Z",
+   "author": "Anirà Marc Rakotonirina et al.",
+   "raw_text": "In coastal Madagascar, marine protected areas (MPAs) have emerged as a strategy for managing coupled human-natural systems shaped by ecological and social factors. While the ecological effects of MPAs on vertebrates (fish) have been relatively well documented,far less is known about effects on macroinvertebrates, despite the major socioeconomic importance of macroinvertebrate fisheries for local consumption, export markets and tourism-related ornament production. Many macroinvertebrate species inhabiting shallow coral reefs are harvested through gleaning, yet evaluations of reserve effects on these communities have largely focused on only a few species. This study evaluates broader macroinvertebrate communities in shallow intertidal coral reef habitats across 20 coastal communities in southwest (SW), northeast (NE), and northwest (NW) Madagascar. The Shannon diversity index and macroinvertebrate abundance were compared between reserve and non-reserve sites using quadrat sampling, while accounting for regional differences and substrate composition. Across Madagascar, beta regression showed no significant effect of reserve status on the Shannon diversity index. In contrast, a negative binomial-generalized linear model (GLM) revealed a significant positive reserve effect on mean macroinvertebrate abundance, with areas outside marine reserves supporting 36.6% lower estimated abundance than inside reserves. Differences were primarly driven by mollusks and echinoderms. Macroinvertebrate diversity decreased with increasing turf algae and hard coral cover, while a bundance declined with macroalgae and hard coral cover. For every 1% increase in macroalgae cover, macroinvertebrate abundance decreased by approximately 0.55%, whereas a 1% increase in hard coral cover corresponded to a 2.7% decline in abundance. In contrast, abundance was positively associated with dead coral cover. Multivariate analyses further indicated that reserve status significantly influenced substrate co",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "PeerJ",
+    "section": "Journal",
+    "doi": "https://doi.org/10.7717/peerj.21895",
+    "gist": "Study documents how marine protected areas affect macroinvertebrate communities in Madagascar coral reefs. Important for understanding reserve effectiveness beyond fish populations, which dominate existing MPA research.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Analytical Chemistry",
+   "title": "Insights into Coral Skeletogenesis from Raman Lattice Mode Signatures",
+   "url": "https://doi.org/10.1021/acs.analchem.6c01277",
+   "published_at": "2026-11-23T00:00:00Z",
+   "author": "Jacob Kleboe et al.",
+   "raw_text": "Understanding the structural composition of coral skeletons is essential for predicting how environmental change influences coral resilience and long-term sustainability. As the skeleton constitutes the majority of a coral colony’s mass, its density, growth dynamics, and sensitivity to ocean chemistry are critical factors in assessing coral health and informing conservation strategies. The current study uses detailed feature analysis of Raman spectra from coral skeletons focusing on external vibrational modes (lattice modes or LaMs) to advance our understanding of coral skeleton structural composition. These low-frequency vibrational modes reflect crystalline lattice dynamics, revealing how variations in these features correspond to differences in the underlying bio-crystalline organization of aragonitic skeletons. Our analysis highlights the sensitivity of LaM features to structural disorder, particularly in highly disordered polymorphs of calcium carbonate. Employing Raman “strip” mapping as an efficient, spatially resolved technique, we capture fine-scale spectral variability across skeletal growth regions. We compare structural growth variations associated with differing morphologies in three coral species (Montipora digitata, Hydnophora grandis, and Stylophora pistillata), thereby understanding the physical mechanisms driving both species-specific and morphological distinctions in spectral signatures. In addition, we assess the influence of embedded organic matrices on LaM vibrational responses, revealing their contribution to the overall Raman fingerprint. Collectively, these results demonstrate the power of Raman LaM spectral analysis as a tool for probing structural order and growth dynamics in biogenic aragonitic materials such as coral skeletons.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Analytical Chemistry",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1021/acs.analchem.6c01277",
+    "gist": "Study uses Raman spectroscopy to analyze coral skeleton structure and stress responses. Understanding skeleton density and composition informs coral health assessment and resilience prediction.",
+    "relevance": "0.75"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Spatial exposure of Mauritanian cold-water coral ecosystems to fishing, hydrocarbon activities, and marine litter: implications for conservation",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.1844944",
+   "published_at": "2026-11-27T00:00:00Z",
+   "author": "Lenaick Menot",
+   "raw_text": "Living cold-water coral (CWC) reefs and mounds occur within the Oxygen Minimum Zone (OMZ) on the Mauritanian margin (400–650 m). Both CWC ecosystems host a rich associated fauna. In the region, they experience an increasing threat from human activities, fishing is intensified, with an annual average catch of 1.1 million tons (40% from trawlers). Also, in the last 50 years, hydrocarbon activities and seafloor littering have increased. We assess the spatial exposure and potential risks associated with these human activities on CWCs by integrating data from visual mapping of anthropogenic pressures on the seafloor with vessel monitoring systems (VMS) fishing activities data and hydrocarbon records. VMS data indicate that fishing near CWCs consists mainly of trawling for hake and shrimp, while this activity remains peripheral to live reefs, it shows a significant spatial overlap with specific fossil mound sectors (Areas A and B). Of the approximately 60 wells drilled by the hydrocarbon industry, some overlap with CWC ecosystems. Seafloor littering is medium to high (mean density 16.68 items/ha) and mostly composed of plastics, with 58% originating from fisheries. Although VMS records indicate that live reefs are not directly targeted by trawlers, fishing- related litter and debris observed on CWC reefs reveal that fisheries pose a major threat. The hydrocarbon installations will, during normal activity, only have a local impact. To safeguard these vulnerable habitats, we propose two Marine Protected Areas encompassing 205 km2 for live CWC reefs in the OMZ, where fishing and hydrocarbon activities would be prohibited.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Journal",
+    "gist": "Research maps threats to cold-water coral ecosystems off Mauritania from fishing trawlers, hydrocarbon extraction, and marine litter. Cold-water corals host rich fauna and their conservation matters for understanding reef resilience under human pressure.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "yt-wwc",
+   "source_name": "World Wide Corals",
+   "title": "18 Years of Acropora Growth & 28-Year-Old Clownfish! | Brazil Reef Tour",
+   "url": "https://www.youtube.com/watch?v=745KNVmrSQY",
+   "published_at": "2026-11-26T21:00:18Z",
+   "author": "World Wide Corals",
+   "raw_text": "Vic is still in São Paulo, Brazil - and for the first time ever, he is conducting an entire reef tour in Spanish (with English captions available in your YouTube settings). Step inside Dr. Dario’s home to see a mature 18-year-old, 190-gallon Acropora-dominated reef tank that has been thriving in the exact same spot for nearly two decades. From a pair of 28-year-old clownfish to a remarkably simple husbandry routine built on patience, a calcium reactor, and water changes only once every four months, this system proves that time and stability beat complicated gadgets every single time! In this video: • Inside Dr. Dario’s 18-year-old Acropora-dominated reef aquarium in São Paulo, Brazil. • Meet a pair of 28-year-old clownfish - older than Dr. Dario's daughters - and a decades-old clean-up crew. • Lighting & flow evolution: Transitioning from metal halides and T5s to Aqua Illumination Hydra 52HDs, Orphek LED bars, and high-PAR SPS coverage. • Minimalist husbandry: Why Dr. Dario only does water changes every 4 months and relies on a calcium reactor. • Real-world lessons in patience: Recovering from home renovation paint fumes and pruning overgrown colonies every four months. World Wide Corals: At World Wide Corals, we believe true reef-keeping success comes down to patience, consistency, and letting nature do the heavy lifting. Visiting long-standing aquariums like Dr. Dario’s reinforces how dialed-in calcium reactor stability, proven equipment longevity, and disciplined husbandry can keep SPS colonies flourishing for decades. What amazed you most about Dr. Dario’s setup—the 18-year-old reef tank, his 28-year-old clownfish, or his four-month water change schedule? Let us know in the comments below! If you enjoyed the video, like, subscribe, and turn on notifications so you don't miss our next video from World Wide Corals. Thanks for watching, and we'll see you in the next one! About This Reef: Explore this 18-year-old Acropora-dominated reef aquarium tour in São Paulo, B",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "745KNVmrSQY",
+    "duration_s": "1328",
+    "gist": "Tour of an 18-year-old Acropora tank thriving on minimal intervention—water changes every four months, calcium reactor, no complex equipment. Demonstrates that system stability and patience outweigh gadget proliferation.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "International Journal of Drug Delivery Technology",
+   "title": "Comparative SEM–EDX analysis of intestinal calcium deposition in a teleost (Sardinella longiceps) and an elasmobranch (Rhinobatos annandalei): implications for marine carbonate cycling and coral reef ecosystems",
+   "url": "https://doi.org/10.25258/ijddt.16.82s.131",
+   "published_at": "2026-11-25T00:00:00Z",
+   "author": "Jeyapraba L et al.",
+   "raw_text": "Marine teleosts precipitate carbonate minerals in their intestines and excrete them, and these precipitates contribute an estimated 3–15% of oceanic carbonate production. Whether elasmobranchs form comparable deposits is almost unknown. This study compared the morphology and elemental composition of solid material recovered from the intestinal fluid of a teleost, the Indian oil sardine (Sardinella longiceps), and an elasmobranch, the Bengal guitarfish (Rhinobatos annandalei). Intestinal fluid was filtered, and the retained material was oven-dried and analysed by scanning electron microscopy with energy-dispersive X-ray spectroscopy (SEM–EDX). Calcium was detected in both deposits. The ray-fish deposit contained 27.47 wt.% calcium (15.27 at.%), 2.32 times the 11.82 wt.% (6.22 at. %) of the sardine deposit; the difference of 15.65 ± 2.21 percentage points was about seven times the combined analytical uncertainty. The ray-fish deposit was also richer in phosphorus (14.62 vs. 6.83 wt.%), whereas the sardine deposit was dominated by silicon (21.65 vs. 3.52 wt.%) and contained aluminium (7.82 wt.%). SEM showed rosettes of spindle-shaped crystallites and ovoid granules in the ray-fish deposit, and diatom frustules in the sardine deposit. Ca/P atomic ratios (1.45 and 1.34) were consistent with calcium phosphate, while the ray-fish deposit alone held oxygen in excess of oxide stoichiometry (15.1 at.%), consistent with an additional carbonate or hydrated phase. These results provide a first elemental comparison of teleost and elasmobranch intestinal deposits and identify the mineral-phase and replicated analyses needed to assess the role of elasmobranchs in marine carbonate cycling.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "International Journal of Drug Delivery Technology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.25258/ijddt.16.82s.131",
+    "gist": "Research compares carbonate precipitation in intestines of a teleost fish versus an elasmobranch, finding implications for oceanic carbonate cycling. Understanding how marine animals contribute to reef carbonate chemistry informs broader reef ecology.",
+    "relevance": "0.72"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Anais do Congresso Brasileiro de Iniciação Científica",
+   "title": "VARIABILIDADE DO CRESCIMENTO CORALÍNEO EM BÚZIOS (RJ): UMA COMPARAÇÃO COM ANOMALIAS ASSOCIADAS AO EL NIÑO–SOUTHERN OSCILLATION (ENSO)",
+   "url": "https://doi.org/10.66221/gew3y804",
+   "published_at": "2026-11-22T00:00:00Z",
+   "author": "Giulia Ferrazzano et al.",
+   "raw_text": "This study evaluated the variability of coral growth in the Búzios region (Rio de Janeiro, Brazil) using three coral cores, comparing annual extension series with El Niño–Southern Oscillation (ENSO) anomalies and investigating the influence of coastal upwelling. The results revealed high interannual variability and a tendency toward higher growth rates during El Niño events, although this relationship was not consistent throughout the record. Approximately 70% of El Niño events and 84% of strong events coincided with increased coral growth. The findings suggest the combined influence of large-scale climatic forcing and local processes in modulating coral growth.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Anais do Congresso Brasileiro de Iniciação Científica",
+    "section": "Journal",
+    "doi": "https://doi.org/10.66221/gew3y804",
+    "gist": "Analysis of coral growth records in Brazil reveals increased growth during El Niño events, suggesting ENSO influence on coral performance. Important for understanding climate oscillation effects on wild reefs.",
+    "relevance": "0.70"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Frontiers in Marine Science",
+   "title": "Sedimentation regimes determine variations in the structure of macroalgal assemblages on coral reefs in the Eastern Tropical Pacific Ocean: a case study",
+   "url": "https://doi.org/10.3389/fmars.2026.1976839",
+   "published_at": "2026-11-25T00:00:00Z",
+   "author": "Norma López et al.",
+   "raw_text": "Introduction Coastal urbanization and land-use changes have increased terrigenous sediment inputs into tropical marine ecosystems, altering benthic habitat structure. While broad functional-group models are commonly applied to assess sedimentation impacts on coral reefs, species-level responses remain poorly understood. To evaluate the influence of local sedimentation regimes on macroalgal community structure, species composition and sediment deposition rates were monitored across five sampling periods in 2014 at two fringing reefs with contrasting environmental exposures (Caleta de Chon and Zacatoso) in the Mexican Tropical Pacific. Methods Sedimentation rates were partitioned into fine and coarse fractions, and macroalgal diversity and assemblage composition were evaluated using taxonomic identification to the species level. Results Macroalgal species diversity (H’) exhibited significant spatial contrasts during May (t = 3.55, df = 10.87, p = 0.0046) and November (t = 3.34, df = 25.85, p = 0.0025), with Caleta de Chon consistently supporting higher diversity and species richness than Zacatoso. Multivariate community composition differed significantly between reefs (one-way PERMANOVA, F = 2.495, p = 0.0074), but showed no significant temporal variation (F = 0.9148, p = 0.6571). Two-way PERMANOVA revealed a strong main temporal effect on deposition rates (F4,59 = 18.35, p = 0.0001) and a significant site-by-time interaction (F 4,59 = 2.69, p = 0.0252), despite no main effect of reef location (F 1,59 = 1.87, p = 0.1673). Both reefs experienced a synchronous total sedimentation peak in May (0.031 g m -2 d -1 at Caleta de Chon vs. 0.034 g m -2 d -1 at Zacatoso); however, deposition at Caleta de Chon was dominated by fine silts (0.022 g m -2 d -1), whereas Zacatoso was driven by a coarse sediment pulse (0.0209 g m -2 d -1). Discussion These findings demonstrate that local geomorphology and hydrodynamic energy filter sediment grain-size fractions, shaping distinct macroa",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Frontiers in Marine Science",
+    "section": "Journal",
+    "doi": "https://doi.org/10.3389/fmars.2026.1976839",
+    "gist": "Sedimentation regime study shows how terrigenous sediment inputs shape macroalgal community structure on Eastern Tropical Pacific fringing reefs. Understanding how local environmental stressors alter reef algal dynamics informs broader reef health assessment.",
+    "relevance": "0.68"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Flipper Invisi-Lid NANO: A Modular, Tool-Free Mesh Lid for Nano Tanks",
+   "url": "https://reefs.com/flipper-invisi-lid-nano-a-modular-tool-free-mesh-lid-for-nano-tanks/",
+   "published_at": "2026-11-25T00:00:39Z",
+   "author": "Josh Saul",
+   "raw_text": "Flipper Aquarium Products , the company behind the Flipper magnetic glass cleaners, has released the Invisi-Lid™ NANO , a smaller version of its modular mesh aquarium lid sized for nano tanks up to 16″ (40 cm) wide.&#8230; The post Flipper Invisi-Lid NANO: A Modular, Tool-Free Mesh Lid for Nano Tanks appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Flipper Aquarium Products released the Invisi-Lid NANO, a modular mesh lid for nano tanks up to 16 inches. A practical accessory update for keepers running smaller reef systems.",
+    "relevance": "0.65",
+    "beat": "Product"
+   }
+  },
+  {
+   "source_id": "asfb-bsky",
+   "source_name": "Australian Society for Fish Biology — Bluesky",
+   "title": "📑 #NewStudy by Clarke et al. compares the fish communities calling a Western Australian world heritage area…",
+   "url": "https://bsky.app/profile/austsocfishbiol.bsky.social/post/3n2z3ay3sz42n",
+   "published_at": "2026-11-23T21:30:00Z",
+   "author": null,
+   "raw_text": "📑 #NewStudy by Clarke et al. compares the fish communities calling a Western Australian world heritage area home from year to year. Significant changes should inform future conservation efforts. 👀 https://doi.org/10.1007/s12526-026-01706-5",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "New study tracks year-to-year changes in fish communities at a Western Australian marine reserve. Findings on community variability inform conservation strategy for wild reef systems.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "ReefStock Returns to Denver – Mark Your Calendars!",
+   "url": "https://reefs.com/reefstock-returns-to-denver-mark-your-calendars/",
+   "published_at": "2026-11-23T16:14:38Z",
+   "author": "xeniaforever",
+   "raw_text": "Who&#8217;s ready for a weekend surrounded by corals, gear, and our favorite people?! ReefStock 2027 is officially coming back to Denver – and it sounds like the biggest one yet! Here&#8217;s the scoop: Saturday, February 27, 2027 – 10:00 AM to 5:00 PM Sunday, February 28, 2027 – 10:00 AM to 4:00 PM Delta Hotels Denver Thornton , 10 East 120th Ave, Northglenn, CO Over 70 exhibitors will be packing the show floor with stunning aquacultured frags, rare fish, inverts, lighting, controllers, aquascaping supplies – basically everything on your wish list (and a few things you didn&#8217;t know you needed… yet).&#8230; The post ReefStock Returns to Denver – Mark Your Calendars! appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "ReefStock 2027 returns to Denver in February with 70+ exhibitors showcasing frags, fish, equipment, and supplies. Major regional event for sourcing livestock and gear.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Anais do Congresso Brasileiro de Iniciação Científica",
+   "title": "AVALIAÇÃO AGUDA DOS EFEITOS ECOTÓXICOLOGICOS DO COMPOSTO FOTOPROTETOR OXIBENZONA NO CORAL FORMADOR DE RECIFE Seriatopora caliendrum",
+   "url": "https://doi.org/10.66221/9eqgsn64",
+   "published_at": "2026-11-22T00:00:00Z",
+   "author": "Ana Santos et al.",
+   "raw_text": "Coral reefs are essential to marine biodiversity but are increasingly affected by climate change and anthropogenic pollutants, including sunscreens. Oxybenzone, a UV filter, has been associated with adverse effects on corals. This study evaluated its effects on Seriatopora caliendrum fragments over 7 days at 26 °C and 30 °C. Zooxanthellae density and RGB coloration were assessed. At 30 °C, increased R and G channel values and a 50.6% reduction in zooxanthellae density were observed, suggesting intensified bleaching-related changes.",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "venue": "Anais do Congresso Brasileiro de Iniciação Científica",
+    "section": "Journal",
+    "doi": "https://doi.org/10.66221/9eqgsn64",
+    "gist": "Study shows oxybenzone sunscreen accelerates bleaching-related changes in Seriatopora caliendrum at elevated temperatures. Directly relevant to understanding reef stressors and chemical pollution impact on corals.",
+    "relevance": "0.65"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Reef Retreat 2027: Registration Is Open for Volume III",
+   "url": "https://reefs.com/reef-retreat-2027/",
+   "published_at": "2026-11-23T20:00:36Z",
+   "author": "Randy Donowitz",
+   "raw_text": "Every reefkeeper eventually hits the point where forum threads and YouTube clips stop answering the questions that matter. You want to hear the reasoning behind the advice, push back on it, and talk it through with people who have kept corals alive for decades or who study them for a living.&#8230; The post Reef Retreat 2027: Registration Is Open for Volume III appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Reef Retreat 2027 registration opens for a multi-day conference bringing together experienced hobbyists and coral researchers. Direct access to expert reasoning and peer discussion on keeping techniques.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "projectseahorse-bsky",
+   "source_name": "Project Seahorse — Bluesky",
+   "title": "At Project Seahorse, we are working to uncover the true scale of bottom trawling by enhancing knowledge for…",
+   "url": "https://bsky.app/profile/projectseahorse.bsky.social/post/3n2tymyztfd2k",
+   "published_at": "2026-11-21T21:00:00Z",
+   "author": null,
+   "raw_text": "At Project Seahorse, we are working to uncover the true scale of bottom trawling by enhancing knowledge for greater scientific and public engagement, with the goal of ending bottom trawling & reducing pressures on seahorses & our seas. Learn more: https://projectseahorse.org/worldfisheriesday2026/",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Project Seahorse works to quantify bottom trawling impacts on seahorses and marine ecosystems. Seahorses are traded ornamentals; conservation of wild populations informs sustainability of aquarium collection.",
+    "relevance": "0.60"
+   }
+  },
+  {
+   "source_id": "projectseahorse-bsky",
+   "source_name": "Project Seahorse — Bluesky",
+   "title": "🌊 Meet the Short-snouted seahorse, or Hippocampus hippocampus!",
+   "url": "https://bsky.app/profile/projectseahorse.bsky.social/post/3n3d3h4ocs42n",
+   "published_at": "2026-11-27T21:00:00Z",
+   "author": null,
+   "raw_text": "🌊 Meet the Short-snouted seahorse, or Hippocampus hippocampus! Use these identifying features to spot one in the wild, then snap a photo and report your sighting to the iSeahorse project on iNaturalist. Learn more here: www.iseahorse.org",
+   "category_hint": "Livestock & Corals",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "Project Seahorse highlights H. hippocampus identification for citizen science reporting on iNaturalist. Seahorses are sold in marine aquarium trade and understanding wild populations informs captive husbandry.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "frontiers-marine",
+   "source_name": "Frontiers in Marine Science — Journal",
+   "title": "Effects of benthic animal disturbance on methane cycling in coastal tidal flats: reshaping sediment microenvironments and underlying mechanisms",
+   "url": "https://www.frontiersin.org/articles/10.3389/fmars.2026.2035645",
+   "published_at": "2026-11-27T00:00:00Z",
+   "author": "Yin Ye",
+   "raw_text": "Coastal tidal flats are important components of global blue carbon ecosystems and also represent active regions for methane production, oxidation, and emission. Benthic animals, as typical ecosystem engineers, can modify sediment structure, material exchange, and biogeochemical processes through burrowing, feeding, sediment reworking, and bioirrigation. However, the mechanisms by which they regulate methane cycling in coastal tidal flats remain insufficiently understood. This review summarizes the effects of benthic animal disturbance on sediment microenvironments and methane cycling processes in coastal tidal flats. Functional traits and behavioral modes of benthic animals determine the spatial extent and intensity of bioturbation. Benthic-animal burrows enhance material exchange within sediments and across the sediment–water interface, alter redox conditions, and generate spatially heterogeneous microenvironments. These changes influence methane production, oxidation, and transport processes by regulating organic substrate availability, electron acceptor distribution, and microbial metabolic conditions. Meanwhile, benthic animal disturbance alters the community composition and functional responses of methanogens, methanotrophs, and other methane-cycling microorganisms. Overall, benthic animal disturbance may stimulate or suppress methanogenesis and methane oxidation, with contrasting consequences for net CH4 emissions. Methanogenesis is more likely to be enhanced when bioavailable organic substrates accumulate in persistently anoxic sediments. Localized oxygenation may favor aerobic methane oxidation (AEOM) where O2 and CH4 overlap, whereas anaerobic methane oxidation (AOM) depends on the local availability and spatial distribution of alternative electron acceptors. In addition, strong and sustained bioirrigation and burrow ventilation may suppress methanogenesis by expanding oxidized microzones and limiting the persistence of reducing conditions. The direction an",
+   "category_hint": "Husbandry & Science",
+   "extra": {
+    "section": "Journal",
+    "gist": "Review examines how burrowing animals alter sediment chemistry and methane cycling in coastal tidal flats. The mechanisms may inform understanding of biogeochemical processes in reef systems.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "reefs",
+   "source_name": "Reefs.com",
+   "title": "Let’s learn more about the Reefability Display with Andrew Bouwma",
+   "url": "https://reefs.com/lets-learn-more-about-the-reefability-display-with-andrew-bouwma/",
+   "published_at": "2026-11-25T15:00:15Z",
+   "author": "Marc Levenson",
+   "raw_text": "&#8230; The post Let&#8217;s learn more about the Reefability Display with Andrew Bouwma appeared first on Reefs.com .",
+   "category_hint": "Community",
+   "extra": {
+    "gist": "Andrew Bouwma discusses the Reefability Display, a product for reef tank management. The post is a headline-only excerpt with no substantive content about what the display does or why it matters.",
+    "relevance": "0.55",
+    "beat": "Product"
+   }
+  },
+  {
+   "source_id": "yt-reefbeef",
+   "source_name": "Reef Beef",
+   "title": "Backyard to Storefront: A Third Place LFS - Episode 172 - Reef Beef Podcast",
+   "url": "https://www.youtube.com/watch?v=zKuKB3i0EME",
+   "published_at": "2026-11-22T12:55:59Z",
+   "author": "Reef Beef Podcast",
+   "raw_text": "Backyard to Storefront: A Third Place LFS - Episode 172 - Reef Beef Podcast. In this episode Rich and Ben talk to Emma Langley from Emmaquatics in Bellingham, Washington, how she got started, and how her hybrid LFS / coffee shop is a third place for her patrons. Thank you to our sponsors: Saltwater Aquarium: https://tinyurl.com/RBSaltwaterAquarium Saltwater Aquarium Wholesale: https://tinyurl.com/SWAWholesale PolypLab: https://www.polyplab.com/ Champion Lighting: https://www.championlighting.com/ Champion Lighting Wholesale: https://www.championlightingdealer.com/ Links: Emmaquatics Website: https://www.emmaquatics.com/ Emmaquatics Instagram: https://www.instagram.com/emma.quatics/ Emmaquatics Reddit: https://www.reddit.com/user/Emmaquatics Emmaquatics FB Page: https://www.facebook.com/profile.php?id=61579612317043 Merch is now available! https://reefbeefpodcast.com/merch/ Join our Discord: https://discord.gg/reefbeef Get notified of new episodes by receiving an email from Reef Beef! https://reefbeefpodcast.com/notify/ Get our help / advice: https://reefbeefpodcast.com/consult/ Buy Reef Beef a Beer! https://reefbeefpodcast.com Become a Member: https://reefbeefpodcast.com/membership Follow Us: Youtube Channel: https://www.youtube.com/@ReefBeefPodcast Spotify: https://open.spotify.com/show/0KA5CRWWe8dDmitJGOAG1J Apple Podcast: https://podcasts.apple.com/us/podcast/reef-beef/id1552005275 Amazon: https://music.amazon.com/podcasts/db09c6a8-5f0e-46c2-ac2d-25ed555a549f/reef-beef Player.fm: https://player.fm/series/reef-beef Overcast: https://overcast.fm/itunes1552005275 Audible: https://audible.com/pd/B08JJNKYLG Time Stamps 00:00:00 Intro 00:01:32 How is Rich? 00:12:31 SPONSOR: SaltwaterAquarium.com 00:13:42 How is Ben? 00:19:22 SPONSOR: PolypLab 00:20:10 Welcome Emma! 00:38:40 SPONSOR: Champion Lighting and Supply 00:39:31 Emma’s Beefs 00:56:02 LFS Tour 01:08:15 Emma’s Advice 01:16:53 Bloopers #ReefBeef #Aquarium #AquariumPodcast",
+   "category_hint": "Community",
+   "extra": {
+    "video_id": "zKuKB3i0EME",
+    "duration_s": "4643",
+    "gist": "Podcast interviews hobbyist who operates hybrid LFS and coffee shop in Washington, discussing her path and community model. Interesting community-building approach but limited technical content.",
+    "relevance": "0.55"
+   }
+  },
+  {
+   "source_id": "openalex-coral",
+   "source_name": "Feminist Anthropology",
+   "title": "Touching corals in crises: “Feel Good” fragmentations of tentacular submarine restorations",
+   "url": "https://doi.org/10.1002/fea2.70093",
+   "published_at": "2026-11-23T00:00:00Z",
+   "author": "Ella Chiara Vallelonga",
+   "raw_text": "Human‐coral contact zones are full of impressions, of touching relays of power and precarity. At in‐water reef restoration nurseries on the Great Barrier Reef, Australia, restoration diver‐practitioners fragment, and cultivate thermally tolerant Acropora corals for adaptive resistance to climate induced marine heat stress. As this handsy work activates a biopolitical governance of life, it is animated by a tentacular submarine. Based on novel subaquatic ethnographic fieldwork that is oriented by embodied methodologies, this article examines how cross‐species touchings in crises are generative of affective charge for restoration divers that forges “epistemic fragmentations.” Storied by a coral fragmentation or “fragging” narrative, this work interrogates how “feeling good” about interventionist touchings of reef‐dwelling beings, stirs up an uneasy, marine situated knowledge of making life in the Anthropocene. With reparative touchings impressed with power, extraction and control, this writing offers a tentacular reimagining of reef restoration biopowers—a “tentacular biopolitics”—and presses for a posthuman feminist reading of biopolitical intervention; one that becomes in touch with the more‐than‐human marine. This subaqueous ethnography thinks through how humans can better live with, make life and care for ocean companions.",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "venue": "Feminist Anthropology",
+    "section": "Journal",
+    "doi": "https://doi.org/10.1002/fea2.70093",
+    "gist": "Ethnographic study of restoration diver practices on the Great Barrier Reef examining human-coral interactions during coral fragmentation for heat tolerance. Academic framework for restoration work already in practice.",
+    "relevance": "0.50"
+   }
+  },
+  {
+   "source_id": "scripps-bsky",
+   "source_name": "Scripps Institution of Oceanography — Bluesky",
+   "title": "🌊#ElNiño is changing the ocean off California, but how is marine life responding?",
+   "url": "https://bsky.app/profile/scrippsocean.bsky.social/post/3n2tzz7ajyu2x",
+   "published_at": "2026-11-21T21:25:00Z",
+   "author": null,
+   "raw_text": "🌊#ElNiño is changing the ocean off California, but how is marine life responding? Rasmus Swalethorp of CalCOFI spoke with CBS 8 about what researchers found on a recent cruise to monitor ocean conditions off the coast of California. ⤵️ https://bit.ly/4jryD0D",
+   "category_hint": "Wild Reefs",
+   "extra": {
+    "section": "Bluesky",
+    "gist": "CalCOFI research examines how El Niño is altering California's coastal ocean and marine life response. Broader oceanographic context but indirect relevance to tropical reef systems most kept in aquariums.",
+    "relevance": "0.45"
+   }
+  }
+ ]
+}
