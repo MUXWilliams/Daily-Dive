@@ -4250,32 +4250,63 @@ def test_a_late_fallback_after_midnight_utc_does_not_send_a_second_issue(tmp_pat
 
     # The incident: same Friday, already Saturday by UTC.
     assert _run_guard(tmp_path, today="2026-11-21") == "build=false"
-    # The morning's own fallbacks, and any lateness short of a week.
-    for today in ("2026-11-20", "2026-11-22", "2026-11-26"):
-        assert _run_guard(tmp_path, today=today) == "build=false", today
+    # The morning's own fallbacks.
+    assert _run_guard(tmp_path, today="2026-11-20") == "build=false"
     # The Worker's dispatch is automatic too, and skips the same way.
     assert _run_guard(tmp_path, today="2026-11-21", event="workflow_dispatch",
                       automatic="true") == "build=false"
-    # Next Friday builds.
-    assert _run_guard(tmp_path, today="2026-11-27") == "build=true"
     # A manual run always builds.
     assert _run_guard(tmp_path, today="2026-11-21", event="workflow_dispatch",
                       automatic="false") == "build=true"
 
 
-def test_the_guard_and_the_send_check_look_back_the_same_week():
-    window = re.search(r"WEEK_WINDOW=(\d+)", _guard_script()).group(1)
-    assert int(window) == cli.WEEK_WINDOW_DAYS == 6
+def test_a_stray_saturday_issue_does_not_block_the_next_friday(tmp_path):
+    """2026-11-27: the 20 Nov incident left a page dated 2026-11-21. A 6-day
+    window still held it on the 27th, so the Worker's 7 a.m. run skipped and
+    the issue went out at 17:44, once a late fallback's window moved past it."""
+    import subprocess
+
+    if subprocess.run(["date", "-u", "-d", "2026-11-21 - 1 days", "+%F"],
+                      capture_output=True).returncode != 0:
+        pytest.skip("needs GNU date, as on GitHub's ubuntu runners")
+    issues = tmp_path / "site" / "issues"
+    issues.mkdir(parents=True)
+    (issues / "2026-11-20.html").write_text("the week's issue")
+    (issues / "2026-11-21.html").write_text("the stray second issue")
+
+    # The Worker at 7 a.m. on the 27th must build.
+    assert _run_guard(tmp_path, today="2026-11-27", event="workflow_dispatch",
+                      automatic="true") == "build=true"
+    # Once it has, that Friday's fallbacks skip, before and after midnight UTC.
+    (issues / "2026-11-27.html").write_text("published at 7 a.m.")
+    for today in ("2026-11-27", "2026-11-28"):
+        assert _run_guard(tmp_path, today=today) == "build=false", today
+    # And the Friday after builds, even though the last issue is dated Saturday.
+    (issues / "2026-11-28.html").write_text("a late, Saturday-dated issue")
+    assert _run_guard(tmp_path, today="2026-12-04") == "build=true"
+
+
+def test_the_guard_and_the_send_check_look_back_the_same_friday():
+    window = re.search(r"SAME_FRIDAY_DAYS=(\d+)", _guard_script()).group(1)
+    assert int(window) == cli.SAME_FRIDAY_DAYS == 1
 
 
 def test_a_weekly_run_will_not_send_if_any_issue_went_out_this_week(tmp_path):
     """The last line behind the guard, at the store: a send on the 20th is
-    found from the 21st, and a send a week earlier is not."""
+    found from the 21st, and the stray send on the 21st is not found from the
+    27th, so it cannot block the next Friday."""
+    from datetime import date
+
     db = tmp_path / "db.sqlite3"
     with store.connect(db) as conn:
         store.record_sent(conn, "2026-11-20", 31)
-        assert store.last_sent_since(conn, "2026-11-15")[0] == "2026-11-20"
-        assert store.last_sent_since(conn, "2026-11-21") is None
+        store.record_sent(conn, "2026-11-21", 2)
+
+        def since(day):
+            return f"{date.fromisoformat(day) - timedelta(days=cli.SAME_FRIDAY_DAYS):%Y-%m-%d}"
+
+        assert store.last_sent_since(conn, since("2026-11-21"))[0] == "2026-11-21"
+        assert store.last_sent_since(conn, since("2026-11-27")) is None
 
     src = Path("dailydive/cli.py").read_text(encoding="utf-8")
     run = src.split("if _is_publishing_run(args):\n        # The seen log", 1)[1]

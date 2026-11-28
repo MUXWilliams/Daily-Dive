@@ -102,11 +102,12 @@ picks → collapse → resource → render → commit → deploy → send`
   Worker uses `workflow_dispatch` rather than `repository_dispatch` for its
   token: the first needs only Actions: write, the second Contents: write, which
   could push code to `main`.
-- **"Already sent" means this week, never this date.** The guard and the
-  `--weekly` send check both look back `cli.WEEK_WINDOW_DAYS` (6) days. A late
-  fallback can land after midnight UTC and date its issue Saturday. On
-  2026-11-20 that sent a second, 2-item issue the same evening, under the old
-  same-date check.
+- **"Already sent" means this Friday's issue: dated today or yesterday by
+  UTC.** The guard and the `--weekly` send check both look back
+  `cli.SAME_FRIDAY_DAYS` (1) days, because a Pacific Friday spans two UTC dates.
+  It used to be same-date only, and on 2026-11-20 a fallback after midnight UTC
+  sent a second, 2-item issue. Then it was 6 days, and on 2026-11-27 that stray
+  issue held the Worker's 7 a.m. run back until a fallback sent it at 17:44.
 - **Cron day numbers differ between Cloudflare and GitHub.** Cloudflare counts
   1 = Sunday, GitHub 0 = Sunday, so `5` is Thursday on one and Friday on the
   other. `trigger/wrangler.toml` names the day (`FRI`); a test rejects a number.

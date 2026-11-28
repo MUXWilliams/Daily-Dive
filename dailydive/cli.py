@@ -34,10 +34,12 @@ FIXTURE_DIR = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
 BUILT_MARKER = Path(".run-built")
 SEND_FAILED_MARKER = Path(".send-failed")
 
-# One issue a week. The automatic run's guard (in daily.yml) and its last-line
-# send check both look back this many days, so a late run on either side of
-# midnight UTC still finds the week's issue. A test holds the two equal.
-WEEK_WINDOW_DAYS = 6
+# One issue per Friday. A Pacific Friday spans two UTC dates, so the automatic
+# run's guard (in daily.yml) and its last-line send check both look back this
+# many days: today and yesterday. Not 0, or a fallback after midnight UTC sends
+# a second issue (2026-11-20). Not 6, or a stray Saturday issue blocks the next
+# Friday until evening (2026-11-27). A test holds the two equal.
+SAME_FRIDAY_DAYS = 1
 
 
 def _collect_mail(source: Source, days: int, client: httpx.Client) -> list[Item]:
@@ -312,8 +314,8 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument(
         "--weekly",
         action="store_true",
-        help="this is the automatic Friday run: never send if an issue went out in the last "
-        f"{WEEK_WINDOW_DAYS} days",
+        help="this is the automatic Friday run: never send if an issue dated today or "
+        "yesterday (UTC) already went out",
     )
     run.add_argument(
         "--threshold",
@@ -917,13 +919,13 @@ def main(argv: list[str] | None = None) -> int:
         with store.connect(args.db) as conn:
             already_sent = store.sent_at(conn, f"{issue.date:%Y-%m-%d}")
             if args.weekly and not already_sent:
-                # A week, not a date. On 2026-11-20 a fallback run started
-                # after midnight UTC, dated its issue the 21st, and so passed a
-                # same-date check and emailed a second issue the same evening.
-                since = issue.date - timedelta(days=WEEK_WINDOW_DAYS)
+                # The same Friday, not the same date. On 2026-11-20 a fallback
+                # run started after midnight UTC, dated its issue the 21st, and
+                # so passed a same-date check and emailed a second issue.
+                since = issue.date - timedelta(days=SAME_FRIDAY_DAYS)
                 recent = store.last_sent_since(conn, f"{since:%Y-%m-%d}")
                 if recent:
-                    already_sent = f"{recent[1]} (the {recent[0]} issue — one a week)"
+                    already_sent = f"{recent[1]} (the {recent[0]} issue — one per Friday)"
         if args.send and already_sent:
             # Two independent schedulers now start the Friday run — the
             # Cloudflare Worker and GitHub's own cron as a fallback — and the

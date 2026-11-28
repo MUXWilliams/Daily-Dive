@@ -139,20 +139,26 @@ jobs:
           EVENT: ${{ github.event_name }}
           IN_AUTOMATIC: ${{ inputs.automatic }}
         #
-        # "Already published" means this WEEK's issue, not today's date. On
-        # 2026-11-20 the 18:47 UTC catch-up started 5½ hours late, at 00:19
-        # UTC — still Friday afternoon in California, already Saturday by
-        # `date -u`. It looked for a 2026-11-21 page, found none, and built and
-        # emailed a second, 2-item issue. So an automatic run now skips if any
-        # issue was published in the last WEEK_WINDOW days, whatever side of
-        # midnight UTC it lands on. GUARD_TODAY exists only so a test can pin
-        # the date; nothing in this workflow sets it.
+        # "Already published" means THIS FRIDAY's issue, dated today or
+        # yesterday by UTC. A Pacific Friday runs from Fri 08:00 to Sat 08:00
+        # UTC, so every automatic run for it, and the date stamped on its
+        # issue, falls on that Friday or the next day by `date -u`.
+        #
+        # Not today only: on 2026-11-20 the 18:47 UTC catch-up started at
+        # 00:19 UTC, Saturday by UTC, found no 2026-11-21 page, and emailed a
+        # second, 2-item issue.
+        # Not a whole week: on 2026-11-27 a 6-day window still held that stray
+        # 2026-11-21 page, so the Worker's 7 a.m. run skipped and the issue
+        # went out at 17:44, when the window finally moved past it.
+        #
+        # GUARD_TODAY exists only so a test can pin the date; nothing in this
+        # workflow sets it.
         run: |
           set -eu
-          WEEK_WINDOW=6
+          SAME_FRIDAY_DAYS=1
           today="${GUARD_TODAY:-$(date -u +%F)}"
           recent=""
-          for back in $(seq 0 "$WEEK_WINDOW"); do
+          for back in $(seq 0 "$SAME_FRIDAY_DAYS"); do
             day="$(date -u -d "$today - $back days" +%F)"
             if [ -f "site/issues/${day}.html" ]; then recent="site/issues/${day}.html"; break; fi
           done
@@ -160,11 +166,11 @@ jobs:
             echo "Manual run — building regardless of what is already published."
             echo "build=true" >> "$GITHUB_OUTPUT"
           elif [ -n "$recent" ]; then
-            echo "$recent is already committed; this week's issue is out."
+            echo "$recent is already committed; this Friday's issue is out."
             echo "Nothing to do — another automatic run got here first." >> "$GITHUB_STEP_SUMMARY"
             echo "build=false" >> "$GITHUB_OUTPUT"
           else
-            echo "No issue in the last $WEEK_WINDOW days — building this week's."
+            echo "No issue dated today or yesterday (UTC) — building this Friday's."
             echo "build=true" >> "$GITHUB_OUTPUT"
           fi
 

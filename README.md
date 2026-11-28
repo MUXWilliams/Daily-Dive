@@ -305,15 +305,18 @@ UTC and an 18:47 catch-up. 15:17 UTC is 7:17 a.m. Pacific in winter and 8:17 in
 summer, so even a punctual fallback cannot publish before 7 a.m. In practice
 both arrive hours late. That makes up to three automatic
 runs each Friday, and exactly one builds. Runs queue rather than overlap. A
-guard job ends any automatic run once **this week's** issue exists: any issue
-page from the last 6 days, not just one dated today. Behind the guard, an
-automatic `daily-dive run --weekly` will not email if the `sent` table holds
-any issue from the last 6 days.
+guard job ends any automatic run once **this Friday's** issue exists: a page
+dated today or yesterday by UTC. A Pacific Friday spans two UTC dates. Behind
+the guard, an automatic `daily-dive run --weekly` will not email if the `sent`
+table holds an issue dated today or yesterday.
 
-The rule is a week rather than a date because of 2026-11-20. The 18:47 UTC
-catch-up started at 00:19 UTC, still Friday afternoon in California but
-Saturday by UTC. It looked for a Saturday issue, found none, and emailed a
-second, 2-item issue that evening.
+The rule has been wrong in both directions:
+
+- **2026-11-20, same-date only.** The 18:47 UTC catch-up started at 00:19 UTC,
+  Saturday by UTC, found no Saturday issue, and emailed a second, 2-item issue.
+- **2026-11-27, a 6-day window.** That stray issue still fell inside the
+  window, so the Worker's 7 a.m. run skipped. The week's issue went out at
+  17:44, from a fallback whose window had moved past it.
 
 A **manual dispatch still has to tick `send`**, because a mid-week run by hand
 is almost always a test.
